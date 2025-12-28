@@ -1,0 +1,221 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================
+   Sistema de Colores Estandarizado
+   Editable desde Admin Panel -> Colores
+   
+   Paleta Unificada:
+   Principales: #3db814, #2a8a0e, #ffffff, #000000
+   Secundarios: #00a658, #009178, #007983, #006076, #2f4858, #00af52, #00a381, #0094a8
+   ============================================ */
+:root {
+  /* === FONDOS DE PÁGINAS === */
+  --color-page-bg-inicio: #ffffff;
+  --color-page-bg-reservas: #ffffff;
+  --color-page-bg-galeria: #ffffff;
+  --color-page-bg-registro: #ffffff;
+  --color-page-bg-guia: #ffffff;
+  --color-page-bg-admin: #ffffff;
+
+  /* === BOTONES === */
+  --color-btn-primary: #3db814;
+  --color-btn-primary-hover: #2a8a0e;
+
+  /* === TEXTOS - COLORES COMPLETOS === */
+  --color-text-main: #2f4858;
+  --color-text-title: #2f4858;
+  --color-text-muted: #007983;
+  --color-text-subtitle: #009178;
+  --color-text-subtitle-dark: #00a658;
+  --color-text-link: #3db814;
+  --color-text-accent: #3db814;
+  --color-text-on-primary: #ffffff;
+
+  /* === ICONOS - COLORES COMPLETOS === */
+  --color-icon-color: #3db814;
+  --color-icon-color-secondary: #009178;
+  --color-icon-color-dark: #ffffff;
+  --color-icon-bg-primary: #ffffff;
+  --color-icon-bg-secondary: #ffffff;
+  --color-icon-bg-dark: #006076;
+  --color-icon-border: #3db814;
+
+  /* === SUPERFICIES - CONTENEDORES === */
+  --color-surface-card: #ffffff;
+  --color-surface-card-hover: #f8faf8;
+  --color-surface-light: #ffffff;
+  /* surface-section ahora es transparente para heredar el fondo de página */
+  --color-surface-section: transparent;
+  --color-surface-nav: #ffffff;
+  --color-surface-footer: #2f4858;
+  --color-surface-card-dark: #2f4858;
+  --color-surface-page: #ffffff;
+  --color-surface-page-dark: #2f4858;
+
+  /* === BORDES === */
+  --color-border-card: #009178;
+  --color-border-card-dark: #006076;
+
+  /* === SOMBRAS === */
+  --color-card-shadow: #22c55e;
+
+  /* === BADGES === */
+  --color-badge-bg: #3db814;
+  --color-badge-text: #ffffff;
+
+  /* === PLATAFORMAS === */
+  --color-platform-airbnb: #2f4858;
+  --color-platform-booking: #006076;
+  --color-platform-google: #0094a8;
+  --color-platform-directa: #00a658;
+
+  /* === NAVEGACIÓN EXTERNA === */
+  --color-nav-waze: #007983;
+  --color-nav-maps: #006076;
+
+  /* === ALERTAS - WARNING === */
+  --color-warning-bg: #007983;
+  --color-warning-text: #ffffff;
+  --color-warning-icon: #ffffff;
+  --color-warning-border: #006076;
+
+  /* === ALERTAS - INFO === */
+  --color-info-bg: #0094a8;
+  --color-info-text: #ffffff;
+  --color-info-icon: #ffffff;
+  --color-info-border: #007983;
+
+  /* === ALERTAS - SUCCESS === */
+  --color-success-bg: #3db814;
+  --color-success-text: #ffffff;
+  --color-success-icon: #ffffff;
+  --color-success-border: #2a8a0e;
+
+  /* === ALERTAS - ERROR === */
+  --color-error-bg: #2f4858;
+  --color-error-text: #ffffff;
+  --color-error-icon: #ffffff;
+  --color-error-border: #006076;
+
+  /* === AGUA - FONDOS Y GRADIENTE === */
+  --color-water-bg-primary: #006076;
+  --color-water-bg-secondary: #007983;
+  --color-water-glow: #00a658;
+
+  /* === AGUA - TEXTOS === */
+  --color-water-text: #ffffff;
+  --color-water-text-muted: #ffffff;
+
+  /* === AGUA - TARJETAS DE CONSEJOS === */
+  --color-water-tip-card-bg: #007983;
+  --color-water-tip-card-border: #009178;
+  --color-water-tip-icon-bg: #009178;
+  --color-water-tip-icon-bg-dark: #006076;
+  --color-water-tip-icon: #ffffff;
+  --color-water-tip-title: #ffffff;
+  --color-water-tip-text: #ffffff;
+
+  /* === AGUA - TARJETA DE AVISO === */
+  --color-water-warning-bg: #00a381;
+  --color-water-warning-border: #009178;
+  --color-water-warning-icon-bg: #009178;
+  --color-water-warning-icon: #ffffff;
+  --color-water-warning-title: #ffffff;
+  --color-water-warning-text: #ffffff;
+
+  /* === AGUA - TARJETA DE AGRADECIMIENTO === */
+  --color-water-thanks-bg: #00af52;
+  --color-water-thanks-border: #00a658;
+  --color-water-thanks-icon-bg: #3db814;
+  --color-water-thanks-icon-bg-dark: #2a8a0e;
+  --color-water-thanks-icon: #ffffff;
+  --color-water-thanks-title: #ffffff;
+  --color-water-thanks-text: #ffffff;
+
+  /* === AGUA - BADGE DE URGENCIA === */
+  --color-water-badge-bg: #2f4858;
+  --color-water-badge-text: #ffffff;
+  --color-water-badge-glow: #006076;
+
+  /* === AGUA - EFECTOS VISUALES === */
+  --color-water-bubbles: #ffffff;
+  --color-water-bubbles-inner: #ffffff;
+  --color-water-wave-back: #ffffff;
+  --color-water-wave-mid: #ffffff;
+  --color-water-wave-front: #ffffff;
+
+  /* ============================================
+     TIPOGRAFÍA GLOBAL - Configurable desde Admin
+     ============================================ */
+  --font-display: "Inter", sans-serif;
+}
+
+/* Aplicar tipografía global a TODO el documento */
+html,
+body {
+  font-family: var(--font-display) !important;
+}
+
+/* Asegurar que inputs y botones también usen la tipografía global */
+input,
+button,
+textarea,
+select {
+  font-family: var(--font-display) !important;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #009178;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #007983;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Material symbols fill */
+.material-symbols-outlined.filled-icon {
+  font-variation-settings: 'FILL' 1;
+}
+
+/* Sombra configurable para botones y cards */
+.shadow-card {
+  box-shadow: 0 10px 15px -3px color-mix(in srgb, var(--color-card-shadow) 30%, transparent),
+    0 4px 6px -4px color-mix(in srgb, var(--color-card-shadow) 30%, transparent);
+}
+
+.shadow-card-sm {
+  box-shadow: 0 4px 6px -1px color-mix(in srgb, var(--color-card-shadow) 20%, transparent),
+    0 2px 4px -2px color-mix(in srgb, var(--color-card-shadow) 20%, transparent);
+}

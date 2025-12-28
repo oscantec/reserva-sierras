@@ -1,0 +1,259 @@
+{
+    "checkInTime": "3:00 PM",
+    "checkOutTime": "11:00 AM",
+    "whatsappNumber": "573001234567",
+    "hostName": "Marcela",
+    "heroVideoUrl": "https://www.youtube.com/watch?v=yzjFNEuWwFI",
+    "heroFilterColor": "#22c55e",
+    "heroFilterOpacity": 30,
+    "heroBlurAmount": 15,
+    "heroRotatingPhrases": [
+        "Somos Reserva de las Sierras",
+        "Somos Tranquilidad",
+        "Somos Aire Puro",
+        "Somos Espacio Verde"
+    ],
+    "inicioContent": {
+        "intro": {
+            "title": "Un refugio donde el tiempo se detiene",
+            "description": "Reserva de las Sierras no es solo un alojamiento, es una experiencia diseñada para tu descanso y conexión con la naturaleza."
+        },
+        "amenidades": [
+            {
+                "icon": "pool",
+                "title": "Piscina Privada",
+                "description": "Disfruta de un baño refrescante en total privacidad."
+            },
+            {
+                "icon": "wifi",
+                "title": "Wi-Fi Alta Velocidad",
+                "description": "Mantente conectado con Starlink."
+            },
+            {
+                "icon": "pets",
+                "title": "Pet Friendly",
+                "description": "Tus mascotas son bienvenidas."
+            }
+        ],
+        "contactoInicial": {
+            "sectionTitle": "Contacto Inicial",
+            "sectionSubtitle": "Coordina los detalles de tu llegada con nuestra anfitriona.",
+            "welcomeText": "¡Gracias por elegir Reserva de las Sierras! Para brindarte la mejor experiencia, es importante que coordines los detalles de tu llegada.",
+            "items": [
+                {
+                    "icon": "schedule",
+                    "title": "Hora de llegada",
+                    "description": "Confirma tu hora aproximada de check-in"
+                },
+                {
+                    "icon": "directions_car",
+                    "title": "Indicaciones",
+                    "description": "Recibe instrucciones detalladas para llegar"
+                },
+                {
+                    "icon": "key",
+                    "title": "Acceso",
+                    "description": "Coordina la entrega de llaves"
+                }
+            ]
+        },
+        "zonasHumedas": {
+            "piscina": {
+                "title": "Piscina Privada",
+                "subtitle": "Uso exclusivo durante tu estadía",
+                "badge": "Privada",
+                "rules": [
+                    {
+                        "icon": "schedule",
+                        "text": "Horario de uso: 8:00 AM - 10:00 PM"
+                    },
+                    {
+                        "icon": "checkroom",
+                        "text": "Se requiere gorro de baño obligatorio"
+                    },
+                    {
+                        "icon": "shower",
+                        "text": "Ducharse antes de ingresar a la piscina"
+                    },
+                    {
+                        "icon": "warning",
+                        "text": "No ingresar alimentos ni bebidas al área de la piscina"
+                    }
+                ]
+            },
+            "jacuzzi": {
+                "title": "Jacuzzi Privado",
+                "subtitle": "Relájate en total privacidad",
+                "badge": "Exclusivo",
+                "rules": [
+                    {
+                        "icon": "wb_sunny",
+                        "text": "Recomendamos usarlo durante el día para mayor disfrute"
+                    },
+                    {
+                        "icon": "timer",
+                        "text": "Máximo 90 minutos por día para conservación de equipos"
+                    },
+                    {
+                        "icon": "thermostat",
+                        "text": "No manipular la temperatura del agua"
+                    },
+                    {
+                        "icon": "favorite",
+                        "text": "Cuida el jacuzzi como si fuera tuyo"
+                    }
+                ]
+            },
+            "bottomMessage": "Las zonas húmedas son de uso exclusivo para los huéspedes de la reserva. Por favor, respeta las normas para mantener las instalaciones en óptimas condiciones."
+        },
+        "waterConservation": {
+            "title": "Cuidado del Agua",
+            "subtitle": "Anapoima presenta desafíos con el suministro. Tu colaboración es fundamental.",
+            "tips": [
+                {
+                    "icon": "shower",
+                    "title": "Duchas Cortas",
+                    "desc": "Máximo 5 minutos. Disfrutarás igual y ahorraremos juntos."
+                },
+                {
+                    "icon": "local_laundry_service",
+                    "title": "Sin Lavandería",
+                    "desc": "Evita lavar ropa durante tu estadía, ayuda mucho."
+                },
+                {
+                    "icon": "water_drop",
+                    "title": "Cierra el Grifo",
+                    "desc": "Mientras te enjabonas o cepillas los dientes."
+                },
+                {
+                    "icon": "report",
+                    "title": "Reporta Fugas",
+                    "desc": "Avísanos inmediatamente de cualquier fuga o goteo."
+                }
+            ],
+            "bottomTitle": "Gracias por tu compromiso",
+            "bottomMessage": "Cada gota cuenta. Juntos podemos preservar este recurso vital para futuras generaciones."
+        },
+        "rules": [
+            {
+                "icon": "schedule",
+                "title": "Check-in / Check-out",
+                "desc": "Entrada: 3:00 PM. Salida: 11:00 AM. Flexible bajo petición."
+            },
+            {
+                "icon": "volume_off",
+                "title": "Horas de Silencio",
+                "desc": "Por respeto a los vecinos, moderar ruido a partir de las 10:00 PM."
+            },
+            {
+                "icon": "pets",
+                "title": "Mascotas",
+                "desc": "Bienvenidas con previo aviso. Deben estar vigiladas en zonas comunes."
+            },
+            {
+                "icon": "smoke_free",
+                "title": "No Fumar",
+                "desc": "Prohibido fumar en espacios interiores. Usar zonas habilitadas."
+            },
+            {
+                "icon": "celebration",
+                "title": "Eventos",
+                "desc": "No se permiten fiestas o eventos ruidosos sin autorización escrita."
+            },
+            {
+                "icon": "nature_people",
+                "title": "Cuidado Ambiental",
+                "desc": "Ayúdanos a cuidar el entorno, no arrojar basura en los senderos."
+            }
+        ],
+        "location": {
+            "title": "Cómo llegar a Reserva de las Sierras",
+            "subtitle": "Sigue nuestras indicaciones para disfrutar sin contratiempos.",
+            "mapUrl": "https://maps.google.com/maps?q=Reserva+de+las+Sierras&output=embed",
+            "wazeUrl": "https://waze.com/ul",
+            "mapsUrl": "https://maps.google.com",
+            "referenceImage": "/src/images/Acceso Casa2.webp",
+            "referenceCaption": "Acceso a la Finca",
+            "roadCondition": "Carretera pavimentada en 95%. Últimos 500m de vía destapada accesible.",
+            "stepsCarro": [
+                {
+                    "title": "Salida por Autopista Norte",
+                    "desc": "Mantente en carril izquierdo hasta el Peaje Los Andes."
+                },
+                {
+                    "title": "Glorieta San Mateo",
+                    "desc": "Toma la segunda salida hacia variante rural."
+                },
+                {
+                    "title": "Desvío Veredal (Km 12)",
+                    "desc": "Gira a la derecha. Referencia: tienda azul."
+                },
+                {
+                    "title": "Llegada",
+                    "desc": "500m más, tercera finca a la izquierda."
+                }
+            ],
+            "stepsBus": [
+                {
+                    "title": "Terminal de Transporte",
+                    "desc": "Toma un bus hacia Anapoima desde el Terminal del Sur."
+                },
+                {
+                    "title": "Bajarse en el cruce",
+                    "desc": "Pide al conductor dejarte en el cruce de la vereda."
+                },
+                {
+                    "title": "Mototaxi o caminata",
+                    "desc": "Toma un mototaxi o camina 15 minutos hasta la finca."
+                },
+                {
+                    "title": "Llegada",
+                    "desc": "Busca el letrero \"Reserva de las Sierras\" a la izquierda."
+                }
+            ],
+            "helpMessage": "¿Te perdiste? Llámanos, te guiaremos en tiempo real."
+        },
+        "antesDePartir": {
+            "title": "Antes de partir",
+            "subtitle": "Sigue estas pautas para un check-out sin contratiempos.",
+            "items": [
+                {
+                    "icon": "schedule",
+                    "title": "Horario de Check-out",
+                    "description": "Salida a las 11:00 AM para permitir limpieza profunda.",
+                    "isWarning": false
+                },
+                {
+                    "icon": "delete",
+                    "title": "Manejo de Residuos",
+                    "description": "Disponga residuos en contenedores verdes de la zona exterior.",
+                    "isWarning": false
+                },
+                {
+                    "icon": "cleaning_services",
+                    "title": "Orden y Limpieza",
+                    "description": "Entregue la cocina sin platos sucios y la casa ordenada.",
+                    "isWarning": false
+                },
+                {
+                    "icon": "chair",
+                    "title": "Cuidado del Mobiliario",
+                    "description": "Si movió muebles, regréselos a su sitio original.",
+                    "isWarning": false
+                },
+                {
+                    "icon": "warning",
+                    "title": "Reporte de Daños",
+                    "description": "Notifíquenos de cualquier rotura o mal funcionamiento.",
+                    "isWarning": true
+                },
+                {
+                    "icon": "key",
+                    "title": "Entrega de Llaves",
+                    "description": "Deposite llaves en caja de seguridad junto a la puerta.",
+                    "isWarning": false
+                }
+            ]
+        }
+    }
+}
