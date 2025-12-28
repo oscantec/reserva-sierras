@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import exteriorImg from '../Images/Exterior1.webp'
-import nextLogo from '../Images/NextLogo.png'
+import exteriorImg from '../images/Exterior1.webp'
+import nextLogo from '../images/NextLogo.png'
 
 export default function Footer() {
     const [config, setConfig] = useState({

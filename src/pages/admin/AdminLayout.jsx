@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
-import nextLogo from '../../Images/NextLogo.png'
+import nextLogo from '../../images/NextLogo.png'
 
 export default function AdminLayout() {
     const location = useLocation()
