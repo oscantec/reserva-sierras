@@ -130,16 +130,18 @@ export default function LocationSection() {
                             </div>
                         </div>
 
-                        {/* Visual References Card */}
-                        <div className="bg-surface-card dark:bg-surface-card-dark rounded-xl p-3 md:p-5 border border-border-card dark:border-border-card-dark">
-                            <h3 className="font-bold text-base md:text-lg mb-3 md:mb-4 flex items-center gap-2">
-                                <span className="material-symbols-outlined text-icon-color">location_on</span>
-                                Puntos de Referencia
-                            </h3>
-                            <div className="relative rounded-xl overflow-hidden">
+                        {/* Visual References Card - Image fills full width */}
+                        <div className="bg-surface-card dark:bg-surface-card-dark rounded-xl border border-border-card dark:border-border-card-dark overflow-hidden">
+                            <div className="p-3 md:p-5 pb-0">
+                                <h3 className="font-bold text-base md:text-lg mb-3 md:mb-4 flex items-center gap-2">
+                                    <span className="material-symbols-outlined text-icon-color">location_on</span>
+                                    Puntos de Referencia
+                                </h3>
+                            </div>
+                            <div className="relative">
                                 <img
                                     src={accesoImage}
-                                    className="w-full h-auto"
+                                    className="w-full h-auto block"
                                     alt="Acceso a la Finca"
                                     loading="eager"
                                 />
