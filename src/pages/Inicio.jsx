@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, memo } from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import ContactoInicialSection from '../components/ContactoInicialSection'
@@ -33,12 +33,13 @@ const getInitialConfig = () => {
 const INITIAL_STATE = getInitialConfig()
 const INITIAL_VIDEO_ID = getYouTubeVideoId(INITIAL_STATE.heroVideoUrl)
 
-// STABLE Video Component to prevent re-renders when phrases change
-const VideoBackground = ({ videoId, blurAmount }) => {
+// STABLE Video Component - MEMOIZED to prevent refreshes when phrases rotate
+const VideoBackground = memo(({ videoId, blurAmount }) => {
     if (!videoId) return null;
 
-    // Most compatible YouTube embed URL for mobile autoplay
-    const src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&disablekb=1&iv_load_policy=3`;
+    // Simplest possible URL to avoid mobile security handshakes that cause delays
+    // We remove enablejsapi and origin as they can trigger additional security checks on mobile
+    const src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&muted=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3`;
 
     return (
         <div className="absolute inset-0 z-1 pointer-events-none overflow-hidden">
@@ -47,15 +48,16 @@ const VideoBackground = ({ videoId, blurAmount }) => {
                 src={src}
                 title="Hero Video Background"
                 frameBorder="0"
-                allow="autoplay; encrypted-media; picture-in-picture"
+                allow="autoplay; encrypted-media; gyroscope; picture-in-picture"
                 style={{
                     filter: `blur(${blurAmount}px) brightness(0.8) saturate(1.1)`,
                     pointerEvents: 'none'
                 }}
+                loading="eager"
             />
         </div>
     );
-};
+});
 
 export default function Landing() {
     const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0)
