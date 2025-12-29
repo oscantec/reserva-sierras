@@ -37,11 +37,12 @@ const INITIAL_VIDEO_ID = getYouTubeVideoId(INITIAL_STATE.heroVideoUrl)
 const VideoBackground = memo(({ videoId, blurAmount }) => {
     if (!videoId) return null;
 
-    // Use nocookie for better privacy and potentially avoiding some mobile blocks
-    const src = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&muted=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&iv_load_policy=3`;
+    // Use nocookie and most aggressive parameters for mobile autoplay
+    // We use enablejsapi=1 to allow the "Kickstart" command from the parent
+    const src = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&muted=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&iv_load_policy=3&widget_referrer=${window.location.origin}`;
 
     return (
-        <div className="absolute inset-0 z-1 pointer-events-none overflow-hidden bg-black/10">
+        <div className="absolute inset-0 z-1 pointer-events-none overflow-hidden bg-black/5">
             <iframe
                 id="hero-video-iframe"
                 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[115vw] h-[65vw] min-w-full min-h-full opacity-0 transition-opacity duration-1000"
@@ -53,7 +54,14 @@ const VideoBackground = memo(({ videoId, blurAmount }) => {
                     filter: `blur(${blurAmount}px) brightness(0.8) saturate(1.1)`,
                     pointerEvents: 'none'
                 }}
-                onLoad={(e) => e.target.classList.remove('opacity-0')}
+                onLoad={(e) => {
+                    // Force play on load just in case
+                    try {
+                        e.target.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+                        e.target.contentWindow.postMessage('{"event":"command","func":"mute","args":""}', '*');
+                    } catch (err) { }
+                    setTimeout(() => e.target.classList.remove('opacity-0'), 500);
+                }}
             />
         </div>
     );
@@ -169,26 +177,39 @@ export default function Landing() {
                     }}
                 ></div>
 
-                {/* Video Background Component - Stable, won't re-render on phrase change */}
+                {/* Video Background Component - MEMOIZED to prevent refreshes */}
                 <VideoBackground
                     videoId={videoId}
                     blurAmount={heroConfig.blurAmount}
                 />
 
+                {/* GHOST OVERLAY: Invisible bridge to "unlock" video on mobile */}
+                <div
+                    className="absolute inset-0 z-10 cursor-pointer"
+                    onPointerDown={() => {
+                        const iframe = document.getElementById('hero-video-iframe');
+                        if (iframe && iframe.contentWindow) {
+                            iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+                            iframe.contentWindow.postMessage('{"event":"command","func":"mute","args":""}', '*');
+                        }
+                    }}
+                ></div>
+
                 {/* Green Filter Overlay */}
                 <div
-                    className="absolute inset-0 z-10"
+                    className="absolute inset-0 z-1"
                     style={{
                         backgroundColor: heroConfig.filterColor,
-                        opacity: heroConfig.filterOpacity / 100
+                        opacity: heroConfig.filterOpacity / 100,
+                        pointerEvents: 'none'
                     }}
                 ></div>
 
                 {/* Dark Gradient Overlay for text readability */}
-                <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/60 z-10"></div>
+                <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/60 z-1 pointer-events-none"></div>
 
                 {/* Content - Only Dynamic Rotating Text */}
-                <div className="relative z-20 text-center px-4 max-w-4xl mx-auto flex flex-col items-center justify-center h-full fade-in">
+                <div className="relative z-20 text-center px-4 max-w-4xl mx-auto flex flex-col items-center justify-center h-full fade-in pointer-events-none">
                     {/* Animated Rotating Text */}
                     <h1
                         className={`text-2xl sm:text-4xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight tracking-tight shadow-sm transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'

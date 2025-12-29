@@ -20,7 +20,7 @@ function LazyImage({ src, alt, className }) {
             <img
                 src={src}
                 alt={alt}
-                className={`${className} ${fullLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-700 ease-in-out`}
+                className={`${className} ${fullLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 ease-out`}
                 loading="lazy"
                 onLoad={() => setFullLoaded(true)}
             />
