@@ -8,19 +8,27 @@ function LazyImage({ src, alt, className, priority = false }) {
     const [fullLoaded, setFullLoaded] = useState(false)
 
     return (
-        <div className="relative w-full h-full overflow-hidden bg-green-50/30 dark:bg-gray-800">
-            {/* HIGH-VISIBILITY SKELETON: Green pulse, shows immediately */}
+        <div className="relative w-full h-full overflow-hidden bg-gray-100 dark:bg-gray-800">
+            {/* SHIMMER EFFECT: Sophisticated loading state */}
             {!fullLoaded && (
-                <div className="absolute inset-0 z-0 flex items-center justify-center bg-gradient-to-br from-green-50 to-green-100/50 dark:from-gray-700 dark:to-gray-800 animate-pulse">
-                    <span className="material-symbols-outlined text-green-200 dark:text-gray-600 text-4xl">image</span>
+                <div className="absolute inset-0 z-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"
+                    style={{
+                        backgroundSize: '200% 100%',
+                        animation: 'shimmer 1.5s infinite linear',
+                        background: 'linear-gradient(90deg, #f3f4f6 0%, #e5e7eb 50%, #f3f4f6 100%)'
+                    }}
+                >
+                    <div className="flex items-center justify-center w-full h-full">
+                        <span className="material-symbols-outlined text-gray-300 dark:text-gray-600 text-4xl animate-pulse">image</span>
+                    </div>
                 </div>
             )}
 
-            {/* Full quality image */}
+            {/* Full quality image with scale-in transition */}
             <img
                 src={src}
                 alt={alt}
-                className={`${className} ${fullLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 ease-out`}
+                className={`${className} ${fullLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-110'} transition-all duration-700 ease-out`}
                 loading={priority ? "eager" : "lazy"}
                 fetchpriority={priority ? "high" : "auto"}
                 onLoad={() => setFullLoaded(true)}

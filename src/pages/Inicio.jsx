@@ -60,26 +60,44 @@ const VideoBackground = memo(({ videoId, blurAmount }) => {
                     enablejsapi: 1,
                     iv_load_policy: 3,
                     disablekb: 1,
-                    origin: window.location.origin
+                    origin: window.location.origin,
+                    widget_referrer: window.location.origin
                 },
                 events: {
                     onReady: (event) => {
                         event.target.mute();
                         event.target.playVideo();
-                        // Fade in once ready
-                        setTimeout(() => {
-                            const iframe = document.getElementById('hero-video-player');
-                            if (iframe) iframe.style.opacity = '1';
+
+                        // AGGRESSIVE HEARTBEAT: Mobile browsers often ignore the first playVideo().
+                        // We check every 500ms if it's playing, and force it if not.
+                        let attempts = 0;
+                        const heartbeat = setInterval(() => {
+                            const state = event.target.getPlayerState();
+                            if (state !== 1 && attempts < 10) { // 1 = PLAYING
+                                event.target.mute();
+                                event.target.playVideo();
+                                attempts++;
+                            } else if (state === 1) {
+                                // Once playing, fade in and stop heartbeat
+                                const iframe = document.getElementById('hero-video-player');
+                                if (iframe) iframe.style.opacity = '1';
+                                clearInterval(heartbeat);
+                            } else {
+                                clearInterval(heartbeat);
+                            }
                         }, 500);
                     },
                     onStateChange: (event) => {
-                        // Force play if paused by browser (common on mobile)
+                        // Ensure it stays muted and playing
                         if (event.data === window.YT.PlayerState.PAUSED) {
                             event.target.playVideo();
                         }
-                        // Loop manually if playlist loop fails
                         if (event.data === window.YT.PlayerState.ENDED) {
                             event.target.playVideo();
+                        }
+                        if (event.data === window.YT.PlayerState.PLAYING) {
+                            const iframe = document.getElementById('hero-video-player');
+                            if (iframe) iframe.style.opacity = '1';
                         }
                     }
                 }
