@@ -30,7 +30,7 @@ function LazyImage({ src, alt, className, priority = false }) {
                 alt={alt}
                 className={`${className} ${fullLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-110'} transition-all duration-700 ease-out`}
                 loading={priority ? "eager" : "lazy"}
-                fetchpriority={priority ? "high" : "auto"}
+                fetchPriority={priority ? "high" : "auto"}
                 onLoad={() => setFullLoaded(true)}
             />
         </div>

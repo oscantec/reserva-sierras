@@ -273,7 +273,7 @@ export default function Landing() {
                 <div
                     className="absolute inset-0 z-10 cursor-pointer"
                     onPointerDown={() => {
-                        const iframe = document.getElementById('hero-video-iframe');
+                        const iframe = document.getElementById('hero-video-player');
                         if (iframe && iframe.contentWindow) {
                             iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
                             iframe.contentWindow.postMessage('{"event":"command","func":"mute","args":""}', '*');
