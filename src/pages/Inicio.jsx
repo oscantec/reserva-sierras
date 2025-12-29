@@ -11,6 +11,14 @@ import AntesDePartirSection from '../components/AntesDePartirSection'
 import ZonasHumedasSection from '../components/ZonasHumedasSection'
 import { DEFAULT_CONFIG } from '../utils/config'
 
+// Helper function to extract YouTube video ID from various URL formats
+function getYouTubeVideoId(url) {
+    if (!url) return null
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/
+    const match = url.match(regExp)
+    return (match && match[2].length === 11) ? match[2] : null
+}
+
 // Helper to get synced config from localStorage for instant, consistent initial render
 const getInitialConfig = () => {
     try {
@@ -115,10 +123,10 @@ export default function Landing() {
                     <div className="absolute inset-0 z-1 pointer-events-none overflow-hidden">
                         <iframe
                             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[115vw] h-[65vw] min-w-full min-h-full"
-                            src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&disablekb=1&fs=0&iv_load_policy=3&origin=${window.location.origin}`}
+                            src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&disablekb=1&fs=0&iv_load_policy=3&origin=${window.location.origin}`}
                             title="Hero Video Background"
                             frameBorder="0"
-                            allow="autoplay; encrypted-media; gyroscope; picture-in-picture"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                             style={{ filter: 'brightness(0.85) saturate(1.1)', pointerEvents: 'none' }}
                         />
                     </div>
