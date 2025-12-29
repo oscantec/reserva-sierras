@@ -136,17 +136,15 @@ export default function LocationSection() {
                                 <span className="material-symbols-outlined text-icon-color">location_on</span>
                                 Puntos de Referencia
                             </h3>
-                            <div className="mb-3">
-                                <div className="relative rounded-xl overflow-hidden">
-                                    <img
-                                        src={accesoImage}
-                                        className="w-full h-auto"
-                                        alt="Acceso a la Finca"
-                                        loading="eager"
-                                    />
-                                    <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent">
-                                        <p className="text-white text-sm font-bold">{content.referenceCaption}</p>
-                                    </div>
+                            <div className="relative rounded-xl overflow-hidden">
+                                <img
+                                    src={accesoImage}
+                                    className="w-full h-auto"
+                                    alt="Acceso a la Finca"
+                                    loading="eager"
+                                />
+                                <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent">
+                                    <p className="text-white text-sm font-bold">{content.referenceCaption}</p>
                                 </div>
                             </div>
                         </div>
