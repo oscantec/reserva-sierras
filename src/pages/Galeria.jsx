@@ -3,41 +3,38 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { DEFAULT_CONFIG } from '../utils/config'
 
-// Lazy loading image - shows high-visibility skeleton first, then fades in the image
+// Lazy loading image - shows progressive blur preview while loading
 function LazyImage({ src, alt, className, priority = false }) {
     const [fullLoaded, setFullLoaded] = useState(false)
 
     return (
-        <div className="relative w-full h-full overflow-hidden bg-gray-100 dark:bg-gray-800">
-            {/* SHIMMER EFFECT: Sophisticated loading state */}
-            {!fullLoaded && (
-                <div className="absolute inset-0 z-10 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"
-                    style={{
-                        backgroundSize: '200% 100%',
-                        animation: 'shimmer 1.5s infinite linear',
-                        background: 'linear-gradient(90deg, #f3f4f6 0%, #e5e7eb 50%, #f3f4f6 100%)'
-                    }}
-                >
-                    <div className="flex items-center justify-center w-full h-full">
-                        <span className="material-symbols-outlined text-gray-300 dark:text-gray-600 text-4xl animate-pulse">image</span>
-                    </div>
-                </div>
-            )}
+        <div className="relative w-full h-full overflow-hidden bg-gray-200 dark:bg-gray-800">
+            {/* PROGRESSIVE PREVIEW: Showing blurred original at low opacity while loading */}
+            <div className={`absolute inset-0 transition-opacity duration-1000 ${fullLoaded ? 'opacity-0' : 'opacity-100'}`}>
+                <img
+                    src={src}
+                    alt=""
+                    className={`${className} blur-3xl scale-110 opacity-40`}
+                    aria-hidden="true"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer"
+                    style={{ backgroundSize: '200% 100%', animation: 'shimmer 2s infinite linear' }}
+                />
+            </div>
 
-            {/* PROGRESSIVE BLUR-UP: Image loads blurred and sharpens smoothly */}
+            {/* HIGH QUALITY IMAGE: Scales and sharpens upon full load */}
             <img
                 src={src}
                 alt={alt}
                 className={`${className} transition-all duration-1000 ease-out ${fullLoaded
                         ? 'opacity-100 blur-0 scale-100'
-                        : 'opacity-0 blur-2xl scale-110'
+                        : 'opacity-0 blur-xl scale-105'
                     }`}
                 loading={priority ? "eager" : "lazy"}
                 fetchPriority={priority ? "high" : "auto"}
                 onLoad={() => setFullLoaded(true)}
                 style={{
-                    backfaceVisibility: 'hidden',
-                    transform: fullLoaded ? 'scale(1)' : 'scale(1.1)'
+                    backfaceVisibility: 'hidden'
                 }}
             />
         </div>

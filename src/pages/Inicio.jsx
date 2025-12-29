@@ -125,12 +125,12 @@ const VideoBackground = memo(({ videoId, blurAmount }) => {
         <div className="absolute inset-0 z-1 pointer-events-none overflow-hidden bg-black">
             {/* AMBIENT BACKGROUND: Blurred thumbnail to fill sides on wide screens */}
             <div
-                className="absolute inset-0 z-0 opacity-50 transition-opacity duration-1000"
+                className="absolute inset-0 z-0 opacity-70 transition-opacity duration-1000"
                 style={{
-                    backgroundImage: `url(https://img.youtube.com/vi/${videoId}/maxresdefault.jpg)`,
+                    backgroundImage: `url(https://img.youtube.com/vi/${videoId}/hqdefault.jpg)`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
-                    filter: `blur(40px) scale(1.1) brightness(0.5)`,
+                    filter: `blur(30px) scale(1.1) brightness(0.6)`,
                     transform: 'scale(1.1)'
                 }}
             />
