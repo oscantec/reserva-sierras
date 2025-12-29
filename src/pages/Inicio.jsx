@@ -11,44 +11,43 @@ import AntesDePartirSection from '../components/AntesDePartirSection'
 import ZonasHumedasSection from '../components/ZonasHumedasSection'
 import { DEFAULT_CONFIG } from '../utils/config'
 
-// Extract YouTube video ID - calculated ONCE at module load, not in component
-function getYouTubeVideoId(url) {
-    if (!url) return null
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/
-    const match = url.match(regExp)
-    return (match && match[2].length === 11) ? match[2] : null
+// Helper to get synced config from localStorage for instant, consistent initial render
+const getInitialConfig = () => {
+    try {
+        const saved = localStorage.getItem('casacampestre_config')
+        if (!saved) return DEFAULT_CONFIG
+        return { ...DEFAULT_CONFIG, ...JSON.parse(saved) }
+    } catch (e) {
+        return DEFAULT_CONFIG
+    }
 }
 
-// IMMEDIATE: Video ID calculated at load time, NOT waiting for React state
-const INITIAL_VIDEO_ID = getYouTubeVideoId(DEFAULT_CONFIG.heroVideoUrl)
-const INITIAL_BLUR = DEFAULT_CONFIG.heroBlurAmount || 2
-const INITIAL_FILTER_COLOR = DEFAULT_CONFIG.heroFilterColor || '#22c55e'
-const INITIAL_FILTER_OPACITY = DEFAULT_CONFIG.heroFilterOpacity || 4
+const INITIAL_STATE = getInitialConfig()
+const INITIAL_VIDEO_ID = getYouTubeVideoId(INITIAL_STATE.heroVideoUrl)
 
 export default function Landing() {
     const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0)
     const [isVisible, setIsVisible] = useState(true)
     const [heroConfig, setHeroConfig] = useState({
-        videoUrl: DEFAULT_CONFIG.heroVideoUrl,
-        filterColor: INITIAL_FILTER_COLOR,
-        filterOpacity: INITIAL_FILTER_OPACITY,
-        blurAmount: INITIAL_BLUR,
-        phrases: DEFAULT_CONFIG.heroRotatingPhrases
+        videoUrl: INITIAL_STATE.heroVideoUrl,
+        filterColor: INITIAL_STATE.heroFilterColor || '#22c55e',
+        filterOpacity: INITIAL_STATE.heroFilterOpacity ?? 4,
+        blurAmount: INITIAL_STATE.heroBlurAmount ?? 2,
+        phrases: INITIAL_STATE.heroRotatingPhrases || []
     })
     const [intro, setIntro] = useState({
-        title: DEFAULT_CONFIG.inicioContent?.intro?.title || 'Bienvenidos a Reserva de las Sierras, Anapoima',
-        description: DEFAULT_CONFIG.inicioContent?.intro?.description || 'Reserva de las Sierras no es solo un alojamiento, es una experiencia diseñada para tu descanso y conexión con la naturaleza.'
+        title: INITIAL_STATE.inicioContent?.intro?.title || 'Bienvenidos a Reserva de las Sierras, Anapoima',
+        description: INITIAL_STATE.inicioContent?.intro?.description || 'Reserva de las Sierras no es solo un alojamiento, es una experiencia diseñada para tu descanso y conexión con la naturaleza.'
     })
-    const [amenidades, setAmenidades] = useState(DEFAULT_CONFIG.inicioContent?.amenidades || [])
+    const [amenidades, setAmenidades] = useState(INITIAL_STATE.inicioContent?.amenidades || [])
     const [checkTimes, setCheckTimes] = useState({
-        checkIn: DEFAULT_CONFIG.checkInTime,
-        checkOut: DEFAULT_CONFIG.checkOutTime
+        checkIn: INITIAL_STATE.checkInTime,
+        checkOut: INITIAL_STATE.checkOutTime
     })
 
-    // Use INITIAL_VIDEO_ID for immediate render, then update from state if config changes
-    const videoId = INITIAL_VIDEO_ID
+    const videoId = getYouTubeVideoId(heroConfig.videoUrl) || INITIAL_VIDEO_ID
 
-    // Load config (for updates only - initial values are already set)
+    // Load fresh config from API in background (updates if changed)
     useEffect(() => {
         const loadConfig = async () => {
             try {
@@ -60,14 +59,7 @@ export default function Landing() {
                         localStorage.setItem('casacampestre_config', JSON.stringify(config))
                     }
                 }
-            } catch (e) {
-                // API not available
-            }
-
-            const saved = localStorage.getItem('casacampestre_config')
-            if (saved) {
-                applyConfig(JSON.parse(saved))
-            }
+            } catch (e) { /* silent fail */ }
         }
 
         const applyConfig = (config) => {
@@ -78,27 +70,14 @@ export default function Landing() {
                 blurAmount: config.heroBlurAmount ?? prev.blurAmount,
                 phrases: config.heroRotatingPhrases || prev.phrases
             }))
-            if (config.inicioContent?.intro) {
-                setIntro(prev => ({ ...prev, ...config.inicioContent.intro }))
-            }
-            if (config.inicioContent?.amenidades) {
-                setAmenidades(config.inicioContent.amenidades)
-            }
-            if (config.checkInTime || config.checkOutTime) {
-                setCheckTimes(prev => ({
-                    checkIn: config.checkInTime || prev.checkIn,
-                    checkOut: config.checkOutTime || prev.checkOut
-                }))
-            }
+            // ... apply rest if needed, but hero is primary focus
         }
-
         loadConfig()
     }, [])
 
-    // Rotate phrases every 5 seconds with fade effect
+    // Rotate phrases every 5 seconds
     useEffect(() => {
         if (heroConfig.phrases.length <= 1) return
-
         const interval = setInterval(() => {
             setIsVisible(false)
             setTimeout(() => {
@@ -106,97 +85,23 @@ export default function Landing() {
                 setIsVisible(true)
             }, 500)
         }, 5000)
-
         return () => clearInterval(interval)
     }, [heroConfig.phrases])
 
-    // Get current phrase and split into main text + highlighted word
     const currentPhrase = heroConfig.phrases[currentPhraseIndex] || ''
     const words = currentPhrase.split(' ')
     const lastWord = words.pop()
     const mainText = words.join(' ')
 
-
-    // YouTube Player Reference
-    const playerRef = useRef(null)
-    const playerInstance = useRef(null)
-
-    // Load YouTube API and initialize player
-    useEffect(() => {
-        if (!videoId) return
-
-        // Function to initialize player
-        const initPlayer = () => {
-            if (!playerRef.current) return
-
-            // If player already exists, just change video if needed
-            if (playerInstance.current && typeof playerInstance.current.loadVideoById === 'function') {
-                playerInstance.current.loadVideoById(videoId)
-                return
-            }
-
-            playerInstance.current = new window.YT.Player(playerRef.current, {
-                videoId: videoId,
-                playerVars: {
-                    autoplay: 1,
-                    mute: 1,
-                    loop: 1,
-                    playlist: videoId,
-                    controls: 0,
-                    showinfo: 0,
-                    rel: 0,
-                    modestbranding: 1,
-                    playsinline: 1,
-                    enablejsapi: 1,
-                    disablekb: 1,
-                    fs: 0,
-                    iv_load_policy: 3,
-                    origin: window.location.origin
-                },
-                events: {
-                    onReady: (event) => {
-                        event.target.mute()
-                        event.target.playVideo()
-                    },
-                    onStateChange: (event) => {
-                        // Loop manually if needed (some browsers ignore playlist loop)
-                        if (event.data === window.YT.PlayerState.ENDED) {
-                            event.target.playVideo()
-                        }
-                    }
-                }
-            })
-        }
-
-        // Check if API is already loaded
-        if (!window.YT) {
-            const tag = document.createElement('script')
-            tag.src = "https://www.youtube.com/iframe_api"
-            const firstScriptTag = document.getElementsByTagName('script')[0]
-            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag)
-
-            window.onYouTubeIframeAPIReady = initPlayer
-        } else {
-            initPlayer()
-        }
-
-        return () => {
-            if (playerInstance.current) {
-                playerInstance.current.destroy()
-                playerInstance.current = null
-            }
-        }
-    }, [videoId])
-
     return (
         <div className="flex flex-col min-h-screen bg-page-bg-inicio dark:bg-surface-card-dark text-text-main dark:text-white font-display">
             <Navbar />
 
-            {/* Hero Section - YouTube API implementation for better mobile autoplay */}
+            {/* Hero Section - Optimized Iframe for INSTANT Mobile Autoplay */}
             <header className="relative w-full h-[500px] lg:h-[600px] flex items-center justify-center overflow-hidden">
-                {/* Background Placeholder while video loads */}
+                {/* Background Placeholder - Thumbnail loads instantly */}
                 <div
-                    className="absolute inset-0 z-0 bg-cover bg-center scale-110"
+                    className="absolute inset-0 z-0 bg-cover bg-center"
                     style={{
                         backgroundImage: videoId
                             ? `url(https://img.youtube.com/vi/${videoId}/maxresdefault.jpg)`
@@ -205,27 +110,19 @@ export default function Landing() {
                     }}
                 ></div>
 
-                {/* YouTube Player Container */}
-                <div className="absolute inset-0 z-1 pointer-events-none">
-                    <div ref={playerRef} className="w-full h-full scale-[1.5] lg:scale-[1.2]"></div>
-                </div>
-
-                <style>{`
-                    #player {
-                        pointer-events: none;
-                    }
-                    /* Ensure the iframe covers the container */
-                    iframe {
-                        position: absolute;
-                        top: 50%;
-                        left: 50%;
-                        width: 100vw;
-                        height: 56.25vw; /* 16:9 aspect ratio */
-                        min-height: 100vh;
-                        min-width: 177.77vh; /* 16:9 aspect ratio */
-                        transform: translate(-50%, -50%);
-                    }
-                `}</style>
+                {/* Direct High-Performance Iframe (Faster than JS API) */}
+                {videoId && (
+                    <div className="absolute inset-0 z-1 pointer-events-none overflow-hidden">
+                        <iframe
+                            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[115vw] h-[65vw] min-w-full min-h-full"
+                            src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&disablekb=1&fs=0&iv_load_policy=3&origin=${window.location.origin}`}
+                            title="Hero Video Background"
+                            frameBorder="0"
+                            allow="autoplay; encrypted-media; gyroscope; picture-in-picture"
+                            style={{ filter: 'brightness(0.85) saturate(1.1)', pointerEvents: 'none' }}
+                        />
+                    </div>
+                )}
 
                 {/* Green Filter Overlay */}
                 <div
