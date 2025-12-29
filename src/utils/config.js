@@ -1,17 +1,21 @@
 // Default configuration for the entire application
-// This ensures credentials are ALWAYS available even after app restart
+// This ensures the correct content is ALWAYS available for new visitors
 
 export const DEFAULT_CONFIG = {
     // Hero Video Settings
     heroVideoUrl: 'https://www.youtube.com/watch?v=yzjFNEuWwFI',
-    heroFilterColor: '#3db814',
-    heroFilterOpacity: 30,
+    heroFilterColor: '#22c55e',
+    heroFilterOpacity: 4,
+    heroBlurAmount: 2,
     heroRotatingPhrases: [
         'Somos Reserva de las Sierras',
         'Somos Tranquilidad',
         'Somos Aire Puro',
         'Somos Espacio Verde'
     ],
+    // Check-in/out times
+    checkInTime: '3:00 PM',
+    checkOutTime: '1:00 PM',
     // iCal URLs
     airbnbUrl: 'https://www.airbnb.com.co/calendar/ical/1164759440955486077.ics?s=556ea5347565316f2bf679394086236b',
     bookingUrl: 'https://ical.booking.com/v1/export?t=1f8d5ee8-e773-4d57-a0a7-cb23c241ea8c',
@@ -51,9 +55,17 @@ YfU9ug2VqA7hLh83iLYP
     // Sheet Names
     sheetNameReservas: '1. BD',
     sheetNameHuespedes: '2. BH',
+    // Host info
+    hostName: 'Nuestra Administradora',
+    // WhatsApp
+    whatsappNumber: '573115565483',
     // Payment Configuration
     paymentAdvancePercent: 25,
     paymentBalancePercent: 75,
+    paymentSectionSubtitle: 'Si tu reserva fue realizada a través de Airbnb, no es necesario efectuar pagos adicionales, ya que todo el proceso se gestiona directamente por la plataforma. Para reservas directas o realizadas por Booking, se solicita un ABONO OBLIGATORIO del 25 % al momento de confirmar la reserva para asegurar la fecha, y el saldo restante se paga al llegar a la casa.',
+    paymentSubtitlePart1: 'Si tu reserva fue realizada a través de Airbnb, no es necesario efectuar pagos adicionales, ya que todo el proceso se gestiona directamente por la plataforma. Para reservas directas o realizadas por Booking, se solicita un',
+    paymentSubtitleHighlight: 'ABONO OBLIGATORIO DEL 25 %',
+    paymentSubtitlePart2: 'al momento de confirmar la reserva para asegurar la fecha, y el saldo restante se paga al llegar a la casa. FInal Fimal',
     // Bank Transfer Info
     paymentBankName: 'Bancolombia',
     paymentBankAccountType: 'Ahorros',
@@ -62,15 +74,53 @@ YfU9ug2VqA7hLh83iLYP
     paymentBankAccountNit: '901.234.567-8',
     // Nequi Info
     paymentNequiNumber: '3057501023',
-    paymentNequiName: 'Osc_ Can (Oscar Cante)',
+    paymentNequiName: 'Osc_Can (Oscar Cante)',
     // QR Code
     paymentQRImageUrl: '',
     // WhatsApp for payment receipts
-    paymentWhatsappNumber: '3057501023',
+    paymentWhatsappNumber: '3027857026',
     paymentWhatsappMessage: 'Hola, adjunto mi comprobante de pago para la reserva',
     // B-bre / PSE Link
     paymentBbreLink: '',
-    // Pricing Configuration (CRITICAL: Must be here for persistence)
+    paymentBbreEmail: 'ingenierocante@gmail.com',
+    paymentBbrePhone: '3057501023',
+    // Galeria labels
+    galeriaLabels: {},
+    // Galeria Content
+    galeriaContent: {
+        pageTitle: 'Nuestra Galería',
+        pageSubtitle: 'Explora cada rincón de Reserva de las Sierras.'
+    },
+    // Registro Content
+    registroContent: {
+        pageTitle: 'Registro de Huéspedes'
+    },
+    // Reservas Content
+    reservasContent: {
+        pageTitle: 'Reserva tu hospedaje',
+        pageSubtitle: 'Selecciona tus fechas de llegada y salida.'
+    },
+    // Inicio Content
+    inicioContent: {
+        intro: {
+            title: 'Bienvenidos a Reserva de las Sierras, Anapoima'
+        }
+    },
+    // Site Colors
+    siteColors: {
+        pageBgInicio: '#ffffff',
+        pageBgReservas: '#ffffff',
+        pageBgGaleria: '#ffffff'
+    },
+    // Site Fonts
+    siteFonts: {
+        fontTitle: 'Outfit',
+        fontBody: 'Inter',
+        fontCard: 'Inter',
+        fontButton: 'Poppins',
+        fontAlert: 'Inter'
+    },
+    // Pricing Configuration
     pricing: {
         baseRates: {
             weekday: 350000,
@@ -83,15 +133,15 @@ YfU9ug2VqA7hLh83iLYP
         },
         seasons: [
             { id: 1, name: 'Temporada Alta', multiplier: 1.3, startMonth: 12, startDay: 15, endMonth: 1, endDay: 15, color: '#2f4858' },
-            { id: 2, name: 'Semana Santa', multiplier: 1.4, startMonth: 3, startDay: 24, endMonth: 3, endDay: 31, color: '#007983' },
+            { id: 2, name: 'Semana Santa', multiplier: 1.4, startMonth: 3, startDay: 24, endMonth: 3, endDay: 31, color: '#007983' }
         ],
         specialDates: [
             { id: 1, date: '2024-12-24', price: 600000, label: 'Nochebuena' },
-            { id: 2, date: '2024-12-31', price: 700000, label: 'Año Nuevo' },
+            { id: 2, date: '2024-12-31', price: 700000, label: 'Año Nuevo' }
         ],
         discounts: {
             longStay: { enabled: true, nights: 7, percent: 15 },
-            lastMinute: { enabled: false, hours: 48, percent: 10 },
+            lastMinute: { enabled: false, hours: 48, percent: 10 }
         }
     }
 }

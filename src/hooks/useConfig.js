@@ -1,42 +1,47 @@
 import { useState, useEffect } from 'react'
+import { DEFAULT_CONFIG } from '../utils/config'
+
+const CONFIG_KEY = 'casacampestre_config'
 
 /**
- * Custom hook to load configuration from API first, then localStorage as fallback.
- * This ensures all components always have the latest saved configuration.
+ * Custom hook to load configuration.
+ * Uses DEFAULT_CONFIG as the base, then merges with any localStorage overrides.
  */
 export function useConfig() {
-    const [config, setConfig] = useState(null)
+    const [config, setConfig] = useState(DEFAULT_CONFIG)
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
         const loadConfig = async () => {
-            // 1. Try API first (saved-config.json in dev, Supabase in prod)
+            // Start with defaults
+            let finalConfig = { ...DEFAULT_CONFIG }
+
+            // Check localStorage for any saved overrides
+            try {
+                const saved = localStorage.getItem(CONFIG_KEY)
+                if (saved) {
+                    const parsed = JSON.parse(saved)
+                    finalConfig = { ...DEFAULT_CONFIG, ...parsed }
+                }
+            } catch {
+                // If localStorage fails, just use defaults
+            }
+
+            // Try to fetch from API for latest updates
             try {
                 const response = await fetch('/api/config')
                 if (response.ok) {
                     const data = await response.json()
                     if (Object.keys(data).length > 0) {
-                        setConfig(data)
-                        localStorage.setItem('casacampestre_config', JSON.stringify(data))
-                        setIsLoading(false)
-                        return
+                        finalConfig = { ...DEFAULT_CONFIG, ...data }
+                        localStorage.setItem(CONFIG_KEY, JSON.stringify(finalConfig))
                     }
                 }
-            } catch (e) {
-                console.log('API not available, using localStorage fallback')
+            } catch {
+                // API not available, use local config
             }
 
-            // 2. Fallback to localStorage
-            const saved = localStorage.getItem('casacampestre_config')
-            if (saved) {
-                try {
-                    setConfig(JSON.parse(saved))
-                } catch {
-                    setConfig({})
-                }
-            } else {
-                setConfig({})
-            }
+            setConfig(finalConfig)
             setIsLoading(false)
         }
 

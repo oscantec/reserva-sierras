@@ -291,6 +291,20 @@ export default function Booking() {
         return date.toLocaleDateString('es-CO', { day: 'numeric', month: 'short', year: 'numeric' })
     }
 
+    // Handle Continuar Reserva - Enviar mensaje a WhatsApp
+    const handleContinuarReserva = () => {
+        if (!selectedRange.start || !selectedRange.end || nights === 0) return
+
+        const fechaLlegada = formatDate(selectedRange.start)
+        const fechaSalida = formatDate(selectedRange.end)
+        const phoneNumber = '573027857026' // Número de WhatsApp con código de país
+
+        const mensaje = `Hola Oscar, queremos reservar contigo las fechas del ${fechaLlegada} al ${fechaSalida} (${nights} ${nights === 1 ? 'noche' : 'noches'}), por un valor total de ${formatPrice(total)}. ¿Está disponible?`
+
+        const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(mensaje)}`
+        window.open(whatsappUrl, '_blank')
+    }
+
     return (
         <div className="flex flex-col min-h-screen bg-page-bg-reservas dark:bg-surface-card-dark text-text-main dark:text-white font-display">
             <Navbar />
@@ -372,7 +386,8 @@ export default function Booking() {
                                             } else if (inRange) {
                                                 className += "bg-primary text-white font-medium"
                                             } else {
-                                                className += "rounded-lg hover:bg-icon-bg-primary dark:hover:bg-icon-bg-dark hover:text-primary cursor-pointer"
+                                                // Días disponibles - sin fondo, solo hover
+                                                className += "rounded-lg hover:bg-primary/20 dark:hover:bg-primary/30 hover:text-primary cursor-pointer"
                                             }
 
                                             return (
@@ -392,13 +407,13 @@ export default function Booking() {
                         </div>
 
                         {/* Legend */}
-                        <div className="mt-6 flex flex-wrap gap-4 text-sm text-text-muted dark:text-text-muted border-t border-border-card dark:border-border-card-dark pt-4">
+                        <div className="mt-6 flex flex-wrap gap-4 justify-center text-sm text-text-muted dark:text-text-muted border-t border-border-card dark:border-border-card-dark pt-4">
                             <div className="flex items-center gap-2">
                                 <div className="size-3 rounded-full bg-primary"></div>
                                 <span>Seleccionado</span>
                             </div>
                             <div className="flex items-center gap-2">
-                                <div className="size-3 rounded-full border border-gray-300 bg-white dark:bg-gray-700"></div>
+                                <div className="size-3 rounded-full border border-primary/30" style={{ backgroundColor: '#e8f5e9' }}></div>
                                 <span>Disponible</span>
                             </div>
                             <div className="flex items-center gap-2">
@@ -545,7 +560,10 @@ export default function Booking() {
                                             <span className="font-black text-2xl text-primary">{formatPrice(total)}</span>
                                         </div>
                                     </div>
-                                    <button className="w-full h-12 rounded-lg bg-primary hover:bg-btn-primary-hover text-white font-bold text-base shadow-lg shadow-card transition-all transform active:scale-95 flex items-center justify-center gap-2">
+                                    <button
+                                        onClick={handleContinuarReserva}
+                                        className="w-full h-12 rounded-lg bg-primary hover:bg-btn-primary-hover text-white font-bold text-base shadow-lg shadow-card transition-all transform active:scale-95 flex items-center justify-center gap-2"
+                                    >
                                         <span>Continuar Reserva</span>
                                         <span className="material-symbols-outlined text-sm">arrow_forward</span>
                                     </button>
