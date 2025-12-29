@@ -33,11 +33,7 @@ export default function Landing() {
         title: DEFAULT_CONFIG.inicioContent?.intro?.title || 'Bienvenidos a Reserva de las Sierras, Anapoima',
         description: DEFAULT_CONFIG.inicioContent?.intro?.description || 'Reserva de las Sierras no es solo un alojamiento, es una experiencia diseñada para tu descanso y conexión con la naturaleza.'
     })
-    const [amenidades, setAmenidades] = useState(DEFAULT_CONFIG.inicioContent?.amenidades || [
-        { icon: 'pool', title: 'Piscina Privada', description: 'Disfruta de un baño refrescante en total privacidad.' },
-        { icon: 'wifi', title: 'Wi-Fi Alta Velocidad', description: 'Mantente conectado con Starlink.' },
-        { icon: 'pets', title: 'Pet Friendly', description: 'Tus mascotas son bienvenidas.' }
-    ])
+    const [amenidades, setAmenidades] = useState(DEFAULT_CONFIG.inicioContent?.amenidades || [])
     const [checkTimes, setCheckTimes] = useState({
         checkIn: DEFAULT_CONFIG.checkInTime,
         checkOut: DEFAULT_CONFIG.checkOutTime
