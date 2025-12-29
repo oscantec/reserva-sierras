@@ -1,28 +1,25 @@
 import { useState, useEffect } from 'react'
+import { DEFAULT_CONFIG } from '../utils/config'
+import accesoImage from '../images/Acceso Casa2.webp'
 
 export default function LocationSection() {
+    const locationConfig = DEFAULT_CONFIG.inicioContent?.location || {}
     const defaults = {
-        title: 'Cómo llegar a Reserva de las Sierras',
-        subtitle: 'Sigue nuestras indicaciones para disfrutar sin contratiempos.',
-        mapUrl: 'https://maps.google.com/maps?q=Reserva+de+las+Sierras&output=embed',
-        wazeUrl: 'https://waze.com/ul',
-        mapsUrl: 'https://maps.google.com',
-        referenceImage: '/src/images/Acceso Casa2.webp',
-        referenceCaption: 'Acceso a la Finca',
-        roadCondition: 'Carretera pavimentada en 95%. Últimos 500m de vía destapada accesible.',
-        stepsCarro: [
-            { title: 'Salida por Autopista Norte', desc: 'Mantente en carril izquierdo hasta el Peaje Los Andes.' },
-            { title: 'Glorieta San Mateo', desc: 'Toma la segunda salida hacia variante rural.' },
-            { title: 'Desvío Veredal (Km 12)', desc: 'Gira a la derecha. Referencia: tienda azul.' },
-            { title: 'Llegada', desc: '500m más, tercera finca a la izquierda.' }
+        title: locationConfig.title || 'Cómo llegar a Reserva de las Sierras',
+        subtitle: locationConfig.subtitle || 'Sigue nuestras indicaciones para disfrutar sin contratiempos.',
+        mapUrl: locationConfig.mapUrl || 'https://maps.google.com/maps?q=Reserva+de+las+Sierras&output=embed',
+        wazeUrl: locationConfig.wazeUrl || 'https://waze.com/ul',
+        mapsUrl: locationConfig.mapsUrl || 'https://maps.google.com',
+        referenceImage: accesoImage, // Usar imagen importada directamente
+        referenceCaption: locationConfig.referenceCaption || 'Acceso a la Finca',
+        roadCondition: locationConfig.roadCondition || 'Carretera pavimentada en 95%. Últimos 500m de vía destapada accesible.',
+        stepsCarro: locationConfig.stepsCarro || [
+            { title: 'Vía principal', desc: 'Sigue las indicaciones.' }
         ],
-        stepsBus: [
-            { title: 'Terminal de Transporte', desc: 'Toma un bus hacia Anapoima desde el Terminal del Sur.' },
-            { title: 'Bajarse en el cruce', desc: 'Pide al conductor dejarte en el cruce de la vereda.' },
-            { title: 'Mototaxi o caminata', desc: 'Toma un mototaxi o camina 15 minutos hasta la finca.' },
-            { title: 'Llegada', desc: 'Busca el letrero "Reserva de las Sierras" a la izquierda.' }
+        stepsBus: locationConfig.stepsBus || [
+            { title: 'Terminal de Transporte', desc: 'Toma un bus hacia Anapoima.' }
         ],
-        helpMessage: '¿Te perdiste? Llámanos, te guiaremos en tiempo real.'
+        helpMessage: locationConfig.helpMessage || '¿Te perdiste? Llámanos, te guiaremos.'
     }
 
     const [content, setContent] = useState(defaults)

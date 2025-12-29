@@ -124,8 +124,19 @@ export default function Landing() {
 
             {/* Hero Section with YouTube Video Background */}
             <header className="relative w-full h-[500px] lg:h-[600px] flex items-center justify-center overflow-hidden">
+                {/* YouTube Thumbnail as instant background while video loads */}
+                {videoId && (
+                    <div
+                        className="absolute inset-0 z-0 bg-cover bg-center"
+                        style={{
+                            backgroundImage: `url(https://img.youtube.com/vi/${videoId}/maxresdefault.jpg)`,
+                            filter: `blur(${heroConfig.blurAmount}px) brightness(0.7)`
+                        }}
+                    ></div>
+                )}
+
                 {/* Blurred Background Video (fills entire container - letterbox blur effect) */}
-                <div className="absolute inset-0 z-0">
+                <div className="absolute inset-0 z-1">
                     {videoId ? (
                         <iframe
                             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400%] h-[400%] min-w-full min-h-full pointer-events-none"

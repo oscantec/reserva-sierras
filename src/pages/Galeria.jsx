@@ -3,6 +3,31 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { DEFAULT_CONFIG } from '../utils/config'
 
+// Lazy loading image component with placeholder
+function LazyImage({ src, alt, className }) {
+    const [loaded, setLoaded] = useState(false)
+    const [error, setError] = useState(false)
+
+    return (
+        <div className="relative w-full h-full">
+            {/* Placeholder skeleton */}
+            {!loaded && !error && (
+                <div className="absolute inset-0 bg-gray-200 dark:bg-gray-700 animate-pulse flex items-center justify-center">
+                    <span className="material-symbols-outlined text-gray-400 text-2xl">image</span>
+                </div>
+            )}
+            <img
+                src={src}
+                alt={alt}
+                className={`${className} ${loaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}
+                loading="lazy"
+                onLoad={() => setLoaded(true)}
+                onError={() => setError(true)}
+            />
+        </div>
+    )
+}
+
 // Import all images - EXTERNAS (removed accesoCasa2 - only for Inicio)
 import exterior1 from '../images/Exterior1.webp'
 import exterior2 from '../images/Exterior 2.webp'
@@ -377,11 +402,10 @@ export default function Gallery() {
                                     onClick={() => openLightbox(image, index)}
                                     className={`group relative overflow-hidden rounded-2xl cursor-pointer ${getBentoClass(index)} transition-all duration-500 hover:z-10`}
                                 >
-                                    <img
+                                    <LazyImage
                                         src={image.src}
                                         alt={image.title}
                                         className="absolute inset-0 w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
-                                        loading="lazy"
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
                                     <div className="absolute bottom-0 left-0 right-0 p-3 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
@@ -403,11 +427,10 @@ export default function Gallery() {
                                     onClick={() => openLightbox(image, index)}
                                     className="group relative overflow-hidden rounded-2xl cursor-pointer aspect-square bg-surface-card dark:bg-surface-card-dark border border-border-card dark:border-border-card-dark shadow-md hover:shadow-xl transition-all duration-300"
                                 >
-                                    <img
+                                    <LazyImage
                                         src={image.src}
                                         alt={image.title}
                                         className="absolute inset-0 w-full h-full object-cover transition-all duration-500 group-hover:scale-105"
-                                        loading="lazy"
                                     />
                                     {/* Always visible label at bottom */}
                                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-3">
