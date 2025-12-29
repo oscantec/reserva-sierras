@@ -73,7 +73,7 @@ export default function LocationSection() {
                 {/* Header - Same structure as ContactoInicialSection */}
                 <div className="mb-4 md:mb-6">
                     <h2 className="text-3xl md:text-4xl font-black leading-tight tracking-[-0.033em] mb-2">Ubicación</h2>
-                    <p className="text-sm text-text-muted dark:text-text-muted mb-4">{content.subtitle}</p>
+                    <p className="text-text-subtitle dark:text-text-subtitle-dark text-base mb-4">{content.subtitle}</p>
 
                     {/* Waze and Maps buttons */}
                     <div className="flex gap-3">
