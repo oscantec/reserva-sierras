@@ -1,21 +1,22 @@
 import { useState, useEffect } from 'react'
 import { fetchReservasData } from '../utils/googleSheets'
 import qrImage from '/src/images/QR RS.png'
+import { DEFAULT_CONFIG } from '../utils/config'
 
 export default function PaymentSection() {
     const [config, setConfig] = useState({
-        paymentAdvancePercent: 25,
-        paymentBalancePercent: 75,
-        paymentBbreEmail: 'ingenierocante@gmail.com',
-        paymentBbrePhone: '3057501023',
-        paymentNequiNumber: '3057501023',
-        paymentNequiName: 'Osc_ Can (Oscar Cante)',
-        paymentQRImageUrl: '',
-        paymentWhatsappNumber: '3057501023',
-        paymentWhatsappMessage: 'Hola, adjunto mi comprobante de pago para la reserva',
-        paymentSubtitlePart1: 'Si tu reserva fue realizada a través de Airbnb, no es necesario efectuar pagos adicionales, ya que todo el proceso se gestiona directamente por la plataforma. Para reservas directas o realizadas por Booking, se solicita un',
-        paymentSubtitleHighlight: 'ABONO OBLIGATORIO del 25 %',
-        paymentSubtitlePart2: 'al momento de confirmar la reserva para asegurar la fecha, y el saldo restante se paga al llegar a la casa.',
+        paymentAdvancePercent: DEFAULT_CONFIG.paymentAdvancePercent,
+        paymentBalancePercent: DEFAULT_CONFIG.paymentBalancePercent,
+        paymentBbreEmail: DEFAULT_CONFIG.paymentBbreEmail,
+        paymentBbrePhone: DEFAULT_CONFIG.paymentBbrePhone,
+        paymentNequiNumber: DEFAULT_CONFIG.paymentNequiNumber,
+        paymentNequiName: DEFAULT_CONFIG.paymentNequiName,
+        paymentQRImageUrl: DEFAULT_CONFIG.paymentQRImageUrl,
+        paymentWhatsappNumber: DEFAULT_CONFIG.paymentWhatsappNumber,
+        paymentWhatsappMessage: DEFAULT_CONFIG.paymentWhatsappMessage,
+        paymentSubtitlePart1: DEFAULT_CONFIG.paymentSubtitlePart1,
+        paymentSubtitleHighlight: DEFAULT_CONFIG.paymentSubtitleHighlight,
+        paymentSubtitlePart2: DEFAULT_CONFIG.paymentSubtitlePart2,
     })
 
     const [selectedMethod, setSelectedMethod] = useState(null)

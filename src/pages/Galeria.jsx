@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+import { DEFAULT_CONFIG } from '../utils/config'
 
 // Import all images - EXTERNAS (removed accesoCasa2 - only for Inicio)
 import exterior1 from '../images/Exterior1.webp'
@@ -63,23 +64,23 @@ export default function Gallery() {
     const [lightboxImage, setLightboxImage] = useState(null)
     const [lightboxIndex, setLightboxIndex] = useState(0)
     const [isAnimating, setIsAnimating] = useState(false)
-    const [customLabels, setCustomLabels] = useState({})
+    const [customLabels, setCustomLabels] = useState(DEFAULT_CONFIG.galeriaLabels || {})
     const [pageContent, setPageContent] = useState({
-        pageTitle: 'Nuestra Galería',
-        pageSubtitle: 'Explora cada rincón de Reserva de las Sierras.',
+        pageTitle: DEFAULT_CONFIG.galeriaContent?.pageTitle || 'Nuestra Galería',
+        pageSubtitle: DEFAULT_CONFIG.galeriaContent?.pageSubtitle || 'Explora cada rincón de Reserva de las Sierras.',
         categoryAll: 'Galería Completa',
         categoryExternas: 'Externas',
         categoryInternas: 'Internas',
         categoryHumedas: 'Zonas Húmedas'
     })
 
-    // Load custom labels from localStorage
+    // Load custom labels from localStorage (overrides if available)
     useEffect(() => {
         const saved = localStorage.getItem('casacampestre_config')
         if (saved) {
             const config = JSON.parse(saved)
             if (config.galeriaLabels) {
-                setCustomLabels(config.galeriaLabels)
+                setCustomLabels(prev => ({ ...prev, ...config.galeriaLabels }))
             }
             if (config.galeriaContent) {
                 setPageContent(prev => ({ ...prev, ...config.galeriaContent }))

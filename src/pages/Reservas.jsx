@@ -2,19 +2,20 @@ import { useState, useEffect, useMemo } from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { fetchAllCalendars } from '../utils/icalParser'
+import { DEFAULT_CONFIG } from '../utils/config'
 
 export default function Booking() {
     const [currentMonth, setCurrentMonth] = useState(new Date())
     const [reservedDates, setReservedDates] = useState([])
     const [selectedRange, setSelectedRange] = useState({ start: null, end: null })
     const [isLoading, setIsLoading] = useState(true)
-    const [pricing, setPricing] = useState(null)
+    const [pricing, setPricing] = useState(DEFAULT_CONFIG.pricing)
     const [siteColors, setSiteColors] = useState({
-        discountText: '#3db814'
+        discountText: DEFAULT_CONFIG.siteColors?.discountText || '#3db814'
     })
     const [pageContent, setPageContent] = useState({
-        pageTitle: 'Reserva tu escape',
-        pageSubtitle: 'Selecciona tus fechas de llegada y salida.',
+        pageTitle: DEFAULT_CONFIG.reservasContent?.pageTitle || 'Reserva tu hospedaje',
+        pageSubtitle: DEFAULT_CONFIG.reservasContent?.pageSubtitle || 'Selecciona tus fechas de llegada y salida.',
         stepIndicator: 'Paso 1 de 4',
         stepLabel: 'Fechas',
         tarifasTitle: 'Nuestras Tarifas',
@@ -52,11 +53,11 @@ export default function Booking() {
         fetchReservations()
     }, [])
 
-    // Load pricing from localStorage
+    // Load pricing from localStorage (to override defaults if available)
     useEffect(() => {
         const config = JSON.parse(localStorage.getItem('casacampestre_config') || '{}')
         if (config.pricing) {
-            setPricing(config.pricing)
+            setPricing(prev => ({ ...DEFAULT_CONFIG.pricing, ...config.pricing }))
         }
         if (config.siteColors?.discountText) {
             setSiteColors(prev => ({

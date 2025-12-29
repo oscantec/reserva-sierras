@@ -9,6 +9,7 @@ import RulesSection from '../components/RulesSection'
 import WaterConservationSection from '../components/WaterConservationSection'
 import AntesDePartirSection from '../components/AntesDePartirSection'
 import ZonasHumedasSection from '../components/ZonasHumedasSection'
+import { DEFAULT_CONFIG } from '../utils/config'
 
 // Helper function to extract YouTube video ID from various URL formats
 function getYouTubeVideoId(url) {
@@ -22,29 +23,24 @@ export default function Landing() {
     const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0)
     const [isVisible, setIsVisible] = useState(true)
     const [heroConfig, setHeroConfig] = useState({
-        videoUrl: 'https://www.youtube.com/watch?v=yzjFNEuWwFI',
-        filterColor: '#3db814',
-        filterOpacity: 30,
-        blurAmount: 15,
-        phrases: [
-            'Somos Reserva de las Sierras',
-            'Somos Tranquilidad',
-            'Somos Aire Puro',
-            'Somos Espacio Verde'
-        ]
+        videoUrl: DEFAULT_CONFIG.heroVideoUrl,
+        filterColor: DEFAULT_CONFIG.heroFilterColor,
+        filterOpacity: DEFAULT_CONFIG.heroFilterOpacity,
+        blurAmount: DEFAULT_CONFIG.heroBlurAmount || 2,
+        phrases: DEFAULT_CONFIG.heroRotatingPhrases
     })
     const [intro, setIntro] = useState({
-        title: 'Un refugio donde el tiempo se detiene',
-        description: 'Reserva de las Sierras no es solo un alojamiento, es una experiencia diseñada para tu descanso y conexión con la naturaleza.'
+        title: DEFAULT_CONFIG.inicioContent?.intro?.title || 'Bienvenidos a Reserva de las Sierras, Anapoima',
+        description: DEFAULT_CONFIG.inicioContent?.intro?.description || 'Reserva de las Sierras no es solo un alojamiento, es una experiencia diseñada para tu descanso y conexión con la naturaleza.'
     })
-    const [amenidades, setAmenidades] = useState([
+    const [amenidades, setAmenidades] = useState(DEFAULT_CONFIG.inicioContent?.amenidades || [
         { icon: 'pool', title: 'Piscina Privada', description: 'Disfruta de un baño refrescante en total privacidad.' },
         { icon: 'wifi', title: 'Wi-Fi Alta Velocidad', description: 'Mantente conectado con Starlink.' },
         { icon: 'pets', title: 'Pet Friendly', description: 'Tus mascotas son bienvenidas.' }
     ])
     const [checkTimes, setCheckTimes] = useState({
-        checkIn: '3:00 PM',
-        checkOut: '11:00 AM'
+        checkIn: DEFAULT_CONFIG.checkInTime,
+        checkOut: DEFAULT_CONFIG.checkOutTime
     })
 
     // Load config
