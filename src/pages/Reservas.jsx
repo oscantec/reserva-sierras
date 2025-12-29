@@ -424,6 +424,89 @@ export default function Booking() {
                         </div>
                     </div>
 
+                    {/* Tu Reserva - Mobile only (visible solo en móvil, en desktop está el sidebar) */}
+                    <div className="lg:hidden bg-surface-card dark:bg-surface-card-dark rounded-2xl p-6 shadow-xl shadow-gray-200/50 dark:shadow-black/20 border border-border-card dark:border-border-card-dark">
+                        <div className="flex justify-between items-center mb-6">
+                            <h3 className="text-lg font-bold">Tu Reserva</h3>
+                            <span className="bg-icon-bg-primary dark:bg-icon-bg-dark text-icon-color text-xs font-bold px-2 py-1 rounded">
+                                {nights} {nights === 1 ? 'Noche' : 'Noches'}
+                            </span>
+                        </div>
+                        <div className="flex gap-4 mb-6">
+                            <div className="flex-1 p-3 rounded-lg border border-border-card dark:border-border-card-dark bg-background-light dark:bg-background-dark">
+                                <p className="text-xs text-text-muted uppercase font-bold mb-1">Llegada</p>
+                                <p className="font-bold text-sm">{formatDate(selectedRange.start)}</p>
+                            </div>
+                            <div className="flex-1 p-3 rounded-lg border border-border-card dark:border-border-card-dark bg-background-light dark:bg-background-dark">
+                                <p className="text-xs text-text-muted uppercase font-bold mb-1">Salida</p>
+                                <p className="font-bold text-sm">{formatDate(selectedRange.end)}</p>
+                            </div>
+                        </div>
+                        {nights > 0 && (
+                            <>
+                                <div className="flex flex-col gap-2 mb-6">
+                                    {pricingDetails.weekdayNights > 0 && (
+                                        <div className="flex justify-between text-sm text-text-muted dark:text-text-muted">
+                                            <span>{formatPrice(pricing?.baseRates?.weekday || 350000)} x {pricingDetails.weekdayNights} {pricingDetails.weekdayNights === 1 ? 'noche L-J' : 'noches L-J'}</span>
+                                            <span>{formatPrice((pricing?.baseRates?.weekday || 350000) * pricingDetails.weekdayNights)}</span>
+                                        </div>
+                                    )}
+                                    {pricingDetails.weekendNights > 0 && (
+                                        <div className="flex justify-between text-sm text-text-muted dark:text-text-muted">
+                                            <span>{formatPrice(pricing?.baseRates?.weekend || 450000)} x {pricingDetails.weekendNights} {pricingDetails.weekendNights === 1 ? 'noche V-D' : 'noches V-D'}</span>
+                                            <span>{formatPrice((pricing?.baseRates?.weekend || 450000) * pricingDetails.weekendNights)}</span>
+                                        </div>
+                                    )}
+                                    {pricingDetails.specialNights > 0 && (
+                                        <div className="flex justify-between text-sm" style={{ color: siteColors.discountText }}>
+                                            <span>⭐ {pricingDetails.specialNights} {pricingDetails.specialNights === 1 ? 'noche especial' : 'noches especiales'}</span>
+                                            <span>Incluido</span>
+                                        </div>
+                                    )}
+                                    <div className="flex justify-between text-sm font-medium text-text-main-light dark:text-text-muted pt-1">
+                                        <span>Subtotal alojamiento</span>
+                                        <span>{formatPrice(pricingDetails.subtotal)}</span>
+                                    </div>
+                                    {applyLongStayDiscount && (
+                                        <div className="flex justify-between text-sm text-success-text dark:text-green-400">
+                                            <span>Descuento estadía larga (-{discountPercent}%)</span>
+                                            <span>-{formatPrice(discountAmount)}</span>
+                                        </div>
+                                    )}
+                                    {cleaningEnabled && cleaningFee > 0 && (
+                                        <div className="flex justify-between text-sm text-text-muted dark:text-text-muted">
+                                            <span>Tarifa de limpieza</span>
+                                            <span>{formatPrice(cleaningFee)}</span>
+                                        </div>
+                                    )}
+                                    {ivaEnabled && taxes > 0 && (
+                                        <div className="flex justify-between text-sm text-text-muted dark:text-text-muted">
+                                            <span>IVA ({ivaPercent}%)</span>
+                                            <span>{formatPrice(taxes)}</span>
+                                        </div>
+                                    )}
+                                    <div className="h-px bg-icon-bg-primary dark:bg-border-card-dark my-2"></div>
+                                    <div className="flex justify-between items-center">
+                                        <span className="font-bold text-lg">Total</span>
+                                        <span className="font-black text-2xl text-primary">{formatPrice(total)}</span>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={handleContinuarReserva}
+                                    className="w-full h-12 rounded-lg bg-primary hover:bg-btn-primary-hover text-white font-bold text-base shadow-lg shadow-card transition-all transform active:scale-95 flex items-center justify-center gap-2"
+                                >
+                                    <span>Continuar Reserva</span>
+                                    <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                                </button>
+                            </>
+                        )}
+                        {nights === 0 && (
+                            <p className="text-center text-text-muted text-sm py-4">
+                                Selecciona fechas en el calendario para ver el precio
+                            </p>
+                        )}
+                    </div>
+
                     {/* Pricing Cards */}
                     <div>
                         <h3 className="text-xl font-bold mb-4">{pageContent.tarifasTitle}</h3>
@@ -479,8 +562,8 @@ export default function Booking() {
                     </div>
                 </div>
 
-                {/* Sidebar Summary */}
-                <div className="lg:w-[380px] shrink-0">
+                {/* Sidebar Summary - Desktop only */}
+                <div className="hidden lg:block lg:w-[380px] shrink-0">
                     <div className="sticky top-24 flex flex-col gap-6">
                         <div className="bg-surface-card dark:bg-surface-card-dark rounded-2xl p-6 shadow-xl shadow-gray-200/50 dark:shadow-black/20 border border-border-card dark:border-border-card-dark">
                             <div className="flex justify-between items-center mb-6">
