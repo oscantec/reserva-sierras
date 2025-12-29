@@ -4,7 +4,7 @@ import Footer from '../components/Footer'
 import { DEFAULT_CONFIG } from '../utils/config'
 
 // Lazy loading image - shows high-visibility skeleton first, then fades in the image
-function LazyImage({ src, alt, className }) {
+function LazyImage({ src, alt, className, priority = false }) {
     const [fullLoaded, setFullLoaded] = useState(false)
 
     return (
@@ -21,7 +21,8 @@ function LazyImage({ src, alt, className }) {
                 src={src}
                 alt={alt}
                 className={`${className} ${fullLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 ease-out`}
-                loading="lazy"
+                loading={priority ? "eager" : "lazy"}
+                fetchpriority={priority ? "high" : "auto"}
                 onLoad={() => setFullLoaded(true)}
             />
         </div>
@@ -405,6 +406,7 @@ export default function Gallery() {
                                     <LazyImage
                                         src={image.src}
                                         alt={image.title}
+                                        priority={index < 6}
                                         className="absolute inset-0 w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
@@ -430,6 +432,7 @@ export default function Gallery() {
                                     <LazyImage
                                         src={image.src}
                                         alt={image.title}
+                                        priority={index < 4}
                                         className="absolute inset-0 w-full h-full object-cover transition-all duration-500 group-hover:scale-105"
                                     />
                                     {/* Always visible label at bottom */}

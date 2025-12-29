@@ -37,29 +37,42 @@ const INITIAL_VIDEO_ID = getYouTubeVideoId(INITIAL_STATE.heroVideoUrl)
 const VideoBackground = memo(({ videoId, blurAmount }) => {
     if (!videoId) return null;
 
-    // Use nocookie and most aggressive parameters for mobile autoplay
-    // We use enablejsapi=1 to allow the "Kickstart" command from the parent
-    const src = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&muted=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&iv_load_policy=3&widget_referrer=${window.location.origin}`;
+    // Direct High-Performance URL with explicit loop configuration
+    const src = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&muted=1&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&loop=1&playlist=${videoId}&iv_load_policy=3&origin=${window.location.origin}`;
 
     return (
         <div className="absolute inset-0 z-1 pointer-events-none overflow-hidden bg-black/5">
+            {/* MEDIA UNLOCKER: Invisible native video to prime the browser's autoplay engine */}
+            <video
+                autoPlay
+                muted
+                playsInline
+                loop
+                className="absolute w-1 h-1 opacity-0 pointer-events-none"
+                src="data:video/mp4;base64,AAAAHGZ0eXBpc29tAAAAAGlzb21tcDQyAAAAA21vb3YAAABsbXZoZAAAAADR7m730e5u9wAAA+gAAAcQAAEAAAEAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAABidHJha3YAAABcdGtoZAAAAADR7m730e5u9wAAAAEAAAAAAAcQAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAZBtZWRpYQAAACBtZGhkAAAAANHubvfR7m73AAA7eAAAFuBAAQAAAQAAAAAAAAAAAAAAAAAAJWhkbHIAAAAAAAAAAHZpZGUAAAAAAAAAAAAAAABWaWRlb0hhbmRsZXIAAAABUW1pbmYAAAAUdm1oZAAAAAEAAAAAAAAAAAAAACRkaW5mAAAAHGRyZWYAAAAAAAAAAQAAAAxyZWRsAAAAAQAAAHBzdGJsAAAALXN0c2QAAAAAAAAAAQAAAB1hdmMxAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAgACABIAAAASAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGP//AAAALWF2Y0MBQsAN/+EAFWdCwA3ZAsTsBEAAAPpAADqYAA8SGmXiwAAAAAAhYnBocgAAAAAAABAAAABidHJlZgAAAAAIdmlydAAAAAEAAACgc3R0cwAAAAAAAAABAAAAAQAAADsAAABoc3RzYwAAAAAAAAABAAAAAQAAAAEAAAABAAAAXHN0c3oAAAAAAAAAAAAAAAEAAAA7AAAAZHN0Y28AAAAAAAAAAQAAADAAAABidWR0YQAAADptZXRhAAAAAAAAACFoZGxyAAAAAAAAAABtZGlyYXBwbAAAAAAAAAAAAAAAAGlsc3QAAAASAK1kYXRhAAAAAQAAAAAA"
+            />
+
             <iframe
                 id="hero-video-iframe"
                 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[115vw] h-[65vw] min-w-full min-h-full opacity-0 transition-opacity duration-1000"
                 src={src}
                 title="Hero Video Background"
                 frameBorder="0"
-                allow="autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allow="autoplay *; fullscreen *; encrypted-media; gyroscope; picture-in-picture"
                 style={{
                     filter: `blur(${blurAmount}px) brightness(0.8) saturate(1.1)`,
                     pointerEvents: 'none'
                 }}
                 onLoad={(e) => {
-                    // Force play on load just in case
-                    try {
-                        e.target.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
-                        e.target.contentWindow.postMessage('{"event":"command","func":"mute","args":""}', '*');
-                    } catch (err) { }
+                    // Force commands immediately on load
+                    const sendCmd = () => {
+                        try {
+                            e.target.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+                            e.target.contentWindow.postMessage('{"event":"command","func":"mute","args":""}', '*');
+                        } catch (err) { }
+                    }
+                    sendCmd();
+                    setTimeout(sendCmd, 1000); // Retry after 1s for slow networks
                     setTimeout(() => e.target.classList.remove('opacity-0'), 500);
                 }}
             />
