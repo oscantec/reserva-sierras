@@ -11,7 +11,7 @@ import AntesDePartirSection from '../components/AntesDePartirSection'
 import ZonasHumedasSection from '../components/ZonasHumedasSection'
 import { DEFAULT_CONFIG } from '../utils/config'
 
-// Helper function to extract YouTube video ID from various URL formats
+// Extract YouTube video ID - calculated ONCE at module load, not in component
 function getYouTubeVideoId(url) {
     if (!url) return null
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/
@@ -19,14 +19,20 @@ function getYouTubeVideoId(url) {
     return (match && match[2].length === 11) ? match[2] : null
 }
 
+// IMMEDIATE: Video ID calculated at load time, NOT waiting for React state
+const INITIAL_VIDEO_ID = getYouTubeVideoId(DEFAULT_CONFIG.heroVideoUrl)
+const INITIAL_BLUR = DEFAULT_CONFIG.heroBlurAmount || 2
+const INITIAL_FILTER_COLOR = DEFAULT_CONFIG.heroFilterColor || '#22c55e'
+const INITIAL_FILTER_OPACITY = DEFAULT_CONFIG.heroFilterOpacity || 4
+
 export default function Landing() {
     const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0)
     const [isVisible, setIsVisible] = useState(true)
     const [heroConfig, setHeroConfig] = useState({
         videoUrl: DEFAULT_CONFIG.heroVideoUrl,
-        filterColor: DEFAULT_CONFIG.heroFilterColor,
-        filterOpacity: DEFAULT_CONFIG.heroFilterOpacity,
-        blurAmount: DEFAULT_CONFIG.heroBlurAmount || 2,
+        filterColor: INITIAL_FILTER_COLOR,
+        filterOpacity: INITIAL_FILTER_OPACITY,
+        blurAmount: INITIAL_BLUR,
         phrases: DEFAULT_CONFIG.heroRotatingPhrases
     })
     const [intro, setIntro] = useState({
@@ -39,10 +45,12 @@ export default function Landing() {
         checkOut: DEFAULT_CONFIG.checkOutTime
     })
 
-    // Load config
+    // Use INITIAL_VIDEO_ID for immediate render, then update from state if config changes
+    const videoId = INITIAL_VIDEO_ID
+
+    // Load config (for updates only - initial values are already set)
     useEffect(() => {
         const loadConfig = async () => {
-            // 1. Try API first
             try {
                 const response = await fetch('/api/config')
                 if (response.ok) {
@@ -50,19 +58,15 @@ export default function Landing() {
                     if (Object.keys(config).length > 0) {
                         applyConfig(config)
                         localStorage.setItem('casacampestre_config', JSON.stringify(config))
-                        console.log('✅ Config loaded from API')
-                        return
                     }
                 }
             } catch (e) {
-                console.log('API not available, using localStorage')
+                // API not available
             }
 
-            // 2. Fallback to localStorage
             const saved = localStorage.getItem('casacampestre_config')
             if (saved) {
                 applyConfig(JSON.parse(saved))
-                console.log('✅ Config loaded from localStorage')
             }
         }
 
@@ -71,7 +75,7 @@ export default function Landing() {
                 videoUrl: config.heroVideoUrl || prev.videoUrl,
                 filterColor: config.heroFilterColor || prev.filterColor,
                 filterOpacity: config.heroFilterOpacity ?? prev.filterOpacity,
-                blurAmount: config.heroBlurAmount ?? 15,
+                blurAmount: config.heroBlurAmount ?? prev.blurAmount,
                 phrases: config.heroRotatingPhrases || prev.phrases
             }))
             if (config.inicioContent?.intro) {
@@ -96,14 +100,11 @@ export default function Landing() {
         if (heroConfig.phrases.length <= 1) return
 
         const interval = setInterval(() => {
-            // Fade out
             setIsVisible(false)
-
-            // After fade out, change phrase and fade in
             setTimeout(() => {
                 setCurrentPhraseIndex(prev => (prev + 1) % heroConfig.phrases.length)
                 setIsVisible(true)
-            }, 500) // 500ms for fade out animation
+            }, 500)
         }, 5000)
 
         return () => clearInterval(interval)
@@ -115,8 +116,6 @@ export default function Landing() {
     const lastWord = words.pop()
     const mainText = words.join(' ')
 
-    // Get YouTube video ID
-    const videoId = getYouTubeVideoId(heroConfig.videoUrl)
 
     return (
         <div className="flex flex-col min-h-screen bg-page-bg-inicio dark:bg-surface-card-dark text-text-main dark:text-white font-display">
