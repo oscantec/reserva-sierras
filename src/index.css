@@ -215,7 +215,18 @@ html {
     0 4px 6px -4px color-mix(in srgb, var(--color-card-shadow) 30%, transparent);
 }
 
-.shadow-card-sm {
-  box-shadow: 0 4px 6px -1px color-mix(in srgb, var(--color-card-shadow) 20%, transparent),
-    0 2px 4px -2px color-mix(in srgb, var(--color-card-shadow) 20%, transparent);
+/* Shimmer effect for skeleton loaders */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-shimmer {
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
 }
