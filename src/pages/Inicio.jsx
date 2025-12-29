@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import ContactoInicialSection from '../components/ContactoInicialSection'
@@ -117,13 +117,84 @@ export default function Landing() {
     const mainText = words.join(' ')
 
 
+    // YouTube Player Reference
+    const playerRef = useRef(null)
+    const playerInstance = useRef(null)
+
+    // Load YouTube API and initialize player
+    useEffect(() => {
+        if (!videoId) return
+
+        // Function to initialize player
+        const initPlayer = () => {
+            if (!playerRef.current) return
+
+            // If player already exists, just change video if needed
+            if (playerInstance.current && typeof playerInstance.current.loadVideoById === 'function') {
+                playerInstance.current.loadVideoById(videoId)
+                return
+            }
+
+            playerInstance.current = new window.YT.Player(playerRef.current, {
+                videoId: videoId,
+                playerVars: {
+                    autoplay: 1,
+                    mute: 1,
+                    loop: 1,
+                    playlist: videoId,
+                    controls: 0,
+                    showinfo: 0,
+                    rel: 0,
+                    modestbranding: 1,
+                    playsinline: 1,
+                    enablejsapi: 1,
+                    disablekb: 1,
+                    fs: 0,
+                    iv_load_policy: 3,
+                    origin: window.location.origin
+                },
+                events: {
+                    onReady: (event) => {
+                        event.target.mute()
+                        event.target.playVideo()
+                    },
+                    onStateChange: (event) => {
+                        // Loop manually if needed (some browsers ignore playlist loop)
+                        if (event.data === window.YT.PlayerState.ENDED) {
+                            event.target.playVideo()
+                        }
+                    }
+                }
+            })
+        }
+
+        // Check if API is already loaded
+        if (!window.YT) {
+            const tag = document.createElement('script')
+            tag.src = "https://www.youtube.com/iframe_api"
+            const firstScriptTag = document.getElementsByTagName('script')[0]
+            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag)
+
+            window.onYouTubeIframeAPIReady = initPlayer
+        } else {
+            initPlayer()
+        }
+
+        return () => {
+            if (playerInstance.current) {
+                playerInstance.current.destroy()
+                playerInstance.current = null
+            }
+        }
+    }, [videoId])
+
     return (
         <div className="flex flex-col min-h-screen bg-page-bg-inicio dark:bg-surface-card-dark text-text-main dark:text-white font-display">
             <Navbar />
 
-            {/* Hero Section - Thumbnail loads INSTANTLY, video loads after */}
+            {/* Hero Section - YouTube API implementation for better mobile autoplay */}
             <header className="relative w-full h-[500px] lg:h-[600px] flex items-center justify-center overflow-hidden">
-                {/* INSTANT: YouTube Thumbnail as primary background - loads in milliseconds */}
+                {/* Background Placeholder while video loads */}
                 <div
                     className="absolute inset-0 z-0 bg-cover bg-center scale-110"
                     style={{
@@ -134,20 +205,27 @@ export default function Landing() {
                     }}
                 ></div>
 
-                {/* Video - optimized for mobile autoplay */}
-                {videoId && (
-                    <div className="absolute inset-0 z-1 flex items-center justify-center">
-                        <iframe
-                            className="w-auto h-full aspect-video max-w-none pointer-events-none"
-                            src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&disablekb=1&fs=0&iv_load_policy=3&origin=${window.location.origin}`}
-                            title="Hero Video Background"
-                            frameBorder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            allowFullScreen
-                            style={{ filter: 'brightness(0.85)' }}
-                        />
-                    </div>
-                )}
+                {/* YouTube Player Container */}
+                <div className="absolute inset-0 z-1 pointer-events-none">
+                    <div ref={playerRef} className="w-full h-full scale-[1.5] lg:scale-[1.2]"></div>
+                </div>
+
+                <style>{`
+                    #player {
+                        pointer-events: none;
+                    }
+                    /* Ensure the iframe covers the container */
+                    iframe {
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        width: 100vw;
+                        height: 56.25vw; /* 16:9 aspect ratio */
+                        min-height: 100vh;
+                        min-width: 177.77vh; /* 16:9 aspect ratio */
+                        transform: translate(-50%, -50%);
+                    }
+                `}</style>
 
                 {/* Green Filter Overlay */}
                 <div
