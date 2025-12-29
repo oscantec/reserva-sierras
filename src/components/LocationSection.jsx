@@ -140,12 +140,12 @@ export default function LocationSection() {
                                 <div className="relative rounded-xl overflow-hidden">
                                     <img
                                         src={accesoImage}
-                                        className="w-full h-auto object-contain"
+                                        className="w-full h-auto object-cover"
                                         alt="Acceso a la Finca"
                                         loading="eager"
                                     />
-                                    <div className="absolute bottom-0 left-0 right-0 p-2 bg-black/60">
-                                        <p className="text-white text-xs font-bold">{content.referenceCaption}</p>
+                                    <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent">
+                                        <p className="text-white text-sm font-bold">{content.referenceCaption}</p>
                                     </div>
                                 </div>
                             </div>

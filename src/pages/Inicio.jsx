@@ -33,28 +33,115 @@ const getInitialConfig = () => {
 const INITIAL_STATE = getInitialConfig()
 const INITIAL_VIDEO_ID = getYouTubeVideoId(INITIAL_STATE.heroVideoUrl)
 
-// Simple Video Background - Single fullscreen iframe
+// Premium Video Background - Dual layer with YouTube API for HD quality and mobile autoplay
 const VideoBackground = memo(({ videoId, blurAmount }) => {
-    if (!videoId) return null;
+    const mainPlayerRef = useRef(null);
+    const ambientPlayerRef = useRef(null);
+    const [isReady, setIsReady] = useState(false);
 
-    const iframeSrc = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&controls=0&showinfo=0&rel=0&modestbranding=1&loop=1&playlist=${videoId}&playsinline=1&enablejsapi=0&iv_load_policy=3&disablekb=1&fs=0`;
+    useEffect(() => {
+        if (!videoId || typeof window === 'undefined') return;
+
+        const initPlayers = () => {
+            // AMBIENT BACKGROUND - Blurred video for wide screens
+            if (document.getElementById('hero-video-ambient')) {
+                ambientPlayerRef.current = new window.YT.Player('hero-video-ambient', {
+                    videoId: videoId,
+                    playerVars: {
+                        autoplay: 1, mute: 1, controls: 0, showinfo: 0, rel: 0,
+                        modestbranding: 1, loop: 1, playlist: videoId, playsinline: 1,
+                        enablejsapi: 1, iv_load_policy: 3, disablekb: 1
+                    },
+                    events: {
+                        onReady: (e) => { e.target.mute(); e.target.playVideo(); },
+                        onStateChange: (e) => { if (e.data === 0) e.target.playVideo(); }
+                    }
+                });
+            }
+
+            // MAIN VIDEO - High quality, centered
+            if (document.getElementById('hero-video-main')) {
+                mainPlayerRef.current = new window.YT.Player('hero-video-main', {
+                    videoId: videoId,
+                    playerVars: {
+                        autoplay: 1, mute: 1, controls: 0, showinfo: 0, rel: 0,
+                        modestbranding: 1, loop: 1, playlist: videoId, playsinline: 1,
+                        enablejsapi: 1, iv_load_policy: 3, disablekb: 1, vq: 'hd1080'
+                    },
+                    events: {
+                        onReady: (e) => {
+                            e.target.mute();
+                            e.target.setPlaybackQuality('hd1080');
+                            e.target.playVideo();
+
+                            // Heartbeat for mobile - force play every 500ms if paused
+                            let attempts = 0;
+                            const heartbeat = setInterval(() => {
+                                try {
+                                    const state = e.target.getPlayerState();
+                                    if (state !== 1 && attempts < 15) {
+                                        e.target.mute();
+                                        e.target.playVideo();
+                                        attempts++;
+                                    } else if (state === 1) {
+                                        setIsReady(true);
+                                        clearInterval(heartbeat);
+                                    }
+                                } catch (err) { clearInterval(heartbeat); }
+                            }, 500);
+                        },
+                        onStateChange: (e) => {
+                            if (e.data === 0 || e.data === 2) e.target.playVideo();
+                            if (e.data === 1) setIsReady(true);
+                        }
+                    }
+                });
+            }
+        };
+
+        // Load YouTube API if not present
+        if (!window.YT) {
+            const tag = document.createElement('script');
+            tag.src = 'https://www.youtube.com/iframe_api';
+            document.head.appendChild(tag);
+            window.onYouTubeIframeAPIReady = initPlayers;
+        } else if (window.YT.Player) {
+            initPlayers();
+        }
+
+        return () => {
+            try {
+                mainPlayerRef.current?.destroy();
+                ambientPlayerRef.current?.destroy();
+            } catch (e) { }
+        };
+    }, [videoId]);
+
+    if (!videoId) return null;
 
     return (
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden bg-black">
-            {/* FULLSCREEN VIDEO - Scaled up to cover entire area */}
-            <iframe
-                src={iframeSrc}
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[180vw] h-[101.25vw] min-w-full min-h-full"
-                style={{
-                    filter: `blur(${blurAmount}px) brightness(0.85) saturate(1.1)`,
-                    border: 'none',
-                    pointerEvents: 'none'
-                }}
-                allow="autoplay; accelerometer; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                title="Background Video"
-                loading="eager"
+            {/* AMBIENT LAYER - Heavily blurred, fills wide screens */}
+            <div
+                id="hero-video-ambient"
+                className={`absolute inset-0 w-[200%] h-[200%] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-1000 ${isReady ? 'opacity-100' : 'opacity-0'}`}
+                style={{ filter: 'blur(50px) brightness(0.6) saturate(1.2)', transform: 'translate(-50%, -50%) scale(1.5)' }}
             />
+
+            {/* MAIN LAYER - HD quality, applies Admin blur */}
+            <div className="absolute inset-0 flex items-center justify-center">
+                <div
+                    id="hero-video-main"
+                    className={`w-[180vw] h-[101.25vw] min-w-full min-h-full transition-opacity duration-1000 ${isReady ? 'opacity-100' : 'opacity-0'}`}
+                    style={{
+                        filter: `blur(${blurAmount}px) brightness(0.85) saturate(1.1)`,
+                        pointerEvents: 'none'
+                    }}
+                />
+            </div>
+
+            {/* Mobile autoplay primer */}
+            <video autoPlay muted playsInline loop className="absolute w-1 h-1 opacity-0" src="data:video/mp4;base64,AAAAHGZ0eXBpc29tAAAAAGlzb21tcDQyAAAAA21vb3YAAABsbXZoZAAAAADR7m730e5u9wAAA+gAAAcQAAEAAAEAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAABidHJha3YAAABcdGtoZAAAAADR7m730e5u9wAAAAEAAAAAAAcQAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAZBtZWRpYQAAACBtZGhkAAAAANHubvfR7m73AAA7eAAAFuBAAQAAAQAAAAAAAAAAAAAAAAAAJWhkbHIAAAAAAAAAAHZpZGUAAAAAAAAAAAAAAABWaWRlb0hhbmRsZXIAAAABUW1pbmYAAAAUdm1oZAAAAAEAAAAAAAAAAAAAACRkaW5mAAAAHGRyZWYAAAAAAAAAAQAAAAxyZWRsAAAAAQAAAHBzdGJsAAAALXN0c2QAAAAAAAAAAQAAAB1hdmMxAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAgACABIAAAASAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGP//AAAALWF2Y0MBQsAN/+EAFWdCwA3ZAsTsBEAAAPpAADqYAA8SGmXiwAAAAAAhYnBocgAAAAAAABAAAABidHJlZgAAAAAIdmlydAAAAAEAAACgc3R0cwAAAAAAAAABAAAAAQAAADsAAABoc3RzYwAAAAAAAAABAAAAAQAAAAEAAAABAAAAXHN0c3oAAAAAAAAAAAAAAAEAAAA7AAAAZHN0Y28AAAAAAAAAAQAAADAAAABidWR0YQAAADptZXRhAAAAAAAAACFoZGxyAAAAAAAAAABtZGlyYXBwbAAAAAAAAAAAAAAAAGlsc3QAAAASAK1kYXRhAAAAAQAAAAAA" />
         </div>
     );
 });
