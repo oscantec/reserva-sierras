@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { DEFAULT_CONFIG } from '../utils/config'
-import accesoImage from '../images/Acceso Casa2.webp'
+import accesoImage from '../images/accesofinca.png'
 
 export default function LocationSection() {
     const locationConfig = DEFAULT_CONFIG.inicioContent?.location || {}
