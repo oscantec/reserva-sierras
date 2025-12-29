@@ -451,13 +451,6 @@ export default function PaymentSection() {
                                         )}
                                     </div>
 
-                                    {/* Info Box - Green theme */}
-                                    <div className="bg-icon-bg-primary dark:bg-icon-bg-dark rounded-xl p-4 flex items-start gap-3 border border-border-card dark:border-border-card-dark">
-                                        <span className="material-symbols-outlined text-icon-color mt-0.5">info</span>
-                                        <p className="text-sm text-text-main-light dark:text-text-subtitle-dark">
-                                            Realiza el pago y envía el comprobante por WhatsApp para confirmar tu reserva.
-                                        </p>
-                                    </div>
 
                                     {/* CTA Button - WhatsApp */}
                                     <button

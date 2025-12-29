@@ -146,22 +146,22 @@ export default function AdminLayout() {
                 <Outlet />
             </main>
 
-            {/* Mobile Bottom Navigation */}
+            {/* Mobile Bottom Navigation - Compact */}
             <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-surface-card dark:bg-surface-card-dark border-t border-border-card dark:border-border-card-dark z-50 safe-area-inset-bottom">
-                <div className="flex justify-around items-center h-14">
+                <div className="flex justify-around items-center h-12">
                     {mobileNavItems.map((item) => (
                         <Link
                             key={item.path}
                             to={item.path}
-                            className={`flex flex-col items-center justify-center flex-1 h-full py-1 transition-colors ${isActive(item.path)
+                            className={`flex flex-col items-center justify-center flex-1 h-full py-0.5 transition-colors ${isActive(item.path)
                                 ? 'text-primary'
                                 : 'text-text-muted dark:text-text-muted'
                                 }`}
                         >
-                            <span className={`material-symbols-outlined text-xl ${isActive(item.path) ? 'filled-icon' : ''}`}>
+                            <span className={`material-symbols-outlined text-lg ${isActive(item.path) ? 'filled-icon' : ''}`}>
                                 {item.icon}
                             </span>
-                            <span className="text-[10px] font-medium mt-0.5">{item.label}</span>
+                            <span className="text-[8px] font-medium leading-tight">{item.label}</span>
                         </Link>
                     ))}
                 </div>
