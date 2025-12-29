@@ -3,23 +3,26 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { DEFAULT_CONFIG } from '../utils/config'
 
-// Lazy loading image component with placeholder
+// Lazy loading image component with visible placeholder
 function LazyImage({ src, alt, className }) {
     const [loaded, setLoaded] = useState(false)
     const [error, setError] = useState(false)
 
     return (
         <div className="relative w-full h-full">
-            {/* Placeholder skeleton */}
+            {/* Visible placeholder skeleton with green tint */}
             {!loaded && !error && (
-                <div className="absolute inset-0 bg-gray-200 dark:bg-gray-700 animate-pulse flex items-center justify-center">
-                    <span className="material-symbols-outlined text-gray-400 text-2xl">image</span>
+                <div className="absolute inset-0 bg-gradient-to-br from-green-100 to-green-200 dark:from-gray-700 dark:to-gray-800 flex flex-col items-center justify-center gap-2">
+                    <span className="material-symbols-outlined text-green-500 dark:text-green-400 text-3xl animate-pulse">photo_library</span>
+                    <div className="w-8 h-1 bg-green-300 dark:bg-green-600 rounded-full overflow-hidden">
+                        <div className="h-full bg-green-500 dark:bg-green-400 animate-loading-bar"></div>
+                    </div>
                 </div>
             )}
             <img
                 src={src}
                 alt={alt}
-                className={`${className} ${loaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}
+                className={`${className} ${loaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-500`}
                 loading="lazy"
                 onLoad={() => setLoaded(true)}
                 onError={() => setError(true)}
@@ -557,6 +560,14 @@ export default function Gallery() {
                 }
                 .animate-scaleIn {
                     animation: scaleIn 0.3s ease-out;
+                }
+                @keyframes loading-bar {
+                    0% { width: 0%; }
+                    50% { width: 100%; }
+                    100% { width: 0%; }
+                }
+                .animate-loading-bar {
+                    animation: loading-bar 1.5s ease-in-out infinite;
                 }
             `}</style>
         </div>

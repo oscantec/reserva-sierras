@@ -122,39 +122,22 @@ export default function Landing() {
         <div className="flex flex-col min-h-screen bg-page-bg-inicio dark:bg-surface-card-dark text-text-main dark:text-white font-display">
             <Navbar />
 
-            {/* Hero Section with YouTube Video Background */}
+            {/* Hero Section - Thumbnail loads INSTANTLY, video loads after */}
             <header className="relative w-full h-[500px] lg:h-[600px] flex items-center justify-center overflow-hidden">
-                {/* YouTube Thumbnail as instant background while video loads */}
+                {/* INSTANT: YouTube Thumbnail as primary background - loads in milliseconds */}
+                <div
+                    className="absolute inset-0 z-0 bg-cover bg-center scale-110"
+                    style={{
+                        backgroundImage: videoId
+                            ? `url(https://img.youtube.com/vi/${videoId}/maxresdefault.jpg)`
+                            : "url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600')",
+                        filter: `blur(${heroConfig.blurAmount}px) brightness(0.7)`
+                    }}
+                ></div>
+
+                {/* LAZY: Video loads in background, only shown when ready */}
                 {videoId && (
-                    <div
-                        className="absolute inset-0 z-0 bg-cover bg-center"
-                        style={{
-                            backgroundImage: `url(https://img.youtube.com/vi/${videoId}/maxresdefault.jpg)`,
-                            filter: `blur(${heroConfig.blurAmount}px) brightness(0.7)`
-                        }}
-                    ></div>
-                )}
-
-                {/* Blurred Background Video (fills entire container - letterbox blur effect) */}
-                <div className="absolute inset-0 z-1">
-                    {videoId ? (
-                        <iframe
-                            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400%] h-[400%] min-w-full min-h-full pointer-events-none"
-                            src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&origin=${window.location.origin}`}
-                            title="Hero Video Background Blur"
-                            frameBorder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                            style={{ filter: `blur(${heroConfig.blurAmount}px) brightness(0.7) saturate(1.2)`, transform: 'scale(1.3) translate(-38%, -38%)' }}
-                        />
-                    ) : (
-                        <div className="w-full h-full bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600')", filter: `blur(${heroConfig.blurAmount}px) brightness(0.7)` }}></div>
-                    )}
-                </div>
-
-                {/* Main Video (uses full height, centered horizontally) */}
-                <div className="absolute inset-0 z-5 flex items-center justify-center">
-                    {videoId && (
+                    <div className="absolute inset-0 z-1 flex items-center justify-center">
                         <iframe
                             className="w-auto h-full aspect-video max-w-none pointer-events-none"
                             src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&origin=${window.location.origin}`}
@@ -162,10 +145,11 @@ export default function Landing() {
                             frameBorder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                             allowFullScreen
-                            style={{ filter: 'brightness(0.95)' }}
+                            style={{ filter: 'brightness(0.85)' }}
+                            loading="lazy"
                         />
-                    )}
-                </div>
+                    </div>
+                )}
 
                 {/* Green Filter Overlay */}
                 <div
