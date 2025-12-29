@@ -66,6 +66,7 @@ const VideoBackground = memo(({ videoId, blurAmount }) => {
                 events: {
                     onReady: (event) => {
                         event.target.mute();
+                        event.target.setPlaybackQuality('hd1080');
                         event.target.playVideo();
 
                         // AGGRESSIVE HEARTBEAT: Mobile browsers often ignore the first playVideo().
@@ -121,8 +122,20 @@ const VideoBackground = memo(({ videoId, blurAmount }) => {
     if (!videoId) return null;
 
     return (
-        <div className="absolute inset-0 z-1 pointer-events-none overflow-hidden bg-black/10">
-            {/* Native Video Unlocker - Keep as secondary bridge */}
+        <div className="absolute inset-0 z-1 pointer-events-none overflow-hidden bg-black">
+            {/* AMBIENT BACKGROUND: Blurred thumbnail to fill sides on wide screens */}
+            <div
+                className="absolute inset-0 z-0 opacity-50 transition-opacity duration-1000"
+                style={{
+                    backgroundImage: `url(https://img.youtube.com/vi/${videoId}/maxresdefault.jpg)`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    filter: `blur(40px) scale(1.1) brightness(0.5)`,
+                    transform: 'scale(1.1)'
+                }}
+            />
+
+            {/* Native Video Unlocker */}
             <video
                 autoPlay
                 muted
@@ -131,14 +144,18 @@ const VideoBackground = memo(({ videoId, blurAmount }) => {
                 className="absolute w-1 h-1 opacity-0 pointer-events-none"
                 src="data:video/mp4;base64,AAAAHGZ0eXBpc29tAAAAAGlzb21tcDQyAAAAA21vb3YAAABsbXZoZAAAAADR7m730e5u9wAAA+gAAAcQAAEAAAEAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAABidHJha3YAAABcdGtoZAAAAADR7m730e5u9wAAAAEAAAAAAAcQAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAZBtZWRpYQAAACBtZGhkAAAAANHubvfR7m73AAA7eAAAFuBAAQAAAQAAAAAAAAAAAAAAAAAAJWhkbHIAAAAAAAAAAHZpZGUAAAAAAAAAAAAAAABWaWRlb0hhbmRsZXIAAAABUW1pbmYAAAAUdm1oZAAAAAEAAAAAAAAAAAAAACRkaW5mAAAAHGRyZWYAAAAAAAAAAQAAAAxyZWRsAAAAAQAAAHBzdGJsAAAALXN0c2QAAAAAAAAAAQAAAB1hdmMxAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAgACABIAAAASAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGP//AAAALWF2Y0MBQsAN/+EAFWdCwA3ZAsTsBEAAAPpAADqYAA8SGmXiwAAAAAAhYnBocgAAAAAAABAAAABidHJlZgAAAAAIdmlydAAAAAEAAACgc3R0cwAAAAAAAAABAAAAAQAAADsAAABoc3RzYwAAAAAAAAABAAAAAQAAAAEAAAABAAAAXHN0c3oAAAAAAAAAAAAAAAEAAAA7AAAAZHN0Y28AAAAAAAAAAQAAADAAAABidWR0YQAAADptZXRhAAAAAAAAACFoZGxyAAAAAAAAAABtZGlyYXBwbAAAAAAAAAAAAAAAAGlsc3QAAAASAK1kYXRhAAAAAQAAAAAA"
             />
-            <div
-                id="hero-video-player"
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[115vw] h-[65vw] min-w-full min-h-full opacity-0 transition-opacity duration-1000"
-                style={{
-                    filter: `blur(${blurAmount}px) brightness(0.8) saturate(1.1)`,
-                    pointerEvents: 'none'
-                }}
-            />
+
+            {/* SHARP FOREGROUND VIDEO: Centered 16:9 with no blur */}
+            <div className="absolute inset-0 flex items-center justify-center">
+                <div
+                    id="hero-video-player"
+                    className="w-full h-full md:w-[100vw] md:h-[56.25vw] opacity-0 transition-opacity duration-1000"
+                    style={{
+                        filter: `brightness(0.9) saturate(1.1)`,
+                        pointerEvents: 'none'
+                    }}
+                />
+            </div>
         </div>
     );
 });

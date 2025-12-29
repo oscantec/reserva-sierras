@@ -11,7 +11,7 @@ function LazyImage({ src, alt, className, priority = false }) {
         <div className="relative w-full h-full overflow-hidden bg-gray-100 dark:bg-gray-800">
             {/* SHIMMER EFFECT: Sophisticated loading state */}
             {!fullLoaded && (
-                <div className="absolute inset-0 z-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"
+                <div className="absolute inset-0 z-10 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"
                     style={{
                         backgroundSize: '200% 100%',
                         animation: 'shimmer 1.5s infinite linear',
@@ -24,14 +24,21 @@ function LazyImage({ src, alt, className, priority = false }) {
                 </div>
             )}
 
-            {/* Full quality image with scale-in transition */}
+            {/* PROGRESSIVE BLUR-UP: Image loads blurred and sharpens smoothly */}
             <img
                 src={src}
                 alt={alt}
-                className={`${className} ${fullLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-110'} transition-all duration-700 ease-out`}
+                className={`${className} transition-all duration-1000 ease-out ${fullLoaded
+                        ? 'opacity-100 blur-0 scale-100'
+                        : 'opacity-0 blur-2xl scale-110'
+                    }`}
                 loading={priority ? "eager" : "lazy"}
                 fetchPriority={priority ? "high" : "auto"}
                 onLoad={() => setFullLoaded(true)}
+                style={{
+                    backfaceVisibility: 'hidden',
+                    transform: fullLoaded ? 'scale(1)' : 'scale(1.1)'
+                }}
             />
         </div>
     )
