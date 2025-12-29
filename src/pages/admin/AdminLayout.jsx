@@ -64,8 +64,11 @@ export default function AdminLayout() {
         { path: '/', label: 'Inicio', icon: 'home' },
         { path: '/admin', label: 'Dashboard', icon: 'dashboard' },
         { path: '/admin/calendario', label: 'Calendario', icon: 'calendar_month' },
-        { path: '/admin/contenido', label: 'Contenido', icon: 'edit_note' },
+        { path: '/admin/conexiones', label: 'Conexiones', icon: 'sync' },
+        { path: '/admin/base-datos', label: 'Base Datos', icon: 'database' },
         { path: '/admin/tarifas', label: 'Tarifas', icon: 'sell' },
+        { path: '/admin/contenido', label: 'Contenido', icon: 'edit_note' },
+        { path: '/admin/seguridad', label: 'Seguridad', icon: 'shield' },
     ]
 
     return (

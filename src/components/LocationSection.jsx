@@ -105,7 +105,7 @@ export default function LocationSection() {
                         {/* Map Card with Green Pin */}
                         <div className="bg-surface-card dark:bg-surface-card-dark rounded-xl border border-border-card dark:border-border-card-dark overflow-hidden relative">
                             {/* Map with grayscale filter */}
-                            <div className="w-full h-[180px] md:h-[280px]" style={{ filter: 'grayscale(60%)' }}>
+                            <div className="w-full aspect-video" style={{ filter: 'grayscale(60%)' }}>
                                 <iframe
                                     src={content.mapUrl}
                                     className="w-full h-full"
@@ -140,7 +140,7 @@ export default function LocationSection() {
                                 <div className="relative rounded-xl overflow-hidden">
                                     <img
                                         src={accesoImage}
-                                        className="w-full h-auto object-cover"
+                                        className="w-full aspect-video object-cover"
                                         alt="Acceso a la Finca"
                                         loading="eager"
                                     />
