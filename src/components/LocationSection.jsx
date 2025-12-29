@@ -130,8 +130,8 @@ export default function LocationSection() {
                             </div>
                         </div>
 
-                        {/* Visual References Card - Image fills full width */}
-                        <div className="bg-surface-card dark:bg-surface-card-dark rounded-xl border border-border-card dark:border-border-card-dark overflow-hidden">
+                        {/* Visual References Card - Image fills full width, no border */}
+                        <div className="bg-surface-card dark:bg-surface-card-dark rounded-xl overflow-hidden">
                             <div className="p-3 md:p-5 pb-0">
                                 <h3 className="font-bold text-base md:text-lg mb-3 md:mb-4 flex items-center gap-2">
                                     <span className="material-symbols-outlined text-icon-color">location_on</span>
