@@ -135,18 +135,17 @@ export default function Landing() {
                     }}
                 ></div>
 
-                {/* LAZY: Video loads in background, only shown when ready */}
+                {/* Video - optimized for mobile autoplay */}
                 {videoId && (
                     <div className="absolute inset-0 z-1 flex items-center justify-center">
                         <iframe
                             className="w-auto h-full aspect-video max-w-none pointer-events-none"
-                            src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&origin=${window.location.origin}`}
+                            src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&disablekb=1&fs=0&iv_load_policy=3&origin=${window.location.origin}`}
                             title="Hero Video Background"
                             frameBorder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                             allowFullScreen
                             style={{ filter: 'brightness(0.85)' }}
-                            loading="lazy"
                         />
                     </div>
                 )}
