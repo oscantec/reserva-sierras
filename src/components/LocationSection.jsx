@@ -70,13 +70,13 @@ export default function LocationSection() {
     return (
         <section className="px-4 py-6 md:py-10 bg-page-bg-inicio dark:bg-surface-card-dark">
             <div className="max-w-7xl mx-auto">
-                {/* Header - Title centered, subtitle like WhatsApp text */}
-                <div className="text-center mb-4 md:mb-6">
-                    <h2 className="text-3xl md:text-4xl font-black leading-tight tracking-[-0.033em] mb-2">Ubicación</h2>
+                {/* Header - Title centered, subtitle left-aligned like WhatsApp text */}
+                <div className="mb-4 md:mb-6">
+                    <h2 className="text-3xl md:text-4xl font-black leading-tight tracking-[-0.033em] mb-2 text-center">Ubicación</h2>
                     <p className="text-sm text-text-muted dark:text-text-muted mb-4">{content.subtitle}</p>
 
-                    {/* Waze and Maps buttons - centered below subtitle */}
-                    <div className="flex justify-center gap-3">
+                    {/* Waze and Maps buttons */}
+                    <div className="flex gap-3">
                         <a href={content.wazeUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 bg-surface-card dark:bg-surface-card-dark border border-border-card dark:border-border-card-dark rounded-lg text-sm font-bold hover:shadow-md hover:scale-[1.02] transition-all group">
                             <svg width="20" height="20" viewBox="0 0 24 24" className="text-text-main-light dark:text-white group-hover:text-primary transition-colors">
                                 <path fill="currentColor" d="M12 2C6.5 2 2 6.5 2 12c0 2.3.8 4.4 2.1 6.1-.3 1.3-1 2.4-1.9 3.3-.2.2-.1.5.1.6.1.1.2.1.3.1 1.5 0 2.9-.6 4-1.5 1.6.8 3.4 1.3 5.4 1.3 5.5 0 10-4.5 10-10S17.5 2 12 2m0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8" />
