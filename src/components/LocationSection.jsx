@@ -140,7 +140,7 @@ export default function LocationSection() {
                                 <div className="relative rounded-xl overflow-hidden">
                                     <img
                                         src={accesoImage}
-                                        className="w-full aspect-video object-cover"
+                                        className="w-full h-auto object-cover"
                                         alt="Acceso a la Finca"
                                         loading="eager"
                                     />
