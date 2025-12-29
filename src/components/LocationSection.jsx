@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { DEFAULT_CONFIG } from '../utils/config'
 import accesoImage from '../images/accesofinca.png'
 
@@ -24,21 +24,6 @@ export default function LocationSection() {
 
     const [content, setContent] = useState(defaults)
     const [transportMode, setTransportMode] = useState('carro') // 'carro' or 'bus'
-    const [mapHeight, setMapHeight] = useState(280) // Default height, will sync with image
-    const imageRef = useRef(null)
-
-    // Sync map height with image height
-    useEffect(() => {
-        const syncHeight = () => {
-            if (imageRef.current) {
-                const imgHeight = imageRef.current.offsetHeight
-                if (imgHeight > 0) setMapHeight(imgHeight)
-            }
-        }
-        syncHeight()
-        window.addEventListener('resize', syncHeight)
-        return () => window.removeEventListener('resize', syncHeight)
-    }, [])
 
     useEffect(() => {
         const loadConfig = async () => {
@@ -119,8 +104,8 @@ export default function LocationSection() {
                     <div className="flex-1 flex flex-col gap-3 md:gap-4">
                         {/* Map Card with Green Pin */}
                         <div className="bg-surface-card dark:bg-surface-card-dark rounded-xl border border-border-card dark:border-border-card-dark overflow-hidden relative">
-                            {/* Map with grayscale filter */}
-                            <div className="w-full" style={{ height: `${mapHeight}px`, filter: 'grayscale(60%)' }}>
+                            {/* Map with grayscale filter - same aspect ratio as accesofinca.png (450x170) */}
+                            <div className="w-full" style={{ aspectRatio: '450/170', filter: 'grayscale(60%)' }}>
                                 <iframe
                                     src={content.mapUrl}
                                     className="w-full h-full"
@@ -154,16 +139,10 @@ export default function LocationSection() {
                             <div className="mb-3">
                                 <div className="relative rounded-xl overflow-hidden">
                                     <img
-                                        ref={imageRef}
                                         src={accesoImage}
                                         className="w-full h-auto"
                                         alt="Acceso a la Finca"
                                         loading="eager"
-                                        onLoad={() => {
-                                            if (imageRef.current) {
-                                                setMapHeight(imageRef.current.offsetHeight)
-                                            }
-                                        }}
                                     />
                                     <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent">
                                         <p className="text-white text-sm font-bold">{content.referenceCaption}</p>
