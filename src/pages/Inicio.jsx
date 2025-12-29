@@ -35,33 +35,37 @@ const INITIAL_VIDEO_ID = getYouTubeVideoId(INITIAL_STATE.heroVideoUrl)
 
 // STABLE Video Component - Uses YouTube IFrame API for deeper control
 const VideoBackground = memo(({ videoId, blurAmount }) => {
-    const playerRef = useRef(null);
+    const mainPlayerRef = useRef(null);
+    const ambientPlayerRef = useRef(null);
 
     useEffect(() => {
         if (!videoId) return;
 
-        const initPlayer = () => {
-            if (playerRef.current) {
-                try { playerRef.current.destroy(); } catch (e) { }
-            }
-
-            playerRef.current = new window.YT.Player('hero-video-player', {
+        const initPlayers = () => {
+            // 1. AMBIENT PLAYER (The background blur - fills the sides)
+            ambientPlayerRef.current = new window.YT.Player('hero-video-ambient', {
                 videoId: videoId,
                 playerVars: {
-                    autoplay: 1,
-                    mute: 1,
-                    controls: 0,
-                    showinfo: 0,
-                    rel: 0,
-                    modestbranding: 1,
-                    loop: 1,
-                    playlist: videoId,
-                    playsinline: 1,
-                    enablejsapi: 1,
-                    iv_load_policy: 3,
-                    disablekb: 1,
-                    origin: window.location.origin,
-                    widget_referrer: window.location.origin
+                    autoplay: 1, mute: 1, controls: 0, showinfo: 0, rel: 0,
+                    modestbranding: 1, loop: 1, playlist: videoId, playsinline: 1,
+                    enablejsapi: 1, iv_load_policy: 3
+                },
+                events: {
+                    onReady: (event) => {
+                        event.target.mute();
+                        event.target.setPlaybackQuality('small'); // Minimal res for blur is fine
+                        event.target.playVideo();
+                    }
+                }
+            });
+
+            // 2. MAIN PLAYER (The sharp central video)
+            mainPlayerRef.current = new window.YT.Player('hero-video-main', {
+                videoId: videoId,
+                playerVars: {
+                    autoplay: 1, mute: 1, controls: 0, showinfo: 0, rel: 0,
+                    modestbranding: 1, loop: 1, playlist: videoId, playsinline: 1,
+                    enablejsapi: 1, iv_load_policy: 3
                 },
                 events: {
                     onReady: (event) => {
@@ -69,53 +73,32 @@ const VideoBackground = memo(({ videoId, blurAmount }) => {
                         event.target.setPlaybackQuality('hd1080');
                         event.target.playVideo();
 
-                        // AGGRESSIVE HEARTBEAT: Mobile browsers often ignore the first playVideo().
-                        // We check every 500ms if it's playing, and force it if not.
-                        let attempts = 0;
-                        const heartbeat = setInterval(() => {
-                            const state = event.target.getPlayerState();
-                            if (state !== 1 && attempts < 10) { // 1 = PLAYING
-                                event.target.mute();
-                                event.target.playVideo();
-                                attempts++;
-                            } else if (state === 1) {
-                                // Once playing, fade in and stop heartbeat
-                                const iframe = document.getElementById('hero-video-player');
-                                if (iframe) iframe.style.opacity = '1';
-                                clearInterval(heartbeat);
-                            } else {
-                                clearInterval(heartbeat);
-                            }
+                        setTimeout(() => {
+                            const main = document.getElementById('hero-video-main');
+                            const ambient = document.getElementById('hero-video-ambient');
+                            if (main) main.style.opacity = '1';
+                            if (ambient) ambient.style.opacity = '1';
                         }, 500);
                     },
                     onStateChange: (event) => {
-                        // Ensure it stays muted and playing
-                        if (event.data === window.YT.PlayerState.PAUSED) {
-                            event.target.playVideo();
-                        }
-                        if (event.data === window.YT.PlayerState.ENDED) {
-                            event.target.playVideo();
-                        }
-                        if (event.data === window.YT.PlayerState.PLAYING) {
-                            const iframe = document.getElementById('hero-video-player');
-                            if (iframe) iframe.style.opacity = '1';
-                        }
+                        if (event.data === window.YT.PlayerState.ENDED) event.target.playVideo();
+                        if (event.data === window.YT.PlayerState.PAUSED) event.target.playVideo();
                     }
                 }
             });
         };
 
         if (window.YT && window.YT.Player) {
-            initPlayer();
+            initPlayers();
         } else {
-            // Wait for API to be ready
-            window.onYouTubeIframeAPIReady = initPlayer;
+            window.onYouTubeIframeAPIReady = initPlayers;
         }
 
         return () => {
-            if (playerRef.current) {
-                try { playerRef.current.destroy(); } catch (e) { }
-            }
+            try {
+                mainPlayerRef.current?.destroy();
+                ambientPlayerRef.current?.destroy();
+            } catch (e) { }
         };
     }, [videoId]);
 
@@ -123,30 +106,27 @@ const VideoBackground = memo(({ videoId, blurAmount }) => {
 
     return (
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden bg-black">
-            {/* Native Video Unlocker */}
-            <video
-                autoPlay
-                muted
-                playsInline
-                loop
-                className="absolute w-1 h-1 opacity-0 pointer-events-none"
-                src="data:video/mp4;base64,AAAAHGZ0eXBpc29tAAAAAGlzb21tcDQyAAAAA21vb3YAAABsbXZoZAAAAADR7m730e5u9wAAA+gAAAcQAAEAAAEAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAABidHJha3YAAABcdGtoZAAAAADR7m730e5u9wAAAAEAAAAAAAcQAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAZBtZWRpYQAAACBtZGhkAAAAANHubvfR7m73AAA7eAAAFuBAAQAAAQAAAAAAAAAAAAAAAAAAJWhkbHIAAAAAAAAAAHZpZGUAAAAAAAAAAAAAAABWaWRlb0hhbmRsZXIAAAABUW1pbmYAAAAUdm1oZAAAAAEAAAAAAAAAAAAAACRkaW5mAAAAHGRyZWYAAAAAAAAAAQAAAAxyZWRsAAAAAQAAAHBzdGJsAAAALXN0c2QAAAAAAAAAAQAAAB1hdmMxAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAgACABIAAAASAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGP//AAAALWF2Y0MBQsAN/+EAFWdCwA3ZAsTsBEAAAPpAADqYAA8SGmXiwAAAAAAhYnBocgAAAAAAABAAAABidHJlZgAAAAAIdmlydAAAAAEAAACgc3R0cwAAAAAAAAABAAAAAQAAADsAAABoc3RzYwAAAAAAAAABAAAAAQAAAAEAAAABAAAAXHN0c3oAAAAAAAAAAAAAAAEAAAA7AAAAZHN0Y28AAAAAAAAAAQAAADAAAABidWR0YQAAADptZXRhAAAAAAAAACFoZGxyAAAAAAAAAABtZGlyYXBwbAAAAAAAAAAAAAAAAGlsc3QAAAASAK1kYXRhAAAAAQAAAAAA"
+            {/* AMBIENT LAYER: Full screen video, heavily blurred (Cover sides) */}
+            <div
+                id="hero-video-ambient"
+                className="absolute inset-0 w-full h-full scale-[1.3] opacity-0 transition-opacity duration-1000"
+                style={{ filter: `blur(45px) brightness(0.7) blur(${blurAmount}px)`, transform: 'scale(1.3)' }}
             />
-            {/* 
-               SCALING LOGIC: To achieve a true "Cover" effect with an Iframe, 
-               we use a container that is always at least 100% width and 56.25vw height (16:9).
-               We scale it up to ensure no black bars ever show on any monitor.
-            */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full min-w-[100%] min-h-[100%]">
+
+            {/* MAIN LAYER: High quality video, centered & sharp */}
+            <div className="absolute inset-0 flex items-center justify-center">
                 <div
-                    id="hero-video-player"
-                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120vw] h-[67.5vw] min-w-[100vw] min-h-[56.25vw] sm:w-[150vw] sm:h-[84.375vw] xl:w-[110vw] xl:h-[61.875vw] opacity-0 transition-opacity duration-1000"
+                    id="hero-video-main"
+                    className="w-[100vw] h-[56.25vw] min-w-full min-h-full opacity-0 transition-opacity duration-1000"
                     style={{
-                        filter: `blur(${blurAmount}px) brightness(0.9) saturate(1.2)`,
+                        filter: `blur(${blurAmount}px) brightness(0.9) saturate(1.1)`,
                         pointerEvents: 'none'
                     }}
                 />
             </div>
+
+            {/* Native Media Priming */}
+            <video autoPlay muted playsInline loop className="absolute w-1 h-1 opacity-0" src="data:video/mp4;base64,AAAAHGZ0eXBpc29tAAAAAGlzb21tcDQyAAAAA21vb3YAAABsbXZoZAAAAADR7m730e5u9wAAA+gAAAcQAAEAAAEAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAABidHJha3YAAABcdGtoZAAAAADR7m730e5u9wAAAAEAAAAAAAcQAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAZBtZWRpYQAAACBtZGhkAAAAANHubvfR7m73AAA7eAAAFuBAAQAAAQAAAAAAAAAAAAAAAAAAJWhkbHIAAAAAAAAAAHZpZGUAAAAAAAAAAAAAAABWaWRlb0hhbmRsZXIAAAABUW1pbmYAAAAUdm1oZAAAAAEAAAAAAAAAAAAAACRkaW5mAAAAHGRyZWYAAAAAAAAAAQAAAAxyZWRsAAAAAQAAAHBzdGJsAAAALXN0c2QAAAAAAAAAAQAAAB1hdmMxAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAgACABIAAAASAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGP//AAAALWF2Y0MBQsAN/+EAFWdCwA3ZAsTsBEAAAPpAADqYAA8SGmXiwAAAAAAhYnBocgAAAAAAABAAAABidHJlZgAAAAAIdmlydAAAAAEAAACgc3R0cwAAAAAAAAABAAAAAQAAADsAAABoc3RzYwAAAAAAAAABAAAAAQAAAAEAAAABAAAAXHN0c3oAAAAAAAAAAAAAAAEAAAA7AAAAZHN0Y28AAAAAAAAAAQAAADAAAABidWR0YQAAADptZXRhAAAAAAAAACFoZGxyAAAAAAAAAABtZGlyYXBwbAAAAAAAAAAAAAAAAGlsc3QAAAASAK1kYXRhAAAAAQAAAAAA" />
         </div>
     );
 });
