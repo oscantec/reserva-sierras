@@ -3,32 +3,24 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { DEFAULT_CONFIG } from '../utils/config'
 
-// Lazy loading image - shows tiny blurred version first, then full quality
+// Lazy loading image - shows high-visibility skeleton first, then fades in the image
 function LazyImage({ src, alt, className }) {
     const [fullLoaded, setFullLoaded] = useState(false)
 
     return (
-        <div className="relative w-full h-full overflow-hidden">
-            {/* INSTANT: Tiny blurred version (loads super fast) */}
-            <img
-                src={src}
-                alt=""
-                className="absolute inset-0 w-full h-full object-cover blur-xl scale-110"
-                style={{
-                    imageRendering: 'pixelated',
-                    filter: 'blur(20px) brightness(0.9)',
-                    width: '100%',
-                    height: '100%'
-                }}
-                loading="eager"
-                decoding="async"
-                fetchPriority="low"
-            />
-            {/* Full quality image on top */}
+        <div className="relative w-full h-full overflow-hidden bg-green-50/30 dark:bg-gray-800">
+            {/* HIGH-VISIBILITY SKELETON: Green pulse, shows immediately */}
+            {!fullLoaded && (
+                <div className="absolute inset-0 z-0 flex items-center justify-center bg-gradient-to-br from-green-50 to-green-100/50 dark:from-gray-700 dark:to-gray-800 animate-pulse">
+                    <span className="material-symbols-outlined text-green-200 dark:text-gray-600 text-4xl">image</span>
+                </div>
+            )}
+
+            {/* Full quality image */}
             <img
                 src={src}
                 alt={alt}
-                className={`${className} ${fullLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-500`}
+                className={`${className} ${fullLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-700 ease-in-out`}
                 loading="lazy"
                 onLoad={() => setFullLoaded(true)}
             />
