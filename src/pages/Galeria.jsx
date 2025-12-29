@@ -3,29 +3,34 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { DEFAULT_CONFIG } from '../utils/config'
 
-// Lazy loading image component with visible placeholder
+// Lazy loading image - shows tiny blurred version first, then full quality
 function LazyImage({ src, alt, className }) {
-    const [loaded, setLoaded] = useState(false)
-    const [error, setError] = useState(false)
+    const [fullLoaded, setFullLoaded] = useState(false)
 
     return (
-        <div className="relative w-full h-full">
-            {/* Visible placeholder skeleton with green tint */}
-            {!loaded && !error && (
-                <div className="absolute inset-0 bg-gradient-to-br from-green-100 to-green-200 dark:from-gray-700 dark:to-gray-800 flex flex-col items-center justify-center gap-2">
-                    <span className="material-symbols-outlined text-green-500 dark:text-green-400 text-3xl animate-pulse">photo_library</span>
-                    <div className="w-8 h-1 bg-green-300 dark:bg-green-600 rounded-full overflow-hidden">
-                        <div className="h-full bg-green-500 dark:bg-green-400 animate-loading-bar"></div>
-                    </div>
-                </div>
-            )}
+        <div className="relative w-full h-full overflow-hidden">
+            {/* INSTANT: Tiny blurred version (loads super fast) */}
+            <img
+                src={src}
+                alt=""
+                className="absolute inset-0 w-full h-full object-cover blur-xl scale-110"
+                style={{
+                    imageRendering: 'pixelated',
+                    filter: 'blur(20px) brightness(0.9)',
+                    width: '100%',
+                    height: '100%'
+                }}
+                loading="eager"
+                decoding="async"
+                fetchPriority="low"
+            />
+            {/* Full quality image on top */}
             <img
                 src={src}
                 alt={alt}
-                className={`${className} ${loaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-500`}
+                className={`${className} ${fullLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-500`}
                 loading="lazy"
-                onLoad={() => setLoaded(true)}
-                onError={() => setError(true)}
+                onLoad={() => setFullLoaded(true)}
             />
         </div>
     )
