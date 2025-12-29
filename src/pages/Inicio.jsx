@@ -122,16 +122,16 @@ const VideoBackground = memo(({ videoId, blurAmount }) => {
     if (!videoId) return null;
 
     return (
-        <div className="absolute inset-0 z-1 pointer-events-none overflow-hidden bg-black">
+        <div className="absolute inset-0 z-1 pointer-events-none overflow-hidden surface-section">
             {/* AMBIENT BACKGROUND: Blurred thumbnail to fill sides on wide screens */}
             <div
-                className="absolute inset-0 z-0 opacity-70 transition-opacity duration-1000"
+                className="absolute inset-0 z-0 opacity-80 transition-opacity duration-1000"
                 style={{
                     backgroundImage: `url(https://img.youtube.com/vi/${videoId}/hqdefault.jpg)`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
-                    filter: `blur(30px) scale(1.1) brightness(0.6)`,
-                    transform: 'scale(1.1)'
+                    filter: `blur(40px) brightness(0.6) saturate(1.2)`,
+                    transform: 'scale(1.2)'
                 }}
             />
 
@@ -145,11 +145,11 @@ const VideoBackground = memo(({ videoId, blurAmount }) => {
                 src="data:video/mp4;base64,AAAAHGZ0eXBpc29tAAAAAGlzb21tcDQyAAAAA21vb3YAAABsbXZoZAAAAADR7m730e5u9wAAA+gAAAcQAAEAAAEAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAABidHJha3YAAABcdGtoZAAAAADR7m730e5u9wAAAAEAAAAAAAcQAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAZBtZWRpYQAAACBtZGhkAAAAANHubvfR7m73AAA7eAAAFuBAAQAAAQAAAAAAAAAAAAAAAAAAJWhkbHIAAAAAAAAAAHZpZGUAAAAAAAAAAAAAAABWaWRlb0hhbmRsZXIAAAABUW1pbmYAAAAUdm1oZAAAAAEAAAAAAAAAAAAAACRkaW5mAAAAHGRyZWYAAAAAAAAAAQAAAAxyZWRsAAAAAQAAAHBzdGJsAAAALXN0c2QAAAAAAAAAAQAAAB1hdmMxAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAgACABIAAAASAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGP//AAAALWF2Y0MBQsAN/+EAFWdCwA3ZAsTsBEAAAPpAADqYAA8SGmXiwAAAAAAhYnBocgAAAAAAABAAAABidHJlZgAAAAAIdmlydAAAAAEAAACgc3R0cwAAAAAAAAABAAAAAQAAADsAAABoc3RzYwAAAAAAAAABAAAAAQAAAAEAAAABAAAAXHN0c3oAAAAAAAAAAAAAAAEAAAA7AAAAZHN0Y28AAAAAAAAAAQAAADAAAABidWR0YQAAADptZXRhAAAAAAAAACFoZGxyAAAAAAAAAABtZGlyYXBwbAAAAAAAAAAAAAAAAGlsc3QAAAASAK1kYXRhAAAAAQAAAAAA"
             />
 
-            {/* SHARP FOREGROUND VIDEO: Centered 16:9 with no blur */}
+            {/* SHARP FOREGROUND VIDEO: Centered 16:9 with no sides cropped */}
             <div className="absolute inset-0 flex items-center justify-center">
                 <div
                     id="hero-video-player"
-                    className="w-full h-full md:w-[100vw] md:h-[56.25vw] opacity-0 transition-opacity duration-1000"
+                    className="h-full aspect-video md:h-full md:w-auto w-full opacity-0 transition-opacity duration-1000"
                     style={{
                         filter: `brightness(0.9) saturate(1.1)`,
                         pointerEvents: 'none'
