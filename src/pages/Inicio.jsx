@@ -33,100 +33,28 @@ const getInitialConfig = () => {
 const INITIAL_STATE = getInitialConfig()
 const INITIAL_VIDEO_ID = getYouTubeVideoId(INITIAL_STATE.heroVideoUrl)
 
-// STABLE Video Component - Uses YouTube IFrame API for deeper control
+// Simple Video Background - Single fullscreen iframe
 const VideoBackground = memo(({ videoId, blurAmount }) => {
-    const mainPlayerRef = useRef(null);
-    const ambientPlayerRef = useRef(null);
-
-    useEffect(() => {
-        if (!videoId) return;
-
-        const initPlayers = () => {
-            // 1. AMBIENT PLAYER (The background blur - fills the sides)
-            ambientPlayerRef.current = new window.YT.Player('hero-video-ambient', {
-                videoId: videoId,
-                playerVars: {
-                    autoplay: 1, mute: 1, controls: 0, showinfo: 0, rel: 0,
-                    modestbranding: 1, loop: 1, playlist: videoId, playsinline: 1,
-                    enablejsapi: 1, iv_load_policy: 3
-                },
-                events: {
-                    onReady: (event) => {
-                        event.target.mute();
-                        event.target.setPlaybackQuality('small'); // Minimal res for blur is fine
-                        event.target.playVideo();
-                    }
-                }
-            });
-
-            // 2. MAIN PLAYER (The sharp central video)
-            mainPlayerRef.current = new window.YT.Player('hero-video-main', {
-                videoId: videoId,
-                playerVars: {
-                    autoplay: 1, mute: 1, controls: 0, showinfo: 0, rel: 0,
-                    modestbranding: 1, loop: 1, playlist: videoId, playsinline: 1,
-                    enablejsapi: 1, iv_load_policy: 3
-                },
-                events: {
-                    onReady: (event) => {
-                        event.target.mute();
-                        event.target.setPlaybackQuality('hd1080');
-                        event.target.playVideo();
-
-                        setTimeout(() => {
-                            const main = document.getElementById('hero-video-main');
-                            const ambient = document.getElementById('hero-video-ambient');
-                            if (main) main.style.opacity = '1';
-                            if (ambient) ambient.style.opacity = '1';
-                        }, 500);
-                    },
-                    onStateChange: (event) => {
-                        if (event.data === window.YT.PlayerState.ENDED) event.target.playVideo();
-                        if (event.data === window.YT.PlayerState.PAUSED) event.target.playVideo();
-                    }
-                }
-            });
-        };
-
-        if (window.YT && window.YT.Player) {
-            initPlayers();
-        } else {
-            window.onYouTubeIframeAPIReady = initPlayers;
-        }
-
-        return () => {
-            try {
-                mainPlayerRef.current?.destroy();
-                ambientPlayerRef.current?.destroy();
-            } catch (e) { }
-        };
-    }, [videoId]);
-
     if (!videoId) return null;
+
+    const iframeSrc = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&controls=0&showinfo=0&rel=0&modestbranding=1&loop=1&playlist=${videoId}&playsinline=1&enablejsapi=0&iv_load_policy=3&disablekb=1&fs=0`;
 
     return (
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden bg-black">
-            {/* AMBIENT LAYER: Full screen video, heavily blurred (Cover sides) */}
-            <div
-                id="hero-video-ambient"
-                className="absolute inset-0 w-full h-full scale-[1.3] opacity-0 transition-opacity duration-1000"
-                style={{ filter: `blur(45px) brightness(0.7) blur(${blurAmount}px)`, transform: 'scale(1.3)' }}
+            {/* FULLSCREEN VIDEO - Scaled up to cover entire area */}
+            <iframe
+                src={iframeSrc}
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[180vw] h-[101.25vw] min-w-full min-h-full"
+                style={{
+                    filter: `blur(${blurAmount}px) brightness(0.85) saturate(1.1)`,
+                    border: 'none',
+                    pointerEvents: 'none'
+                }}
+                allow="autoplay; accelerometer; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                title="Background Video"
+                loading="eager"
             />
-
-            {/* MAIN LAYER: High quality video, centered & sharp */}
-            <div className="absolute inset-0 flex items-center justify-center">
-                <div
-                    id="hero-video-main"
-                    className="w-[100vw] h-[56.25vw] min-w-full min-h-full opacity-0 transition-opacity duration-1000"
-                    style={{
-                        filter: `blur(${blurAmount}px) brightness(0.9) saturate(1.1)`,
-                        pointerEvents: 'none'
-                    }}
-                />
-            </div>
-
-            {/* Native Media Priming */}
-            <video autoPlay muted playsInline loop className="absolute w-1 h-1 opacity-0" src="data:video/mp4;base64,AAAAHGZ0eXBpc29tAAAAAGlzb21tcDQyAAAAA21vb3YAAABsbXZoZAAAAADR7m730e5u9wAAA+gAAAcQAAEAAAEAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAABidHJha3YAAABcdGtoZAAAAADR7m730e5u9wAAAAEAAAAAAAcQAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAZBtZWRpYQAAACBtZGhkAAAAANHubvfR7m73AAA7eAAAFuBAAQAAAQAAAAAAAAAAAAAAAAAAJWhkbHIAAAAAAAAAAHZpZGUAAAAAAAAAAAAAAABWaWRlb0hhbmRsZXIAAAABUW1pbmYAAAAUdm1oZAAAAAEAAAAAAAAAAAAAACRkaW5mAAAAHGRyZWYAAAAAAAAAAQAAAAxyZWRsAAAAAQAAAHBzdGJsAAAALXN0c2QAAAAAAAAAAQAAAB1hdmMxAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAgACABIAAAASAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGP//AAAALWF2Y0MBQsAN/+EAFWdCwA3ZAsTsBEAAAPpAADqYAA8SGmXiwAAAAAAhYnBocgAAAAAAABAAAABidHJlZgAAAAAIdmlydAAAAAEAAACgc3R0cwAAAAAAAAABAAAAAQAAADsAAABoc3RzYwAAAAAAAAABAAAAAQAAAAEAAAABAAAAXHN0c3oAAAAAAAAAAAAAAAEAAAA7AAAAZHN0Y28AAAAAAAAAAQAAADAAAABidWR0YQAAADptZXRhAAAAAAAAACFoZGxyAAAAAAAAAABtZGlyYXBwbAAAAAAAAAAAAAAAAGlsc3QAAAASAK1kYXRhAAAAAQAAAAAA" />
         </div>
     );
 });

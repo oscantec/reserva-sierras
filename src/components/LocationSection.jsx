@@ -138,7 +138,12 @@ export default function LocationSection() {
                             </h3>
                             <div className="mb-3">
                                 <div className="relative rounded-xl overflow-hidden">
-                                    <img src={content.referenceImage} className="w-full h-auto object-contain" alt={content.referenceCaption} />
+                                    <img
+                                        src={accesoImage}
+                                        className="w-full h-auto object-contain"
+                                        alt="Acceso a la Finca"
+                                        loading="eager"
+                                    />
                                     <div className="absolute bottom-0 left-0 right-0 p-2 bg-black/60">
                                         <p className="text-white text-xs font-bold">{content.referenceCaption}</p>
                                     </div>
