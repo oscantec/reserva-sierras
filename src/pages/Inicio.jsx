@@ -122,8 +122,8 @@ const VideoBackground = memo(({ videoId, blurAmount }) => {
     if (!videoId) return null;
 
     return (
-        <div className="absolute inset-0 z-1 pointer-events-none overflow-hidden bg-black/10">
-            {/* Native Video Unlocker - Keep as secondary bridge */}
+        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden bg-black">
+            {/* Native Video Unlocker */}
             <video
                 autoPlay
                 muted
@@ -132,14 +132,21 @@ const VideoBackground = memo(({ videoId, blurAmount }) => {
                 className="absolute w-1 h-1 opacity-0 pointer-events-none"
                 src="data:video/mp4;base64,AAAAHGZ0eXBpc29tAAAAAGlzb21tcDQyAAAAA21vb3YAAABsbXZoZAAAAADR7m730e5u9wAAA+gAAAcQAAEAAAEAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAABidHJha3YAAABcdGtoZAAAAADR7m730e5u9wAAAAEAAAAAAAcQAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAZBtZWRpYQAAACBtZGhkAAAAANHubvfR7m73AAA7eAAAFuBAAQAAAQAAAAAAAAAAAAAAAAAAJWhkbHIAAAAAAAAAAHZpZGUAAAAAAAAAAAAAAABWaWRlb0hhbmRsZXIAAAABUW1pbmYAAAAUdm1oZAAAAAEAAAAAAAAAAAAAACRkaW5mAAAAHGRyZWYAAAAAAAAAAQAAAAxyZWRsAAAAAQAAAHBzdGJsAAAALXN0c2QAAAAAAAAAAQAAAB1hdmMxAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAgACABIAAAASAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGP//AAAALWF2Y0MBQsAN/+EAFWdCwA3ZAsTsBEAAAPpAADqYAA8SGmXiwAAAAAAhYnBocgAAAAAAABAAAABidHJlZgAAAAAIdmlydAAAAAEAAACgc3R0cwAAAAAAAAABAAAAAQAAADsAAABoc3RzYwAAAAAAAAABAAAAAQAAAAEAAAABAAAAXHN0c3oAAAAAAAAAAAAAAAEAAAA7AAAAZHN0Y28AAAAAAAAAAQAAADAAAABidWR0YQAAADptZXRhAAAAAAAAACFoZGxyAAAAAAAAAABtZGlyYXBwbAAAAAAAAAAAAAAAAGlsc3QAAAASAK1kYXRhAAAAAQAAAAAA"
             />
-            <div
-                id="hero-video-player"
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[115vw] h-[65vw] min-w-full min-h-full opacity-0 transition-opacity duration-1000"
-                style={{
-                    filter: `blur(${blurAmount}px) brightness(0.9) saturate(1.1)`,
-                    pointerEvents: 'none'
-                }}
-            />
+            {/* 
+               SCALING LOGIC: To achieve a true "Cover" effect with an Iframe, 
+               we use a container that is always at least 100% width and 56.25vw height (16:9).
+               We scale it up to ensure no black bars ever show on any monitor.
+            */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full min-w-[100%] min-h-[100%]">
+                <div
+                    id="hero-video-player"
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120vw] h-[67.5vw] min-w-[100vw] min-h-[56.25vw] sm:w-[150vw] sm:h-[84.375vw] xl:w-[110vw] xl:h-[61.875vw] opacity-0 transition-opacity duration-1000"
+                    style={{
+                        filter: `blur(${blurAmount}px) brightness(0.9) saturate(1.2)`,
+                        pointerEvents: 'none'
+                    }}
+                />
+            </div>
         </div>
     );
 });
