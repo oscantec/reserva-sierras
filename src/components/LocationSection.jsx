@@ -70,9 +70,9 @@ export default function LocationSection() {
     return (
         <section className="px-4 py-6 md:py-10 bg-page-bg-inicio dark:bg-surface-card-dark">
             <div className="max-w-7xl mx-auto">
-                {/* Header - Title centered, subtitle left-aligned like WhatsApp text */}
+                {/* Header - Same structure as ContactoInicialSection */}
                 <div className="mb-4 md:mb-6">
-                    <h2 className="text-3xl md:text-4xl font-black leading-tight tracking-[-0.033em] mb-2 text-center">Ubicación</h2>
+                    <h2 className="text-3xl md:text-4xl font-black leading-tight tracking-[-0.033em] mb-2">Ubicación</h2>
                     <p className="text-sm text-text-muted dark:text-text-muted mb-4">{content.subtitle}</p>
 
                     {/* Waze and Maps buttons */}
