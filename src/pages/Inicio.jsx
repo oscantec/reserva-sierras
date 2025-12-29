@@ -64,16 +64,24 @@ const VideoBackground = memo(({ videoId, blurAmount }) => {
                     pointerEvents: 'none'
                 }}
                 onLoad={(e) => {
-                    // Force commands immediately on load
-                    const sendCmd = () => {
+                    const iframe = e.target;
+                    // AGGRESSIVE RETRY LOOP: Mobile browsers often ignore the first play command.
+                    // We send it multiple times over the first 3 seconds to "catch" the moment the browser allows it.
+                    let attempts = 0;
+                    const maxAttempts = 6;
+
+                    const interval = setInterval(() => {
                         try {
-                            e.target.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
-                            e.target.contentWindow.postMessage('{"event":"command","func":"mute","args":""}', '*');
+                            iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+                            iframe.contentWindow.postMessage('{"event":"command","func":"mute","args":""}', '*');
                         } catch (err) { }
-                    }
-                    sendCmd();
-                    setTimeout(sendCmd, 1000); // Retry after 1s for slow networks
-                    setTimeout(() => e.target.classList.remove('opacity-0'), 500);
+
+                        attempts++;
+                        if (attempts >= maxAttempts) clearInterval(interval);
+                    }, 500);
+
+                    // Show the iframe only after at least one attempt, with a small delay for smoothness
+                    setTimeout(() => iframe.classList.remove('opacity-0'), 1000);
                 }}
             />
         </div>
