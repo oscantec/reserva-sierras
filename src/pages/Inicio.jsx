@@ -33,16 +33,78 @@ const getInitialConfig = () => {
 const INITIAL_STATE = getInitialConfig()
 const INITIAL_VIDEO_ID = getYouTubeVideoId(INITIAL_STATE.heroVideoUrl)
 
-// STABLE Video Component - MEMOIZED to prevent refreshes when phrases rotate
+// STABLE Video Component - Uses YouTube IFrame API for deeper control
 const VideoBackground = memo(({ videoId, blurAmount }) => {
+    const playerRef = useRef(null);
+
+    useEffect(() => {
+        if (!videoId) return;
+
+        const initPlayer = () => {
+            if (playerRef.current) {
+                try { playerRef.current.destroy(); } catch (e) { }
+            }
+
+            playerRef.current = new window.YT.Player('hero-video-player', {
+                videoId: videoId,
+                playerVars: {
+                    autoplay: 1,
+                    mute: 1,
+                    controls: 0,
+                    showinfo: 0,
+                    rel: 0,
+                    modestbranding: 1,
+                    loop: 1,
+                    playlist: videoId,
+                    playsinline: 1,
+                    enablejsapi: 1,
+                    iv_load_policy: 3,
+                    disablekb: 1,
+                    origin: window.location.origin
+                },
+                events: {
+                    onReady: (event) => {
+                        event.target.mute();
+                        event.target.playVideo();
+                        // Fade in once ready
+                        setTimeout(() => {
+                            const iframe = document.getElementById('hero-video-player');
+                            if (iframe) iframe.style.opacity = '1';
+                        }, 500);
+                    },
+                    onStateChange: (event) => {
+                        // Force play if paused by browser (common on mobile)
+                        if (event.data === window.YT.PlayerState.PAUSED) {
+                            event.target.playVideo();
+                        }
+                        // Loop manually if playlist loop fails
+                        if (event.data === window.YT.PlayerState.ENDED) {
+                            event.target.playVideo();
+                        }
+                    }
+                }
+            });
+        };
+
+        if (window.YT && window.YT.Player) {
+            initPlayer();
+        } else {
+            // Wait for API to be ready
+            window.onYouTubeIframeAPIReady = initPlayer;
+        }
+
+        return () => {
+            if (playerRef.current) {
+                try { playerRef.current.destroy(); } catch (e) { }
+            }
+        };
+    }, [videoId]);
+
     if (!videoId) return null;
 
-    // Direct High-Performance URL with explicit loop configuration
-    const src = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&muted=1&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&loop=1&playlist=${videoId}&iv_load_policy=3&origin=${window.location.origin}`;
-
     return (
-        <div className="absolute inset-0 z-1 pointer-events-none overflow-hidden bg-black/5">
-            {/* MEDIA UNLOCKER: Invisible native video to prime the browser's autoplay engine */}
+        <div className="absolute inset-0 z-1 pointer-events-none overflow-hidden bg-black/10">
+            {/* Native Video Unlocker - Keep as secondary bridge */}
             <video
                 autoPlay
                 muted
@@ -51,37 +113,12 @@ const VideoBackground = memo(({ videoId, blurAmount }) => {
                 className="absolute w-1 h-1 opacity-0 pointer-events-none"
                 src="data:video/mp4;base64,AAAAHGZ0eXBpc29tAAAAAGlzb21tcDQyAAAAA21vb3YAAABsbXZoZAAAAADR7m730e5u9wAAA+gAAAcQAAEAAAEAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAABidHJha3YAAABcdGtoZAAAAADR7m730e5u9wAAAAEAAAAAAAcQAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAZBtZWRpYQAAACBtZGhkAAAAANHubvfR7m73AAA7eAAAFuBAAQAAAQAAAAAAAAAAAAAAAAAAJWhkbHIAAAAAAAAAAHZpZGUAAAAAAAAAAAAAAABWaWRlb0hhbmRsZXIAAAABUW1pbmYAAAAUdm1oZAAAAAEAAAAAAAAAAAAAACRkaW5mAAAAHGRyZWYAAAAAAAAAAQAAAAxyZWRsAAAAAQAAAHBzdGJsAAAALXN0c2QAAAAAAAAAAQAAAB1hdmMxAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAgACABIAAAASAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGP//AAAALWF2Y0MBQsAN/+EAFWdCwA3ZAsTsBEAAAPpAADqYAA8SGmXiwAAAAAAhYnBocgAAAAAAABAAAABidHJlZgAAAAAIdmlydAAAAAEAAACgc3R0cwAAAAAAAAABAAAAAQAAADsAAABoc3RzYwAAAAAAAAABAAAAAQAAAAEAAAABAAAAXHN0c3oAAAAAAAAAAAAAAAEAAAA7AAAAZHN0Y28AAAAAAAAAAQAAADAAAABidWR0YQAAADptZXRhAAAAAAAAACFoZGxyAAAAAAAAAABtZGlyYXBwbAAAAAAAAAAAAAAAAGlsc3QAAAASAK1kYXRhAAAAAQAAAAAA"
             />
-
-            <iframe
-                id="hero-video-iframe"
+            <div
+                id="hero-video-player"
                 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[115vw] h-[65vw] min-w-full min-h-full opacity-0 transition-opacity duration-1000"
-                src={src}
-                title="Hero Video Background"
-                frameBorder="0"
-                allow="autoplay *; fullscreen *; encrypted-media; gyroscope; picture-in-picture"
                 style={{
                     filter: `blur(${blurAmount}px) brightness(0.8) saturate(1.1)`,
                     pointerEvents: 'none'
-                }}
-                onLoad={(e) => {
-                    const iframe = e.target;
-                    // AGGRESSIVE RETRY LOOP: Mobile browsers often ignore the first play command.
-                    // We send it multiple times over the first 3 seconds to "catch" the moment the browser allows it.
-                    let attempts = 0;
-                    const maxAttempts = 6;
-
-                    const interval = setInterval(() => {
-                        try {
-                            iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
-                            iframe.contentWindow.postMessage('{"event":"command","func":"mute","args":""}', '*');
-                        } catch (err) { }
-
-                        attempts++;
-                        if (attempts >= maxAttempts) clearInterval(interval);
-                    }, 500);
-
-                    // Show the iframe only after at least one attempt, with a small delay for smoothness
-                    setTimeout(() => iframe.classList.remove('opacity-0'), 1000);
                 }}
             />
         </div>
@@ -110,12 +147,22 @@ export default function Landing() {
 
     const videoId = getYouTubeVideoId(heroConfig.videoUrl) || INITIAL_VIDEO_ID
 
+    // Load YouTube API script once
+    useEffect(() => {
+        if (!window.YT) {
+            const tag = document.createElement('script');
+            tag.src = "https://www.youtube.com/iframe_api";
+            const firstScriptTag = document.getElementsByTagName('script')[0];
+            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+        }
+    }, []);
+
     // KICKSTART: Force video play on first user interaction (Secret of high-end mobile sites)
     useEffect(() => {
         const kickstartVideo = () => {
-            const iframe = document.getElementById('hero-video-iframe');
+            const iframe = document.getElementById('hero-video-player');
             if (iframe && iframe.contentWindow) {
-                // Send standard YT API play command directly to iframe
+                // Try multiple ways to trigger play
                 iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
                 iframe.contentWindow.postMessage('{"event":"command","func":"mute","args":""}', '*');
             }
