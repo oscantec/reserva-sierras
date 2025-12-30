@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { useState, useEffect, memo } from 'react'
+import { useState, useEffect, useRef, memo } from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import ContactoInicialSection from '../components/ContactoInicialSection'
@@ -33,19 +33,43 @@ const getInitialConfig = () => {
 const INITIAL_STATE = getInitialConfig()
 const INITIAL_VIDEO_ID = getYouTubeVideoId(INITIAL_STATE.heroVideoUrl)
 
-// Video Background - Simple iframe that stretches to cover the entire hero
+// Video Background - Optimized for mobile autoplay and desktop progressive quality
 const VideoBackground = memo(({ videoId, blurAmount }) => {
     const [isReady, setIsReady] = useState(false);
+    const iframeRef = useRef(null);
 
     if (!videoId) return null;
 
-    // Build YouTube embed URL with autoplay parameters
-    const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&iv_load_policy=3&disablekb=1&vq=hd1080`;
+    // Detect if mobile for different quality settings
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+
+    // Mobile: start with medium quality for faster load, Desktop: start with default (will upgrade)
+    const initialQuality = isMobile ? 'medium' : 'default';
+
+    // Build YouTube embed URL with optimized autoplay parameters
+    // playsinline=1 is critical for iOS autoplay
+    const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&iv_load_policy=3&disablekb=1&vq=${initialQuality}&origin=${typeof window !== 'undefined' ? window.location.origin : ''}`;
+
+    // Upgrade quality on desktop after initial load
+    useEffect(() => {
+        if (isReady && !isMobile && iframeRef.current) {
+            // Try to upgrade quality via postMessage after load
+            const iframe = iframeRef.current;
+            setTimeout(() => {
+                try {
+                    iframe.contentWindow?.postMessage('{"event":"command","func":"setPlaybackQuality","args":["hd1080"]}', '*');
+                } catch (e) {
+                    // Silently fail if cross-origin issues
+                }
+            }, 2000); // Wait 2 seconds for video to start playing
+        }
+    }, [isReady, isMobile]);
 
     return (
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden bg-black">
             {/* Single iframe that covers entire hero - stretches on wide screens */}
             <iframe
+                ref={iframeRef}
                 id="hero-video-player"
                 src={embedUrl}
                 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200%] h-[200%] min-w-[100%] min-h-[100%]"
@@ -54,8 +78,9 @@ const VideoBackground = memo(({ videoId, blurAmount }) => {
                     border: 'none',
                     pointerEvents: 'none'
                 }}
-                allow="autoplay; encrypted-media"
+                allow="autoplay; encrypted-media; accelerometer; gyroscope"
                 allowFullScreen
+                loading="eager"
                 onLoad={() => setIsReady(true)}
             />
         </div>
