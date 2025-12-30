@@ -13,9 +13,9 @@ export default function Navbar() {
 
     const navLinks = [
         { path: '/', label: 'Inicio' },
-        { path: '/galeria', label: 'Galería' },
         { path: '/reservas', label: 'Reservas' },
         { path: '/registro', label: 'Registro' },
+        { path: '/galeria', label: 'Galería' },
     ]
 
     const handleLinkClick = () => {
