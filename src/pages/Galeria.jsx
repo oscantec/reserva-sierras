@@ -27,8 +27,8 @@ function LazyImage({ src, alt, className, priority = false }) {
                 src={src}
                 alt={alt}
                 className={`${className} transition-all duration-1000 ease-out ${fullLoaded
-                        ? 'opacity-100 blur-0 scale-100'
-                        : 'opacity-0 blur-xl scale-105'
+                    ? 'opacity-100 blur-0 scale-100'
+                    : 'opacity-0 blur-xl scale-105'
                     }`}
                 loading={priority ? "eager" : "lazy"}
                 fetchPriority={priority ? "high" : "auto"}
@@ -55,7 +55,7 @@ import frutales1 from '../images/Frutales 1.webp'
 import frutales2 from '../images/Frutales 2.webp'
 import sendero1 from '../images/Sendero 1.webp'
 import sendero2 from '../images/Sendero 2.webp'
-import solar1 from '../images/Solar 1.webp'
+
 import garaje from '../images/garaje.webp'
 import portada1 from '../images/Portada 1.webp'
 import portada2 from '../images/Portada 2.webp'
@@ -167,7 +167,7 @@ export default function Gallery() {
         { id: 'frutales2', src: frutales2, title: 'Huerta', label: 'Frutales', category: 'externas' },
         { id: 'sendero1', src: sendero1, title: 'Sendero Ecológico', label: 'Sendero', category: 'externas' },
         { id: 'sendero2', src: sendero2, title: 'Caminos', label: 'Sendero', category: 'externas' },
-        { id: 'solar1', src: solar1, title: 'Paneles Solares', label: 'Solar', category: 'externas' },
+
         { id: 'garaje', src: garaje, title: 'Garaje', label: 'Garaje', category: 'externas' },
         { id: 'portada2', src: portada2, title: 'Atardecer', label: 'Portada', category: 'externas' },
         { id: 'portada3', src: portada3, title: 'Paisaje', label: 'Portada', category: 'externas' },
