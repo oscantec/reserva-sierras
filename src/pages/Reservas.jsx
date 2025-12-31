@@ -509,16 +509,11 @@ export default function Booking() {
                                             const past = isDatePast(date)
                                             const holiday = isHoliday(date)
 
-                                            // 3. Construir estilo visual (Background)
+                                            // 3. Construir estilo visual
                                             let bgStyle = {}
                                             let cursorClass = "cursor-pointer"
                                             let textClass = "text-text-main dark:text-white"
-
-                                            // Colores
-                                            const cGray = "rgba(156, 163, 175, 0.5)" // gray-400
-                                            const cPrimary = "var(--primary)" // Verde
-                                            const cNone = "transparent"
-                                            const cBaseRes = "rgba(209, 213, 219, 1)" // gray-300
+                                            let shapeClass = "rounded-lg"
 
                                             // Lógica de deshabilitado
                                             const isDisabled = past || resState === 'middle'
@@ -527,46 +522,58 @@ export default function Booking() {
                                                 cursorClass = "cursor-not-allowed hidden-cursor"
                                                 textClass = "text-gray-400 dark:text-gray-500 line-through"
                                                 if (resState === 'middle') {
-                                                    // Gris completo
                                                     bgStyle = { backgroundColor: 'var(--surface-card)' }
                                                 }
                                             }
 
-                                            // Construcción del Gradiente
-                                            let leftColor = cNone
-                                            let rightColor = cNone
+                                            // Logica de 'Split View' (Gradiente) vs Estilo Estándar
+                                            // Usamos gradiente SOLO si hay una reserva parcial (start/end) O si necesitamos dividir una seleccion sobre una reserva
+                                            const needsSplit = resState === 'start' || resState === 'end'
 
-                                            // Capa Base: Reserva
-                                            if (resState === 'end') leftColor = cBaseRes
-                                            if (resState === 'start') rightColor = cBaseRes
-                                            if (resState === 'middle') { leftColor = cBaseRes; rightColor = cBaseRes; }
+                                            if (needsSplit) {
+                                                // --- MODIO SPLIT (GRADIENTE) ---
+                                                const cGray = "rgba(209, 213, 219, 1)" // gray-300
+                                                const cPrimary = "var(--primary)" // Verde
+                                                const cNone = "transparent"
 
-                                            // Capa Superior: Selección (Override)
-                                            if (isSelRange) {
-                                                // Rango completo seleccionado -> Verde
-                                                leftColor = cPrimary; rightColor = cPrimary;
-                                                textClass = "text-white font-medium"
-                                            } else if (isSelStart && isSelEnd) {
-                                                // Un solo día seleccionado
+                                                let leftColor = cNone
+                                                let rightColor = cNone
+
+                                                // Capa Base: Reserva
+                                                if (resState === 'end') leftColor = cGray
+                                                if (resState === 'start') rightColor = cGray
+
+                                                // Capa Superior: Selección
+                                                if (isSelRange) {
+                                                    leftColor = cPrimary; rightColor = cPrimary;
+                                                    textClass = "text-white font-medium"
+                                                } else {
+                                                    if (isSelEnd) { leftColor = cPrimary; textClass = "text-white font-bold"; }
+                                                    if (isSelStart) { rightColor = cPrimary; textClass = "text-white font-bold"; }
+                                                }
+
+                                                bgStyle = { background: `linear-gradient(90deg, ${leftColor} 50%, ${rightColor} 50%)` }
+                                                shapeClass = "rounded-lg" // En split mode, mantenemos forma cuadrada/suave
+
                                             } else {
-                                                if (isSelEnd) { leftColor = cPrimary; textClass = "text-white font-bold"; }
-                                                if (isSelStart) { rightColor = cPrimary; textClass = "text-white font-bold"; }
-                                            }
+                                                // --- MODO ESTÁNDAR (Clases Tailwind) ---
+                                                // Recuperamos el "verde lindo" original
 
-                                            // Generar el linear-gradient
-                                            const gradient = `linear-gradient(90deg, ${leftColor} 50%, ${rightColor} 50%)`
-
-                                            // Clases adicionales para formas
-                                            let shapeClass = "rounded-lg"
-                                            // Ajustamos formas si es selección
-                                            if (isSelStart && !isSelEnd) shapeClass = "rounded-l-full rounded-r-none"
-                                            if (isSelEnd && !isSelStart) shapeClass = "rounded-r-full rounded-l-none"
-                                            if (isSelStart && isSelEnd) shapeClass = "rounded-full"
-                                            if (isSelRange) shapeClass = "rounded-none"
-
-                                            // Manejo de festivos (texto bold)
-                                            if (holiday && !isDisabled && !isSelStart && !isSelEnd && !isSelRange) {
-                                                textClass = "text-primary font-bold"
+                                                if (isSelRange) {
+                                                    textClass = "bg-primary text-white font-medium rounded-none"
+                                                    shapeClass = "" // Override
+                                                } else if (isSelStart && isSelEnd) {
+                                                    textClass = "bg-primary text-white font-bold"
+                                                    shapeClass = "rounded-full shadow-md shadow-card-sm"
+                                                } else if (isSelStart) {
+                                                    textClass = "bg-primary text-white font-bold"
+                                                    shapeClass = "rounded-l-full rounded-r-none shadow-md shadow-card-sm"
+                                                } else if (isSelEnd) {
+                                                    textClass = "bg-primary text-white font-bold"
+                                                    shapeClass = "rounded-r-full rounded-l-none shadow-md shadow-card-sm"
+                                                } else if (holiday && !isDisabled) {
+                                                    textClass = "text-primary font-bold"
+                                                }
                                             }
 
                                             return (
@@ -575,12 +582,12 @@ export default function Booking() {
                                                     onClick={() => handleDateClick(date)}
                                                     disabled={isDisabled}
                                                     className={`h-10 w-full flex items-center justify-center text-sm transition-all relative ${cursorClass} ${textClass} ${shapeClass}`}
-                                                    style={{ background: gradient }}
+                                                    style={bgStyle}
                                                     title={holiday ? holiday.name : ''}
                                                 >
                                                     <span className="relative z-10">{date.getDate()}</span>
 
-                                                    {/* Indicador de festivo (puntito) si no está seleccionado ni lleno */}
+                                                    {/* Indicador de festivo (puntito) */}
                                                     {holiday && !isSelRange && !isSelStart && !isSelEnd && resState !== 'middle' && (
                                                         <span className="absolute top-0.5 right-0.5 w-1.5 h-1.5 bg-primary rounded-full"></span>
                                                     )}
