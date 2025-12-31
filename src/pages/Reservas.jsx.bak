@@ -470,19 +470,6 @@ export default function Booking() {
                                             <span>⭐ {pricingDetails.specialNights} {pricingDetails.specialNights === 1 ? 'noche especial' : 'noches especiales'}</span>
                                             <span>Incluido</span>
                                         </div>
-                                    
-                                    {/* Season Multiplier Display */}
-                                    {pricingDetails.appliedSeasons && pricingDetails.appliedSeasons.length > 0 && (
-                                        <div className="space-y-1 py-2 border-t border-border-card dark:border-border-card-dark mt-2">
-                                            {pricingDetails.appliedSeasons.map((season, idx) => (
-                                                <div key={idx} className="flex justify-between text-sm text-primary font-medium">
-                                                    <span>⭐ Multiplicador {season.multiplier}x - {season.name}</span>
-                                                    <span className="text-xs text-text-muted">Aplicado</span>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
-                                    
                                     )}
                                     <div className="flex justify-between text-sm font-medium text-text-main-light dark:text-text-muted pt-1">
                                         <span>Subtotal alojamiento</span>
@@ -628,19 +615,6 @@ export default function Booking() {
                                                 <span>Incluido</span>
                                             </div>
                                         )}
-                                    
-                                    {/* Season Multiplier Display */}
-                                    {pricingDetails.appliedSeasons && pricingDetails.appliedSeasons.length > 0 && (
-                                        <div className="space-y-1 py-2 border-t border-border-card dark:border-border-card-dark mt-2">
-                                            {pricingDetails.appliedSeasons.map((season, idx) => (
-                                                <div key={idx} className="flex justify-between text-sm text-primary font-medium">
-                                                    <span>⭐ Multiplicador {season.multiplier}x - {season.name}</span>
-                                                    <span className="text-xs text-text-muted">Aplicado</span>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
-                                    
 
                                         {/* Subtotal */}
                                         <div className="flex justify-between text-sm font-medium text-text-main-light dark:text-text-muted pt-1">
