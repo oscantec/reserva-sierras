@@ -231,10 +231,11 @@ export default function Booking() {
     // Calculate detailed pricing breakdown
     const calculatePricing = () => {
         if (!selectedRange.start || !selectedRange.end || nights === 0) {
-            return { subtotal: 0, weekdayNights: 0, weekendNights: 0, specialNights: 0, breakdown: [], appliedSeasons: [], extraGuestCharge: 0, extraGuests: 0 }
+            return { subtotal: 0, weekdayNights: 0, weekendNights: 0, specialNights: 0, breakdown: [], appliedSeasons: [], extraGuestCharge: 0, extraGuests: 0, seasonCharge: 0 }
         }
 
         let subtotal = 0
+        let subtotalBase = 0 // Subtotal without season multiplier
         let weekdayNights = 0
         let weekendNights = 0
         let specialNights = 0
@@ -246,6 +247,12 @@ export default function Booking() {
         while (current < selectedRange.end) {
             const { price, type, multiplier, seasonName } = getPriceForNight(current)
             subtotal += price
+
+            // Calculate base price (without season multiplier)
+            const baseRate = type === 'weekend'
+                ? (pricing?.baseRates?.weekend || 450000)
+                : (pricing?.baseRates?.weekday || 350000)
+            subtotalBase += baseRate
 
             if (type === 'special') specialNights++
             else if (type === 'weekend') weekendNights++
@@ -267,6 +274,9 @@ export default function Booking() {
             current.setDate(current.getDate() + 1)
         }
 
+        // Calculate season charge (difference between subtotal with and without multiplier)
+        const seasonCharge = subtotal - subtotalBase
+
         // Calculate extra guest charge (10% per person over 7)
         let extraGuestCharge = 0
         let extraGuests = 0
@@ -275,7 +285,7 @@ export default function Booking() {
             extraGuestCharge = Math.round(subtotal * 0.10 * extraGuests)
         }
 
-        return { subtotal, weekdayNights, weekendNights, specialNights, breakdown, appliedSeasons, extraGuestCharge, extraGuests }
+        return { subtotal, weekdayNights, weekendNights, specialNights, breakdown, appliedSeasons, extraGuestCharge, extraGuests, seasonCharge }
     }
 
     const pricingDetails = calculatePricing()
@@ -527,12 +537,12 @@ export default function Booking() {
                                         </div>
                                     )}
                                     {/* Season Multiplier Display */}
-                                    {pricingDetails.appliedSeasons && pricingDetails.appliedSeasons.length > 0 && (
+                                    {pricingDetails.appliedSeasons && pricingDetails.appliedSeasons.length > 0 && pricingDetails.seasonCharge > 0 && (
                                         <div className="space-y-1 py-2 border-t border-border-card dark:border-border-card-dark mt-2">
                                             {pricingDetails.appliedSeasons.map((season, idx) => (
                                                 <div key={idx} className="flex justify-between text-sm text-primary font-medium">
                                                     <span>Multiplicador {season.multiplier}x - {season.name}</span>
-                                                    <span className="text-xs text-text-muted">Aplicado</span>
+                                                    <span>+{formatPrice(pricingDetails.seasonCharge)}</span>
                                                 </div>
                                             ))}
                                         </div>
@@ -564,7 +574,7 @@ export default function Booking() {
                                         </div>
                                     )}
                                     {ivaEnabled && taxes > 0 && (
-                                        <div className="flex justify-between text-sm text-text-muted dark:text-text-muted">
+                                        <div className="flex justify-between text-sm text-primary font-medium">
                                             <span>IVA ({ivaPercent}%)</span>
                                             <span>{formatPrice(taxes)}</span>
                                         </div>
@@ -727,15 +737,14 @@ export default function Booking() {
                                         )}
 
                                         {/* Season Multiplier Display */}
-                                        {pricingDetails.appliedSeasons && pricingDetails.appliedSeasons.length > 0 && (
+                                        {pricingDetails.appliedSeasons && pricingDetails.appliedSeasons.length > 0 && pricingDetails.seasonCharge > 0 && (
                                             <div className="space-y-1 py-2 border-t border-border-card dark:border-border-card-dark mt-2">
                                                 {pricingDetails.appliedSeasons.map((season, idx) => (
                                                     <div key={idx} className="flex justify-between text-sm text-primary font-medium">
                                                         <span>Multiplicador {season.multiplier}x - {season.name}</span>
-                                                        <span className="text-xs text-text-muted">Aplicado</span>
+                                                        <span>+{formatPrice(pricingDetails.seasonCharge)}</span>
                                                     </div>
-                                                ))}
-                                            </div>
+                                                ))}                                            </div>
                                         )}
 
                                         {/* Extra guest charge - BEFORE subtotal */}
@@ -770,7 +779,7 @@ export default function Booking() {
 
                                         {/* IVA */}
                                         {ivaEnabled && taxes > 0 && (
-                                            <div className="flex justify-between text-sm text-text-muted dark:text-text-muted">
+                                            <div className="flex justify-between text-sm text-primary font-medium">
                                                 <span>IVA ({ivaPercent}%)</span>
                                                 <span>{formatPrice(taxes)}</span>
                                             </div>
