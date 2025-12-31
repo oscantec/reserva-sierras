@@ -470,7 +470,7 @@ export default function Booking() {
                                             <span>⭐ {pricingDetails.specialNights} {pricingDetails.specialNights === 1 ? 'noche especial' : 'noches especiales'}</span>
                                             <span>Incluido</span>
                                         </div>
-                                    
+                                    )}
                                     {/* Season Multiplier Display */}
                                     {pricingDetails.appliedSeasons && pricingDetails.appliedSeasons.length > 0 && (
                                         <div className="space-y-1 py-2 border-t border-border-card dark:border-border-card-dark mt-2">
@@ -483,7 +483,6 @@ export default function Booking() {
                                         </div>
                                     )}
                                     
-                                    )}
                                     <div className="flex justify-between text-sm font-medium text-text-main-light dark:text-text-muted pt-1">
                                         <span>Subtotal alojamiento</span>
                                         <span>{formatPrice(pricingDetails.subtotal)}</span>
