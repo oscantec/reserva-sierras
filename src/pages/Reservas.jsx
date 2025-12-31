@@ -473,122 +473,109 @@ export default function Booking() {
                                                 return <span key={index}></span>
                                             }
 
-                                            // 1. Determinar estado de reservas existentes
-                                            let resState = 'none' // none, start, end, middle, full (start+end same day)
-
-                                            // Normalizamos fechas para comparación
+                                            // 1. ANÁLISIS DE ESTADO DE RESERVA (BASE GRIS)
+                                            // 'none' | 'start' (Entrada otro, Gris Derecha) | 'end' (Salida otro, Gris Izq) | 'middle' (Full Gris)
+                                            let resState = 'none'
                                             const dateTime = date.getTime()
 
-                                            // Buscamos si cae en alguna reserva
-                                            for (const r of reservedDates) {
-                                                const rStart = new Date(r.start)
-                                                rStart.setHours(0, 0, 0, 0)
-                                                const rEnd = new Date(r.end)
-                                                rEnd.setHours(0, 0, 0, 0)
+                                            // Lógica mejorada para detectar cruces de reserva (fin de una, inicio de otra = Full)
+                                            let isResStart = false
+                                            let isResEnd = false
+                                            let isResMiddle = false
 
+                                            for (const r of reservedDates) {
+                                                const rStart = new Date(r.start); rStart.setHours(0, 0, 0, 0)
+                                                const rEnd = new Date(r.end); rEnd.setHours(0, 0, 0, 0)
                                                 const tStart = rStart.getTime()
                                                 const tEnd = rEnd.getTime()
 
-                                                if (dateTime > tStart && dateTime < tEnd) {
-                                                    resState = 'middle'
-                                                    break // Middle domina, bloqueado total
-                                                } else if (dateTime === tStart) {
-                                                    // Si ya era 'end', ahora es 'switch' (full)
-                                                    resState = resState === 'end' ? 'middle' : 'start'
-                                                } else if (dateTime === tEnd) {
-                                                    // Si ya era 'start', ahora es 'switch' (full)
-                                                    resState = resState === 'start' ? 'middle' : 'end'
-                                                }
+                                                if (dateTime > tStart && dateTime < tEnd) { isResMiddle = true; break; }
+                                                if (dateTime === tStart) isResStart = true
+                                                if (dateTime === tEnd) isResEnd = true
                                             }
 
-                                            // 2. Determinar estado de selección actual
+                                            // Consolidar estado reserva
+                                            if (isResMiddle) resState = 'middle'
+                                            else if (isResStart && isResEnd) resState = 'middle' // Cruce: sale uno, entra otro el mismo día -> Todo ocupado para tránsitos, pero visualmente...
+                                            // Espera, si sale uno y entra otro, es [Gris|Gris]. Sí, middle.
+                                            else if (isResStart) resState = 'start'
+                                            else if (isResEnd) resState = 'end'
+
+
+                                            // 2. ANÁLISIS DE SELECCIÓN (CAPA VERDE)
+                                            // 'none' | 'selStart' (Mi Entrada, Verde Derecha) | 'selEnd' (Mi Salida, Verde Izq) | 'selMiddle' (Full Verde)
                                             const isSelStart = isStartDate(date)
                                             const isSelEnd = isEndDate(date)
-                                            const isSelRange = isDateInRange(date) // Días intermedios de mi selección
+                                            const isSelMiddle = isDateInRange(date) // Días intermedios selección
 
                                             const past = isDatePast(date)
                                             const holiday = isHoliday(date)
 
-                                            // 3. Construir estilo visual
-                                            let bgStyle = {}
-                                            let cursorClass = "cursor-pointer"
-                                            let textClass = "text-text-main dark:text-white"
-                                            let shapeClass = "rounded-lg"
+                                            // 3. DEFINICIÓN DE COLORES (IZQUIERDA | DERECHA)
+                                            const cTrans = "transparent"
+                                            const cGray = "rgba(209, 213, 219, 1)" // gray-300
+                                            const cGreen = "var(--primary)" // Verde Sistema
 
-                                            // Lógica de deshabilitado
-                                            const isDisabled = past || resState === 'middle'
+                                            let leftColor = cTrans
+                                            let rightColor = cTrans
 
-                                            if (isDisabled) {
-                                                cursorClass = "cursor-not-allowed hidden-cursor"
-                                                textClass = "text-gray-400 dark:text-gray-500 line-through"
-                                                if (resState === 'middle') {
-                                                    bgStyle = { backgroundColor: 'var(--surface-card)' }
-                                                }
+                                            // --- APLICAR CAPA BASE (RESERVAS) ---
+                                            if (resState === 'middle') { leftColor = cGray; rightColor = cGray; }
+                                            else if (resState === 'end') { leftColor = cGray; }
+                                            else if (resState === 'start') { rightColor = cGray; }
+
+                                            // --- APLICAR CAPA SELECCIÓN (SOBRESCRIBE/COMPLEMENTA) ---
+                                            if (isSelMiddle) {
+                                                leftColor = cGreen; rightColor = cGreen;
+                                            } else {
+                                                if (isSelEnd) leftColor = cGreen // Mi salida pinta izquierda verde
+                                                if (isSelStart) rightColor = cGreen // Mi entrada pinta derecha verde
                                             }
 
-                                            // Logica de 'Split View' (Gradiente) vs Estilo Estándar
-                                            // Usamos gradiente SOLO si hay una reserva parcial (start/end) O si necesitamos dividir una seleccion sobre una reserva
-                                            const needsSplit = resState === 'start' || resState === 'end'
+                                            // 4. ESTILOS DE TEXTO Y CURSOR
+                                            let textClass = "text-text-main dark:text-white"
+                                            let cursorClass = "cursor-pointer"
 
-                                            if (needsSplit) {
-                                                // --- MODIO SPLIT (GRADIENTE) ---
-                                                const cGray = "rgba(209, 213, 219, 1)" // gray-300
-                                                const cPrimary = "var(--primary)" // Verde
-                                                const cNone = "transparent"
-
-                                                let leftColor = cNone
-                                                let rightColor = cNone
-
-                                                // Capa Base: Reserva
-                                                if (resState === 'end') leftColor = cGray
-                                                if (resState === 'start') rightColor = cGray
-
-                                                // Capa Superior: Selección
-                                                if (isSelRange) {
-                                                    leftColor = cPrimary; rightColor = cPrimary;
-                                                    textClass = "text-white font-medium"
-                                                } else {
-                                                    if (isSelEnd) { leftColor = cPrimary; textClass = "text-white font-bold"; }
-                                                    if (isSelStart) { rightColor = cPrimary; textClass = "text-white font-bold"; }
-                                                }
-
-                                                bgStyle = { background: `linear-gradient(90deg, ${leftColor} 50%, ${rightColor} 50%)` }
-                                                shapeClass = "rounded-lg" // En split mode, mantenemos forma cuadrada/suave
-
+                                            // Días pasados o bloqueados totalmente
+                                            if (past) {
+                                                cursorClass = "cursor-not-allowed"
+                                                textClass = "text-gray-300 dark:text-gray-600 line-through"
+                                            } else if (resState === 'middle') {
+                                                cursorClass = "cursor-not-allowed"
+                                                textClass = "text-gray-400 dark:text-gray-500 line-through decoration-gray-400"
                                             } else {
-                                                // --- MODO ESTÁNDAR (Clases Tailwind) ---
-                                                // Recuperamos el "verde lindo" original
-
-                                                if (isSelRange) {
-                                                    textClass = "bg-primary text-white font-medium rounded-none"
-                                                    shapeClass = "" // Override
-                                                } else if (isSelStart && isSelEnd) {
-                                                    textClass = "bg-primary text-white font-bold"
-                                                    shapeClass = "rounded-full shadow-md shadow-card-sm"
-                                                } else if (isSelStart) {
-                                                    textClass = "bg-primary text-white font-bold"
-                                                    shapeClass = "rounded-l-full rounded-r-none shadow-md shadow-card-sm"
-                                                } else if (isSelEnd) {
-                                                    textClass = "bg-primary text-white font-bold"
-                                                    shapeClass = "rounded-r-full rounded-l-none shadow-md shadow-card-sm"
-                                                } else if (holiday && !isDisabled) {
+                                                // Texto blanco si hay algo de verde
+                                                if (isSelStart || isSelEnd || isSelMiddle) {
+                                                    textClass = "text-white font-bold"
+                                                } else if (holiday) {
                                                     textClass = "text-primary font-bold"
                                                 }
                                             }
+
+                                            // 5. GENERAR GRADIENTE
+                                            const gradient = `linear-gradient(90deg, ${leftColor} 50%, ${rightColor} 50%)`
+
+                                            // 6. BORDES REDONDEADOS (SOLO ESTÉTICO)
+                                            // Para coherencia, rounded-lg siempre, o ajuste fino.
+                                            // El usuario pidió: "el primero... mitad derecha verde".
+                                            let shapeClass = "rounded-lg"
+                                            if (isSelMiddle) shapeClass = "rounded-none"
+                                            if (isSelStart && !isSelEnd) shapeClass = "rounded-l-lg rounded-r-lg" // Mantenemos lg para que se vea botón
+                                            // Actually, rectangular look inside ranges is better.
 
                                             return (
                                                 <button
                                                     key={index}
                                                     onClick={() => handleDateClick(date)}
-                                                    disabled={isDisabled}
+                                                    disabled={past || resState === 'middle'}
                                                     className={`h-10 w-full flex items-center justify-center text-sm transition-all relative ${cursorClass} ${textClass} ${shapeClass}`}
-                                                    style={bgStyle}
+                                                    style={{ background: gradient }}
                                                     title={holiday ? holiday.name : ''}
                                                 >
                                                     <span className="relative z-10">{date.getDate()}</span>
 
-                                                    {/* Indicador de festivo (puntito) */}
-                                                    {holiday && !isSelRange && !isSelStart && !isSelEnd && resState !== 'middle' && (
+                                                    {/* Indicador de festivo */}
+                                                    {holiday && !isSelMiddle && !isSelStart && !isSelEnd && resState !== 'middle' && (
                                                         <span className="absolute top-0.5 right-0.5 w-1.5 h-1.5 bg-primary rounded-full"></span>
                                                     )}
                                                 </button>
