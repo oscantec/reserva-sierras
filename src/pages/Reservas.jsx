@@ -473,57 +473,116 @@ export default function Booking() {
                                                 return <span key={index}></span>
                                             }
 
-                                            const reserved = isDateReserved(date)
-                                            const isStartExisting = reserved && isDateStartOfReservation(date)
+                                            // 1. Determinar estado de reservas existentes
+                                            let resState = 'none' // none, start, end, middle, full (start+end same day)
+
+                                            // Normalizamos fechas para comparación
+                                            const dateTime = date.getTime()
+
+                                            // Buscamos si cae en alguna reserva
+                                            for (const r of reservedDates) {
+                                                const rStart = new Date(r.start)
+                                                rStart.setHours(0, 0, 0, 0)
+                                                const rEnd = new Date(r.end)
+                                                rEnd.setHours(0, 0, 0, 0)
+
+                                                const tStart = rStart.getTime()
+                                                const tEnd = rEnd.getTime()
+
+                                                if (dateTime > tStart && dateTime < tEnd) {
+                                                    resState = 'middle'
+                                                    break // Middle domina, bloqueado total
+                                                } else if (dateTime === tStart) {
+                                                    // Si ya era 'end', ahora es 'switch' (full)
+                                                    resState = resState === 'end' ? 'middle' : 'start'
+                                                } else if (dateTime === tEnd) {
+                                                    // Si ya era 'start', ahora es 'switch' (full)
+                                                    resState = resState === 'start' ? 'middle' : 'end'
+                                                }
+                                            }
+
+                                            // 2. Determinar estado de selección actual
+                                            const isSelStart = isStartDate(date)
+                                            const isSelEnd = isEndDate(date)
+                                            const isSelRange = isDateInRange(date) // Días intermedios de mi selección
+
                                             const past = isDatePast(date)
-                                            const isStart = isStartDate(date)
-                                            const isEnd = isEndDate(date)
-                                            const inRange = isDateInRange(date)
                                             const holiday = isHoliday(date)
 
-                                            let className = "h-10 w-full flex items-center justify-center text-sm transition-colors relative "
+                                            // 3. Construir estilo visual (Background)
+                                            let bgStyle = {}
+                                            let cursorClass = "cursor-pointer"
+                                            let textClass = "text-text-main dark:text-white"
 
-                                            // Lógica de estilos
-                                            if (past) {
-                                                className += "text-gray-300 dark:text-gray-600 cursor-not-allowed"
-                                            } else if (reserved && !isStartExisting) {
-                                                // Reservado completo (no permite interacción)
-                                                className += "bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed line-through decoration-gray-400"
-                                            } else if (reserved && isStartExisting) {
-                                                // Reservado pero es día de Check-in (permite ser Check-out de nueva reserva)
-                                                // Visualmente distinto: Gris más claro o borde advertencia
-                                                className += "bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 cursor-pointer border-l-4 border-l-gray-400 dark:border-l-gray-600"
-                                            } else if (isStart && isEnd) {
-                                                // Solo un día seleccionado
-                                                className += "rounded-full bg-primary text-white font-bold shadow-md shadow-card-sm"
-                                            } else if (isStart) {
-                                                className += "rounded-l-full bg-primary text-white font-bold shadow-md shadow-card-sm"
-                                            } else if (isEnd) {
-                                                className += "rounded-r-full bg-primary text-white font-bold shadow-md shadow-card-sm"
-                                            } else if (inRange) {
-                                                className += "bg-primary text-white font-medium"
-                                            } else if (holiday) {
-                                                // Días festivos - resaltado especial
-                                                className += "rounded-lg bg-warning-bg/10 dark:bg-warning-bg/20 text-primary font-semibold border border-primary/30 hover:bg-primary/20 dark:hover:bg-primary/30 cursor-pointer"
+                                            // Colores
+                                            const cGray = "rgba(156, 163, 175, 0.5)" // gray-400
+                                            const cPrimary = "var(--primary)" // Verde
+                                            const cNone = "transparent"
+                                            const cBaseRes = "rgba(209, 213, 219, 1)" // gray-300
+
+                                            // Lógica de deshabilitado
+                                            const isDisabled = past || resState === 'middle'
+
+                                            if (isDisabled) {
+                                                cursorClass = "cursor-not-allowed hidden-cursor"
+                                                textClass = "text-gray-400 dark:text-gray-500 line-through"
+                                                if (resState === 'middle') {
+                                                    // Gris completo
+                                                    bgStyle = { backgroundColor: 'var(--surface-card)' }
+                                                }
+                                            }
+
+                                            // Construcción del Gradiente
+                                            let leftColor = cNone
+                                            let rightColor = cNone
+
+                                            // Capa Base: Reserva
+                                            if (resState === 'end') leftColor = cBaseRes
+                                            if (resState === 'start') rightColor = cBaseRes
+                                            if (resState === 'middle') { leftColor = cBaseRes; rightColor = cBaseRes; }
+
+                                            // Capa Superior: Selección (Override)
+                                            if (isSelRange) {
+                                                // Rango completo seleccionado -> Verde
+                                                leftColor = cPrimary; rightColor = cPrimary;
+                                                textClass = "text-white font-medium"
+                                            } else if (isSelStart && isSelEnd) {
+                                                // Un solo día seleccionado
                                             } else {
-                                                // Días disponibles - sin fondo, solo hover
-                                                className += "rounded-lg hover:bg-primary/20 dark:hover:bg-primary/30 hover:text-primary cursor-pointer"
+                                                if (isSelEnd) { leftColor = cPrimary; textClass = "text-white font-bold"; }
+                                                if (isSelStart) { rightColor = cPrimary; textClass = "text-white font-bold"; }
+                                            }
+
+                                            // Generar el linear-gradient
+                                            const gradient = `linear-gradient(90deg, ${leftColor} 50%, ${rightColor} 50%)`
+
+                                            // Clases adicionales para formas
+                                            let shapeClass = "rounded-lg"
+                                            // Ajustamos formas si es selección
+                                            if (isSelStart && !isSelEnd) shapeClass = "rounded-l-full rounded-r-none"
+                                            if (isSelEnd && !isSelStart) shapeClass = "rounded-r-full rounded-l-none"
+                                            if (isSelStart && isSelEnd) shapeClass = "rounded-full"
+                                            if (isSelRange) shapeClass = "rounded-none"
+
+                                            // Manejo de festivos (texto bold)
+                                            if (holiday && !isDisabled && !isSelStart && !isSelEnd && !isSelRange) {
+                                                textClass = "text-primary font-bold"
                                             }
 
                                             return (
                                                 <button
                                                     key={index}
                                                     onClick={() => handleDateClick(date)}
-                                                    disabled={past || (reserved && !isStartExisting)}
-                                                    className={className}
-                                                    title={holiday ? holiday.name : (reserved ? 'Reservado' : 'Disponible')}
+                                                    disabled={isDisabled}
+                                                    className={`h-10 w-full flex items-center justify-center text-sm transition-all relative ${cursorClass} ${textClass} ${shapeClass}`}
+                                                    style={{ background: gradient }}
+                                                    title={holiday ? holiday.name : ''}
                                                 >
-                                                    {date.getDate()}
-                                                    {holiday && !reserved && !past && (
+                                                    <span className="relative z-10">{date.getDate()}</span>
+
+                                                    {/* Indicador de festivo (puntito) si no está seleccionado ni lleno */}
+                                                    {holiday && !isSelRange && !isSelStart && !isSelEnd && resState !== 'middle' && (
                                                         <span className="absolute top-0.5 right-0.5 w-1.5 h-1.5 bg-primary rounded-full"></span>
-                                                    )}
-                                                    {isStartExisting && (
-                                                        <span className="absolute bottom-0.5 right-1 text-[8px] text-gray-500">Salida</span>
                                                     )}
                                                 </button>
                                             )
