@@ -2,44 +2,66 @@ import { useState, useEffect } from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { DEFAULT_CONFIG } from '../utils/config'
+import placeholders from '../images/placeholders.json'
 
-// Lazy loading image - shows progressive blur preview while loading
-function LazyImage({ src, alt, className, priority = false }) {
-    const [fullLoaded, setFullLoaded] = useState(false)
+// Helper to get medium quality image path
+const getMediumSrc = (fullSrc) => {
+    // Extract filename from full path
+    const parts = fullSrc.split('/');
+    const filename = parts[parts.length - 1];
+    // Return medium quality path
+    return fullSrc.replace(`/images/${filename}`, `/images/medium/${filename}`);
+}
+
+// Helper to get placeholder from filename
+const getPlaceholder = (fullSrc) => {
+    const parts = fullSrc.split('/');
+    const filename = parts[parts.length - 1].split('?')[0]; // Remove query params if any
+    return placeholders[filename] || placeholders[filename.replace('.webp', ' .webp')] || '';
+}
+
+// Progressive loading: placeholder → medium → full (on lightbox)
+function LazyImage({ placeholder, mediumSrc, fullSrc, alt, className, priority = false, onImageClick }) {
+    const [mediumLoaded, setMediumLoaded] = useState(false)
 
     return (
-        <div className="relative w-full h-full overflow-hidden bg-gray-200 dark:bg-gray-800">
-            {/* PROGRESSIVE PREVIEW: Showing blurred original at low opacity while loading */}
-            <div className={`absolute inset-0 transition-opacity duration-1000 ${fullLoaded ? 'opacity-0' : 'opacity-100'}`}>
+        <div
+            className="relative w-full h-full overflow-hidden bg-gray-200 dark:bg-gray-800 cursor-pointer"
+            onClick={onImageClick}
+        >
+            {/* Phase 1: Tiny blur placeholder (Base64 - loads instantly) */}
+            <div className={`absolute inset-0 transition-opacity duration-700 ${mediumLoaded ? 'opacity-0' : 'opacity-100'}`}>
                 <img
-                    src={src}
+                    src={placeholder}
                     alt=""
-                    className={`${className} blur-3xl scale-110 opacity-40`}
+                    className={`${className} blur-xl scale-110`}
                     aria-hidden="true"
-                />
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer"
-                    style={{ backgroundSize: '200% 100%', animation: 'shimmer 2s infinite linear' }}
                 />
             </div>
 
-            {/* HIGH QUALITY IMAGE: Scales and sharpens upon full load */}
+            {/* Phase 2: Medium quality for gallery (lazy loaded) */}
             <img
-                src={src}
+                src={mediumSrc}
                 alt={alt}
-                className={`${className} transition-all duration-1000 ease-out ${fullLoaded
+                className={`${className} transition-all duration-700 ease-out ${mediumLoaded
                     ? 'opacity-100 blur-0 scale-100'
-                    : 'opacity-0 blur-xl scale-105'
+                    : 'opacity-0 blur-md scale-105'
                     }`}
                 loading={priority ? "eager" : "lazy"}
                 fetchPriority={priority ? "high" : "auto"}
-                onLoad={() => setFullLoaded(true)}
+                onLoad={() => setMediumLoaded(true)}
                 style={{
                     backfaceVisibility: 'hidden'
                 }}
             />
+
+            {/* Phase 3: Full quality loaded only when lightbox opens (handled by parent) */}
         </div>
     )
 }
+
+
+// Medium quality images for gallery
 
 // Import all images - EXTERNAS (removed accesoCasa2 - only for Inicio)
 import exterior1 from '../images/Exterior1.webp'
@@ -411,9 +433,12 @@ export default function Gallery() {
                                     className={`group relative overflow-hidden rounded-2xl cursor-pointer ${getBentoClass(index)} transition-all duration-500 hover:z-10`}
                                 >
                                     <LazyImage
-                                        src={image.src}
+                                        placeholder={getPlaceholder(image.src)}
+                                        mediumSrc={getMediumSrc(image.src)}
+                                        fullSrc={image.src}
                                         alt={image.title}
                                         priority={index < 6}
+                                        onImageClick={() => openLightbox(image, index)}
                                         className="absolute inset-0 w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
@@ -437,9 +462,12 @@ export default function Gallery() {
                                     className="group relative overflow-hidden rounded-2xl cursor-pointer aspect-square bg-surface-card dark:bg-surface-card-dark border border-border-card dark:border-border-card-dark shadow-md hover:shadow-xl transition-all duration-300"
                                 >
                                     <LazyImage
-                                        src={image.src}
+                                        placeholder={getPlaceholder(image.src)}
+                                        mediumSrc={getMediumSrc(image.src)}
+                                        fullSrc={image.src}
                                         alt={image.title}
                                         priority={index < 4}
+                                        onImageClick={() => openLightbox(image, index)}
                                         className="absolute inset-0 w-full h-full object-cover transition-all duration-500 group-hover:scale-105"
                                     />
                                     {/* Always visible label at bottom */}
