@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head><title>Obtener Config</title></head>
+<body>
+<h1>Tu configuración actual:</h1>
+<button onclick="getConfig()">Click para ver config</button>
+<pre id="output" style="background:#f0f0f0; padding:20px; margin-top:20px;"></pre>
+<script>
+function getConfig() {
+  const config = localStorage.getItem('casacampestre_config');
+  document.getElementById('output').textContent = config || 'No hay configuración guardada';
+}
+</script>
+</body>
+</html>

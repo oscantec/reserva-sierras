@@ -68,12 +68,12 @@ export default function CheckIn() {
     // Contenido dinámico de la página
     const [pageContent, setPageContent] = useState({
         pageTitle: 'Registro de Huéspedes',
-        pageSubtitle: 'Completa tus datos para agilizar el check-in.',
-        step1Title: 'Validar Reserva',
+        pageSubtitle: 'Completa el registro de todos los huéspedes para tu estadía.',
+        step1Title: 'Valida tu Reserva',
         step2Title: 'Datos del Huésped Principal',
         step3Title: 'Acompañantes',
         successTitle: '¡Registro Exitoso!',
-        successMessage: 'Tu registro ha sido confirmado. Te esperamos en Reserva de las Sierras.'
+        successMessage: 'Tu registro ha sido completado. Te esperamos pronto.'
     })
 
     // Load colors and config
