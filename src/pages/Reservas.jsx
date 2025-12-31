@@ -514,7 +514,10 @@ export default function Booking() {
                                             // 3. DEFINICIÓN DE COLORES (IZQUIERDA | DERECHA)
                                             const cTrans = "transparent"
                                             const cGray = "rgba(209, 213, 219, 1)" // gray-300
-                                            const cGreen = "var(--primary)" // Verde Sistema
+
+                                            // IMPORTANTE: Usamos la variable CSS directa definida en index.css/tailwind
+                                            // 'primary' en Tailwind mapea a '--color-btn-primary'
+                                            const cGreen = "var(--color-btn-primary)"
 
                                             let leftColor = cTrans
                                             let rightColor = cTrans
