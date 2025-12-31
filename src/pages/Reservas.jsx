@@ -540,9 +540,9 @@ export default function Booking() {
 
                                     {/* Extra guest charge - Mobile BEFORE subtotal */}
                                     {pricingDetails.extraGuestCharge > 0 && (
-                                        <div className="flex justify-between text-sm text-warning-text dark:text-warning-text border-t border-border-card dark:border-border-card-dark pt-2 mt-2">
+                                        <div className="flex justify-between text-sm text-primary font-medium">
                                             <span>Multiplicador por Huésped adicional</span>
-                                            <span>+{formatPrice(pricingDetails.extraGuestCharge)}</span>
+                                            <span className="text-xs text-text-muted">Aplicado</span>
                                         </div>
                                     )}
 
@@ -740,9 +740,9 @@ export default function Booking() {
 
                                         {/* Extra guest charge - BEFORE subtotal */}
                                         {pricingDetails.extraGuestCharge > 0 && (
-                                            <div className="flex justify-between text-sm text-warning-text dark:text-warning-text border-t border-border-card dark:border-border-card-dark pt-2 mt-2">
+                                            <div className="flex justify-between text-sm text-primary font-medium">
                                                 <span>Multiplicador por Huésped adicional</span>
-                                                <span>+{formatPrice(pricingDetails.extraGuestCharge)}</span>
+                                                <span className="text-xs text-text-muted">Aplicado</span>
                                             </div>
                                         )}
 
