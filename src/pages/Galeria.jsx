@@ -82,8 +82,7 @@ import sala21 from '../images/Sala 2 1.webp'
 import sala22 from '../images/Sala 2 2.webp'
 import tv1 from '../images/TV 1.webp'
 import tv2 from '../images/TV 2.webp'
-import tv3 from '../images/TV 3.webp'
-import tv4 from '../images/TV 4.webp'
+
 
 // Import all images - ZONAS HUMEDAS
 import piscina1 from '../images/Piscina 1.webp'
@@ -193,8 +192,7 @@ export default function Gallery() {
         { id: 'balcon', src: balcon, title: 'Balcón', label: 'Balcón', category: 'internas' },
         { id: 'tv1', src: tv1, title: 'Zona TV 1', label: 'TV', category: 'internas' },
         { id: 'tv2', src: tv2, title: 'Zona TV 2', label: 'TV', category: 'internas' },
-        { id: 'tv3', src: tv3, title: 'Smart TV', label: 'TV', category: 'internas' },
-        { id: 'tv4', src: tv4, title: 'Sala Multimedia', label: 'TV', category: 'internas' },
+
 
         // ZONAS HUMEDAS
         { id: 'piscina1', src: piscina1, title: 'Piscina Privada', label: 'Piscina', category: 'humedas' },
