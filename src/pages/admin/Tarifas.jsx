@@ -54,8 +54,23 @@ export default function Tarifas() {
             { id: 2, name: 'Semana Santa', multiplier: 1.4, startMonth: 3, startDay: 24, endMonth: 3, endDay: 31, color: '#007983' },
         ],
         specialDates: [
-            { id: 1, date: '2024-12-24', price: 600000, label: 'Nochebuena' },
-            { id: 2, date: '2024-12-31', price: 700000, label: 'Año Nuevo' },
+            { id: 1, startDate: '2026-01-01', endDate: '2026-01-01', multiplier: 1.4, label: 'Año Nuevo' },
+            { id: 2, startDate: '2026-01-09', endDate: '2026-01-12', multiplier: 1.4, label: 'Puente Reyes Magos' },
+            { id: 3, startDate: '2026-03-20', endDate: '2026-03-23', multiplier: 1.4, label: 'Puente San José' },
+            { id: 4, startDate: '2026-04-02', endDate: '2026-04-05', multiplier: 1.4, label: 'Semana Santa (Jueves-Domingo)' },
+            { id: 5, startDate: '2026-05-01', endDate: '2026-05-03', multiplier: 1.4, label: 'Día del Trabajo' },
+            { id: 6, startDate: '2026-05-15', endDate: '2026-05-18', multiplier: 1.4, label: 'Puente Ascensión' },
+            { id: 7, startDate: '2026-06-05', endDate: '2026-06-08', multiplier: 1.4, label: 'Puente Corpus Christi' },
+            { id: 8, startDate: '2026-06-12', endDate: '2026-06-15', multiplier: 1.4, label: 'Puente Sagrado Corazón' },
+            { id: 9, startDate: '2026-06-26', endDate: '2026-06-29', multiplier: 1.4, label: 'Puente San Pedro' },
+            { id: 10, startDate: '2026-07-17', endDate: '2026-07-20', multiplier: 1.4, label: 'Puente Independencia' },
+            { id: 11, startDate: '2026-08-07', endDate: '2026-08-09', multiplier: 1.4, label: 'Batalla de Boyacá' },
+            { id: 12, startDate: '2026-08-14', endDate: '2026-08-17', multiplier: 1.4, label: 'Puente Asunción' },
+            { id: 13, startDate: '2026-10-09', endDate: '2026-10-12', multiplier: 1.4, label: 'Puente Día de la Raza' },
+            { id: 14, startDate: '2026-10-30', endDate: '2026-11-02', multiplier: 1.4, label: 'Puente Todos los Santos' },
+            { id: 15, startDate: '2026-11-13', endDate: '2026-11-16', multiplier: 1.4, label: 'Puente Indep. Cartagena' },
+            { id: 16, startDate: '2026-12-07', endDate: '2026-12-08', multiplier: 1.4, label: 'Inmaculada Concepción' },
+            { id: 17, startDate: '2026-12-24', endDate: '2026-12-25', multiplier: 1.4, label: 'Navidad' },
         ],
         discounts: {
             longStay: { enabled: true, nights: 7, percent: 15 },
@@ -193,9 +208,10 @@ export default function Tarifas() {
     const addSpecialDate = () => {
         const newDate = {
             id: Date.now(),
-            date: new Date().toISOString().split('T')[0],
-            price: pricing.baseRates.weekend,
-            label: 'Fecha Especial'
+            startDate: new Date().toISOString().split('T')[0],
+            endDate: new Date().toISOString().split('T')[0],
+            multiplier: 1.4,
+            label: 'Nueva Fecha Especial'
         }
         setPricing(prev => ({
             ...prev,
@@ -586,26 +602,43 @@ export default function Tarifas() {
                                                 className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-surface-card dark:bg-surface-card-dark text-sm"
                                             />
                                         </div>
-                                        <div>
-                                            <label className="block text-xs font-medium text-text-muted dark:text-text-muted mb-1">Fecha</label>
-                                            <input
-                                                type="date"
-                                                value={item.date}
-                                                onChange={(e) => updateSpecialDate(item.id, 'date', e.target.value)}
-                                                className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-surface-card dark:bg-surface-card-dark text-sm"
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-xs font-medium text-text-muted dark:text-text-muted mb-1">Precio por noche</label>
-                                            <div className="flex items-center gap-2">
-                                                <span className="text-sm font-bold text-text-muted">$</span>
+                                        <div className="grid grid-cols-2 gap-2">
+                                            <div>
+                                                <label className="block text-xs font-medium text-text-muted dark:text-text-muted mb-1">Desde</label>
                                                 <input
-                                                    type="number"
-                                                    value={item.price}
-                                                    onChange={(e) => updateSpecialDate(item.id, 'price', parseInt(e.target.value) || 0)}
-                                                    className="flex-1 px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-surface-card dark:bg-surface-card-dark text-sm font-mono"
+                                                    type="date"
+                                                    value={item.startDate || item.date}
+                                                    onChange={(e) => updateSpecialDate(item.id, 'startDate', e.target.value)}
+                                                    className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-surface-card dark:bg-surface-card-dark text-xs"
                                                 />
                                             </div>
+                                            <div>
+                                                <label className="block text-xs font-medium text-text-muted dark:text-text-muted mb-1">Hasta</label>
+                                                <input
+                                                    type="date"
+                                                    value={item.endDate || item.date}
+                                                    onChange={(e) => updateSpecialDate(item.id, 'endDate', e.target.value)}
+                                                    className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-surface-card dark:bg-surface-card-dark text-xs"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label className="block text-xs font-medium text-text-muted dark:text-text-muted mb-1">Multiplicador</label>
+                                            <div className="flex items-center gap-2">
+                                                <input
+                                                    type="number"
+                                                    step="0.1"
+                                                    min="1"
+                                                    max="3"
+                                                    value={item.multiplier || 1.4}
+                                                    onChange={(e) => updateSpecialDate(item.id, 'multiplier', parseFloat(e.target.value) || 1)}
+                                                    className="flex-1 px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-surface-card dark:bg-surface-card-dark text-sm font-mono"
+                                                />
+                                                <span className="text-sm font-bold text-text-muted">x</span>
+                                            </div>
+                                        </div>
+                                        <div className="pt-2 border-t border-slate-100 dark:border-slate-800 text-xs text-text-muted">
+                                            Precio aprox: <span className="font-bold">{formatPrice(pricing.baseRates.weekend * (item.multiplier || 1.4))}</span>
                                         </div>
                                     </div>
                                 </div>

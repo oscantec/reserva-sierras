@@ -188,64 +188,81 @@ export default function Booking() {
         return day === 5 || day === 6 || day === 0
     }
 
-    // Helper: Check if a date matches a special date
-    const getSpecialDatePrice = (date) => {
-        if (!pricing?.specialDates) return null
-        const dateStr = date.toISOString().split('T')[0]
-        const special = pricing.specialDates.find(s => s.date === dateStr)
-        return special?.price || null
-    }
+    // Helper: Get multiplier and name (checks both Special Dates and Seasons)
+    const getMultiplierConfig = (date) => {
+        if (!pricing) return { multiplier: 1, name: null }
 
-    // Helper: Get season multiplier for a date
-    const getSeasonMultiplier = (date) => {
-        if (!pricing?.seasons) return { multiplier: 1, seasonName: null }
-        const month = date.getMonth() + 1
-        const day = date.getDate()
+        // 1. Check Special Dates (Ranges) - Prioridad alta
+        if (pricing.specialDates) {
+            const dateStr = date.toISOString().split('T')[0]
+            // Convert current date to timestamp for range comparison
+            const checkTime = new Date(dateStr).getTime()
 
-        for (const season of pricing.seasons) {
-            let inSeason = false
-
-            // Handle seasons that span year boundary (e.g., Dec 15 - Jan 15)
-            if (season.startMonth > season.endMonth) {
-                // Season crosses year boundary
-                if (month > season.startMonth || (month === season.startMonth && day >= season.startDay)) {
-                    inSeason = true
-                } else if (month < season.endMonth || (month === season.endMonth && day <= season.endDay)) {
-                    inSeason = true
-                }
-            } else {
-                // Normal season within same year
-                if ((month > season.startMonth || (month === season.startMonth && day >= season.startDay)) &&
-                    (month < season.endMonth || (month === season.endMonth && day <= season.endDay))) {
-                    inSeason = true
+            for (const special of pricing.specialDates) {
+                // Support both new range format and old single date format (fallback)
+                if (special.startDate && special.endDate) {
+                    const startTime = new Date(special.startDate).getTime()
+                    const endTime = new Date(special.endDate).getTime()
+                    // Adjust endTime timezone offset if needed or simple string comparison
+                    // Using string comparison is safer for YYYY-MM-DD
+                    if (dateStr >= special.startDate && dateStr <= special.endDate) {
+                        return { multiplier: special.multiplier || 1.4, name: special.label }
+                    }
+                } else if (special.date === dateStr) {
+                    // Fallback for old format
+                    return { multiplier: special.multiplier || 1.4, name: special.label }
                 }
             }
-
-            if (inSeason) return { multiplier: season.multiplier, seasonName: season.name }
         }
-        return { multiplier: 1, seasonName: null }
+
+        // 2. Check Annual Seasons
+        if (pricing.seasons) {
+            const month = date.getMonth() + 1
+            const day = date.getDate()
+
+            for (const season of pricing.seasons) {
+                let inSeason = false
+
+                // Handle seasons that span year boundary (e.g., Dec 15 - Jan 15)
+                if (season.startMonth > season.endMonth) {
+                    // Season crosses year boundary
+                    if (month > season.startMonth || (month === season.startMonth && day >= season.startDay)) {
+                        inSeason = true
+                    } else if (month < season.endMonth || (month === season.endMonth && day <= season.endDay)) {
+                        inSeason = true
+                    }
+                } else {
+                    // Normal season within same year
+                    if ((month > season.startMonth || (month === season.startMonth && day >= season.startDay)) &&
+                        (month < season.endMonth || (month === season.endMonth && day <= season.endDay))) {
+                        inSeason = true
+                    }
+                }
+
+                if (inSeason) return { multiplier: season.multiplier, name: season.name }
+            }
+        }
+
+        return { multiplier: 1, name: null }
     }
 
     // Calculate price for a single night (check-in date)
     const getPriceForNight = (date) => {
-        // 1. Check special dates first
-        const specialPrice = getSpecialDatePrice(date)
-        if (specialPrice) return { price: specialPrice, type: 'special' }
-
-        // 2. Get base rate based on day of week
-        const baseRate = isWeekendDay(date)
+        // 1. Get base rate based on day of week
+        const isWeekend = isWeekendDay(date)
+        const baseRate = isWeekend
             ? (pricing?.baseRates?.weekend || 450000)
             : (pricing?.baseRates?.weekday || 350000)
 
-        // 3. Apply season multiplier
-        const { multiplier, seasonName } = getSeasonMultiplier(date)
+        // 2. Apply multiplier (Season or Special Date)
+        const { multiplier, name } = getMultiplierConfig(date)
         const finalPrice = Math.round(baseRate * multiplier)
 
         return {
             price: finalPrice,
-            type: isWeekendDay(date) ? 'weekend' : 'weekday',
-            multiplier: multiplier,
-            seasonName: seasonName
+            type: isWeekend ? 'weekend' : 'weekday',
+            multiplier,
+            seasonName: name
         }
     }
 
