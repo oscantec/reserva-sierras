@@ -147,11 +147,32 @@ export default function Booking() {
             // Start new selection
             setSelectedRange({ start: date, end: null })
         } else {
-            // Complete selection
-            if (date < selectedRange.start) {
-                setSelectedRange({ start: date, end: selectedRange.start })
+            // Complete selection - validate no reserved dates in between
+            const startDate = date < selectedRange.start ? date : selectedRange.start
+            const endDate = date < selectedRange.start ? selectedRange.start : date
+
+            // Check if any date in the range is reserved
+            const current = new Date(startDate)
+            let hasReservedDate = false
+
+            while (current <= endDate) {
+                if (isDateReserved(current)) {
+                    hasReservedDate = true
+                    break
+                }
+                current.setDate(current.getDate() + 1)
+            }
+
+            // Only set the range if there are no reserved dates
+            if (!hasReservedDate) {
+                if (date < selectedRange.start) {
+                    setSelectedRange({ start: date, end: selectedRange.start })
+                } else {
+                    setSelectedRange({ start: selectedRange.start, end: date })
+                }
             } else {
-                setSelectedRange({ start: selectedRange.start, end: date })
+                // Reset selection if trying to cross a reserved date
+                setSelectedRange({ start: date, end: null })
             }
         }
     }
@@ -558,11 +579,11 @@ export default function Booking() {
 
                                     <div className="flex justify-between text-sm font-medium text-text-main-light dark:text-text-muted pt-1">
                                         <span>Subtotal alojamiento</span>
-                                        <span>{formatPrice(pricingDetails.subtotal)}</span>
+                                        <span className="font-bold">{formatPrice(pricingDetails.subtotal)}</span>
                                     </div>
 
                                     {applyLongStayDiscount && (
-                                        <div className="flex justify-between text-sm text-success-text dark:text-green-400">
+                                        <div className="flex justify-between text-sm text-primary font-medium">
                                             <span>Descuento estadía larga (-{discountPercent}%)</span>
                                             <span>-{formatPrice(discountAmount)}</span>
                                         </div>
@@ -758,12 +779,12 @@ export default function Booking() {
                                         {/* Subtotal */}
                                         <div className="flex justify-between text-sm font-medium text-text-main-light dark:text-text-muted pt-1">
                                             <span>Subtotal alojamiento</span>
-                                            <span>{formatPrice(pricingDetails.subtotal)}</span>
+                                            <span className="font-bold">{formatPrice(pricingDetails.subtotal)}</span>
                                         </div>
 
                                         {/* Long stay discount */}
                                         {applyLongStayDiscount && (
-                                            <div className="flex justify-between text-sm text-success-text dark:text-green-400">
+                                            <div className="flex justify-between text-sm text-primary font-medium">
                                                 <span>Descuento estadía larga (-{discountPercent}%)</span>
                                                 <span>-{formatPrice(discountAmount)}</span>
                                             </div>
