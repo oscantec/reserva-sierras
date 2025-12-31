@@ -457,6 +457,7 @@
       "showAdmin": false,
       "poweredBy": "IngenieroCante - NextCan",
       "email": "info@reservadelassierras",
+      "overlayColor": "#2f4858",
       "overlayOpacity": 37,
       "adminLogoHeight": 60,
       "logoHeight": 80,
