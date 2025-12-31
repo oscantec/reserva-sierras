@@ -474,6 +474,7 @@ export default function Booking() {
                                             }
 
                                             const reserved = isDateReserved(date)
+                                            const isStartExisting = reserved && isDateStartOfReservation(date)
                                             const past = isDatePast(date)
                                             const isStart = isStartDate(date)
                                             const isEnd = isEndDate(date)
@@ -482,8 +483,16 @@ export default function Booking() {
 
                                             let className = "h-10 w-full flex items-center justify-center text-sm transition-colors relative "
 
-                                            if (reserved || past) {
-                                                className += "bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed line-through"
+                                            // Lógica de estilos
+                                            if (past) {
+                                                className += "text-gray-300 dark:text-gray-600 cursor-not-allowed"
+                                            } else if (reserved && !isStartExisting) {
+                                                // Reservado completo (no permite interacción)
+                                                className += "bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed line-through decoration-gray-400"
+                                            } else if (reserved && isStartExisting) {
+                                                // Reservado pero es día de Check-in (permite ser Check-out de nueva reserva)
+                                                // Visualmente distinto: Gris más claro o borde advertencia
+                                                className += "bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 cursor-pointer border-l-4 border-l-gray-400 dark:border-l-gray-600"
                                             } else if (isStart && isEnd) {
                                                 // Solo un día seleccionado
                                                 className += "rounded-full bg-primary text-white font-bold shadow-md shadow-card-sm"
@@ -505,13 +514,16 @@ export default function Booking() {
                                                 <button
                                                     key={index}
                                                     onClick={() => handleDateClick(date)}
-                                                    disabled={reserved || past}
+                                                    disabled={past || (reserved && !isStartExisting)}
                                                     className={className}
-                                                    title={holiday ? holiday.name : ''}
+                                                    title={holiday ? holiday.name : (reserved ? 'Reservado' : 'Disponible')}
                                                 >
                                                     {date.getDate()}
                                                     {holiday && !reserved && !past && (
                                                         <span className="absolute top-0.5 right-0.5 w-1.5 h-1.5 bg-primary rounded-full"></span>
+                                                    )}
+                                                    {isStartExisting && (
+                                                        <span className="absolute bottom-0.5 right-1 text-[8px] text-gray-500">Salida</span>
                                                     )}
                                                 </button>
                                             )
