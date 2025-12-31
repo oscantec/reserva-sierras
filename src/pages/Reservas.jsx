@@ -538,18 +538,18 @@ export default function Booking() {
                                         </div>
                                     )}
 
+                                    {/* Extra guest charge - Mobile BEFORE subtotal */}
+                                    {pricingDetails.extraGuestCharge > 0 && (
+                                        <div className="flex justify-between text-sm text-warning-text dark:text-warning-text border-t border-border-card dark:border-border-card-dark pt-2 mt-2">
+                                            <span>Multiplicador por Huésped adicional</span>
+                                            <span>+{formatPrice(pricingDetails.extraGuestCharge)}</span>
+                                        </div>
+                                    )}
+
                                     <div className="flex justify-between text-sm font-medium text-text-main-light dark:text-text-muted pt-1">
                                         <span>Subtotal alojamiento</span>
                                         <span>{formatPrice(pricingDetails.subtotal)}</span>
                                     </div>
-
-                                    {/* Extra guest charge - Mobile */}
-                                    {pricingDetails.extraGuestCharge > 0 && (
-                                        <div className="flex justify-between text-sm text-warning-text dark:text-warning-text">
-                                            <span>Cargo {pricingDetails.extraGuests} {pricingDetails.extraGuests === 1 ? 'persona' : 'personas'} extra (+10% c/u)</span>
-                                            <span>+{formatPrice(pricingDetails.extraGuestCharge)}</span>
-                                        </div>
-                                    )}
 
                                     {applyLongStayDiscount && (
                                         <div className="flex justify-between text-sm text-success-text dark:text-green-400">
@@ -607,6 +607,7 @@ export default function Booking() {
                                     <span className="text-sm font-normal text-text-muted">/noche</span>
                                 </p>
                                 <p className="text-sm text-text-muted dark:text-text-muted">{pageContent.weekdayDesc}</p>
+                                <p className="text-xs text-primary font-semibold mt-2">Aplica para hasta 7 huéspedes</p>
                             </div>
                             <div className="bg-surface-card dark:bg-surface-card-dark rounded-xl p-5 pt-8 border border-primary/30 flex flex-col gap-2 shadow-sm relative overflow-hidden">
                                 <div className="absolute top-0 right-0 bg-primary text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg">POPULAR</div>
@@ -621,6 +622,7 @@ export default function Booking() {
                                     <span className="text-sm font-normal text-text-muted dark:text-text-muted">/noche</span>
                                 </p>
                                 <p className="text-sm text-text-muted dark:text-text-muted">{pageContent.weekendDesc}</p>
+                                <p className="text-xs text-primary font-semibold mt-2">Aplica para hasta 7 huéspedes</p>
                             </div>
                             <div className="bg-surface-card dark:bg-surface-card-dark rounded-xl p-5 border border-border-card dark:border-border-card-dark flex flex-col gap-2 hover:shadow-md transition-shadow">
                                 <div className="flex justify-between items-start">
@@ -641,6 +643,7 @@ export default function Booking() {
                                 <p className="text-sm text-text-muted dark:text-text-muted">
                                     Reserva {pricing?.discounts?.longStay?.nights || 7}+ {pageContent.discountDesc}
                                 </p>
+                                <p className="text-xs text-primary font-semibold mt-2">Aplica para hasta 7 huéspedes</p>
                             </div>
                         </div>
                     </div>
@@ -735,20 +738,19 @@ export default function Booking() {
                                             </div>
                                         )}
 
+                                        {/* Extra guest charge - BEFORE subtotal */}
+                                        {pricingDetails.extraGuestCharge > 0 && (
+                                            <div className="flex justify-between text-sm text-warning-text dark:text-warning-text border-t border-border-card dark:border-border-card-dark pt-2 mt-2">
+                                                <span>Multiplicador por Huésped adicional</span>
+                                                <span>+{formatPrice(pricingDetails.extraGuestCharge)}</span>
+                                            </div>
+                                        )}
 
                                         {/* Subtotal */}
                                         <div className="flex justify-between text-sm font-medium text-text-main-light dark:text-text-muted pt-1">
                                             <span>Subtotal alojamiento</span>
                                             <span>{formatPrice(pricingDetails.subtotal)}</span>
                                         </div>
-
-                                        {/* Extra guest charge */}
-                                        {pricingDetails.extraGuestCharge > 0 && (
-                                            <div className="flex justify-between text-sm text-warning-text dark:text-warning-text">
-                                                <span>Cargo {pricingDetails.extraGuests} {pricingDetails.extraGuests === 1 ? 'persona' : 'personas'} extra (+10% c/u)</span>
-                                                <span>+{formatPrice(pricingDetails.extraGuestCharge)}</span>
-                                            </div>
-                                        )}
 
                                         {/* Long stay discount */}
                                         {applyLongStayDiscount && (
