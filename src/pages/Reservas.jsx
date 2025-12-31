@@ -86,6 +86,17 @@ export default function Booking() {
         })
     }
 
+    // Check if date is the start of an existing reservation
+    const isDateStartOfReservation = (date) => {
+        return reservedDates.some(reservation => {
+            const checkDate = new Date(date)
+            checkDate.setHours(0, 0, 0, 0)
+            const start = new Date(reservation.start)
+            start.setHours(0, 0, 0, 0)
+            return checkDate.getTime() === start.getTime()
+        })
+    }
+
     // Check if date is in past
     const isDatePast = (date) => {
         const today = new Date()
@@ -96,13 +107,20 @@ export default function Booking() {
     // Helper para normalizar fecha a solo día (sin hora)
     const getDateOnly = (date) => new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime()
 
+    // Helper para formatear fecha localmente YYYY-MM-DD
+    const formatDateLocal = (date) => {
+        const d = new Date(date)
+        const year = d.getFullYear()
+        const month = String(d.getMonth() + 1).padStart(2, '0')
+        const day = String(d.getDate()).padStart(2, '0')
+        return `${year}-${month}-${day}`
+    }
+
     // Check if date is in selected range (excluyendo inicio y fin)
     const isDateInRange = (date) => {
         if (!selectedRange.start || !selectedRange.end) return false
-        const d = getDateOnly(date)
-        const s = getDateOnly(selectedRange.start)
-        const e = getDateOnly(selectedRange.end)
-        return d > s && d < e
+        const current = date.getTime()
+        return current > selectedRange.start.getTime() && current < selectedRange.end.getTime()
     }
 
     const isStartDate = (date) => selectedRange.start && getDateOnly(date) === getDateOnly(selectedRange.start)
@@ -141,26 +159,47 @@ export default function Booking() {
     }
 
     const handleDateClick = (date) => {
-        if (isDateReserved(date) || isDatePast(date)) return
+        if (isDatePast(date)) return
+
+        const reserved = isDateReserved(date)
+        const isStartExisting = isDateStartOfReservation(date)
+
+        // Si está reservado y NO es inicio de otra reserva, bloquear
+        if (reserved && !isStartExisting) return
+
+        // Si es inicio de otra reserva, solo permitir como fecha FIN de mi selección actual
+        if (isStartExisting) {
+            if (!selectedRange.start || (selectedRange.end)) return // No puedo empezar nueva reserva aquí
+            if (date <= selectedRange.start) return // No puedo ir hacia atrás
+        }
 
         if (!selectedRange.start || (selectedRange.start && selectedRange.end)) {
-            // Start new selection
+            // Start new selection (si es inicio de existente, ya retornó arriba)
+            if (reserved) return
             setSelectedRange({ start: date, end: null })
         } else {
-            // Complete selection - validate no reserved dates in between
+            // Complete selection - validate no reserved dates in between (EXCEPT the last day if it's just a check-in)
             const startDate = date < selectedRange.start ? date : selectedRange.start
             const endDate = date < selectedRange.start ? selectedRange.start : date
 
-            // Check if any date in the range is reserved
+            // Check if any date in the range is reserved (excluding the checkout day if it allows checkin)
             const current = new Date(startDate)
             let hasReservedDate = false
 
-            while (current <= endDate) {
+            while (current < endDate) { // Check strictly dates BEFORE end date
                 if (isDateReserved(current)) {
                     hasReservedDate = true
                     break
                 }
                 current.setDate(current.getDate() + 1)
+            }
+
+            // Check the last day specifically
+            // It is invalid if it is reserved AND NOT the start of another reservation
+            if (!hasReservedDate) {
+                if (isDateReserved(endDate) && !isDateStartOfReservation(endDate)) {
+                    hasReservedDate = true
+                }
             }
 
             // Only set the range if there are no reserved dates
@@ -172,7 +211,13 @@ export default function Booking() {
                 }
             } else {
                 // Reset selection if trying to cross a reserved date
-                setSelectedRange({ start: date, end: null })
+                // Si intenta seleccionar una fecha reservada inválida, reiniciamos O simplemente no hacemos nada
+                if (!isDateReserved(date) || isDateStartOfReservation(date)) {
+                    // Si clicó en un lugar válido para empezar, iniciamos ahí
+                    setSelectedRange({ start: date, end: null })
+                } else {
+                    setSelectedRange({ start: selectedRange.start, end: null })
+                }
             }
         }
     }
@@ -194,16 +239,11 @@ export default function Booking() {
 
         // 1. Check Special Dates (Ranges) - Prioridad alta
         if (pricing.specialDates) {
-            const dateStr = date.toISOString().split('T')[0]
-            // Convert current date to timestamp for range comparison
-            const checkTime = new Date(dateStr).getTime()
+            const dateStr = formatDateLocal(date)
 
             for (const special of pricing.specialDates) {
                 // Support both new range format and old single date format (fallback)
                 if (special.startDate && special.endDate) {
-                    const startTime = new Date(special.startDate).getTime()
-                    const endTime = new Date(special.endDate).getTime()
-                    // Adjust endTime timezone offset if needed or simple string comparison
                     // Using string comparison is safer for YYYY-MM-DD
                     if (dateStr >= special.startDate && dateStr <= special.endDate) {
                         return { multiplier: special.multiplier || 1.4, name: special.label }

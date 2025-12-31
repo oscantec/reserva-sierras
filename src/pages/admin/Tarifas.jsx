@@ -58,19 +58,19 @@ export default function Tarifas() {
             { id: 2, startDate: '2026-01-09', endDate: '2026-01-12', multiplier: 1.4, label: 'Puente Reyes Magos' },
             { id: 3, startDate: '2026-03-20', endDate: '2026-03-23', multiplier: 1.4, label: 'Puente San José' },
             { id: 4, startDate: '2026-04-02', endDate: '2026-04-05', multiplier: 1.4, label: 'Semana Santa (Jueves-Domingo)' },
-            { id: 5, startDate: '2026-05-01', endDate: '2026-05-03', multiplier: 1.4, label: 'Día del Trabajo' },
+            { id: 5, startDate: '2026-04-30', endDate: '2026-05-03', multiplier: 1.4, label: 'Puente Día del Trabajo' },
             { id: 6, startDate: '2026-05-15', endDate: '2026-05-18', multiplier: 1.4, label: 'Puente Ascensión' },
             { id: 7, startDate: '2026-06-05', endDate: '2026-06-08', multiplier: 1.4, label: 'Puente Corpus Christi' },
             { id: 8, startDate: '2026-06-12', endDate: '2026-06-15', multiplier: 1.4, label: 'Puente Sagrado Corazón' },
             { id: 9, startDate: '2026-06-26', endDate: '2026-06-29', multiplier: 1.4, label: 'Puente San Pedro' },
             { id: 10, startDate: '2026-07-17', endDate: '2026-07-20', multiplier: 1.4, label: 'Puente Independencia' },
-            { id: 11, startDate: '2026-08-07', endDate: '2026-08-09', multiplier: 1.4, label: 'Batalla de Boyacá' },
+            { id: 11, startDate: '2026-08-06', endDate: '2026-08-09', multiplier: 1.4, label: 'Puente Batalla de Boyacá' },
             { id: 12, startDate: '2026-08-14', endDate: '2026-08-17', multiplier: 1.4, label: 'Puente Asunción' },
             { id: 13, startDate: '2026-10-09', endDate: '2026-10-12', multiplier: 1.4, label: 'Puente Día de la Raza' },
             { id: 14, startDate: '2026-10-30', endDate: '2026-11-02', multiplier: 1.4, label: 'Puente Todos los Santos' },
             { id: 15, startDate: '2026-11-13', endDate: '2026-11-16', multiplier: 1.4, label: 'Puente Indep. Cartagena' },
             { id: 16, startDate: '2026-12-07', endDate: '2026-12-08', multiplier: 1.4, label: 'Inmaculada Concepción' },
-            { id: 17, startDate: '2026-12-24', endDate: '2026-12-25', multiplier: 1.4, label: 'Navidad' },
+            { id: 17, startDate: '2026-12-24', endDate: '2026-12-27', multiplier: 1.4, label: 'Navidad (Jueves-Domingo)' },
         ],
         discounts: {
             longStay: { enabled: true, nights: 7, percent: 15 },
@@ -567,15 +567,29 @@ export default function Tarifas() {
                 {/* Special Dates Tab */}
                 {activeTab === 'special' && (
                     <div className="space-y-6">
-                        <div className="flex justify-between items-center">
+                        <div className="flex justify-between items-center flex-wrap gap-2">
                             <p className="text-text-secondary-light dark:text-text-secondary-dark">Define precios específicos para fechas importantes</p>
-                            <button
-                                onClick={addSpecialDate}
-                                className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg font-bold text-sm hover:bg-primary-dark transition-colors"
-                            >
-                                <span className="material-symbols-outlined text-lg">add</span>
-                                Agregar Fecha
-                            </button>
+                            <div className="flex gap-2">
+                                <button
+                                    onClick={() => {
+                                        if (window.confirm('¿Cargar festivos de Colombia 2026? Esto reemplazará las fechas especiales actuales.')) {
+                                            setPricing(prev => ({ ...prev, specialDates: DEFAULT_PRICING.specialDates }))
+                                            setSaved(false)
+                                        }
+                                    }}
+                                    className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-surface-card-dark border border-gray-300 dark:border-gray-600 text-text-main-light dark:text-text-main-dark rounded-lg font-bold text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                                >
+                                    <span className="material-symbols-outlined text-lg">calendar_month</span>
+                                    Cargar Festivos 2026
+                                </button>
+                                <button
+                                    onClick={addSpecialDate}
+                                    className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg font-bold text-sm hover:bg-primary-dark transition-colors"
+                                >
+                                    <span className="material-symbols-outlined text-lg">add</span>
+                                    Agregar Fecha
+                                </button>
+                            </div>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
