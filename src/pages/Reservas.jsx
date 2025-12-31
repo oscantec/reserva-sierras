@@ -9,6 +9,7 @@ export default function Booking() {
     const [currentMonth, setCurrentMonth] = useState(new Date())
     const [reservedDates, setReservedDates] = useState([])
     const [selectedRange, setSelectedRange] = useState({ start: null, end: null })
+    const [numberOfGuests, setNumberOfGuests] = useState(4) // Default 4 guests
     const [isLoading, setIsLoading] = useState(true)
     const [pricing, setPricing] = useState(DEFAULT_CONFIG.pricing)
     const [siteColors, setSiteColors] = useState({
@@ -230,7 +231,7 @@ export default function Booking() {
     // Calculate detailed pricing breakdown
     const calculatePricing = () => {
         if (!selectedRange.start || !selectedRange.end || nights === 0) {
-            return { subtotal: 0, weekdayNights: 0, weekendNights: 0, specialNights: 0, breakdown: [], appliedSeasons: [] }
+            return { subtotal: 0, weekdayNights: 0, weekendNights: 0, specialNights: 0, breakdown: [], appliedSeasons: [], extraGuestCharge: 0, extraGuests: 0 }
         }
 
         let subtotal = 0
@@ -266,7 +267,15 @@ export default function Booking() {
             current.setDate(current.getDate() + 1)
         }
 
-        return { subtotal, weekdayNights, weekendNights, specialNights, breakdown, appliedSeasons }
+        // Calculate extra guest charge (10% per person over 7)
+        let extraGuestCharge = 0
+        let extraGuests = 0
+        if (numberOfGuests > 7) {
+            extraGuests = numberOfGuests - 7
+            extraGuestCharge = Math.round(subtotal * 0.10 * extraGuests)
+        }
+
+        return { subtotal, weekdayNights, weekendNights, specialNights, breakdown, appliedSeasons, extraGuestCharge, extraGuests }
     }
 
     const pricingDetails = calculatePricing()
@@ -281,8 +290,8 @@ export default function Booking() {
     const cleaningEnabled = pricing?.baseRates?.cleaningEnabled !== false
     const cleaningFee = cleaningEnabled ? (pricing?.baseRates?.cleaningFee || 80000) : 0
 
-    // Subtotal after discount
-    const subtotalAfterDiscount = pricingDetails.subtotal - discountAmount
+    // Subtotal after discount + extra guest charge
+    const subtotalAfterDiscount = pricingDetails.subtotal - discountAmount + pricingDetails.extraGuestCharge
 
     // IVA (respect toggle)
     const ivaEnabled = pricing?.baseRates?.ivaEnabled === true
@@ -465,6 +474,37 @@ export default function Booking() {
                                 <p className="font-bold text-sm">{formatDate(selectedRange.end)}</p>
                             </div>
                         </div>
+
+                        {/* Guest count selector - Mobile */}
+                        <div className="mb-6 p-4 rounded-lg border border-border-card dark:border-border-card-dark bg-background-light dark:bg-background-dark">
+                            <label className="block text-xs text-text-muted uppercase font-bold mb-2">Número de Huéspedes</label>
+                            <div className="flex items-center gap-3">
+                                <button
+                                    onClick={() => setNumberOfGuests(Math.max(1, numberOfGuests - 1))}
+                                    className="w-10 h-10 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary font-bold transition-colors"
+                                >
+                                    -
+                                </button>
+                                <div className="flex-1 text-center">
+                                    <span className="text-2xl font-bold text-primary">{numberOfGuests}</span>
+                                    <p className="text-xs text-text-muted mt-1">
+                                        {numberOfGuests <= 7 ? 'Tarifa base' : `+${pricingDetails.extraGuests} extra`}
+                                    </p>
+                                </div>
+                                <button
+                                    onClick={() => setNumberOfGuests(Math.min(10, numberOfGuests + 1))}
+                                    className="w-10 h-10 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary font-bold transition-colors"
+                                >
+                                    +
+                                </button>
+                            </div>
+                            {numberOfGuests > 7 && (
+                                <p className="text-xs text-warning-text dark:text-warning-text mt-2 text-center">
+                                    +10% por cada persona adicional sobre 7
+                                </p>
+                            )}
+                        </div>
+
                         {nights > 0 && (
                             <>
                                 <div className="flex flex-col gap-2 mb-6">
@@ -502,6 +542,15 @@ export default function Booking() {
                                         <span>Subtotal alojamiento</span>
                                         <span>{formatPrice(pricingDetails.subtotal)}</span>
                                     </div>
+
+                                    {/* Extra guest charge - Mobile */}
+                                    {pricingDetails.extraGuestCharge > 0 && (
+                                        <div className="flex justify-between text-sm text-warning-text dark:text-warning-text">
+                                            <span>Cargo {pricingDetails.extraGuests} {pricingDetails.extraGuests === 1 ? 'persona' : 'personas'} extra (+10% c/u)</span>
+                                            <span>+{formatPrice(pricingDetails.extraGuestCharge)}</span>
+                                        </div>
+                                    )}
+
                                     {applyLongStayDiscount && (
                                         <div className="flex justify-between text-sm text-success-text dark:text-green-400">
                                             <span>Descuento estadía larga (-{discountPercent}%)</span>
@@ -617,6 +666,37 @@ export default function Booking() {
                                     <p className="font-bold text-sm">{formatDate(selectedRange.end)}</p>
                                 </div>
                             </div>
+
+                            {/* Guest count selector */}
+                            <div className="mb-6 p-4 rounded-lg border border-border-card dark:border-border-card-dark bg-background-light dark:bg-background-dark">
+                                <label className="block text-xs text-text-muted uppercase font-bold mb-2">Número de Huéspedes</label>
+                                <div className="flex items-center gap-3">
+                                    <button
+                                        onClick={() => setNumberOfGuests(Math.max(1, numberOfGuests - 1))}
+                                        className="w-10 h-10 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary font-bold transition-colors"
+                                    >
+                                        -
+                                    </button>
+                                    <div className="flex-1 text-center">
+                                        <span className="text-2xl font-bold text-primary">{numberOfGuests}</span>
+                                        <p className="text-xs text-text-muted mt-1">
+                                            {numberOfGuests <= 7 ? 'Tarifa base' : `+${pricingDetails.extraGuests} extra`}
+                                        </p>
+                                    </div>
+                                    <button
+                                        onClick={() => setNumberOfGuests(Math.min(10, numberOfGuests + 1))}
+                                        className="w-10 h-10 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary font-bold transition-colors"
+                                    >
+                                        +
+                                    </button>
+                                </div>
+                                {numberOfGuests > 7 && (
+                                    <p className="text-xs text-warning-text dark:text-warning-text mt-2 text-center">
+                                        +10% por cada persona adicional sobre 7
+                                    </p>
+                                )}
+                            </div>
+
                             {nights > 0 && (
                                 <>
                                     <div className="flex flex-col gap-2 mb-6">
@@ -661,6 +741,14 @@ export default function Booking() {
                                             <span>Subtotal alojamiento</span>
                                             <span>{formatPrice(pricingDetails.subtotal)}</span>
                                         </div>
+
+                                        {/* Extra guest charge */}
+                                        {pricingDetails.extraGuestCharge > 0 && (
+                                            <div className="flex justify-between text-sm text-warning-text dark:text-warning-text">
+                                                <span>Cargo {pricingDetails.extraGuests} {pricingDetails.extraGuests === 1 ? 'persona' : 'personas'} extra (+10% c/u)</span>
+                                                <span>+{formatPrice(pricingDetails.extraGuestCharge)}</span>
+                                            </div>
+                                        )}
 
                                         {/* Long stay discount */}
                                         {applyLongStayDiscount && (
