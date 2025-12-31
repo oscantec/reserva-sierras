@@ -542,7 +542,7 @@ export default function Booking() {
                                     {pricingDetails.extraGuestCharge > 0 && (
                                         <div className="flex justify-between text-sm text-primary font-medium">
                                             <span>Multiplicador por Huésped adicional</span>
-                                            <span className="text-xs text-text-muted">Aplicado</span>
+                                            <span>+{formatPrice(pricingDetails.extraGuestCharge)}</span>
                                         </div>
                                     )}
 
@@ -742,7 +742,7 @@ export default function Booking() {
                                         {pricingDetails.extraGuestCharge > 0 && (
                                             <div className="flex justify-between text-sm text-primary font-medium">
                                                 <span>Multiplicador por Huésped adicional</span>
-                                                <span className="text-xs text-text-muted">Aplicado</span>
+                                                <span>+{formatPrice(pricingDetails.extraGuestCharge)}</span>
                                             </div>
                                         )}
 
