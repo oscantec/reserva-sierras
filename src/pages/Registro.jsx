@@ -59,10 +59,10 @@ export default function CheckIn() {
 
     // Colores configurables
     const [siteColors, setSiteColors] = useState({
-        warningBg: '#007983',
+        warningBg: '#2f4858',
         warningText: '#ffffff',
-        warningIcon: '#ffffff',
-        warningBorder: '#006076'
+        warningIcon: '#ff6600',
+        warningBorder: '#3db814'
     })
 
     // Contenido dinámico de la página
