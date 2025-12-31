@@ -20,84 +20,84 @@
   --color-page-bg-admin: #ffffff;
 
   /* === BOTONES === */
-  --color-btn-primary: #3db814;
-  --color-btn-primary-hover: #2a8a0e;
+  --color-btn-primary: #2d6a4f;
+  --color-btn-primary-hover: #3db814;
 
   /* === TEXTOS - COLORES COMPLETOS === */
-  --color-text-main: #2f4858;
-  --color-text-title: #2f4858;
-  --color-text-muted: #007983;
-  --color-text-subtitle: #009178;
-  --color-text-subtitle-dark: #00a658;
+  --color-text-main: #081c15;
+  --color-text-title: #1b4332;
+  --color-text-muted: #081c15;
+  --color-text-subtitle: #081c15;
+  --color-text-subtitle-dark: #1b4332;
   --color-text-link: #3db814;
-  --color-text-accent: #3db814;
+  --color-text-accent: #2a8a0e;
   --color-text-on-primary: #ffffff;
 
   /* === ICONOS - COLORES COMPLETOS === */
-  --color-icon-color: #3db814;
-  --color-icon-color-secondary: #009178;
+  --color-icon-color: #ffffff;
+  --color-icon-color-secondary: #3db814;
   --color-icon-color-dark: #ffffff;
-  --color-icon-bg-primary: #ffffff;
+  --color-icon-bg-primary: #2d6a4f;
   --color-icon-bg-secondary: #ffffff;
-  --color-icon-bg-dark: #006076;
-  --color-icon-border: #3db814;
+  --color-icon-bg-dark: #2d6a4f;
+  --color-icon-border: #1b4332;
 
   /* === SUPERFICIES - CONTENEDORES === */
-  --color-surface-card: #ffffff;
-  --color-surface-card-hover: #f8faf8;
+  --color-surface-card: #fafafa;
+  --color-surface-card-hover: #f7fdf8;
   --color-surface-light: #ffffff;
   /* surface-section ahora es transparente para heredar el fondo de página */
-  --color-surface-section: transparent;
+  --color-surface-section: #ffffff;
   --color-surface-nav: #ffffff;
   --color-surface-footer: #2f4858;
-  --color-surface-card-dark: #2f4858;
+  --color-surface-card-dark: #081c15;
   --color-surface-page: #ffffff;
-  --color-surface-page-dark: #2f4858;
+  --color-surface-page-dark: #111b0e;
 
   /* === BORDES === */
-  --color-border-card: #009178;
-  --color-border-card-dark: #006076;
+  --color-border-card: #f5f5f5;
+  --color-border-card-dark: #2a3d24;
 
   /* === SOMBRAS === */
-  --color-card-shadow: #22c55e;
+  --color-card-shadow: #1b4332;
 
   /* === BADGES === */
   --color-badge-bg: #3db814;
-  --color-badge-text: #ffffff;
+  --color-badge-text: #000000;
 
   /* === PLATAFORMAS === */
-  --color-platform-airbnb: #2f4858;
-  --color-platform-booking: #006076;
-  --color-platform-google: #0094a8;
-  --color-platform-directa: #00a658;
+  --color-platform-airbnb: #FF5A5F;
+  --color-platform-booking: #003580;
+  --color-platform-google: #4285F4;
+  --color-platform-directa: #00A658;
 
   /* === NAVEGACIÓN EXTERNA === */
   --color-nav-waze: #007983;
   --color-nav-maps: #006076;
 
   /* === ALERTAS - WARNING === */
-  --color-warning-bg: #007983;
+  --color-warning-bg: #2f4858;
   --color-warning-text: #ffffff;
-  --color-warning-icon: #ffffff;
-  --color-warning-border: #006076;
+  --color-warning-icon: #ff6600;
+  --color-warning-border: #3db814;
 
   /* === ALERTAS - INFO === */
-  --color-info-bg: #0094a8;
-  --color-info-text: #ffffff;
-  --color-info-icon: #ffffff;
-  --color-info-border: #007983;
+  --color-info-bg: #e0f7f4;
+  --color-info-text: #1b4332;
+  --color-info-icon: #1b4332;
+  --color-info-border: #081c15;
 
   /* === ALERTAS - SUCCESS === */
-  --color-success-bg: #3db814;
-  --color-success-text: #ffffff;
-  --color-success-icon: #ffffff;
-  --color-success-border: #2a8a0e;
+  --color-success-bg: #40916c;
+  --color-success-text: #2a8a0e;
+  --color-success-icon: #081c15;
+  --color-success-border: #1b4332;
 
   /* === ALERTAS - ERROR === */
-  --color-error-bg: #2f4858;
-  --color-error-text: #ffffff;
-  --color-error-icon: #ffffff;
-  --color-error-border: #006076;
+  --color-error-bg: #b7e4c7;
+  --color-error-text: #2d6a4f;
+  --color-error-icon: #ef4444;
+  --color-error-border: #1b4332;
 
   /* === AGUA - FONDOS Y GRADIENTE === */
   --color-water-bg-primary: #006076;
