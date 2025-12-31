@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { fetchAllCalendars } from '../utils/icalParser'
 import { DEFAULT_CONFIG } from '../utils/config'
+import { isHoliday, getHolidayName } from '../utils/holidays'
 
 export default function Booking() {
     const [currentMonth, setCurrentMonth] = useState(new Date())
@@ -380,8 +381,9 @@ export default function Booking() {
                                             const isStart = isStartDate(date)
                                             const isEnd = isEndDate(date)
                                             const inRange = isDateInRange(date)
+                                            const holiday = isHoliday(date)
 
-                                            let className = "h-10 w-full flex items-center justify-center text-sm transition-colors "
+                                            let className = "h-10 w-full flex items-center justify-center text-sm transition-colors relative "
 
                                             if (reserved || past) {
                                                 className += "bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed line-through"
@@ -394,6 +396,9 @@ export default function Booking() {
                                                 className += "rounded-r-full bg-primary text-white font-bold shadow-md shadow-card-sm"
                                             } else if (inRange) {
                                                 className += "bg-primary text-white font-medium"
+                                            } else if (holiday) {
+                                                // Días festivos - resaltado especial
+                                                className += "rounded-lg bg-warning-bg/10 dark:bg-warning-bg/20 text-primary font-semibold border border-primary/30 hover:bg-primary/20 dark:hover:bg-primary/30 cursor-pointer"
                                             } else {
                                                 // Días disponibles - sin fondo, solo hover
                                                 className += "rounded-lg hover:bg-primary/20 dark:hover:bg-primary/30 hover:text-primary cursor-pointer"
@@ -405,8 +410,12 @@ export default function Booking() {
                                                     onClick={() => handleDateClick(date)}
                                                     disabled={reserved || past}
                                                     className={className}
+                                                    title={holiday ? holiday.name : ''}
                                                 >
                                                     {date.getDate()}
+                                                    {holiday && !reserved && !past && (
+                                                        <span className="absolute top-0.5 right-0.5 w-1.5 h-1.5 bg-primary rounded-full"></span>
+                                                    )}
                                                 </button>
                                             )
                                         })
@@ -424,6 +433,12 @@ export default function Booking() {
                             <div className="flex items-center gap-2">
                                 <div className="size-3 rounded-full border border-primary/30" style={{ backgroundColor: '#e8f5e9' }}></div>
                                 <span>Disponible</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <div className="size-3 rounded-full bg-primary/10 border border-primary/30 relative">
+                                    <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-primary rounded-full"></span>
+                                </div>
+                                <span>Festivo</span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <div className="size-3 rounded-full bg-gray-300 dark:bg-gray-600"></div>
@@ -482,7 +497,7 @@ export default function Booking() {
                                             ))}
                                         </div>
                                     )}
-                                    
+
                                     <div className="flex justify-between text-sm font-medium text-text-main-light dark:text-text-muted pt-1">
                                         <span>Subtotal alojamiento</span>
                                         <span>{formatPrice(pricingDetails.subtotal)}</span>
@@ -627,19 +642,19 @@ export default function Booking() {
                                                 <span>Incluido</span>
                                             </div>
                                         )}
-                                    
-                                    {/* Season Multiplier Display */}
-                                    {pricingDetails.appliedSeasons && pricingDetails.appliedSeasons.length > 0 && (
-                                        <div className="space-y-1 py-2 border-t border-border-card dark:border-border-card-dark mt-2">
-                                            {pricingDetails.appliedSeasons.map((season, idx) => (
-                                                <div key={idx} className="flex justify-between text-sm text-primary font-medium">
-                                                    <span>Multiplicador {season.multiplier}x - {season.name}</span>
-                                                    <span className="text-xs text-text-muted">Aplicado</span>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
-                                    
+
+                                        {/* Season Multiplier Display */}
+                                        {pricingDetails.appliedSeasons && pricingDetails.appliedSeasons.length > 0 && (
+                                            <div className="space-y-1 py-2 border-t border-border-card dark:border-border-card-dark mt-2">
+                                                {pricingDetails.appliedSeasons.map((season, idx) => (
+                                                    <div key={idx} className="flex justify-between text-sm text-primary font-medium">
+                                                        <span>Multiplicador {season.multiplier}x - {season.name}</span>
+                                                        <span className="text-xs text-text-muted">Aplicado</span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+
 
                                         {/* Subtotal */}
                                         <div className="flex justify-between text-sm font-medium text-text-main-light dark:text-text-muted pt-1">
