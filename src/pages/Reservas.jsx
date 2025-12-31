@@ -476,7 +476,7 @@ export default function Booking() {
                                         <div className="space-y-1 py-2 border-t border-border-card dark:border-border-card-dark mt-2">
                                             {pricingDetails.appliedSeasons.map((season, idx) => (
                                                 <div key={idx} className="flex justify-between text-sm text-primary font-medium">
-                                                    <span>⭐ Multiplicador {season.multiplier}x - {season.name}</span>
+                                                    <span>Multiplicador {season.multiplier}x - {season.name}</span>
                                                     <span className="text-xs text-text-muted">Aplicado</span>
                                                 </div>
                                             ))}
@@ -633,7 +633,7 @@ export default function Booking() {
                                         <div className="space-y-1 py-2 border-t border-border-card dark:border-border-card-dark mt-2">
                                             {pricingDetails.appliedSeasons.map((season, idx) => (
                                                 <div key={idx} className="flex justify-between text-sm text-primary font-medium">
-                                                    <span>⭐ Multiplicador {season.multiplier}x - {season.name}</span>
+                                                    <span>Multiplicador {season.multiplier}x - {season.name}</span>
                                                     <span className="text-xs text-text-muted">Aplicado</span>
                                                 </div>
                                             ))}
