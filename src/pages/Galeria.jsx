@@ -97,7 +97,7 @@ import jac4 from '../images/Jac 4.webp'
 import jac5 from '../images/Jac 5.webp'
 
 export default function Gallery() {
-    const [activeCategory, setActiveCategory] = useState('todas')
+    const [activeCategory, setActiveCategory] = useState('externas')
     const [lightboxImage, setLightboxImage] = useState(null)
     const [lightboxIndex, setLightboxIndex] = useState(0)
     const [isAnimating, setIsAnimating] = useState(false)
@@ -319,10 +319,7 @@ export default function Gallery() {
                             <h1 className="text-3xl md:text-4xl font-black leading-tight tracking-[-0.033em] mb-2">{pageContent.pageTitle}</h1>
                             <p className="text-text-subtitle dark:text-text-subtitle-dark text-base">{pageContent.pageSubtitle}</p>
                         </div>
-                        <div className="text-right hidden sm:block">
-                            <p className="text-sm font-bold text-primary">{allImages.length} Fotos</p>
-                            <p className="text-xs text-text-muted dark:text-text-muted">{pageContent.categoryAll}</p>
-                        </div>
+
                     </div>
                     <div className="h-2 w-full rounded-full bg-icon-bg-secondary dark:bg-border-card-dark mt-2 relative overflow-hidden">
                         <div className="absolute top-0 left-0 h-full w-full bg-primary rounded-full"></div>
@@ -421,7 +418,7 @@ export default function Gallery() {
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
                                     <div className="absolute bottom-0 left-0 right-0 p-3 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                                        <p className="text-white/70 text-xs font-medium">{image.label}</p>
+
                                         <h3 className="text-white font-bold text-sm">{image.title}</h3>
                                     </div>
                                     <div className="absolute top-3 right-3 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg">
@@ -447,9 +444,7 @@ export default function Gallery() {
                                     />
                                     {/* Always visible label at bottom */}
                                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-3">
-                                        <span className="inline-block bg-primary/90 text-white text-[10px] font-bold px-2 py-0.5 rounded-full mb-1">
-                                            {image.label}
-                                        </span>
+
                                         <h3 className="text-white font-bold text-sm leading-tight">{image.title}</h3>
                                     </div>
                                     {/* Zoom icon on hover */}
@@ -511,9 +506,7 @@ export default function Gallery() {
                             className="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl"
                         />
                         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-6 md:p-8 rounded-b-2xl">
-                            <span className="inline-block bg-primary text-white text-xs font-bold px-3 py-1 rounded-full mb-2">
-                                {lightboxImage.label}
-                            </span>
+
                             <h3 className="text-white font-bold text-xl md:text-2xl">{lightboxImage.title}</h3>
                         </div>
                     </div>
@@ -548,14 +541,14 @@ export default function Gallery() {
                     100% { transform: translateX(-50%); }
                 }
                 .animate-marquee {
-                    animation: marquee 60s linear infinite;
+                    animation: marquee 30s linear infinite;
                 }
                 @keyframes marquee-reverse {
                     0% { transform: translateX(-50%); }
                     100% { transform: translateX(0); }
                 }
                 .animate-marquee-reverse {
-                    animation: marquee-reverse 60s linear infinite;
+                    animation: marquee-reverse 30s linear infinite;
                 }
                 @keyframes fadeIn {
                     from { opacity: 0; }
