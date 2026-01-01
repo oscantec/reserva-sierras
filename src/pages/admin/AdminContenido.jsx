@@ -26,10 +26,10 @@ const getDefaultContent = () => ({
         title: 'Explora el Sitio',
         subtitle: 'Navega por las secciones para conocer todo sobre tu estadía.',
         items: [
-            { path: '/reservas', icon: 'calendar_month', title: 'Reservas', description: 'Consulta disponibilidad y precios actualizados.' },
-            { path: '/registro', icon: 'edit_document', title: 'Registro', description: 'Registra a los huéspedes una vez confirmes tu reserva.' },
-            { path: '/galeria', icon: 'photo_library', title: 'Galería', description: 'Conoce los espacios y la distribución de la casa.' },
-            { path: '/guia', icon: 'info', title: 'Guía', description: 'Detalles de llegada, estadía y salida.' }
+            { path: '/reservas', icon: 'calendar_month', title: 'Reservas', description: 'Consulta disponibilidad y precios actualizados.', image: '/src/images/Piscina 1.webp' },
+            { path: '/registro', icon: 'edit_document', title: 'Registro', description: 'Registra a los huéspedes una vez confirmes tu reserva.', image: '/src/images/Sala 1 1.webp' },
+            { path: '/galeria', icon: 'photo_library', title: 'Galería', description: 'Conoce los espacios y la distribución de la casa.', image: '/src/images/Casa 1.webp' },
+            { path: '/guia', icon: 'info', title: 'Guía', description: 'Detalles de llegada, estadía y salida.', image: '/src/images/Exterior1.webp' }
         ]
     },
     contactoInicial: {

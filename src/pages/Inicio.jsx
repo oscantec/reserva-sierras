@@ -308,7 +308,7 @@ export default function Landing() {
                     </div>
                 )}
 
-                {/* Explora el Sitio - Cards con links */}
+                {/* Explora el Sitio - Cards con imágenes de fondo */}
                 {exploraSitio?.items?.length > 0 && (
                     <div className="mb-8 md:mb-12">
                         <div className="flex flex-col gap-2 mb-4">
@@ -316,22 +316,55 @@ export default function Landing() {
                             <p className="text-sm md:text-base text-text-subtitle dark:text-text-subtitle-dark">{exploraSitio.subtitle}</p>
                         </div>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
-                            {exploraSitio.items.map((item, i) => (
-                                <Link
-                                    key={i}
-                                    to={item.path}
-                                    className="group bg-surface-card dark:bg-surface-card-dark rounded-xl p-4 md:p-5 border border-border-card dark:border-border-card-dark hover:shadow-lg hover:border-primary transition-all flex flex-col items-center text-center"
-                                >
-                                    <div
-                                        className="w-12 h-12 md:w-14 md:h-14 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform"
-                                        style={{ backgroundColor: 'var(--color-icon-bg)' }}
+                            {exploraSitio.items.map((item, i) => {
+                                // Imágenes de preview por defecto según la página
+                                const defaultImages = {
+                                    '/reservas': '/src/images/Piscina 1.webp',
+                                    '/registro': '/src/images/Sala 1 1.webp',
+                                    '/galeria': '/src/images/Casa 1.webp',
+                                    '/guia': '/src/images/Exterior1.webp'
+                                }
+                                const bgImage = item.image || defaultImages[item.path] || '/src/images/Portada 1.webp'
+
+                                return (
+                                    <Link
+                                        key={i}
+                                        to={item.path}
+                                        className="group relative rounded-xl overflow-hidden aspect-[4/5] md:aspect-[3/4] border border-border-card dark:border-border-card-dark hover:shadow-xl hover:scale-[1.02] transition-all duration-300"
                                     >
-                                        <span className="material-symbols-outlined text-2xl md:text-3xl" style={{ color: 'var(--color-primary)' }}>{item.icon}</span>
-                                    </div>
-                                    <h3 className="text-base md:text-lg font-bold mb-1 group-hover:text-primary transition-colors">{item.title}</h3>
-                                    <p className="text-sm text-text-muted dark:text-text-muted line-clamp-2">{item.description}</p>
-                                </Link>
-                            ))}
+                                        {/* Imagen de fondo */}
+                                        <div
+                                            className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+                                            style={{ backgroundImage: `url('${bgImage}')` }}
+                                        />
+
+                                        {/* Overlay gradient */}
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+
+                                        {/* Icono superior */}
+                                        <div className="absolute top-3 left-3">
+                                            <div
+                                                className="w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center backdrop-blur-sm bg-white/20 border border-white/30 group-hover:bg-primary group-hover:border-primary transition-all duration-300"
+                                            >
+                                                <span className="material-symbols-outlined text-xl md:text-2xl text-white">{item.icon}</span>
+                                            </div>
+                                        </div>
+
+                                        {/* Contenido inferior */}
+                                        <div className="absolute bottom-0 left-0 right-0 p-3 md:p-4">
+                                            <h3 className="text-base md:text-lg font-bold text-white mb-1 group-hover:text-primary transition-colors">{item.title}</h3>
+                                            <p className="text-xs md:text-sm text-white/80 line-clamp-2">{item.description}</p>
+                                        </div>
+
+                                        {/* Flecha de navegación */}
+                                        <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                            <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+                                                <span className="material-symbols-outlined text-white text-lg">arrow_forward</span>
+                                            </div>
+                                        </div>
+                                    </Link>
+                                )
+                            })}
                         </div>
                     </div>
                 )}
