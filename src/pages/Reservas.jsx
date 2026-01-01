@@ -587,15 +587,15 @@ export default function Booking() {
                                                     key={index}
                                                     onClick={() => handleDateClick(date)}
                                                     disabled={past || resState === 'middle'}
-                                                    className={`h-10 w-full flex items-center justify-center text-sm transition-all relative ${cursorClass} ${textClass} ${shapeClass} ${borderClass} ${hoverClass}`}
+                                                    className={`h-12 w-full flex items-start justify-end p-1.5 text-xs transition-all relative ${cursorClass} ${textClass} ${shapeClass} ${borderClass} ${hoverClass}`}
                                                     style={{ background: gradient }}
                                                     title={holiday ? holiday.name : ''}
                                                 >
                                                     <span className="relative z-10">{date.getDate()}</span>
 
-                                                    {/* Indicador de festivo */}
+                                                    {/* Indicador de festivo - Ahora en la izquierda */}
                                                     {holiday && !isSelMiddle && !isSelStart && !isSelEnd && resState !== 'middle' && (
-                                                        <span className="absolute top-0.5 right-0.5 w-1.5 h-1.5 bg-primary rounded-full"></span>
+                                                        <span className="absolute bottom-1.5 left-1.5 w-1.5 h-1.5 bg-primary rounded-full"></span>
                                                     )}
                                                 </button>
                                             )
