@@ -175,6 +175,7 @@ const getDefaultGaleriaContent = () => ({
 // === TABS ORGANIZADOS EN DOS SECCIONES ===
 const CONTENT_TABS = [
     { id: 'inicio', label: 'Inicio', icon: 'home' },
+    { id: 'guia', label: 'Guía', icon: 'info' },
     { id: 'registro', label: 'Registro', icon: 'edit_document' },
     { id: 'galeria', label: 'Galería', icon: 'photo_library' },
     { id: 'reservas', label: 'Reservas', icon: 'calendar_month' }
@@ -225,20 +226,24 @@ const FONT_CATEGORIES = [
 // Alias para retrocompatibilidad
 const PAGE_TABS = [...CONTENT_TABS, ...EDITING_TABS]
 
-// Sub-tabs para la página de Inicio
+// Sub-tabs para la página de Inicio (simplificada)
 const INICIO_SUBTABS = [
     { id: 'general', label: 'General', icon: 'settings' },
     { id: 'hero', label: 'Hero', icon: 'movie' },
     { id: 'intro', label: 'Intro', icon: 'title' },
     { id: 'amenidades', label: 'Amenidades', icon: 'star' },
+    { id: 'footer', label: 'Footer', icon: 'bottom_navigation' }
+]
+
+// Sub-tabs para la página de Guía (operativa)
+const GUIA_SUBTABS = [
     { id: 'contacto', label: 'Contacto', icon: 'chat' },
     { id: 'pagos', label: 'Pagos', icon: 'payment' },
     { id: 'zonas', label: 'Zonas Húmedas', icon: 'pool' },
     { id: 'agua', label: 'Agua', icon: 'water_drop' },
     { id: 'normas', label: 'Normas', icon: 'gavel' },
     { id: 'ubicacion', label: 'Ubicación', icon: 'map' },
-    { id: 'checkout', label: 'Check-out', icon: 'logout' },
-    { id: 'footer', label: 'Footer', icon: 'bottom_navigation' }
+    { id: 'checkout', label: 'Check-out', icon: 'logout' }
 ]
 
 // Default gallery image data for admin editing
@@ -2618,6 +2623,14 @@ export default function AdminContenido() {
                 case 'hero': return renderHeroTab()
                 case 'intro': return renderIntroTab()
                 case 'amenidades': return renderAmenidadesTab()
+                case 'footer': return renderFooterTab()
+                default: return renderGeneralTab()
+            }
+        }
+
+        // Página Guía con sus sub-tabs operativos
+        if (activePageTab === 'guia') {
+            switch (activeSubTab) {
                 case 'contacto': return renderContactoTab()
                 case 'pagos': return renderPagosTab()
                 case 'zonas': return renderZonasTab()
@@ -2625,8 +2638,7 @@ export default function AdminContenido() {
                 case 'normas': return renderRulesTab()
                 case 'ubicacion': return renderLocationTab()
                 case 'checkout': return renderCheckoutTab()
-                case 'footer': return renderFooterTab()
-                default: return renderGeneralTab()
+                default: return renderContactoTab()
             }
         }
 
@@ -2669,7 +2681,7 @@ export default function AdminContenido() {
                         {/* Sección CONTENIDO PÁGINAS */}
                         <span className="text-[10px] font-bold text-text-muted uppercase tracking-wider px-2">Contenido</span>
                         {CONTENT_TABS.map(tab => (
-                            <button key={tab.id} onClick={() => { setActivePageTab(tab.id); if (tab.id === 'inicio') setActiveSubTab('general'); }}
+                            <button key={tab.id} onClick={() => { setActivePageTab(tab.id); if (tab.id === 'inicio') setActiveSubTab('general'); if (tab.id === 'guia') setActiveSubTab('contacto'); }}
                                 className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-bold transition-all whitespace-nowrap ${activePageTab === tab.id ? 'bg-primary text-white shadow-md' : 'text-text-muted hover:bg-icon-bg-primary'}`}>
                                 <span className="material-symbols-outlined text-lg">{tab.icon}</span>
                                 <span>{tab.label}</span>
@@ -2694,6 +2706,21 @@ export default function AdminContenido() {
                     <div className="bg-surface-light border-b border-border-card px-4 overflow-x-auto">
                         <div className="flex gap-1 min-w-max py-2">
                             {INICIO_SUBTABS.map(subtab => (
+                                <button key={subtab.id} onClick={() => setActiveSubTab(subtab.id)}
+                                    className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-all whitespace-nowrap ${activeSubTab === subtab.id ? 'bg-icon-bg-primary text-icon-color' : 'text-text-muted hover:bg-icon-bg-primary'}`}>
+                                    <span className="material-symbols-outlined text-base">{subtab.icon}</span>
+                                    <span className="hidden sm:inline">{subtab.label}</span>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* Sub-tabs para Guía */}
+                {activePageTab === 'guia' && (
+                    <div className="bg-surface-light border-b border-border-card px-4 overflow-x-auto">
+                        <div className="flex gap-1 min-w-max py-2">
+                            {GUIA_SUBTABS.map(subtab => (
                                 <button key={subtab.id} onClick={() => setActiveSubTab(subtab.id)}
                                     className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-all whitespace-nowrap ${activeSubTab === subtab.id ? 'bg-icon-bg-primary text-icon-color' : 'text-text-muted hover:bg-icon-bg-primary'}`}>
                                     <span className="material-symbols-outlined text-base">{subtab.icon}</span>

@@ -16,7 +16,7 @@ export default function Navbar() {
         { path: '/reservas', label: 'Reservas' },
         { path: '/registro', label: 'Registro' },
         { path: '/galeria', label: 'Galería' },
-        { path: '/info', label: 'Info' },
+        { path: '/guia', label: 'Guía' },
     ]
 
     const handleLinkClick = () => {
@@ -115,7 +115,7 @@ export default function Navbar() {
                                 {link.path === '/galeria' && 'photo_library'}
                                 {link.path === '/reservas' && 'calendar_month'}
                                 {link.path === '/registro' && 'edit_document'}
-                                {link.path === '/info' && 'info'}
+                                {link.path === '/guia' && 'info'}
                             </span>
                             {link.label}
                         </Link>

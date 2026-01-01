@@ -8,7 +8,7 @@ import WaterConservationSection from '../components/WaterConservationSection'
 import AntesDePartirSection from '../components/AntesDePartirSection'
 import ZonasHumedasSection from '../components/ZonasHumedasSection'
 
-export default function Info() {
+export default function Guia() {
     return (
         <div className="flex flex-col min-h-screen bg-page-bg-inicio dark:bg-surface-card-dark text-text-main dark:text-white font-display">
             <Navbar />
