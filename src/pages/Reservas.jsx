@@ -318,7 +318,7 @@ export default function Booking() {
         const breakdown = []
 
         // Track unique seasons and their SPECIFIC contribution
-        const seasonSums = {} // name -> { extraCharge, multiplier }
+        const seasonSums = {} // name -> { extraCharge, multiplier, dates: [] }
 
         // Iterate through each night (not including checkout day)
         const current = new Date(selectedRange.start)
@@ -333,9 +333,12 @@ export default function Booking() {
             if (seasonName && multiplier > 1) {
                 const extraForThisNight = price - baseRate
                 if (!seasonSums[seasonName]) {
-                    seasonSums[seasonName] = { extraCharge: 0, multiplier: multiplier }
+                    seasonSums[seasonName] = { extraCharge: 0, multiplier: multiplier, dates: [] }
                 }
                 seasonSums[seasonName].extraCharge += extraForThisNight
+                // Format date as "22 ene"
+                const dateShort = current.toLocaleDateString('es-CO', { day: 'numeric', month: 'short' }).replace('.', '')
+                seasonSums[seasonName].dates.push(dateShort)
             }
 
             breakdown.push({
@@ -353,7 +356,8 @@ export default function Booking() {
         const appliedSeasons = Object.keys(seasonSums).map(name => ({
             name,
             charge: seasonSums[name].extraCharge,
-            multiplier: seasonSums[name].multiplier
+            multiplier: seasonSums[name].multiplier,
+            datesFormatted: seasonSums[name].dates.join(', ')
         }))
 
         const totalSeasonCharge = Object.values(seasonSums).reduce((acc, curr) => acc + curr.extraCharge, 0)
@@ -713,7 +717,10 @@ export default function Booking() {
                                         <div className="space-y-1 py-2 border-t border-border-card dark:border-border-card-dark mt-2">
                                             {pricingDetails.appliedSeasons.map((season, idx) => (
                                                 <div key={idx} className="flex justify-between text-sm text-primary font-medium">
-                                                    <span>Multiplicador {season.multiplier}x - {season.name}</span>
+                                                    <div className="flex flex-col">
+                                                        <span>Multiplicador {season.multiplier}x - {season.name}</span>
+                                                        <span className="text-[10px] opacity-70">({season.datesFormatted})</span>
+                                                    </div>
                                                     <span>+{formatPrice(season.charge)}</span>
                                                 </div>
                                             ))}
@@ -913,7 +920,10 @@ export default function Booking() {
                                             <div className="space-y-1 py-2 border-t border-border-card dark:border-border-card-dark mt-2">
                                                 {pricingDetails.appliedSeasons.map((season, idx) => (
                                                     <div key={idx} className="flex justify-between text-sm text-primary font-medium">
-                                                        <span>Multiplicador {season.multiplier}x - {season.name}</span>
+                                                        <div className="flex flex-col">
+                                                            <span>Multiplicador {season.multiplier}x - {season.name}</span>
+                                                            <span className="text-[10px] opacity-70">({season.datesFormatted})</span>
+                                                        </div>
                                                         <span>+{formatPrice(season.charge)}</span>
                                                     </div>
                                                 ))}                                            </div>
