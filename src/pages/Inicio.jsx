@@ -95,6 +95,25 @@ export default function Landing() {
         description: INITIAL_STATE.inicioContent?.intro?.description || 'Reserva de las Sierras no es solo un alojamiento, es una experiencia diseñada para tu descanso y conexión con la naturaleza.'
     })
     const [amenidades, setAmenidades] = useState(INITIAL_STATE.inicioContent?.amenidades || [])
+    const [destacados, setDestacados] = useState(INITIAL_STATE.inicioContent?.destacados || {
+        title: 'Nuestra Casa',
+        subtitle: 'Conoce los detalles de este espacio único.',
+        items: [
+            { icon: 'landscape', title: '2,300 m²', description: 'Amplio lote con zonas verdes y senderos ecológicos.' },
+            { icon: 'location_on', title: 'A 5 km de Anapoima', description: 'Cerca del centro pero en total tranquilidad.' },
+            { icon: 'group', title: 'Hasta 10 huéspedes', description: 'Ideal para familias y grupos de amigos.' }
+        ]
+    })
+    const [exploraSitio, setExploraSitio] = useState(INITIAL_STATE.inicioContent?.exploraSitio || {
+        title: 'Explora el Sitio',
+        subtitle: 'Navega por las secciones para conocer todo sobre tu estadía.',
+        items: [
+            { path: '/reservas', icon: 'calendar_month', title: 'Reservas', description: 'Consulta disponibilidad y precios actualizados.' },
+            { path: '/registro', icon: 'edit_document', title: 'Registro', description: 'Registra a los huéspedes una vez confirmes tu reserva.' },
+            { path: '/galeria', icon: 'photo_library', title: 'Galería', description: 'Conoce los espacios y la distribución de la casa.' },
+            { path: '/guia', icon: 'info', title: 'Guía', description: 'Detalles de llegada, estadía y salida.' }
+        ]
+    })
     const [checkTimes, setCheckTimes] = useState({
         checkIn: INITIAL_STATE.checkInTime,
         checkOut: INITIAL_STATE.checkOutTime
@@ -262,6 +281,60 @@ export default function Landing() {
                         </div>
                     ))}
                 </div>
+
+                {/* Destacados de la Casa */}
+                {destacados?.items?.length > 0 && (
+                    <div className="mb-8 md:mb-12">
+                        <div className="flex flex-col gap-2 mb-4">
+                            <h2 className="text-xl md:text-3xl font-black leading-tight tracking-[-0.033em]">{destacados.title}</h2>
+                            <p className="text-text-subtitle dark:text-text-subtitle-dark text-sm md:text-base">{destacados.subtitle}</p>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6">
+                            {destacados.items.map((item, i) => (
+                                <div key={i} className="bg-surface-card dark:bg-surface-card-dark rounded-xl p-4 md:p-6 border border-border-card dark:border-border-card-dark hover:shadow-md transition-all flex items-start gap-4">
+                                    <div
+                                        className="w-12 h-12 md:w-14 md:h-14 rounded-xl flex items-center justify-center flex-shrink-0"
+                                        style={{ backgroundColor: 'var(--color-icon-bg)' }}
+                                    >
+                                        <span className="material-symbols-outlined text-2xl md:text-3xl" style={{ color: 'var(--color-primary)' }}>{item.icon}</span>
+                                    </div>
+                                    <div>
+                                        <h3 className="text-lg md:text-xl font-black mb-1" style={{ color: 'var(--color-primary)' }}>{item.title}</h3>
+                                        <p className="text-xs md:text-sm text-text-muted dark:text-text-muted">{item.description}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* Explora el Sitio - Cards con links */}
+                {exploraSitio?.items?.length > 0 && (
+                    <div className="mb-8 md:mb-12">
+                        <div className="flex flex-col gap-2 mb-4">
+                            <h2 className="text-xl md:text-3xl font-black leading-tight tracking-[-0.033em]">{exploraSitio.title}</h2>
+                            <p className="text-text-subtitle dark:text-text-subtitle-dark text-sm md:text-base">{exploraSitio.subtitle}</p>
+                        </div>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+                            {exploraSitio.items.map((item, i) => (
+                                <Link
+                                    key={i}
+                                    to={item.path}
+                                    className="group bg-surface-card dark:bg-surface-card-dark rounded-xl p-4 md:p-5 border border-border-card dark:border-border-card-dark hover:shadow-lg hover:border-primary transition-all flex flex-col items-center text-center"
+                                >
+                                    <div
+                                        className="w-12 h-12 md:w-14 md:h-14 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform"
+                                        style={{ backgroundColor: 'var(--color-icon-bg)' }}
+                                    >
+                                        <span className="material-symbols-outlined text-2xl md:text-3xl" style={{ color: 'var(--color-primary)' }}>{item.icon}</span>
+                                    </div>
+                                    <h3 className="text-sm md:text-base font-bold mb-1 group-hover:text-primary transition-colors">{item.title}</h3>
+                                    <p className="text-xs text-text-muted dark:text-text-muted line-clamp-2">{item.description}</p>
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
+                )}
             </div>
 
 

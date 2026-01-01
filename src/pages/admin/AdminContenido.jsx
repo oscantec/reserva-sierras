@@ -13,6 +13,25 @@ const getDefaultContent = () => ({
         { icon: 'wifi', title: 'Wi-Fi Alta Velocidad', description: 'Mantente conectado con Starlink.' },
         { icon: 'pets', title: 'Pet Friendly', description: 'Tus mascotas son bienvenidas.' }
     ],
+    destacados: {
+        title: 'Nuestra Casa',
+        subtitle: 'Conoce los detalles de este espacio único.',
+        items: [
+            { icon: 'landscape', title: '2,300 m²', description: 'Amplio lote con zonas verdes y senderos ecológicos.' },
+            { icon: 'location_on', title: 'A 5 km de Anapoima', description: 'Cerca del centro pero en total tranquilidad.' },
+            { icon: 'group', title: 'Hasta 10 huéspedes', description: 'Ideal para familias y grupos de amigos.' }
+        ]
+    },
+    exploraSitio: {
+        title: 'Explora el Sitio',
+        subtitle: 'Navega por las secciones para conocer todo sobre tu estadía.',
+        items: [
+            { path: '/reservas', icon: 'calendar_month', title: 'Reservas', description: 'Consulta disponibilidad y precios actualizados.' },
+            { path: '/registro', icon: 'edit_document', title: 'Registro', description: 'Registra a los huéspedes una vez confirmes tu reserva.' },
+            { path: '/galeria', icon: 'photo_library', title: 'Galería', description: 'Conoce los espacios y la distribución de la casa.' },
+            { path: '/guia', icon: 'info', title: 'Guía', description: 'Detalles de llegada, estadía y salida.' }
+        ]
+    },
     contactoInicial: {
         sectionTitle: 'Contacto Inicial',
         sectionSubtitle: 'Coordina los detalles de tu llegada con nuestra anfitriona.',
@@ -232,6 +251,8 @@ const INICIO_SUBTABS = [
     { id: 'hero', label: 'Hero', icon: 'movie' },
     { id: 'intro', label: 'Intro', icon: 'title' },
     { id: 'amenidades', label: 'Amenidades', icon: 'star' },
+    { id: 'casa', label: 'Casa', icon: 'home_work' },
+    { id: 'explora', label: 'Explora', icon: 'explore' },
     { id: 'footer', label: 'Footer', icon: 'bottom_navigation' }
 ]
 
@@ -1123,6 +1144,127 @@ export default function AdminContenido() {
                     className="flex items-center gap-2 px-4 py-2 text-primary hover:bg-primary/10 rounded-lg text-sm font-medium">
                     <span className="material-symbols-outlined">add</span>Agregar amenidad
                 </button>
+            </div>
+        </div>
+    )
+
+    const renderCasaTab = () => (
+        <div className="space-y-6">
+            <div className="bg-white rounded-xl p-6 border border-border-card">
+                <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+                    <span className="material-symbols-outlined text-icon-color">home_work</span>
+                    Destacados de la Casa
+                </h3>
+                <div className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-sm font-medium text-text-muted mb-1">Título de Sección</label>
+                            <input type="text" value={content.destacados?.title || ''} onChange={e => setContent(prev => ({ ...prev, destacados: { ...prev.destacados, title: e.target.value } }))}
+                                className="w-full px-3 py-2 border border-border-card rounded-lg text-sm" />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-text-muted mb-1">Subtítulo</label>
+                            <input type="text" value={content.destacados?.subtitle || ''} onChange={e => setContent(prev => ({ ...prev, destacados: { ...prev.destacados, subtitle: e.target.value } }))}
+                                className="w-full px-3 py-2 border border-border-card rounded-lg text-sm" />
+                        </div>
+                    </div>
+                    <div className="space-y-3">
+                        {(content.destacados?.items || []).map((item, i) => (
+                            <div key={i} className="p-4 bg-surface-light rounded-lg space-y-3">
+                                <div className="flex justify-between items-center">
+                                    <span className="font-medium text-sm text-text-muted">Destacado {i + 1}</span>
+                                    <button onClick={() => {
+                                        const items = [...(content.destacados?.items || [])]
+                                        items.splice(i, 1)
+                                        setContent(prev => ({ ...prev, destacados: { ...prev.destacados, items } }))
+                                    }} className="text-gray-500 hover:bg-gray-100 p-1 rounded">
+                                        <span className="material-symbols-outlined text-sm">delete</span>
+                                    </button>
+                                </div>
+                                <div className="grid grid-cols-3 gap-3">
+                                    <input type="text" value={item.icon} onChange={e => {
+                                        const items = [...(content.destacados?.items || [])]
+                                        items[i] = { ...items[i], icon: e.target.value }
+                                        setContent(prev => ({ ...prev, destacados: { ...prev.destacados, items } }))
+                                    }} placeholder="Icono" className="px-3 py-2 border border-border-card rounded-lg text-sm" />
+                                    <input type="text" value={item.title} onChange={e => {
+                                        const items = [...(content.destacados?.items || [])]
+                                        items[i] = { ...items[i], title: e.target.value }
+                                        setContent(prev => ({ ...prev, destacados: { ...prev.destacados, items } }))
+                                    }} placeholder="Título" className="px-3 py-2 border border-border-card rounded-lg text-sm" />
+                                    <input type="text" value={item.description} onChange={e => {
+                                        const items = [...(content.destacados?.items || [])]
+                                        items[i] = { ...items[i], description: e.target.value }
+                                        setContent(prev => ({ ...prev, destacados: { ...prev.destacados, items } }))
+                                    }} placeholder="Descripción" className="px-3 py-2 border border-border-card rounded-lg text-sm" />
+                                </div>
+                            </div>
+                        ))}
+                        <button onClick={() => {
+                            const items = [...(content.destacados?.items || []), { icon: 'info', title: 'Nuevo Destacado', description: 'Descripción' }]
+                            setContent(prev => ({ ...prev, destacados: { ...prev.destacados, items } }))
+                        }} className="flex items-center gap-2 px-4 py-2 text-primary hover:bg-primary/10 rounded-lg text-sm font-medium">
+                            <span className="material-symbols-outlined">add</span>Agregar destacado
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+
+    const renderExploraTab = () => (
+        <div className="space-y-6">
+            <div className="bg-white rounded-xl p-6 border border-border-card">
+                <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+                    <span className="material-symbols-outlined text-icon-color">explore</span>
+                    Explora el Sitio
+                </h3>
+                <div className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-sm font-medium text-text-muted mb-1">Título de Sección</label>
+                            <input type="text" value={content.exploraSitio?.title || ''} onChange={e => setContent(prev => ({ ...prev, exploraSitio: { ...prev.exploraSitio, title: e.target.value } }))}
+                                className="w-full px-3 py-2 border border-border-card rounded-lg text-sm" />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-text-muted mb-1">Subtítulo</label>
+                            <input type="text" value={content.exploraSitio?.subtitle || ''} onChange={e => setContent(prev => ({ ...prev, exploraSitio: { ...prev.exploraSitio, subtitle: e.target.value } }))}
+                                className="w-full px-3 py-2 border border-border-card rounded-lg text-sm" />
+                        </div>
+                    </div>
+                    <div className="space-y-3">
+                        {(content.exploraSitio?.items || []).map((item, i) => (
+                            <div key={i} className="p-4 bg-surface-light rounded-lg space-y-3">
+                                <div className="flex justify-between items-center">
+                                    <span className="font-medium text-sm text-text-muted">{item.title}</span>
+                                </div>
+                                <div className="grid grid-cols-4 gap-3">
+                                    <input type="text" value={item.path} onChange={e => {
+                                        const items = [...(content.exploraSitio?.items || [])]
+                                        items[i] = { ...items[i], path: e.target.value }
+                                        setContent(prev => ({ ...prev, exploraSitio: { ...prev.exploraSitio, items } }))
+                                    }} placeholder="Ruta" className="px-3 py-2 border border-border-card rounded-lg text-sm" />
+                                    <input type="text" value={item.icon} onChange={e => {
+                                        const items = [...(content.exploraSitio?.items || [])]
+                                        items[i] = { ...items[i], icon: e.target.value }
+                                        setContent(prev => ({ ...prev, exploraSitio: { ...prev.exploraSitio, items } }))
+                                    }} placeholder="Icono" className="px-3 py-2 border border-border-card rounded-lg text-sm" />
+                                    <input type="text" value={item.title} onChange={e => {
+                                        const items = [...(content.exploraSitio?.items || [])]
+                                        items[i] = { ...items[i], title: e.target.value }
+                                        setContent(prev => ({ ...prev, exploraSitio: { ...prev.exploraSitio, items } }))
+                                    }} placeholder="Título" className="px-3 py-2 border border-border-card rounded-lg text-sm" />
+                                    <input type="text" value={item.description} onChange={e => {
+                                        const items = [...(content.exploraSitio?.items || [])]
+                                        items[i] = { ...items[i], description: e.target.value }
+                                        setContent(prev => ({ ...prev, exploraSitio: { ...prev.exploraSitio, items } }))
+                                    }} placeholder="Descripción" className="px-3 py-2 border border-border-card rounded-lg text-sm" />
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    <p className="text-xs text-text-muted">Las rutas están predefinidas y conectan con las páginas del sitio.</p>
+                </div>
             </div>
         </div>
     )
@@ -2623,6 +2765,8 @@ export default function AdminContenido() {
                 case 'hero': return renderHeroTab()
                 case 'intro': return renderIntroTab()
                 case 'amenidades': return renderAmenidadesTab()
+                case 'casa': return renderCasaTab()
+                case 'explora': return renderExploraTab()
                 case 'footer': return renderFooterTab()
                 default: return renderGeneralTab()
             }
