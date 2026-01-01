@@ -536,42 +536,58 @@ export default function Booking() {
                                             }
 
                                             // 4. ESTILOS DE TEXTO Y CURSOR
-                                            let textClass = "text-text-main dark:text-white"
+                                            let textClass = "text-gray-700 dark:text-white font-medium"
                                             let cursorClass = "cursor-pointer"
+                                            let borderClass = ""
+                                            let hoverClass = "hover:ring-2 hover:ring-primary/30"
 
                                             // Días pasados o bloqueados totalmente
                                             if (past) {
                                                 cursorClass = "cursor-not-allowed"
                                                 textClass = "text-gray-300 dark:text-gray-600 line-through"
+                                                hoverClass = ""
                                             } else if (resState === 'middle') {
                                                 cursorClass = "cursor-not-allowed"
-                                                textClass = "text-gray-400 dark:text-gray-500 line-through decoration-gray-400"
+                                                textClass = "text-gray-500 dark:text-gray-500 line-through decoration-gray-500"
+                                                hoverClass = ""
+                                            } else if (resState === 'start' || resState === 'end') {
+                                                // Días parcialmente reservados (mitad gris) - texto más oscuro para contraste
+                                                textClass = "text-gray-700 dark:text-white font-medium"
                                             } else {
-                                                // Texto blanco si hay algo de verde
-                                                if (isSelStart || isSelEnd || isSelMiddle) {
-                                                    textClass = "text-white font-bold"
-                                                } else if (holiday) {
-                                                    textClass = "text-primary font-bold"
-                                                }
+                                                // Días completamente disponibles
+                                                textClass = "text-gray-700 dark:text-white font-medium"
+                                            }
+
+                                            // Texto blanco y borde para días seleccionados
+                                            if (isSelStart || isSelEnd || isSelMiddle) {
+                                                textClass = "text-white font-bold"
+                                                borderClass = "ring-2 ring-primary ring-inset"
+                                                hoverClass = "hover:ring-2 hover:ring-white"
+                                            } else if (holiday && !past && resState !== 'middle') {
+                                                textClass = "text-primary font-bold dark:text-primary"
                                             }
 
                                             // 5. GENERAR GRADIENTE
                                             const gradient = `linear-gradient(90deg, ${leftColor} 50%, ${rightColor} 50%)`
 
                                             // 6. BORDES REDONDEADOS (SOLO ESTÉTICO)
-                                            // Para coherencia, rounded-lg siempre, o ajuste fino.
-                                            // El usuario pidió: "el primero... mitad derecha verde".
                                             let shapeClass = "rounded-lg"
-                                            if (isSelMiddle) shapeClass = "rounded-none"
-                                            if (isSelStart && !isSelEnd) shapeClass = "rounded-l-lg rounded-r-lg" // Mantenemos lg para que se vea botón
-                                            // Actually, rectangular look inside ranges is better.
+                                            if (isSelMiddle) {
+                                                shapeClass = "rounded-none"
+                                            } else if (isSelStart && isSelEnd) {
+                                                shapeClass = "rounded-lg"
+                                            } else if (isSelStart) {
+                                                shapeClass = "rounded-l-lg rounded-r-none"
+                                            } else if (isSelEnd) {
+                                                shapeClass = "rounded-r-lg rounded-l-none"
+                                            }
 
                                             return (
                                                 <button
                                                     key={index}
                                                     onClick={() => handleDateClick(date)}
                                                     disabled={past || resState === 'middle'}
-                                                    className={`h-10 w-full flex items-center justify-center text-sm transition-all relative ${cursorClass} ${textClass} ${shapeClass}`}
+                                                    className={`h-10 w-full flex items-center justify-center text-sm transition-all relative ${cursorClass} ${textClass} ${shapeClass} ${borderClass} ${hoverClass}`}
                                                     style={{ background: gradient }}
                                                     title={holiday ? holiday.name : ''}
                                                 >
