@@ -234,23 +234,22 @@ export default function Booking() {
     }
 
     // Helper: Get multiplier and name (checks both Special Dates and Seasons)
+    // ALWAYS picks the MAXIMUM multiplier if multiple apply.
     const getMultiplierConfig = (date) => {
         if (!pricing) return { multiplier: 1, name: null }
 
-        // 1. Check Special Dates (Ranges) - Prioridad alta
+        let activeMultipliers = []
+
+        // 1. Check Special Dates (Ranges)
         if (pricing.specialDates) {
             const dateStr = formatDateLocal(date)
-
             for (const special of pricing.specialDates) {
-                // Support both new range format and old single date format (fallback)
                 if (special.startDate && special.endDate) {
-                    // Using string comparison is safer for YYYY-MM-DD
                     if (dateStr >= special.startDate && dateStr <= special.endDate) {
-                        return { multiplier: special.multiplier || 1.4, name: special.label }
+                        activeMultipliers.push({ multiplier: special.multiplier || 1.4, name: special.label })
                     }
                 } else if (special.date === dateStr) {
-                    // Fallback for old format
-                    return { multiplier: special.multiplier || 1.4, name: special.label }
+                    activeMultipliers.push({ multiplier: special.multiplier || 1.4, name: special.label })
                 }
             }
         }
@@ -262,44 +261,44 @@ export default function Booking() {
 
             for (const season of pricing.seasons) {
                 let inSeason = false
-
-                // Handle seasons that span year boundary (e.g., Dec 15 - Jan 15)
                 if (season.startMonth > season.endMonth) {
-                    // Season crosses year boundary
                     if (month > season.startMonth || (month === season.startMonth && day >= season.startDay)) {
                         inSeason = true
                     } else if (month < season.endMonth || (month === season.endMonth && day <= season.endDay)) {
                         inSeason = true
                     }
                 } else {
-                    // Normal season within same year
                     if ((month > season.startMonth || (month === season.startMonth && day >= season.startDay)) &&
                         (month < season.endMonth || (month === season.endMonth && day <= season.endDay))) {
                         inSeason = true
                     }
                 }
 
-                if (inSeason) return { multiplier: season.multiplier, name: season.name }
+                if (inSeason) {
+                    activeMultipliers.push({ multiplier: season.multiplier, name: season.name })
+                }
             }
         }
 
-        return { multiplier: 1, name: null }
+        if (activeMultipliers.length === 0) return { multiplier: 1, name: null }
+
+        // Pick the one with HIGHEST multiplier
+        return activeMultipliers.reduce((prev, current) => (prev.multiplier > current.multiplier) ? prev : current)
     }
 
     // Calculate price for a single night (check-in date)
     const getPriceForNight = (date) => {
-        // 1. Get base rate based on day of week
         const isWeekend = isWeekendDay(date)
         const baseRate = isWeekend
             ? (pricing?.baseRates?.weekend || 450000)
             : (pricing?.baseRates?.weekday || 350000)
 
-        // 2. Apply multiplier (Season or Special Date)
         const { multiplier, name } = getMultiplierConfig(date)
         const finalPrice = Math.round(baseRate * multiplier)
 
         return {
             price: finalPrice,
+            baseRate,
             type: isWeekend ? 'weekend' : 'weekday',
             multiplier,
             seasonName: name
@@ -309,36 +308,34 @@ export default function Booking() {
     // Calculate detailed pricing breakdown
     const calculatePricing = () => {
         if (!selectedRange.start || !selectedRange.end || nights === 0) {
-            return { subtotal: 0, weekdayNights: 0, weekendNights: 0, specialNights: 0, breakdown: [], appliedSeasons: [], extraGuestCharge: 0, extraGuests: 0, seasonCharge: 0 }
+            return { subtotal: 0, weekdayNights: 0, weekendNights: 0, specialNights: 0, breakdown: [], appliedSeasons: [], extraGuestCharge: 0, extraGuests: 0, totalSeasonCharge: 0 }
         }
 
         let subtotal = 0
-        let subtotalBase = 0 // Subtotal without season multiplier
         let weekdayNights = 0
         let weekendNights = 0
         let specialNights = 0
         const breakdown = []
-        const appliedSeasons = [] // Track unique seasons applied
+
+        // Track unique seasons and their SPECIFIC contribution
+        const seasonSums = {} // name -> { extraCharge, multiplier }
 
         // Iterate through each night (not including checkout day)
         const current = new Date(selectedRange.start)
         while (current < selectedRange.end) {
-            const { price, type, multiplier, seasonName } = getPriceForNight(current)
+            const { price, baseRate, type, multiplier, seasonName } = getPriceForNight(current)
             subtotal += price
 
-            // Calculate base price (without season multiplier)
-            const baseRate = type === 'weekend'
-                ? (pricing?.baseRates?.weekend || 450000)
-                : (pricing?.baseRates?.weekday || 350000)
-            subtotalBase += baseRate
-
-            if (type === 'special') specialNights++
-            else if (type === 'weekend') weekendNights++
+            if (type === 'weekend') weekendNights++
             else weekdayNights++
 
-            // Track unique seasons
-            if (seasonName && multiplier > 1 && !appliedSeasons.find(s => s.name === seasonName)) {
-                appliedSeasons.push({ name: seasonName, multiplier })
+            // Track individual season contribution for this night
+            if (seasonName && multiplier > 1) {
+                const extraForThisNight = price - baseRate
+                if (!seasonSums[seasonName]) {
+                    seasonSums[seasonName] = { extraCharge: 0, multiplier: multiplier }
+                }
+                seasonSums[seasonName].extraCharge += extraForThisNight
             }
 
             breakdown.push({
@@ -352,8 +349,14 @@ export default function Booking() {
             current.setDate(current.getDate() + 1)
         }
 
-        // Calculate season charge (difference between subtotal with and without multiplier)
-        const seasonCharge = subtotal - subtotalBase
+        // Convert seasonSums to appliedSeasons array for UI
+        const appliedSeasons = Object.keys(seasonSums).map(name => ({
+            name,
+            charge: seasonSums[name].extraCharge,
+            multiplier: seasonSums[name].multiplier
+        }))
+
+        const totalSeasonCharge = Object.values(seasonSums).reduce((acc, curr) => acc + curr.extraCharge, 0)
 
         // Calculate extra guest charge (10% per person over 7)
         let extraGuestCharge = 0
@@ -363,7 +366,7 @@ export default function Booking() {
             extraGuestCharge = Math.round(subtotal * 0.10 * extraGuests)
         }
 
-        return { subtotal, weekdayNights, weekendNights, specialNights, breakdown, appliedSeasons, extraGuestCharge, extraGuests, seasonCharge }
+        return { subtotal, weekdayNights, weekendNights, specialNights, breakdown, appliedSeasons, extraGuestCharge, extraGuests, totalSeasonCharge }
     }
 
     const pricingDetails = calculatePricing()
@@ -706,12 +709,12 @@ export default function Booking() {
                                         </div>
                                     )}
                                     {/* Season Multiplier Display */}
-                                    {pricingDetails.appliedSeasons && pricingDetails.appliedSeasons.length > 0 && pricingDetails.seasonCharge > 0 && (
+                                    {pricingDetails.appliedSeasons && pricingDetails.appliedSeasons.length > 0 && pricingDetails.totalSeasonCharge > 0 && (
                                         <div className="space-y-1 py-2 border-t border-border-card dark:border-border-card-dark mt-2">
                                             {pricingDetails.appliedSeasons.map((season, idx) => (
                                                 <div key={idx} className="flex justify-between text-sm text-primary font-medium">
                                                     <span>Multiplicador {season.multiplier}x - {season.name}</span>
-                                                    <span>+{formatPrice(pricingDetails.seasonCharge)}</span>
+                                                    <span>+{formatPrice(season.charge)}</span>
                                                 </div>
                                             ))}
                                         </div>
@@ -906,12 +909,12 @@ export default function Booking() {
                                         )}
 
                                         {/* Season Multiplier Display */}
-                                        {pricingDetails.appliedSeasons && pricingDetails.appliedSeasons.length > 0 && pricingDetails.seasonCharge > 0 && (
+                                        {pricingDetails.appliedSeasons && pricingDetails.appliedSeasons.length > 0 && pricingDetails.totalSeasonCharge > 0 && (
                                             <div className="space-y-1 py-2 border-t border-border-card dark:border-border-card-dark mt-2">
                                                 {pricingDetails.appliedSeasons.map((season, idx) => (
                                                     <div key={idx} className="flex justify-between text-sm text-primary font-medium">
                                                         <span>Multiplicador {season.multiplier}x - {season.name}</span>
-                                                        <span>+{formatPrice(pricingDetails.seasonCharge)}</span>
+                                                        <span>+{formatPrice(season.charge)}</span>
                                                     </div>
                                                 ))}                                            </div>
                                         )}
