@@ -544,23 +544,30 @@ export default function Booking() {
                                             // Días pasados o bloqueados totalmente
                                             if (past) {
                                                 cursorClass = "cursor-not-allowed"
-                                                textClass = "text-gray-300 dark:text-gray-600 line-through"
+                                                textClass = "text-gray-300 dark:text-gray-600"
                                                 hoverClass = ""
                                             } else if (resState === 'middle') {
                                                 cursorClass = "cursor-not-allowed"
-                                                textClass = "text-gray-500 dark:text-gray-500 line-through decoration-gray-500"
+                                                textClass = "text-gray-400 dark:text-gray-500"
                                                 hoverClass = ""
                                             } else if (resState === 'start' || resState === 'end') {
-                                                // Días parcialmente reservados (mitad gris) - texto más oscuro para contraste
+                                                // Días parcialmente reservados (mitad gris)
                                                 textClass = "text-gray-700 dark:text-white font-medium"
                                             } else {
                                                 // Días completamente disponibles
                                                 textClass = "text-gray-700 dark:text-white font-medium"
                                             }
 
-                                            // Texto blanco y borde para días seleccionados
+                                            // Texto para días seleccionados
                                             if (isSelStart || isSelEnd || isSelMiddle) {
-                                                textClass = "text-white font-bold"
+                                                // Si es el fin de la selección (ej: el 15), el número está a la derecha (fondo blanco)
+                                                // por lo tanto debe ser texto verde. Si es inicio o intermedio, fondo verde -> texto blanco.
+                                                if (isSelEnd && !isSelMiddle) {
+                                                    textClass = "text-primary font-bold"
+                                                } else {
+                                                    textClass = "text-white font-bold"
+                                                }
+
                                                 borderClass = "ring-2 ring-primary ring-inset"
                                                 hoverClass = "hover:ring-2 hover:ring-white"
                                             } else if (holiday && !past && resState !== 'middle') {
