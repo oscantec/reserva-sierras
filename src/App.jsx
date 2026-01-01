@@ -9,6 +9,7 @@ import Inicio from './pages/Inicio'
 import Galeria from './pages/Galeria'
 import Reservas from './pages/Reservas'
 import Registro from './pages/Registro'
+import Info from './pages/Info'
 
 // Admin pages
 import AdminLayout from './pages/admin/AdminLayout'
@@ -151,6 +152,7 @@ function App() {
                 <Route path="/galeria" element={<Galeria />} />
                 <Route path="/reservas" element={<Reservas />} />
                 <Route path="/registro" element={<Registro />} />
+                <Route path="/info" element={<Info />} />
 
                 {/* Redirect old /guia to home */}
                 <Route path="/guia" element={<Navigate to="/" replace />} />

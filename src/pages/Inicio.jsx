@@ -2,13 +2,6 @@ import { Link } from 'react-router-dom'
 import { useState, useEffect, useRef, memo } from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
-import ContactoInicialSection from '../components/ContactoInicialSection'
-import PaymentSection from '../components/PaymentSection'
-import LocationSection from '../components/LocationSection'
-import RulesSection from '../components/RulesSection'
-import WaterConservationSection from '../components/WaterConservationSection'
-import AntesDePartirSection from '../components/AntesDePartirSection'
-import ZonasHumedasSection from '../components/ZonasHumedasSection'
 import { DEFAULT_CONFIG } from '../utils/config'
 
 // Helper function to extract YouTube video ID from various URL formats
@@ -271,13 +264,6 @@ export default function Landing() {
                 </div>
             </div>
 
-            <ContactoInicialSection />
-            <LocationSection />
-            <PaymentSection />
-            <WaterConservationSection />
-            <RulesSection />
-            <ZonasHumedasSection />
-            <AntesDePartirSection />
 
             <Footer />
         </div>
