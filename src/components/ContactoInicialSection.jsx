@@ -75,8 +75,8 @@ export default function ContactoInicialSection() {
                 <div className="flex flex-col gap-2 mb-3 md:mb-4">
                     <div className="flex justify-between items-end">
                         <div>
-                            <h2 className="text-3xl md:text-4xl font-black leading-tight tracking-[-0.033em] mb-2">{config.sectionTitle}</h2>
-                            <p className="text-text-subtitle dark:text-text-subtitle-dark text-base">{config.sectionSubtitle}</p>
+                            <h2 className="text-2xl md:text-3xl font-black leading-tight tracking-[-0.033em] mb-2">{config.sectionTitle}</h2>
+                            <p className="text-sm md:text-base text-text-subtitle dark:text-text-subtitle-dark">{config.sectionSubtitle}</p>
                         </div>
                         <div className="text-right hidden sm:block">
                             <p className="text-sm font-bold text-text-accent">Bienvenido</p>
@@ -100,8 +100,8 @@ export default function ContactoInicialSection() {
                                         <span className="material-symbols-outlined">{item.icon}</span>
                                     </div>
                                     <div>
-                                        <p className="font-bold text-sm">{item.title}</p>
-                                        <p className="text-xs text-text-muted dark:text-text-muted">{item.description}</p>
+                                        <p className="font-bold text-base">{item.title}</p>
+                                        <p className="text-sm text-text-muted dark:text-text-muted">{item.description}</p>
                                     </div>
                                 </div>
                             ))}

@@ -72,8 +72,8 @@ export default function LocationSection() {
             <div className="max-w-7xl mx-auto">
                 {/* Header - Same structure as ContactoInicialSection */}
                 <div className="mb-4 md:mb-6">
-                    <h2 className="text-3xl md:text-4xl font-black leading-tight tracking-[-0.033em] mb-2">Ubicación</h2>
-                    <p className="text-text-subtitle dark:text-text-subtitle-dark text-base mb-4">{content.subtitle}</p>
+                    <h2 className="text-2xl md:text-3xl font-black leading-tight tracking-[-0.033em] mb-2">Ubicación</h2>
+                    <p className="text-sm md:text-base text-text-subtitle dark:text-text-subtitle-dark mb-4">{content.subtitle}</p>
 
                     {/* Waze and Maps buttons */}
                     <div className="flex gap-3">
@@ -184,8 +184,8 @@ export default function LocationSection() {
                                     <div key={i} className="flex gap-4">
                                         <div className="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center text-sm font-bold shrink-0">{i + 1}</div>
                                         <div>
-                                            <p className="font-bold text-sm">{step.title}</p>
-                                            <p className="text-xs text-text-muted dark:text-text-muted">{step.desc}</p>
+                                            <p className="font-bold text-base">{step.title}</p>
+                                            <p className="text-sm text-text-muted dark:text-text-muted">{step.desc}</p>
                                         </div>
                                     </div>
                                 ))}

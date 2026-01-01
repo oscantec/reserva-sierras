@@ -260,8 +260,8 @@ export default function Landing() {
                 <div className="flex flex-col gap-2 mb-4 md:mb-8">
                     <div className="flex justify-between items-end">
                         <div>
-                            <h2 className="text-2xl md:text-4xl font-black leading-tight tracking-[-0.033em] mb-1 md:mb-2">{intro.title}</h2>
-                            <p className="text-text-subtitle dark:text-text-subtitle-dark text-sm md:text-base max-w-2xl">{intro.description}</p>
+                            <h2 className="text-2xl md:text-3xl font-black leading-tight tracking-[-0.033em] mb-1 md:mb-2">{intro.title}</h2>
+                            <p className="text-sm md:text-base text-text-subtitle dark:text-text-subtitle-dark max-w-2xl">{intro.description}</p>
                         </div>
                     </div>
                 </div>
@@ -276,8 +276,8 @@ export default function Landing() {
                             >
                                 <span className="material-symbols-outlined text-lg md:text-2xl" style={{ color: 'var(--color-primary)' }}>{item.icon}</span>
                             </div>
-                            <h3 className="text-sm md:text-lg font-bold mb-1">{item.title}</h3>
-                            <p className="text-xs md:text-sm text-text-muted dark:text-text-muted">{item.description}</p>
+                            <h3 className="text-base md:text-lg font-bold mb-1">{item.title}</h3>
+                            <p className="text-sm text-text-muted dark:text-text-muted">{item.description}</p>
                         </div>
                     ))}
                 </div>
@@ -286,8 +286,8 @@ export default function Landing() {
                 {destacados?.items?.length > 0 && (
                     <div className="mb-8 md:mb-12">
                         <div className="flex flex-col gap-2 mb-4">
-                            <h2 className="text-xl md:text-3xl font-black leading-tight tracking-[-0.033em]">{destacados.title}</h2>
-                            <p className="text-text-subtitle dark:text-text-subtitle-dark text-sm md:text-base">{destacados.subtitle}</p>
+                            <h2 className="text-2xl md:text-3xl font-black leading-tight tracking-[-0.033em]">{destacados.title}</h2>
+                            <p className="text-sm md:text-base text-text-subtitle dark:text-text-subtitle-dark">{destacados.subtitle}</p>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6">
                             {destacados.items.map((item, i) => (
@@ -299,8 +299,8 @@ export default function Landing() {
                                         <span className="material-symbols-outlined text-2xl md:text-3xl" style={{ color: 'var(--color-primary)' }}>{item.icon}</span>
                                     </div>
                                     <div>
-                                        <h3 className="text-lg md:text-xl font-black mb-1" style={{ color: 'var(--color-primary)' }}>{item.title}</h3>
-                                        <p className="text-xs md:text-sm text-text-muted dark:text-text-muted">{item.description}</p>
+                                        <h3 className="text-base md:text-lg font-black mb-1" style={{ color: 'var(--color-primary)' }}>{item.title}</h3>
+                                        <p className="text-sm text-text-muted dark:text-text-muted">{item.description}</p>
                                     </div>
                                 </div>
                             ))}
@@ -312,8 +312,8 @@ export default function Landing() {
                 {exploraSitio?.items?.length > 0 && (
                     <div className="mb-8 md:mb-12">
                         <div className="flex flex-col gap-2 mb-4">
-                            <h2 className="text-xl md:text-3xl font-black leading-tight tracking-[-0.033em]">{exploraSitio.title}</h2>
-                            <p className="text-text-subtitle dark:text-text-subtitle-dark text-sm md:text-base">{exploraSitio.subtitle}</p>
+                            <h2 className="text-2xl md:text-3xl font-black leading-tight tracking-[-0.033em]">{exploraSitio.title}</h2>
+                            <p className="text-sm md:text-base text-text-subtitle dark:text-text-subtitle-dark">{exploraSitio.subtitle}</p>
                         </div>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
                             {exploraSitio.items.map((item, i) => (
@@ -328,8 +328,8 @@ export default function Landing() {
                                     >
                                         <span className="material-symbols-outlined text-2xl md:text-3xl" style={{ color: 'var(--color-primary)' }}>{item.icon}</span>
                                     </div>
-                                    <h3 className="text-sm md:text-base font-bold mb-1 group-hover:text-primary transition-colors">{item.title}</h3>
-                                    <p className="text-xs text-text-muted dark:text-text-muted line-clamp-2">{item.description}</p>
+                                    <h3 className="text-base md:text-lg font-bold mb-1 group-hover:text-primary transition-colors">{item.title}</h3>
+                                    <p className="text-sm text-text-muted dark:text-text-muted line-clamp-2">{item.description}</p>
                                 </Link>
                             ))}
                         </div>

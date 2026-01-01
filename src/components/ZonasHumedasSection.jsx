@@ -87,8 +87,8 @@ export default function ZonasHumedasSection() {
                 <div className="flex flex-col gap-2 mb-3 md:mb-4">
                     <div className="flex justify-between items-end">
                         <div>
-                            <h2 className="text-3xl md:text-4xl font-black leading-tight tracking-[-0.033em] mb-2">Zonas Húmedas</h2>
-                            <p className="text-text-subtitle dark:text-text-subtitle-dark text-base">Disfruta de nuestras instalaciones exclusivas para tu descanso.</p>
+                            <h2 className="text-2xl md:text-3xl font-black leading-tight tracking-[-0.033em] mb-2">Zonas Húmedas</h2>
+                            <p className="text-sm md:text-base text-text-subtitle dark:text-text-subtitle-dark">Disfruta de nuestras instalaciones exclusivas para tu descanso.</p>
                         </div>
                     </div>
                 </div>
@@ -107,7 +107,7 @@ export default function ZonasHumedasSection() {
                                         <span className={`material-symbols-outlined text-3xl ${zona.iconColor}`}>{zona.icon}</span>
                                     </div>
                                     <div>
-                                        <h3 className="text-xl font-bold text-text-main-light dark:text-white">{zona.title}</h3>
+                                        <h3 className="text-lg font-bold text-text-main-light dark:text-white">{zona.title}</h3>
                                         <p className="text-sm text-text-muted dark:text-text-muted">{zona.subtitle}</p>
                                     </div>
                                 </div>

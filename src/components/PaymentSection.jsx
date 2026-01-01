@@ -200,8 +200,8 @@ export default function PaymentSection() {
                 <div className="flex flex-col gap-2 mb-3 md:mb-4">
                     <div className="flex justify-between items-end">
                         <div>
-                            <h2 className="text-3xl md:text-4xl font-black leading-tight tracking-[-0.033em] mb-2">Pagar Reserva</h2>
-                            <p className="text-text-main-light dark:text-text-muted text-base">
+                            <h2 className="text-2xl md:text-3xl font-black leading-tight tracking-[-0.033em] mb-2">Pagar Reserva</h2>
+                            <p className="text-sm md:text-base text-text-main-light dark:text-text-muted">
                                 {config.paymentSubtitlePart1}{' '}
                                 <strong className="font-bold">{config.paymentSubtitleHighlight}</strong>{' '}
                                 {config.paymentSubtitlePart2}

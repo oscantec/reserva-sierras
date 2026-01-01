@@ -48,8 +48,8 @@ export default function RulesSection() {
                 <div className="flex flex-col gap-2 mb-3 md:mb-4">
                     <div className="flex justify-between items-end">
                         <div>
-                            <h2 className="text-3xl md:text-4xl font-black leading-tight tracking-[-0.033em] mb-2">Normas de la Casa</h2>
-                            <p className="text-text-subtitle dark:text-text-subtitle-dark text-base">Reglas de convivencia para una estadía armónica.</p>
+                            <h2 className="text-2xl md:text-3xl font-black leading-tight tracking-[-0.033em] mb-2">Normas de la Casa</h2>
+                            <p className="text-sm md:text-base text-text-subtitle dark:text-text-subtitle-dark">Reglas de convivencia para una estadía armónica.</p>
                         </div>
                     </div>
                 </div>
@@ -61,8 +61,8 @@ export default function RulesSection() {
                                 <span className="material-symbols-outlined text-icon-color text-lg md:text-xl">{rule.icon}</span>
                             </div>
                             <div className="flex-1 min-w-0">
-                                <h3 className="font-bold text-sm md:text-base text-text-main-light dark:text-white mb-0.5 md:mb-1">{rule.title}</h3>
-                                <p className="text-xs text-text-muted dark:text-text-muted leading-snug">{rule.desc}</p>
+                                <h3 className="font-bold text-base md:text-lg text-text-main-light dark:text-white mb-0.5 md:mb-1">{rule.title}</h3>
+                                <p className="text-sm text-text-muted dark:text-text-muted leading-snug">{rule.desc}</p>
                             </div>
                         </div>
                     ))}
