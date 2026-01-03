@@ -273,7 +273,7 @@ export default function Landing() {
                 {/* Amenities Grid - Compact 2-column mobile layout */}
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6 mb-4 md:mb-8">
                     {amenidades.map((item, i) => (
-                        <div key={i} className={`bg-surface-card dark:bg-surface-card-dark rounded-xl p-3 md:p-6 border border-border-card dark:border-border-card-dark hover:shadow-md hover:border-primary transition-all duration-300 ${i === amenidades.length - 1 && amenidades.length % 2 !== 0 ? 'col-span-2 md:col-span-1' : ''}`}>
+                        <div key={i} className={`bg-surface-card dark:bg-surface-card-dark rounded-xl p-3 md:p-6 border border-border-card dark:border-border-card-dark hover:shadow-xl hover:scale-[1.03] transition-all duration-500 ease-out ${i === amenidades.length - 1 && amenidades.length % 2 !== 0 ? 'col-span-2 md:col-span-1' : ''}`}>
                             <div
                                 className="w-8 h-8 md:w-12 md:h-12 rounded-xl flex items-center justify-center mb-2 md:mb-4"
                                 style={{ backgroundColor: 'var(--color-icon-bg)' }}
@@ -295,7 +295,7 @@ export default function Landing() {
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6">
                             {destacados.items.map((item, i) => (
-                                <div key={i} className="bg-surface-card dark:bg-surface-card-dark rounded-xl p-4 md:p-6 border border-border-card dark:border-border-card-dark hover:shadow-md hover:border-primary transition-all duration-300 flex items-start gap-4">
+                                <div key={i} className="bg-surface-card dark:bg-surface-card-dark rounded-xl p-4 md:p-6 border border-border-card dark:border-border-card-dark hover:shadow-xl hover:scale-[1.03] transition-all duration-500 ease-out flex items-start gap-4">
                                     <div
                                         className="w-12 h-12 md:w-14 md:h-14 rounded-xl flex items-center justify-center flex-shrink-0"
                                         style={{ backgroundColor: 'var(--color-icon-bg)' }}
@@ -333,14 +333,14 @@ export default function Landing() {
                                     <Link
                                         key={i}
                                         to={item.path}
-                                        className="group bg-surface-card dark:bg-surface-card-dark rounded-xl border border-border-card dark:border-border-card-dark hover:shadow-md hover:border-primary transition-all duration-300 overflow-hidden"
+                                        className="group bg-surface-card dark:bg-surface-card-dark rounded-xl border border-border-card dark:border-border-card-dark hover:shadow-2xl hover:scale-[1.04] transition-all duration-500 ease-out overflow-hidden"
                                     >
                                         {/* Preview Area - Imagen panorámica */}
                                         <div className="aspect-[2/1] border-b border-border-card dark:border-border-card-dark overflow-hidden relative bg-white">
                                             <img
                                                 src={previewImages[item.path]}
                                                 alt={`Vista previa de ${item.title}`}
-                                                className="w-full h-full object-cover object-top"
+                                                className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110"
                                             />
                                             {/* Icono flotante */}
                                             <div className="absolute top-2 left-2">
