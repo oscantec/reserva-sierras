@@ -315,170 +315,13 @@ export default function Landing() {
                         </div>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
                             {exploraSitio.items.map((item, i) => {
-                                // Mini Browser Window Component
-                                const BrowserWindow = ({ children }) => (
-                                    <div className="w-full h-full flex flex-col bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-inner">
-                                        {/* Browser Chrome - Title Bar */}
-                                        <div className="flex items-center gap-1.5 px-2 py-1.5 bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-                                            {/* Window Controls */}
-                                            <div className="flex gap-1">
-                                                <div className="w-2 h-2 rounded-full bg-red-400"></div>
-                                                <div className="w-2 h-2 rounded-full bg-yellow-400"></div>
-                                                <div className="w-2 h-2 rounded-full bg-green-400"></div>
-                                            </div>
-                                            {/* URL Bar */}
-                                            <div className="flex-1 ml-2">
-                                                <div className="bg-white dark:bg-gray-700 rounded px-2 py-0.5 text-[6px] text-gray-400 dark:text-gray-500 truncate border border-gray-200 dark:border-gray-600">
-                                                    reservadelassierras.com
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {/* Content Area */}
-                                        <div className="flex-1 overflow-hidden">
-                                            {children}
-                                        </div>
-                                    </div>
-                                );
-
-                                // Previews representativas de cada página
-                                const previewContent = {
-                                    '/reservas': (
-                                        <BrowserWindow>
-                                            <div className="p-2 bg-white dark:bg-gray-900 h-full flex flex-col">
-                                                {/* Header mini */}
-                                                <div className="flex items-center justify-between mb-1.5">
-                                                    <div className="flex items-center gap-1">
-                                                        <div className="w-3 h-3 rounded bg-primary/20 flex items-center justify-center">
-                                                            <span className="text-[5px] text-primary">◀</span>
-                                                        </div>
-                                                        <div className="text-[7px] font-bold text-gray-700 dark:text-gray-300">Enero 2026</div>
-                                                        <div className="w-3 h-3 rounded bg-primary/20 flex items-center justify-center">
-                                                            <span className="text-[5px] text-primary">▶</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                {/* Calendar Grid */}
-                                                <div className="grid grid-cols-7 gap-0.5 flex-1">
-                                                    {['D', 'L', 'M', 'M', 'J', 'V', 'S'].map((d, i) => (
-                                                        <div key={i} className="text-[5px] text-center text-gray-400 font-semibold">{d}</div>
-                                                    ))}
-                                                    {[...Array(31)].map((_, idx) => {
-                                                        const isSelected = [8, 9, 10, 11, 12].includes(idx);
-                                                        const isBlocked = [15, 16, 17, 18].includes(idx);
-                                                        return (
-                                                            <div
-                                                                key={idx}
-                                                                className={`text-[5px] flex items-center justify-center rounded ${isSelected
-                                                                        ? 'bg-primary text-white font-bold'
-                                                                        : isBlocked
-                                                                            ? 'bg-gray-100 dark:bg-gray-700 text-gray-300 dark:text-gray-600 line-through'
-                                                                            : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50'
-                                                                    }`}
-                                                            >
-                                                                {idx + 1}
-                                                            </div>
-                                                        );
-                                                    })}
-                                                </div>
-                                                {/* Price Badge */}
-                                                <div className="mt-1 bg-primary/10 rounded px-1.5 py-0.5 text-center">
-                                                    <span className="text-[6px] text-primary font-bold">$850.000/noche</span>
-                                                </div>
-                                            </div>
-                                        </BrowserWindow>
-                                    ),
-                                    '/registro': (
-                                        <BrowserWindow>
-                                            <div className="p-2 bg-white dark:bg-gray-900 h-full flex flex-col gap-1.5">
-                                                {/* Form Header */}
-                                                <div className="bg-primary/10 rounded px-1.5 py-1 mb-0.5">
-                                                    <div className="text-[6px] font-bold text-primary text-center">Registro de Huéspedes</div>
-                                                </div>
-                                                {/* Form Fields */}
-                                                <div className="space-y-1">
-                                                    <div>
-                                                        <div className="text-[5px] text-gray-500 mb-0.5 font-medium">Número de Reserva</div>
-                                                        <div className="h-3.5 bg-gray-50 dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 flex items-center px-1">
-                                                            <span className="text-[5px] text-gray-400">R-12345</span>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <div className="text-[5px] text-gray-500 mb-0.5 font-medium">Nombre Completo</div>
-                                                        <div className="h-3.5 bg-gray-50 dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700"></div>
-                                                    </div>
-                                                    <div>
-                                                        <div className="text-[5px] text-gray-500 mb-0.5 font-medium">Cédula / Pasaporte</div>
-                                                        <div className="h-3.5 bg-gray-50 dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700"></div>
-                                                    </div>
-                                                </div>
-                                                {/* Submit Button */}
-                                                <div className="mt-auto bg-primary rounded py-1 text-center">
-                                                    <span className="text-[5px] text-white font-bold">Registrar</span>
-                                                </div>
-                                            </div>
-                                        </BrowserWindow>
-                                    ),
-                                    '/galeria': (
-                                        <BrowserWindow>
-                                            <div className="p-1.5 bg-white dark:bg-gray-900 h-full">
-                                                {/* Gallery Header */}
-                                                <div className="flex items-center justify-between mb-1.5">
-                                                    <div className="text-[6px] font-bold text-gray-700 dark:text-gray-300">Galería</div>
-                                                    <div className="flex gap-0.5">
-                                                        <div className="w-3 h-2 bg-primary/20 rounded text-[4px] text-primary text-center">⊞</div>
-                                                        <div className="w-3 h-2 bg-gray-100 rounded text-[4px] text-gray-400 text-center">☰</div>
-                                                    </div>
-                                                </div>
-                                                {/* Image Grid */}
-                                                <div className="grid grid-cols-3 gap-0.5">
-                                                    {[
-                                                        'from-emerald-400 to-teal-500',
-                                                        'from-blue-400 to-cyan-500',
-                                                        'from-amber-400 to-orange-500',
-                                                        'from-purple-400 to-pink-500',
-                                                        'from-green-400 to-emerald-500',
-                                                        'from-rose-400 to-red-500',
-                                                        'from-indigo-400 to-blue-500',
-                                                        'from-yellow-400 to-amber-500',
-                                                        'from-teal-400 to-green-500'
-                                                    ].map((gradient, idx) => (
-                                                        <div
-                                                            key={idx}
-                                                            className={`bg-gradient-to-br ${gradient} rounded aspect-square relative overflow-hidden`}
-                                                        >
-                                                            <div className="absolute inset-0 flex items-center justify-center opacity-40">
-                                                                <div className="w-2 h-2 border border-white/50 rounded-sm"></div>
-                                                            </div>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        </BrowserWindow>
-                                    ),
-                                    '/guia': (
-                                        <BrowserWindow>
-                                            <div className="p-2 bg-white dark:bg-gray-900 h-full flex flex-col gap-1">
-                                                {/* Guide Header */}
-                                                <div className="text-[6px] font-bold text-gray-700 dark:text-gray-300 mb-0.5">Guía del Huésped</div>
-                                                {/* Info Cards */}
-                                                {[
-                                                    { icon: '🏠', label: 'Check-in', value: '3:00 PM', color: 'bg-green-50 border-green-200' },
-                                                    { icon: '🚪', label: 'Check-out', value: '12:00 PM', color: 'bg-blue-50 border-blue-200' },
-                                                    { icon: '📍', label: 'Ubicación', value: 'Anapoima', color: 'bg-amber-50 border-amber-200' },
-                                                    { icon: '📞', label: 'Contacto', value: '+57 3xx...', color: 'bg-purple-50 border-purple-200' }
-                                                ].map((item, idx) => (
-                                                    <div key={idx} className={`flex items-center gap-1.5 ${item.color} dark:bg-gray-800 dark:border-gray-700 rounded px-1.5 py-0.5 border`}>
-                                                        <span className="text-[6px]">{item.icon}</span>
-                                                        <div className="flex-1">
-                                                            <div className="text-[5px] text-gray-500 dark:text-gray-400">{item.label}</div>
-                                                            <div className="text-[6px] font-bold text-gray-700 dark:text-gray-300">{item.value}</div>
-                                                        </div>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </BrowserWindow>
-                                    )
-                                }
+                                // Mapeo de rutas a imágenes de captura de pantalla reales
+                                const previewImages = {
+                                    '/reservas': '/previews/reservas.png',
+                                    '/registro': '/previews/registro.png',
+                                    '/galeria': '/previews/galeria.png',
+                                    '/guia': '/previews/guia.png'
+                                };
 
                                 return (
                                     <Link
@@ -486,13 +329,13 @@ export default function Landing() {
                                         to={item.path}
                                         className="group bg-surface-card dark:bg-surface-card-dark rounded-xl border border-border-card dark:border-border-card-dark hover:shadow-lg hover:border-primary hover:scale-[1.02] transition-all duration-300 overflow-hidden"
                                     >
-                                        {/* Preview Area */}
-                                        <div className="aspect-[4/3] border-b border-border-card dark:border-border-card-dark overflow-hidden relative">
-                                            {previewContent[item.path] || (
-                                                <div className="w-full h-full bg-surface-light dark:bg-surface-card-dark flex items-center justify-center">
-                                                    <span className="material-symbols-outlined text-4xl text-text-muted/30">{item.icon}</span>
-                                                </div>
-                                            )}
+                                        {/* Preview Area - Captura de pantalla real */}
+                                        <div className="aspect-[4/3] border-b border-border-card dark:border-border-card-dark overflow-hidden relative bg-white">
+                                            <img
+                                                src={previewImages[item.path]}
+                                                alt={`Vista previa de ${item.title}`}
+                                                className="w-full h-full object-cover object-top"
+                                            />
                                             {/* Icono flotante */}
                                             <div className="absolute top-2 left-2">
                                                 <div
