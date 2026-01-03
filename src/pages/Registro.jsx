@@ -60,10 +60,10 @@ export default function CheckIn() {
 
     // Colores configurables
     const [siteColors, setSiteColors] = useState({
-        warningBg: '#d8f3dc',
-        warningText: '#2d6a4f',
-        warningIcon: '#2d6a4f',
-        warningBorder: '#b7e4c7'
+        warningBg: '#2d6a4f',
+        warningText: '#ffffff',
+        warningIcon: '#ffffff',
+        warningBorder: '#1b4332'
     })
 
     // Contenido dinámico de la página
@@ -612,7 +612,7 @@ export default function CheckIn() {
                         <div className="bg-surface-card dark:bg-surface-card-dark rounded-2xl p-6 shadow-xl shadow-gray-200/50 dark:shadow-black/20 border border-border-card dark:border-border-card-dark">
                             <div className="flex justify-between items-center mb-6">
                                 <h3 className="text-lg font-bold">Tu Reserva</h3>
-                                <span className={`text-xs font-bold px-3 py-1 rounded-full bg-[#3db814] text-white shadow-sm`}>
+                                <span className="text-xs font-bold px-3 py-1 rounded-full bg-[#2d6a4f] text-white shadow-sm">
                                     {reservaValidada ? 'Verificada' : 'Pendiente'}
                                 </span>
                             </div>

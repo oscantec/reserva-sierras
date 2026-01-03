@@ -45,8 +45,15 @@ export default function Seguridad() {
     return (
         <div className="flex flex-col h-full bg-background-light dark:bg-background-dark">
             <header className="bg-white dark:bg-surface-card-dark border-b border-border-card dark:border-border-card-dark px-6 py-4">
-                <h1 className="text-2xl font-black text-gray-900 dark:text-white">Seguridad</h1>
-                <p className="text-text-subtitle dark:text-text-subtitle-dark text-sm">Gestiona el acceso y la protección de tu cuenta administrativa</p>
+                <div className="flex flex-col gap-3">
+                    <div>
+                        <h1 className="text-2xl font-black text-gray-900 dark:text-white">Seguridad</h1>
+                        <p className="text-text-subtitle dark:text-text-subtitle-dark text-sm">Gestiona el acceso y la protección de tu cuenta administrativa</p>
+                    </div>
+                    <div className="h-2 w-full rounded-full bg-icon-bg-secondary dark:bg-border-card-dark relative overflow-hidden">
+                        <div className="absolute top-0 left-0 h-full w-full bg-primary rounded-full"></div>
+                    </div>
+                </div>
             </header>
 
             <div className="flex-1 overflow-y-auto p-6">

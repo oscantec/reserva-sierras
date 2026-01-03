@@ -397,10 +397,10 @@ const DEFAULT_COLORS = {
     navMaps: '#006076',
 
     // === ALERTAS - WARNING ===
-    warningBg: '#d8f3dc',
-    warningText: '#2d6a4f',
-    warningIcon: '#2d6a4f',
-    warningBorder: '#b7e4c7',
+    warningBg: '#2d6a4f',
+    warningText: '#ffffff',
+    warningIcon: '#ffffff',
+    warningBorder: '#1b4332',
 
     // === ALERTAS - INFO ===
     infoBg: '#0094a8',
@@ -2861,11 +2861,7 @@ export default function AdminContenido() {
             </header>
 
             <div className="flex-1 overflow-hidden flex flex-col">
-                {/* Tabs Organizados en dos secciones */}
-                <div className="bg-white px-4 overflow-x-auto">
-                    <div className="h-1.5 w-full bg-gray-100 dark:bg-border-card-dark relative overflow-hidden -mx-4">
-                        <div className="absolute top-0 left-0 h-full w-full bg-[#3db814] shadow-[0_0_10px_rgba(61,184,20,0.4)]"></div>
-                    </div>
+                <div className="bg-white border-b border-border-card px-4 overflow-x-auto">
                     <div className="flex gap-1 min-w-max py-2 items-center">
                         {/* Sección CONTENIDO PÁGINAS */}
                         <span className="text-[10px] font-bold text-text-muted uppercase tracking-wider px-2">Contenido</span>
@@ -2925,6 +2921,6 @@ export default function AdminContenido() {
                     {renderTabContent()}
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
