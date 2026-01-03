@@ -51,7 +51,7 @@ export default function Seguridad() {
                         <p className="text-text-subtitle dark:text-text-subtitle-dark text-sm">Gestiona el acceso y la protección de tu cuenta administrativa</p>
                     </div>
                     <div className="h-2 w-full rounded-full bg-icon-bg-secondary dark:bg-border-card-dark relative overflow-hidden">
-                        <div className="absolute top-0 left-0 h-full w-full bg-primary rounded-full"></div>
+                        <div className="absolute top-0 left-0 h-full w-full bg-[#2d6a4f] rounded-full"></div>
                     </div>
                 </div>
             </header>

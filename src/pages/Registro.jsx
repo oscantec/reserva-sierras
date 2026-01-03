@@ -341,7 +341,7 @@ export default function CheckIn() {
                                         <p className="mt-1 text-xs text-text-muted">Ingresa la letra R seguida de los números de tu reserva</p>
                                     </div>
                                     <button
-                                        className="w-full md:w-auto px-6 py-3 bg-primary hover:bg-btn-primary-hover text-white font-bold rounded-lg shadow-lg shadow-card transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                                        className="w-full md:w-auto px-6 py-3 bg-[#2d6a4f] hover:opacity-90 text-white font-bold rounded-lg shadow-lg transition-all flex items-center justify-center gap-2"
                                         type="button"
                                         onClick={validarReserva}
                                         disabled={validando || reservaValidada !== null}

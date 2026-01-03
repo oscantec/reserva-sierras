@@ -317,7 +317,7 @@ export default function PaymentSection() {
                                     <button
                                         onClick={validateAccess}
                                         disabled={isValidating || !reservationRef.trim() || !codigoUnico.trim()}
-                                        className="w-full py-3 px-6 rounded-xl bg-[#2d6a4f] hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold shadow-lg transition-all flex items-center justify-center gap-2"
+                                        className="w-full py-3 px-6 rounded-xl bg-[#2d6a4f] hover:opacity-90 text-white font-bold shadow-lg transition-all flex items-center justify-center gap-2"
                                     >
                                         {isValidating ? (
                                             <>
