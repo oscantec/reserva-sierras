@@ -220,7 +220,7 @@ export default function PaymentSection() {
                                 onClick={() => handleMethodClick(method.id)}
                                 className="flex flex-col items-center gap-2 p-4 rounded-xl border-2 border-transparent bg-surface-card dark:bg-surface-card-dark hover:border-primary hover:shadow-md hover:scale-[1.02] transition-all text-center group"
                             >
-                                <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-icon-bg-primary text-icon-color group-hover:bg-primary group-hover:text-white transition-colors">
+                                <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-icon-bg-primary text-icon-color group-hover:bg-[#2d6a4f] group-hover:text-white transition-colors">
                                     <span className="material-symbols-outlined text-2xl">{method.icon}</span>
                                 </div>
                                 <div>
@@ -317,7 +317,7 @@ export default function PaymentSection() {
                                     <button
                                         onClick={validateAccess}
                                         disabled={isValidating || !reservationRef.trim() || !codigoUnico.trim()}
-                                        className="w-full py-3 px-6 rounded-xl bg-primary hover:bg-btn-primary-hover disabled:bg-border-card disabled:cursor-not-allowed text-white font-bold shadow-lg shadow-card transition-all flex items-center justify-center gap-2"
+                                        className="w-full py-3 px-6 rounded-xl bg-[#2d6a4f] hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold shadow-lg transition-all flex items-center justify-center gap-2"
                                     >
                                         {isValidating ? (
                                             <>
@@ -339,7 +339,7 @@ export default function PaymentSection() {
                                     <div className="bg-surface-card dark:bg-surface-card-dark rounded-2xl p-6 shadow-xl shadow-gray-200/50 dark:shadow-black/20 border border-border-card dark:border-border-card-dark">
                                         <div className="flex justify-between items-center mb-6">
                                             <h3 className="text-lg font-bold">Tu Reserva</h3>
-                                            <span className="bg-icon-bg-primary dark:bg-icon-bg-dark text-icon-color text-xs font-bold px-2 py-1 rounded flex items-center gap-1">
+                                            <span className="bg-[#2d6a4f] text-white text-xs font-bold px-2 py-1 rounded flex items-center gap-1">
                                                 <span className="material-symbols-outlined text-sm">verified</span>
                                                 Verificada
                                             </span>
@@ -370,7 +370,7 @@ export default function PaymentSection() {
                                             <div className="h-px bg-icon-bg-primary dark:bg-border-card-dark my-2"></div>
                                             <div className="flex justify-between items-center">
                                                 <span className="font-bold text-lg">Saldo pendiente</span>
-                                                <span className="font-black text-2xl text-icon-color">{formatPrice(validatedReservation.total - validatedReservation.abono)}</span>
+                                                <span className="font-black text-2xl text-[#2d6a4f]">{formatPrice(validatedReservation.total - validatedReservation.abono)}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -461,7 +461,7 @@ export default function PaymentSection() {
                                             const whatsappNumber = config.paymentWhatsappNumber.replace(/\D/g, '') // Remove non-digits
                                             window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank')
                                         }}
-                                        className="w-full h-12 rounded-lg bg-primary hover:bg-btn-primary-hover text-white font-bold text-base shadow-lg shadow-primary/30 transition-all transform active:scale-95 flex items-center justify-center gap-2"
+                                        className="w-full h-12 rounded-lg bg-[#2d6a4f] hover:opacity-90 text-white font-bold text-base shadow-lg transition-all transform active:scale-95 flex items-center justify-center gap-2"
                                     >
                                         <span className="material-symbols-outlined text-sm">send</span>
                                         Enviar Comprobante por WhatsApp
