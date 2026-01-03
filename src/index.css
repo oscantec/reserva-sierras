@@ -63,7 +63,7 @@
 
   /* === BADGES === */
   --color-badge-bg: #3db814;
-  --color-badge-text: #000000;
+  --color-badge-text: #ffffff;
 
   /* === PLATAFORMAS === */
   --color-platform-airbnb: #FF5A5F;
@@ -78,7 +78,7 @@
   /* === ALERTAS - WARNING === */
   --color-warning-bg: #2f4858;
   --color-warning-text: #ffffff;
-  --color-warning-icon: #ff6600;
+  --color-warning-icon: #3db814;
   --color-warning-border: #3db814;
 
   /* === ALERTAS - INFO === */

@@ -62,7 +62,7 @@ export default function CheckIn() {
     const [siteColors, setSiteColors] = useState({
         warningBg: '#2f4858',
         warningText: '#ffffff',
-        warningIcon: '#ff6600',
+        warningIcon: '#3db814',
         warningBorder: '#3db814'
     })
 
@@ -612,7 +612,7 @@ export default function CheckIn() {
                         <div className="bg-surface-card dark:bg-surface-card-dark rounded-2xl p-6 shadow-xl shadow-gray-200/50 dark:shadow-black/20 border border-border-card dark:border-border-card-dark">
                             <div className="flex justify-between items-center mb-6">
                                 <h3 className="text-lg font-bold">Tu Reserva</h3>
-                                <span className={`text-xs font-bold px-2 py-1 rounded ${reservaValidada ? 'bg-icon-bg-primary dark:bg-icon-bg-dark text-icon-color' : 'bg-icon-bg-primary dark:bg-gray-800 text-text-muted'}`}>
+                                <span className={`text-xs font-bold px-3 py-1 rounded-full ${reservaValidada ? 'bg-primary text-white shadow-sm' : 'bg-primary/80 text-white shadow-sm'}`}>
                                     {reservaValidada ? 'Verificada' : 'Pendiente'}
                                 </span>
                             </div>

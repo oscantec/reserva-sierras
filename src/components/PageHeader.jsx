@@ -52,9 +52,9 @@ const PageHeader = ({
                 )}
             </div>
 
-            <div className="h-2 w-full rounded-full bg-icon-bg-secondary dark:bg-border-card-dark mt-2 relative overflow-hidden">
+            <div className="h-1.5 w-full rounded-full bg-gray-100 dark:bg-border-card-dark mt-2 relative overflow-hidden">
                 <div
-                    className="absolute top-0 left-0 h-full bg-primary rounded-full transition-all duration-500 ease-in-out"
+                    className="absolute top-0 left-0 h-full bg-[#3db814] rounded-full transition-all duration-500 ease-in-out shadow-[0_0_8px_rgba(61,184,20,0.3)]"
                     style={{ width: `${displayProgress}%` }}
                 ></div>
             </div>
