@@ -5,6 +5,12 @@ import Footer from '../components/Footer'
 import { DEFAULT_CONFIG } from '../utils/config'
 import PageHeader from '../components/PageHeader'
 
+// Imágenes de previsualizaciones para las cards de Explora el Sitio
+import previewReservas from '../images/imagesinicio/reservas.png'
+import previewRegistro from '../images/imagesinicio/registro.png'
+import previewGaleria from '../images/imagesinicio/galeria.png'
+import previewGuia from '../images/imagesinicio/guia.png'
+
 // Helper function to extract YouTube video ID from various URL formats
 function getYouTubeVideoId(url) {
     if (!url) return null
@@ -315,12 +321,12 @@ export default function Landing() {
                         </div>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
                             {exploraSitio.items.map((item, i) => {
-                                // Mapeo de rutas a imágenes de captura de pantalla reales
+                                // Mapeo de rutas a imágenes de previsualizaciones
                                 const previewImages = {
-                                    '/reservas': '/previews/reservas.png',
-                                    '/registro': '/previews/registro.png',
-                                    '/galeria': '/previews/galeria.png',
-                                    '/guia': '/previews/guia.png'
+                                    '/reservas': previewReservas,
+                                    '/registro': previewRegistro,
+                                    '/galeria': previewGaleria,
+                                    '/guia': previewGuia
                                 };
 
                                 return (
