@@ -397,10 +397,10 @@ const DEFAULT_COLORS = {
     navMaps: '#006076',
 
     // === ALERTAS - WARNING ===
-    warningBg: '#2f4858',
-    warningText: '#ffffff',
-    warningIcon: '#3db814',
-    warningBorder: '#3db814',
+    warningBg: '#d8f3dc',
+    warningText: '#2d6a4f',
+    warningIcon: '#2d6a4f',
+    warningBorder: '#b7e4c7',
 
     // === ALERTAS - INFO ===
     infoBg: '#0094a8',
@@ -2854,15 +2854,18 @@ export default function AdminContenido() {
                             {saving ? 'Guardando...' : saved ? 'Guardado' : 'Guardar'}
                         </button>
                     </div>
-                    <div className="h-1.5 w-full rounded-full bg-gray-100 dark:bg-border-card-dark relative overflow-hidden">
-                        <div className="absolute top-0 left-0 h-full w-full bg-[#3db814] rounded-full shadow-[0_0_10px_rgba(61,184,20,0.4)]"></div>
+                    <div className="h-2 w-full rounded-full bg-icon-bg-secondary dark:bg-border-card-dark relative overflow-hidden">
+                        <div className="absolute top-0 left-0 h-full w-full bg-primary rounded-full"></div>
                     </div>
                 </div>
             </header>
 
             <div className="flex-1 overflow-hidden flex flex-col">
                 {/* Tabs Organizados en dos secciones */}
-                <div className="bg-white border-b border-border-card px-4 overflow-x-auto">
+                <div className="bg-white px-4 overflow-x-auto">
+                    <div className="h-1.5 w-full bg-gray-100 dark:bg-border-card-dark relative overflow-hidden -mx-4">
+                        <div className="absolute top-0 left-0 h-full w-full bg-[#3db814] shadow-[0_0_10px_rgba(61,184,20,0.4)]"></div>
+                    </div>
                     <div className="flex gap-1 min-w-max py-2 items-center">
                         {/* Sección CONTENIDO PÁGINAS */}
                         <span className="text-[10px] font-bold text-text-muted uppercase tracking-wider px-2">Contenido</span>

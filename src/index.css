@@ -76,10 +76,10 @@
   --color-nav-maps: #006076;
 
   /* === ALERTAS - WARNING === */
-  --color-warning-bg: #2f4858;
-  --color-warning-text: #ffffff;
-  --color-warning-icon: #3db814;
-  --color-warning-border: #3db814;
+  --color-warning-bg: #d8f3dc;
+  --color-warning-text: #2d6a4f;
+  --color-warning-icon: #2d6a4f;
+  --color-warning-border: #b7e4c7;
 
   /* === ALERTAS - INFO === */
   --color-info-bg: #e0f7f4;
