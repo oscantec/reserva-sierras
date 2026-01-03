@@ -271,11 +271,11 @@ export default function Landing() {
                 />
 
                 {/* Amenities Grid - Compact 2-column mobile layout */}
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-6 mb-4 md:mb-8">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6 mb-4 md:mb-8">
                     {amenidades.map((item, i) => (
-                        <div key={i} className={`bg-surface-card dark:bg-surface-card-dark rounded-lg md:rounded-xl p-3 md:p-6 border border-border-card dark:border-border-card-dark hover:shadow-md transition-all ${i === amenidades.length - 1 && amenidades.length % 2 !== 0 ? 'col-span-2 md:col-span-1' : ''}`}>
+                        <div key={i} className={`bg-surface-card dark:bg-surface-card-dark rounded-xl p-3 md:p-6 border border-border-card dark:border-border-card-dark hover:shadow-md hover:border-primary transition-all duration-300 ${i === amenidades.length - 1 && amenidades.length % 2 !== 0 ? 'col-span-2 md:col-span-1' : ''}`}>
                             <div
-                                className="w-8 h-8 md:w-12 md:h-12 rounded-lg flex items-center justify-center mb-2 md:mb-4"
+                                className="w-8 h-8 md:w-12 md:h-12 rounded-xl flex items-center justify-center mb-2 md:mb-4"
                                 style={{ backgroundColor: 'var(--color-icon-bg)' }}
                             >
                                 <span className="material-symbols-outlined text-lg md:text-2xl" style={{ color: 'var(--color-primary)' }}>{item.icon}</span>
@@ -295,7 +295,7 @@ export default function Landing() {
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6">
                             {destacados.items.map((item, i) => (
-                                <div key={i} className="bg-surface-card dark:bg-surface-card-dark rounded-xl p-4 md:p-6 border border-border-card dark:border-border-card-dark hover:shadow-md transition-all flex items-start gap-4">
+                                <div key={i} className="bg-surface-card dark:bg-surface-card-dark rounded-xl p-4 md:p-6 border border-border-card dark:border-border-card-dark hover:shadow-md hover:border-primary transition-all duration-300 flex items-start gap-4">
                                     <div
                                         className="w-12 h-12 md:w-14 md:h-14 rounded-xl flex items-center justify-center flex-shrink-0"
                                         style={{ backgroundColor: 'var(--color-icon-bg)' }}
@@ -303,7 +303,7 @@ export default function Landing() {
                                         <span className="material-symbols-outlined text-2xl md:text-3xl" style={{ color: 'var(--color-primary)' }}>{item.icon}</span>
                                     </div>
                                     <div>
-                                        <h3 className="text-base md:text-lg font-black mb-1" style={{ color: 'var(--color-primary)' }}>{item.title}</h3>
+                                        <h3 className="text-base md:text-lg font-bold mb-1">{item.title}</h3>
                                         <p className="text-sm text-text-muted dark:text-text-muted">{item.description}</p>
                                     </div>
                                 </div>
@@ -354,7 +354,7 @@ export default function Landing() {
 
                                         {/* Content */}
                                         <div className="p-3 md:p-4">
-                                            <h3 className="text-base md:text-lg font-bold mb-1 group-hover:text-primary transition-colors">{item.title}</h3>
+                                            <h3 className="text-base md:text-lg font-bold mb-1">{item.title}</h3>
                                             <p className="text-xs md:text-sm text-text-muted dark:text-text-muted line-clamp-2">{item.description}</p>
                                         </div>
                                     </Link>
