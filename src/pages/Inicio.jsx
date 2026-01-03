@@ -335,8 +335,8 @@ export default function Landing() {
                                         to={item.path}
                                         className="group bg-surface-card dark:bg-surface-card-dark rounded-xl border border-border-card dark:border-border-card-dark hover:shadow-md hover:border-primary transition-all duration-300 overflow-hidden"
                                     >
-                                        {/* Preview Area - Captura de pantalla real */}
-                                        <div className="aspect-[4/3] border-b border-border-card dark:border-border-card-dark overflow-hidden relative bg-white">
+                                        {/* Preview Area - Imagen panorámica */}
+                                        <div className="aspect-[2/1] border-b border-border-card dark:border-border-card-dark overflow-hidden relative bg-white">
                                             <img
                                                 src={previewImages[item.path]}
                                                 alt={`Vista previa de ${item.title}`}
