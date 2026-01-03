@@ -151,6 +151,17 @@ export default function Landing() {
                 blurAmount: config.heroBlurAmount ?? prev.blurAmount,
                 phrases: config.heroRotatingPhrases || prev.phrases
             }))
+            // Load all other dynamic content fields
+            if (config.inicioContent?.intro) setIntro(config.inicioContent.intro)
+            if (config.inicioContent?.amenidades) setAmenidades(config.inicioContent.amenidades)
+            if (config.inicioContent?.destacados) setDestacados(config.inicioContent.destacados)
+            if (config.inicioContent?.exploraSitio) setExploraSitio(config.inicioContent.exploraSitio)
+            if (config.checkInTime || config.checkOutTime) {
+                setCheckTimes({
+                    checkIn: config.checkInTime || INITIAL_STATE.checkInTime,
+                    checkOut: config.checkOutTime || INITIAL_STATE.checkOutTime
+                })
+            }
         }
         loadConfig()
     }, [])

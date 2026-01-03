@@ -56,22 +56,47 @@ export default function Booking() {
         fetchReservations()
     }, [])
 
-    // Load pricing from localStorage (to override defaults if available)
+    // Load pricing and content from API (overrides defaults and localStorage)
     useEffect(() => {
-        const config = JSON.parse(localStorage.getItem('casacampestre_config') || '{}')
-        if (config.pricing) {
-            setPricing(prev => ({ ...DEFAULT_CONFIG.pricing, ...config.pricing }))
+        const loadConfig = async () => {
+            // 1. Try API first
+            try {
+                const response = await fetch('/api/config')
+                if (response.ok) {
+                    const config = await response.json()
+                    if (Object.keys(config).length > 0) {
+                        applyConfig(config)
+                        localStorage.setItem('casacampestre_config', JSON.stringify(config))
+                        return
+                    }
+                }
+            } catch (e) {
+                console.log('API not available, using localStorage')
+            }
+
+            // 2. Fallback to localStorage
+            const saved = localStorage.getItem('casacampestre_config')
+            if (saved) {
+                applyConfig(JSON.parse(saved))
+            }
         }
-        if (config.siteColors?.discountText) {
-            setSiteColors(prev => ({
-                ...prev,
-                discountText: config.siteColors.discountText
-            }))
+
+        const applyConfig = (config) => {
+            if (config.pricing) {
+                setPricing(prev => ({ ...DEFAULT_CONFIG.pricing, ...config.pricing }))
+            }
+            if (config.siteColors?.discountText) {
+                setSiteColors(prev => ({
+                    ...prev,
+                    discountText: config.siteColors.discountText
+                }))
+            }
+            if (config.reservasContent) {
+                setPageContent(prev => ({ ...prev, ...config.reservasContent }))
+            }
         }
-        // Load page content
-        if (config.reservasContent) {
-            setPageContent(prev => ({ ...prev, ...config.reservasContent }))
-        }
+
+        loadConfig()
     }, [])
 
     // Check if a date is reserved

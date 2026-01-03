@@ -134,11 +134,32 @@ export default function Gallery() {
         categoryHumedas: 'Zonas Húmedas'
     })
 
-    // Load custom labels from localStorage (overrides if available)
+    // Load custom labels and content from API (overrides defaults and localStorage)
     useEffect(() => {
-        const saved = localStorage.getItem('casacampestre_config')
-        if (saved) {
-            const config = JSON.parse(saved)
+        const loadConfig = async () => {
+            // 1. Try API first
+            try {
+                const response = await fetch('/api/config')
+                if (response.ok) {
+                    const config = await response.json()
+                    if (Object.keys(config).length > 0) {
+                        applyConfig(config)
+                        localStorage.setItem('casacampestre_config', JSON.stringify(config))
+                        return
+                    }
+                }
+            } catch (e) {
+                console.log('API not available, using localStorage')
+            }
+
+            // 2. Fallback to localStorage
+            const saved = localStorage.getItem('casacampestre_config')
+            if (saved) {
+                applyConfig(JSON.parse(saved))
+            }
+        }
+
+        const applyConfig = (config) => {
             if (config.galeriaLabels) {
                 setCustomLabels(prev => ({ ...prev, ...config.galeriaLabels }))
             }
@@ -146,6 +167,8 @@ export default function Gallery() {
                 setPageContent(prev => ({ ...prev, ...config.galeriaContent }))
             }
         }
+
+        loadConfig()
     }, [])
 
     // Keyboard navigation for lightbox
