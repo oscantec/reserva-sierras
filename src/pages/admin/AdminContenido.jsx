@@ -190,6 +190,12 @@ const getDefaultGaleriaContent = () => ({
     categoryHumedas: 'Zonas Húmedas'
 })
 
+// Contenido editable para Guía
+const getDefaultGuiaContent = () => ({
+    pageTitle: 'Guía del Huésped',
+    pageSubtitle: 'Todo lo que necesitas saber para tu estadía.'
+})
+
 // Tabs principales (por página)
 // === TABS ORGANIZADOS EN DOS SECCIONES ===
 const CONTENT_TABS = [
@@ -258,6 +264,7 @@ const INICIO_SUBTABS = [
 
 // Sub-tabs para la página de Guía (operativa)
 const GUIA_SUBTABS = [
+    { id: 'encabezado', label: 'Encabezado', icon: 'title' },
     { id: 'contacto', label: 'Contacto', icon: 'chat' },
     { id: 'pagos', label: 'Pagos', icon: 'payment' },
     { id: 'zonas', label: 'Zonas Húmedas', icon: 'pool' },
@@ -504,6 +511,7 @@ export default function AdminContenido() {
     const [registroContent, setRegistroContent] = useState(getDefaultRegistroContent())
     const [reservasContent, setReservasContent] = useState(getDefaultReservasContent())
     const [galeriaContent, setGaleriaContent] = useState(getDefaultGaleriaContent())
+    const [guiaContent, setGuiaContent] = useState(getDefaultGuiaContent())
     const [galeriaLabels, setGaleriaLabels] = useState({})
     const [siteColors, setSiteColors] = useState(DEFAULT_COLORS)
     const [siteFonts, setSiteFonts] = useState({
@@ -674,6 +682,9 @@ export default function AdminContenido() {
                 if (parsed.galeriaContent) {
                     setGaleriaContent(prev => ({ ...prev, ...parsed.galeriaContent }))
                 }
+                if (parsed.guiaContent) {
+                    setGuiaContent(prev => ({ ...prev, ...parsed.guiaContent }))
+                }
                 if (parsed.siteColors) {
                     setSiteColors(prev => ({ ...prev, ...parsed.siteColors }))
                     applyColors({ ...DEFAULT_COLORS, ...parsed.siteColors })
@@ -714,6 +725,7 @@ export default function AdminContenido() {
             registroContent,
             reservasContent,
             galeriaContent,
+            guiaContent,
             galeriaLabels,
             siteColors,
             siteFonts, // Tipografías
@@ -1661,6 +1673,35 @@ export default function AdminContenido() {
                             </div>
                         </div>
                     ))}
+                </div>
+            </div>
+        </div>
+    )
+
+    const renderGuiaEncabezadoTab = () => (
+        <div className="space-y-6">
+            {/* Page Header Config */}
+            <div className="bg-white rounded-xl p-6 border border-border-card">
+                <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+                    <span className="material-symbols-outlined text-icon-color">title</span>
+                    Encabezado de Página
+                </h3>
+                <p className="text-sm text-text-muted mb-4">
+                    Este título y subtítulo aparecen en la parte superior de la página "Guía del Huésped".
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label className="block text-sm font-medium text-text-main-light mb-1">Título de la Página</label>
+                        <input type="text" value={guiaContent.pageTitle || ''}
+                            onChange={e => setGuiaContent(prev => ({ ...prev, pageTitle: e.target.value }))}
+                            placeholder="Guía del Huésped" className="w-full px-4 py-2 border border-border-card rounded-lg" />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-text-main-light mb-1">Subtítulo</label>
+                        <input type="text" value={guiaContent.pageSubtitle || ''}
+                            onChange={e => setGuiaContent(prev => ({ ...prev, pageSubtitle: e.target.value }))}
+                            placeholder="Todo lo que necesitas saber para tu estadía." className="w-full px-4 py-2 border border-border-card rounded-lg" />
+                    </div>
                 </div>
             </div>
         </div>
@@ -2775,6 +2816,7 @@ export default function AdminContenido() {
         // Página Guía con sus sub-tabs operativos
         if (activePageTab === 'guia') {
             switch (activeSubTab) {
+                case 'encabezado': return renderGuiaEncabezadoTab()
                 case 'contacto': return renderContactoTab()
                 case 'pagos': return renderPagosTab()
                 case 'zonas': return renderZonasTab()
@@ -2782,7 +2824,7 @@ export default function AdminContenido() {
                 case 'normas': return renderRulesTab()
                 case 'ubicacion': return renderLocationTab()
                 case 'checkout': return renderCheckoutTab()
-                default: return renderContactoTab()
+                default: return renderGuiaEncabezadoTab()
             }
         }
 
@@ -2825,7 +2867,7 @@ export default function AdminContenido() {
                         {/* Sección CONTENIDO PÁGINAS */}
                         <span className="text-[10px] font-bold text-text-muted uppercase tracking-wider px-2">Contenido</span>
                         {CONTENT_TABS.map(tab => (
-                            <button key={tab.id} onClick={() => { setActivePageTab(tab.id); if (tab.id === 'inicio') setActiveSubTab('general'); if (tab.id === 'guia') setActiveSubTab('contacto'); }}
+                            <button key={tab.id} onClick={() => { setActivePageTab(tab.id); if (tab.id === 'inicio') setActiveSubTab('general'); if (tab.id === 'guia') setActiveSubTab('encabezado'); }}
                                 className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-bold transition-all whitespace-nowrap ${activePageTab === tab.id ? 'bg-primary text-white shadow-md' : 'text-text-muted hover:bg-icon-bg-primary'}`}>
                                 <span className="material-symbols-outlined text-lg">{tab.icon}</span>
                                 <span>{tab.label}</span>

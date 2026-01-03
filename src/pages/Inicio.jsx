@@ -327,7 +327,7 @@ export default function Landing() {
                                     <Link
                                         key={i}
                                         to={item.path}
-                                        className="group bg-surface-card dark:bg-surface-card-dark rounded-xl border border-border-card dark:border-border-card-dark hover:shadow-lg hover:border-primary hover:scale-[1.02] transition-all duration-300 overflow-hidden"
+                                        className="group bg-surface-card dark:bg-surface-card-dark rounded-xl border border-border-card dark:border-border-card-dark hover:shadow-md hover:border-primary transition-all duration-300 overflow-hidden"
                                     >
                                         {/* Preview Area - Captura de pantalla real */}
                                         <div className="aspect-[4/3] border-b border-border-card dark:border-border-card-dark overflow-hidden relative bg-white">
@@ -341,7 +341,7 @@ export default function Landing() {
                                                 <div
                                                     className="w-7 h-7 md:w-8 md:h-8 rounded-lg flex items-center justify-center bg-white dark:bg-surface-card-dark shadow-sm border border-border-card dark:border-border-card-dark group-hover:bg-primary group-hover:border-primary transition-all"
                                                 >
-                                                    <span className="material-symbols-outlined text-sm md:text-base text-icon-color group-hover:text-white transition-colors">{item.icon}</span>
+                                                    <span className="material-symbols-outlined text-sm md:text-base group-hover:text-white transition-colors" style={{ color: 'var(--color-primary)' }}>{item.icon}</span>
                                                 </div>
                                             </div>
                                         </div>
