@@ -4,6 +4,7 @@ import Footer from '../components/Footer'
 import { fetchAllCalendars } from '../utils/icalParser'
 import { DEFAULT_CONFIG } from '../utils/config'
 import { isHoliday, getHolidayName } from '../utils/holidays'
+import PageHeader from '../components/PageHeader'
 
 export default function Booking() {
     const [currentMonth, setCurrentMonth] = useState(new Date())
@@ -424,21 +425,13 @@ export default function Booking() {
             <Navbar />
             <main className="max-w-7xl mx-auto px-4 md:px-8 py-8 flex flex-col lg:flex-row gap-8 w-full">
                 <div className="flex-1 flex flex-col gap-8">
-                    <div className="flex flex-col gap-3">
-                        <div className="flex justify-between items-end">
-                            <div>
-                                <h1 className="text-3xl md:text-4xl font-black leading-tight tracking-[-0.033em] mb-2">{pageContent.pageTitle}</h1>
-                                <p className="text-text-subtitle dark:text-text-subtitle-dark text-base">{pageContent.pageSubtitle}</p>
-                            </div>
-                            <div className="text-right hidden sm:block">
-                                <p className="text-sm font-bold text-primary">{pageContent.stepIndicator}</p>
-                                <p className="text-xs text-text-muted dark:text-text-muted">{pageContent.stepLabel}</p>
-                            </div>
-                        </div>
-                        <div className="h-2 w-full rounded-full bg-icon-bg-secondary dark:bg-border-card-dark mt-2 relative overflow-hidden">
-                            <div className="absolute top-0 left-0 h-full w-[25%] bg-primary rounded-full"></div>
-                        </div>
-                    </div>
+                    <PageHeader
+                        title={pageContent.pageTitle}
+                        subtitle={pageContent.pageSubtitle}
+                        currentStep={1}
+                        totalSteps={4}
+                        stepLabel={pageContent.stepLabel}
+                    />
 
                     <div className="bg-surface-card dark:bg-surface-card-dark rounded-xl p-6 shadow-sm border border-border-card dark:border-border-card-dark">
                         <div className="flex flex-col xl:flex-row gap-8 justify-center">

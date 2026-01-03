@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { DEFAULT_CONFIG } from '../utils/config'
+import PageHeader from '../components/PageHeader'
 import placeholders from '../images/placeholders.json'
 
 // Helper to get medium quality image path
@@ -334,20 +335,12 @@ export default function Gallery() {
             <Navbar />
 
             {/* Header Section - Same style as Reservas */}
-            <div className="max-w-7xl mx-auto px-4 md:px-8 pt-8 w-full">
-                <div className="flex flex-col gap-3">
-                    <div className="flex justify-between items-end">
-                        <div>
-                            <h1 className="text-3xl md:text-4xl font-black leading-tight tracking-[-0.033em] mb-2">{pageContent.pageTitle}</h1>
-                            <p className="text-text-subtitle dark:text-text-subtitle-dark text-base">{pageContent.pageSubtitle}</p>
-                        </div>
-
-                    </div>
-                    <div className="h-2 w-full rounded-full bg-icon-bg-secondary dark:bg-border-card-dark mt-2 relative overflow-hidden">
-                        <div className="absolute top-0 left-0 h-full w-full bg-primary rounded-full"></div>
-                    </div>
-                </div>
-            </div>
+            <PageHeader
+                title={pageContent.pageTitle}
+                subtitle={pageContent.pageSubtitle}
+                progress={100}
+                className="max-w-7xl mx-auto px-4 md:px-8 pt-8"
+            />
 
             {/* Hero Header with marquee */}
             <div className="relative overflow-hidden py-8" style={{ minHeight: '320px' }}>

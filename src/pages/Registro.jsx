@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { fetchReservasData, appendHuespedData } from '../utils/googleSheets'
+import PageHeader from '../components/PageHeader'
 
 // Lista de países con Colombia primero
 const COUNTRIES = [
@@ -289,24 +290,13 @@ export default function CheckIn() {
             <main className="max-w-7xl mx-auto px-4 md:px-8 py-8 flex flex-col lg:flex-row gap-8 w-full">
                 {/* Main Form */}
                 <div className="flex-1 flex flex-col gap-8">
-                    {/* Header - Style from Reservas */}
-                    <div className="flex flex-col gap-3">
-                        <div className="flex justify-between items-end">
-                            <div>
-                                <h1 className="text-3xl md:text-4xl font-black leading-tight tracking-[-0.033em] mb-2">{pageContent.pageTitle}</h1>
-                                <p className="text-text-subtitle dark:text-text-subtitle-dark text-base">{pageContent.pageSubtitle}</p>
-                            </div>
-                            <div className="text-right hidden sm:block">
-                                <p className="text-sm font-bold text-primary">Paso {step} de 3</p>
-                                <p className="text-xs text-text-muted dark:text-text-muted">
-                                    {step === 1 ? 'Validación' : step === 2 ? 'Datos' : 'Confirmado'}
-                                </p>
-                            </div>
-                        </div>
-                        <div className="h-2 w-full rounded-full bg-icon-bg-secondary dark:bg-border-card-dark mt-2 relative overflow-hidden">
-                            <div className="absolute top-0 left-0 h-full bg-primary rounded-full transition-all duration-500" style={{ width: `${getProgress()}%` }}></div>
-                        </div>
-                    </div>
+                    <PageHeader
+                        title={pageContent.pageTitle}
+                        subtitle={pageContent.pageSubtitle}
+                        currentStep={step}
+                        totalSteps={3}
+                        stepLabel={step === 1 ? 'Validación' : step === 2 ? 'Datos' : 'Confirmado'}
+                    />
 
                     {enviado ? (
                         /* Confirmación exitosa */
