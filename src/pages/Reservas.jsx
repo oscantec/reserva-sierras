@@ -561,26 +561,28 @@ export default function Booking() {
                                             }
 
                                             // 4. ESTILOS DE TEXTO Y CURSOR
-                                            let textClass = "text-gray-700 dark:text-white font-medium"
+                                            // Unificado: todas las fechas usan gris oscuro (gray-800)
+                                            let textClass = "text-gray-800 dark:text-white font-medium"
                                             let cursorClass = "cursor-pointer"
                                             let borderClass = ""
                                             let hoverClass = "hover:ring-2 hover:ring-primary/30"
 
-                                            // Días pasados o bloqueados totalmente
+                                            // Días pasados - gris claro para indicar no disponible
                                             if (past) {
                                                 cursorClass = "cursor-not-allowed"
                                                 textClass = "text-gray-300 dark:text-gray-600"
                                                 hoverClass = ""
                                             } else if (resState === 'middle') {
+                                                // Días bloqueados completamente - gris oscuro uniforme
                                                 cursorClass = "cursor-not-allowed"
-                                                textClass = "text-gray-400 dark:text-gray-500"
+                                                textClass = "text-gray-800 dark:text-gray-400"
                                                 hoverClass = ""
                                             } else if (resState === 'start' || resState === 'end') {
-                                                // Días parcialmente reservados (mitad gris)
-                                                textClass = "text-gray-700 dark:text-white font-medium"
+                                                // Días parcialmente reservados - gris oscuro uniforme
+                                                textClass = "text-gray-800 dark:text-white font-medium"
                                             } else {
-                                                // Días completamente disponibles
-                                                textClass = "text-gray-700 dark:text-white font-medium"
+                                                // Días completamente disponibles - gris oscuro uniforme
+                                                textClass = "text-gray-800 dark:text-white font-medium"
                                             }
 
                                             // Texto para días seleccionados
@@ -596,6 +598,7 @@ export default function Booking() {
                                                 borderClass = "ring-2 ring-primary ring-inset"
                                                 hoverClass = "hover:ring-2 hover:ring-white"
                                             } else if (holiday && !past && resState !== 'middle') {
+                                                // Festivos mantienen el verde pero con gris oscuro de base
                                                 textClass = "text-primary font-bold dark:text-primary"
                                             }
 
