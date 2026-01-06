@@ -97,7 +97,32 @@ function parseICSDate(dateStr) {
 }
 
 export async function fetchAllCalendars() {
-    const config = JSON.parse(localStorage.getItem('casacampestre_config') || '{}')
+    // CRITICAL: Load config from API (Supabase) first, then fallback to localStorage
+    let config = {}
+
+    // 1. Try to load from API (Supabase) - PRODUCTION PRIORITY
+    try {
+        const response = await fetch('/api/config')
+        if (response.ok) {
+            const apiConfig = await response.json()
+            if (Object.keys(apiConfig).length > 0) {
+                config = apiConfig
+                console.log('✅ iCal URLs loaded from Supabase')
+            }
+        }
+    } catch (e) {
+        console.log('API not available for iCal, using localStorage')
+    }
+
+    // 2. Fallback to localStorage if API didn't work
+    if (Object.keys(config).length === 0) {
+        const localData = localStorage.getItem('casacampestre_config')
+        if (localData) {
+            config = JSON.parse(localData)
+            console.log('✅ iCal URLs loaded from localStorage')
+        }
+    }
+
     const allEvents = []
 
     const calendars = [
