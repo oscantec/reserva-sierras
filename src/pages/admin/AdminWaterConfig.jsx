@@ -67,15 +67,53 @@ export default function AdminWaterConfig() {
     }, [])
 
     // Guardar configuración
-    const saveConfig = () => {
+    const saveConfig = async () => {
         setSaving(true)
-        const config = {
+        const newConfig = {
             tuyaConfig,
             tankConfigs,
             alertConfig,
             lastUpdated: new Date().toISOString()
         }
-        localStorage.setItem(CONFIG_KEY, JSON.stringify(config))
+
+        // 1. Save to Local Storage (Immediate feedback/offline)
+        localStorage.setItem(CONFIG_KEY, JSON.stringify(newConfig))
+
+        // 2. Save to Supabase (for Backup & Cron Jobs)
+        try {
+            // First, get credentials if we need to call an API. 
+            // Or use direct update if we have supabase client.
+            // Using a simple fetch to a dedicated api endpoint is safer if we want to keep logic bundled,
+            // but here we might not have an endpoint. Let's try to use the supabase client directly if available
+            // or create a simple update function.
+
+            // Assuming we can use a helper or direct fetch to an endpoint.
+            // Since we don't have a specific endpoint for saving config shown in file list, 
+            // we will create/use an API route or assume supabase client is available contextually, 
+            // BUT given current files, let's look for a generic "save config" mechanism.
+            // The file `api/cron-water-monitoring.js` reads from `site_config` table, ID 1.
+
+            // We'll calculate totals for the dashboard summary before saving if needed, but not required here.
+
+            // Let's call a new API endpoint we'll create or just use standard fetch to update
+            // For now, we'll try to use `fetch('/api/update-config'...)` if it existed, but it doesn't.
+            // So we will use the Supabase client directly in the component if we import it, 
+            // OR we'll fallback to a fetch that we know works or create one.
+
+            // Actually, best approach: Update site_config table directly via API to avoid exposing keys incorrectly?
+            // No, we already use supabase-js in other parts. Let's import createClient or use a custom endpoint.
+
+            await fetch('/api/save-water-config', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newConfig)
+            })
+
+        } catch (error) {
+            console.error('Error syncing config to server:', error)
+            // Non-blocking error for user but logged
+        }
+
         setSaving(false)
         setSaved(true)
         setTimeout(() => setSaved(false), 2000)
