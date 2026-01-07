@@ -19,7 +19,7 @@ export default async function handler(req, res) {
     if (req.method === 'POST') {
         // Guardar nueva medición
         try {
-            const { zone, volume_m3, level_percent, tuya_percent, level_cm } = req.body
+            const { zone, volume_m3, level_percent, tuya_percent, level_cm, timestamp: requestTimestamp } = req.body
 
             if (!zone || volume_m3 === undefined) {
                 return res.status(400).json({
@@ -27,6 +27,16 @@ export default async function handler(req, res) {
                     error: 'Faltan parámetros requeridos'
                 })
             }
+
+            // Redondear timestamp al intervalo de 5 minutos cerrado más cercano (hacia abajo)
+            // Ejemplo: 2:07:32 -> 2:05:00, 2:13:45 -> 2:10:00
+            const now = requestTimestamp ? new Date(requestTimestamp) : new Date()
+            const minutes = now.getMinutes()
+            const roundedMinutes = Math.floor(minutes / 5) * 5
+            now.setMinutes(roundedMinutes)
+            now.setSeconds(0)
+            now.setMilliseconds(0)
+            const roundedTimestamp = now.toISOString()
 
             const { data, error } = await supabase
                 .from('water_measurements')
@@ -36,7 +46,7 @@ export default async function handler(req, res) {
                     level_percent,
                     tuya_percent,
                     level_cm,
-                    timestamp: new Date().toISOString()
+                    timestamp: roundedTimestamp
                 }])
 
             if (error) throw error

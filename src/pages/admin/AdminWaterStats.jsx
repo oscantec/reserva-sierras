@@ -14,15 +14,53 @@ export default function AdminWaterStats() {
     const [refreshing, setRefreshing] = useState(false)
     const [showConfig, setShowConfig] = useState(false)
 
-    // Cargar configuración de tanques
+    // Función para calcular el tiempo hasta el próximo intervalo de 5 minutos
+    const getTimeUntilNextFiveMinutes = () => {
+        const now = new Date()
+        const minutes = now.getMinutes()
+        const seconds = now.getSeconds()
+        const milliseconds = now.getMilliseconds()
+
+        // Calcular próximo intervalo de 5 minutos
+        const nextFiveMinute = Math.ceil((minutes + 1) / 5) * 5
+        const minutesUntil = nextFiveMinute - minutes
+
+        // Tiempo total en milisegundos
+        return (minutesUntil * 60 * 1000) - (seconds * 1000) - milliseconds + 1000 // +1 seg de margen
+    }
+
+    // Cargar configuración de tanques y configurar auto-guardado cada 5 minutos exactos
     useEffect(() => {
         loadConfig()
         fetchHistoricalData()
-        const interval = setInterval(() => {
-            fetchSensorData()
-        }, 1800000) // Cada 30 minutos
-        return () => clearInterval(interval)
-    }, [])
+
+        let timeoutId = null
+        let intervalId = null
+
+        const scheduleFetch = () => {
+            const timeUntilNext = getTimeUntilNextFiveMinutes()
+            console.log(`⏰ Próxima lectura automática en ${Math.round(timeUntilNext / 1000)} segundos`)
+
+            // Programar primera ejecución al próximo intervalo de 5 min
+            timeoutId = setTimeout(() => {
+                fetchSensorData()
+                // Después, repetir cada 5 minutos exactos
+                intervalId = setInterval(() => {
+                    fetchSensorData()
+                }, 300000) // 5 minutos = 300,000 ms
+            }, timeUntilNext)
+        }
+
+        // Iniciar el programador cuando config esté lista
+        if (config) {
+            scheduleFetch()
+        }
+
+        return () => {
+            if (timeoutId) clearTimeout(timeoutId)
+            if (intervalId) clearInterval(intervalId)
+        }
+    }, [config])
 
     const loadConfig = () => {
         try {
@@ -402,8 +440,8 @@ export default function AdminWaterStats() {
             <div className="bg-surface-card border border-border-card rounded-xl p-6 shadow-sm mb-6">
                 <div className="flex items-center justify-between mb-4">
                     <div>
-                        <h2 className="text-2xl font-bold">Histórico de Agua (últimas 48 horas)</h2>
-                        <p className="text-sm text-text-muted">Mediciones cada 30 minutos</p>
+                        <h2 className="text-2xl font-bold">Histórico de Agua (últimos 7 días)</h2>
+                        <p className="text-sm text-text-muted">Mediciones automáticas cada 5 minutos</p>
                     </div>
                     <div className="flex items-center gap-4 text-xs">
                         <span className="flex items-center gap-1">
@@ -523,7 +561,7 @@ export default function AdminWaterStats() {
                     <div className="text-center py-12 text-text-muted">
                         <span className="material-symbols-outlined text-5xl mb-4">show_chart</span>
                         <p>No hay datos históricos disponibles</p>
-                        <p className="text-sm mt-2">Los datos se guardarán automáticamente cada 30 minutos</p>
+                        <p className="text-sm mt-2">Los datos se guardan automáticamente cada 5 minutos (:00, :05, :10...)</p>
                     </div>
                 )}
             </div>
