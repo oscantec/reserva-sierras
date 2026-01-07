@@ -209,7 +209,10 @@ export default function AdminWaterStats() {
 
     // Prepare chart data
     const chartPoints = historicalData.slice(-48) // Last 48 measurements (24 hours at 30min intervals)
-    const maxValue = Math.max(...chartPoints.flatMap(p => [p.zonaBaja || 0, p.zonaAlta || 0, p.zonaCasa || 0]), 10)
+    const maxValue = Math.max(...chartPoints.flatMap(p => [
+        (p.zonaBaja || 0) + (p.zonaAlta || 0) + (p.zonaCasa || 0),
+        p.zonaBaja || 0, p.zonaAlta || 0, p.zonaCasa || 0
+    ]), 10)
     const chartHeight = 300
     const chartWidth = 1000
 
@@ -367,13 +370,16 @@ export default function AdminWaterStats() {
                     </div>
                     <div className="flex items-center gap-4 text-xs">
                         <span className="flex items-center gap-1">
-                            <span className="w-3 h-3 rounded-full bg-primary"></span> Tanque Abajo
+                            <span className="w-3 h-3 rounded-full bg-black"></span> Tanque Abajo
                         </span>
                         <span className="flex items-center gap-1">
-                            <span className="w-3 h-3 rounded-full bg-primary opacity-70"></span> Tanque Arriba
+                            <span className="w-3 h-3 rounded-full bg-gray-600"></span> Tanque Arriba
                         </span>
                         <span className="flex items-center gap-1">
-                            <span className="w-3 h-3 rounded-full bg-primary opacity-40"></span> Tanque Casa
+                            <span className="w-3 h-3 rounded-full bg-gray-400"></span> Tanque Casa
+                        </span>
+                        <span className="flex items-center gap-1 ml-4 font-bold">
+                            <span className="w-4 h-4 rounded-full bg-primary"></span> TOTAL
                         </span>
                     </div>
                 </div>
@@ -393,9 +399,9 @@ export default function AdminWaterStats() {
                                 )
                             })}
 
-                            {/* Lines for each zone */}
+                            {/* Lines for individual zones - thin and gray */}
                             {['zonaBaja', 'zonaAlta', 'zonaCasa'].map((zoneKey, zoneIdx) => {
-                                const colors = ['#3db814', 'rgba(61, 184, 20, 0.7)', 'rgba(61, 184, 20, 0.4)']
+                                const colors = ['#000000', '#6b7280', '#d1d5db']
                                 const points = chartPoints.map((point, i) => {
                                     const x = 60 + (i * (chartWidth - 80) / (chartPoints.length - 1 || 1))
                                     const value = point[zoneKey] || 0
@@ -411,13 +417,38 @@ export default function AdminWaterStats() {
 
                                 return (
                                     <g key={zoneKey}>
-                                        <path d={pathData} fill="none" stroke={colors[zoneIdx]} strokeWidth="2.5" />
+                                        <path d={pathData} fill="none" stroke={colors[zoneIdx]} strokeWidth="1.5" opacity="0.5" />
                                         {points.map((p, i) => (
-                                            <circle key={i} cx={p.x} cy={p.y} r="4" fill={colors[zoneIdx]} />
+                                            <circle key={i} cx={p.x} cy={p.y} r="2.5" fill={colors[zoneIdx]} opacity="0.6" />
                                         ))}
                                     </g>
                                 )
                             })}
+
+                            {/* TOTAL line - thick green */}
+                            {(() => {
+                                const totalPoints = chartPoints.map((point, i) => {
+                                    const x = 60 + (i * (chartWidth - 80) / (chartPoints.length - 1 || 1))
+                                    const total = (point.zonaBaja || 0) + (point.zonaAlta || 0) + (point.zonaCasa || 0)
+                                    const y = chartHeight - (total / maxValue * chartHeight)
+                                    return { x, y, total }
+                                }).filter(p => p.total > 0)
+
+                                if (totalPoints.length === 0) return null
+
+                                const pathData = totalPoints.map((p, i) =>
+                                    `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`
+                                ).join(' ')
+
+                                return (
+                                    <g>
+                                        <path d={pathData} fill="none" stroke="#3db814" strokeWidth="4" />
+                                        {totalPoints.map((p, i) => (
+                                            <circle key={i} cx={p.x} cy={p.y} r="5" fill="#3db814" />
+                                        ))}
+                                    </g>
+                                )
+                            })()}
 
                             {/* X-axis labels */}
                             {chartPoints.map((point, i) => {
