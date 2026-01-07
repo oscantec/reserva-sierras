@@ -57,14 +57,7 @@ export default function AdminLayout() {
         { path: '/admin/tarifas', label: 'Tarifas', icon: 'sell' },
         { path: '/admin/contenido', label: 'Contenido', icon: 'edit_note' },
         { path: '/admin/seguridad', label: 'Seguridad', icon: 'shield' },
-        {
-            label: 'Agua',
-            icon: 'water_drop',
-            submenu: [
-                { path: '/admin/agua/stats', label: 'Estadísticas', icon: 'bar_chart' },
-                { path: '/admin/agua/config', label: 'Configuración', icon: 'settings' }
-            ]
-        }
+        { path: '/admin/agua/stats', label: 'Agua', icon: 'water_drop' }
     ]
 
     // Mobile bottom navigation items - includes home to exit admin

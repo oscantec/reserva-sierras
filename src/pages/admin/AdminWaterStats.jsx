@@ -280,11 +280,11 @@ export default function AdminWaterStats() {
                 </div>
                 <div className="flex gap-3">
                     <button
-                        onClick={() => setShowConfig(!showConfig)}
+                        onClick={() => window.location.href = '/admin/agua/config'}
                         className="flex items-center gap-2 px-4 py-2 bg-surface-card hover:bg-surface-card-hover border border-border-card rounded-lg transition-colors"
                     >
                         <span className="material-symbols-outlined text-xl">settings</span>
-                        <span>Configurar Dimensiones</span>
+                        <span>Configuración</span>
                     </button>
                     <button
                         onClick={fetchSensorData}
@@ -297,24 +297,7 @@ export default function AdminWaterStats() {
                 </div>
             </div>
 
-            {/* Modal de Configuración */}
-            {showConfig && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowConfig(false)}>
-                    <div className="bg-surface-card rounded-xl p-6 max-w-2xl w-full mx-4" onClick={e => e.stopPropagation()}>
-                        <div className="flex items-center justify-between mb-4">
-                            <h2 className="text-2xl font-bold">Configuración de Tanques</h2>
-                            <button onClick={() => setShowConfig(false)} className="material-symbols-outlined text-2xl hover:text-primary">close</button>
-                        </div>
-                        <p className="text-text-muted mb-4">Accede a /admin/agua/config para modificar las dimensiones</p>
-                        <button
-                            onClick={() => { window.location.href = '/admin/agua/config'; }}
-                            className="w-full py-3 bg-primary hover:bg-btn-primary-hover text-white rounded-lg font-medium"
-                        >
-                            Ir a Configuración
-                        </button>
-                    </div>
-                </div>
-            )}
+
 
             {/* Card de Agua Total */}
             <div className="bg-gradient-to-br from-primary to-btn-primary-hover text-white rounded-xl p-6 mb-6 shadow-lg">
