@@ -57,6 +57,14 @@ export default function AdminLayout() {
         { path: '/admin/tarifas', label: 'Tarifas', icon: 'sell' },
         { path: '/admin/contenido', label: 'Contenido', icon: 'edit_note' },
         { path: '/admin/seguridad', label: 'Seguridad', icon: 'shield' },
+        {
+            label: 'Agua',
+            icon: 'water_drop',
+            submenu: [
+                { path: '/admin/agua/stats', label: 'Estadísticas', icon: 'bar_chart' },
+                { path: '/admin/agua/config', label: 'Configuración', icon: 'settings' }
+            ]
+        }
     ]
 
     // Mobile bottom navigation items - includes home to exit admin
@@ -64,6 +72,7 @@ export default function AdminLayout() {
         { path: '/', label: 'Inicio', icon: 'home' },
         { path: '/admin', label: 'Dashboard', icon: 'dashboard' },
         { path: '/admin/calendario', label: 'Calendario', icon: 'calendar_month' },
+        { path: '/admin/agua/stats', label: 'Agua', icon: 'water_drop' },
         { path: '/admin/conexiones', label: 'Conexiones', icon: 'sync' },
         { path: '/admin/base-datos', label: 'Base Datos', icon: 'database' },
         { path: '/admin/tarifas', label: 'Tarifas', icon: 'sell' },
@@ -87,19 +96,49 @@ export default function AdminLayout() {
 
                     <nav className="flex flex-col gap-1 flex-1">
                         {navItems.map((item) => (
-                            <Link
-                                key={item.path}
-                                to={item.path}
-                                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${isActive(item.path)
-                                    ? 'bg-icon-bg-primary text-icon-color'
-                                    : 'text-text-main-light dark:text-text-main-dark hover:bg-background-light dark:hover:bg-background-dark/50'
-                                    }`}
-                            >
-                                <span className={`material-symbols-outlined ${isActive(item.path) ? 'filled-icon' : 'text-text-secondary-light dark:text-text-secondary-dark'}`}>
-                                    {item.icon}
-                                </span>
-                                <span className={`text-sm ${isActive(item.path) ? 'font-semibold' : 'font-medium'}`}>{item.label}</span>
-                            </Link>
+                            item.submenu ? (
+                                // Item with submenu
+                                <div key={item.label}>
+                                    <div className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-main-light dark:text-text-main-dark">
+                                        <span className="material-symbols-outlined text-text-secondary-light dark:text-text-secondary-dark">
+                                            {item.icon}
+                                        </span>
+                                        <span className="text-sm font-medium">{item.label}</span>
+                                    </div>
+                                    <div className="ml-6 mt-1 space-y-1">
+                                        {item.submenu.map((subitem) => (
+                                            <Link
+                                                key={subitem.path}
+                                                to={subitem.path}
+                                                className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all text-sm ${isActive(subitem.path)
+                                                    ? 'bg-icon-bg-primary text-icon-color font-semibold'
+                                                    : 'text-text-muted hover:bg-background-light dark:hover:bg-background-dark/50'
+                                                    }`}
+                                            >
+                                                <span className={`material-symbols-outlined text-lg ${isActive(subitem.path) ? 'filled-icon' : ''}`}>
+                                                    {subitem.icon}
+                                                </span>
+                                                <span>{subitem.label}</span>
+                                            </Link>
+                                        ))}
+                                    </div>
+                                </div>
+                            ) : (
+                                // Regular item
+                                <Link
+                                    key={item.path}
+                                    to={item.path}
+                                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${isActive(item.path)
+                                        ? 'bg-icon-bg-primary text-icon-color'
+                                        : 'text-text-main-light dark:text-text-main-dark hover:bg-background-light dark:hover:bg-background-dark/50'
+                                        }`}
+                                >
+                                    <span className={`material-symbols-outlined ${isActive(item.path) ? 'filled-icon' : 'text-text-secondary-light dark:text-text-secondary-dark'}`}>
+                                        {item.icon}
+                                    </span>
+                                    <span className={`text-sm ${isActive(item.path) ? 'font-semibold' : 'font-medium'}`}>{item.label}</span>
+                                </Link>
+                            )
                         ))}
 
                         <div className="border-t border-border-card dark:border-border-card-dark my-4"></div>

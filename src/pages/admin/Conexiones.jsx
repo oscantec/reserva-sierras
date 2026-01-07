@@ -622,6 +622,134 @@ YfU9ug2VqA7hLh83iLYP
                     </div>
                 </div>
 
+                {/* Tuya API Section - Monitoreo de Agua */}
+                <div className="bg-surface-card dark:bg-surface-card-dark rounded-xl border border-border-card dark:border-border-card-dark shadow-sm overflow-hidden">
+                    <div className="p-6 border-b border-border-card dark:border-border-card-dark flex items-center gap-3">
+                        <div className="w-10 h-10 bg-icon-bg-primary dark:bg-icon-bg-dark rounded-lg flex items-center justify-center">
+                            <span className="material-symbols-outlined text-icon-color text-xl">water_drop</span>
+                        </div>
+                        <div>
+                            <h3 className="text-text-main-light dark:text-text-main-dark text-lg font-bold">Tuya API - Monitoreo de Agua</h3>
+                            <p className="text-text-secondary-light dark:text-text-secondary-dark text-sm">Credenciales para sensores ultrasónicos Tuya</p>
+                        </div>
+                    </div>
+
+                    <div className="p-6 space-y-6">
+                        {/* Access ID */}
+                        <div>
+                            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                                <span className="flex items-center gap-2">
+                                    <span className="material-symbols-outlined text-gray-600 text-lg">key</span>
+                                    TUYA_ACCESS_ID (Client ID)
+                                </span>
+                            </label>
+                            <input
+                                type="text"
+                                value={config.tuyaAccessId || 'aw59ugmntjfevwdkx8py'}
+                                onChange={(e) => handleChange('tuyaAccessId', e.target.value)}
+                                placeholder="Access ID de Tuya IoT Platform"
+                                className="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-surface-dark text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary text-sm font-mono"
+                            />
+                        </div>
+
+                        {/* Access Secret */}
+                        <div>
+                            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                                <span className="flex items-center gap-2">
+                                    <span className="material-symbols-outlined text-gray-600 text-lg">vpn_key</span>
+                                    TUYA_ACCESS_SECRET (Client Secret)
+                                </span>
+                            </label>
+                            <input
+                                type="password"
+                                value={config.tuyaAccessSecret || '43fd349daf50449d8c2b061e25118c8e'}
+                                onChange={(e) => handleChange('tuyaAccessSecret', e.target.value)}
+                                placeholder="Access Secret de Tuya IoT Platform"
+                                className="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-surface-dark text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary text-sm font-mono"
+                            />
+                        </div>
+
+                        {/* Device IDs */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            {/* Tanque Abajo */}
+                            <div className="p-4 border border-slate-200 dark:border-slate-700 rounded-xl bg-icon-bg-primary/50 dark:bg-surface-dark/50">
+                                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">
+                                    <span className="flex items-center gap-2">
+                                        <span className="material-symbols-outlined text-primary text-lg">water</span>
+                                        Tanque Abajo (Zona Baja)
+                                    </span>
+                                </label>
+                                <input
+                                    type="text"
+                                    value={config.tuyaDeviceIdAbajo || 'ebd09863004e52db0ehcrq'}
+                                    onChange={(e) => handleChange('tuyaDeviceIdAbajo', e.target.value)}
+                                    placeholder="Device ID"
+                                    className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-surface-card dark:bg-surface-card-dark text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary text-xs font-mono"
+                                />
+                                <p className="mt-2 text-xs text-text-muted">Modelo: EPT- Ultrasonic sensor 3m</p>
+                            </div>
+
+                            {/* Tanque Arriba */}
+                            <div className="p-4 border border-slate-200 dark:border-slate-700 rounded-xl bg-icon-bg-primary/50 dark:bg-surface-dark/50">
+                                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">
+                                    <span className="flex items-center gap-2">
+                                        <span className="material-symbols-outlined text-primary text-lg">water</span>
+                                        Tanque Arriba (Zona Alta)
+                                    </span>
+                                </label>
+                                <input
+                                    type="text"
+                                    value={config.tuyaDeviceIdArriba || 'ebc4697fd7293917feksfa'}
+                                    onChange={(e) => handleChange('tuyaDeviceIdArriba', e.target.value)}
+                                    placeholder="Device ID"
+                                    className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-surface-card dark:bg-surface-card-dark text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary text-xs font-mono"
+                                />
+                                <p className="mt-2 text-xs text-text-muted">Modelo: EPT- Ultrasonic sensor Z</p>
+                            </div>
+
+                            {/* Tanque Casa */}
+                            <div className="p-4 border border-slate-200 dark:border-slate-700 rounded-xl bg-icon-bg-primary/50 dark:bg-surface-dark/50">
+                                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">
+                                    <span className="flex items-center gap-2">
+                                        <span className="material-symbols-outlined text-primary text-lg">home</span>
+                                        Tanque Casa
+                                    </span>
+                                </label>
+                                <input
+                                    type="text"
+                                    value={config.tuyaDeviceIdCasa || 'eb04c0fcf71d11da80m8rm'}
+                                    onChange={(e) => handleChange('tuyaDeviceIdCasa', e.target.value)}
+                                    placeholder="Device ID"
+                                    className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-surface-card dark:bg-surface-card-dark text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary text-xs font-mono"
+                                />
+                                <p className="mt-2 text-xs text-text-muted">Modelo: EPT- Ultrasonic sensor Z</p>
+                            </div>
+                        </div>
+
+                        {/* API Region */}
+                        <div>
+                            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                                <span className="flex items-center gap-2">
+                                    <span className="material-symbols-outlined text-gray-600 text-lg">public</span>
+                                    Región del API
+                                </span>
+                            </label>
+                            <select
+                                value={config.tuyaApiRegion || 'https://openapi.tuyaus.com'}
+                                onChange={(e) => handleChange('tuyaApiRegion', e.target.value)}
+                                className="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-surface-dark text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary text-sm"
+                            >
+                                <option value="https://openapi.tuyaus.com">Estados Unidos (USA)</option>
+                                <option value="https://openapi.tuyaeu.com">Europa (EU)</option>
+                                <option value="https://openapi.tuyacn.com">China (CN)</option>
+                                <option value="https://openapi.tuyain.com">India (IN)</option>
+                            </select>
+                            <p className="mt-1 text-xs text-text-muted">Selecciona la región donde creaste tu proyecto en Tuya IoT Platform</p>
+                        </div>
+                    </div>
+                </div>
+
+
 
 
                 {/* Info Card - Green theme */}

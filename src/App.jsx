@@ -21,6 +21,8 @@ import Tarifas from './pages/admin/Tarifas'
 import AdminContenido from './pages/admin/AdminContenido'
 import Login from './pages/admin/Login'
 import Seguridad from './pages/admin/Seguridad'
+import AdminWaterConfig from './pages/admin/AdminWaterConfig'
+import AdminWaterStats from './pages/admin/AdminWaterStats'
 
 // Scroll to top on every page change
 function ScrollToTop() {
@@ -170,6 +172,8 @@ function App() {
                     <Route path="tarifas" element={<Tarifas />} />
                     <Route path="contenido" element={<AdminContenido />} />
                     <Route path="seguridad" element={<Seguridad />} />
+                    <Route path="agua/config" element={<AdminWaterConfig />} />
+                    <Route path="agua/stats" element={<AdminWaterStats />} />
                 </Route>
             </Routes>
         </AuthProvider>
