@@ -127,9 +127,20 @@ export default function AdminWaterStats() {
         try {
             const tuya = await getTuyaCredentials()
 
+            console.log('🔍 Credenciales Tuya obtenidas:', {
+                clientId: tuya?.clientId ? '✅ Presente' : '❌ Faltante',
+                clientSecret: tuya?.clientSecret ? '✅ Presente' : '❌ Faltante',
+                deviceIdAbajo: tuya?.deviceIdAbajo || 'N/A',
+                deviceIdArriba: tuya?.deviceIdArriba || 'N/A',
+                deviceIdCasa: tuya?.deviceIdCasa || 'N/A'
+            })
+
             if (!tuya || !tuya.clientId || !tuya.clientSecret) {
-                console.error('Credenciales Tuya no configuradas')
-                alert('⚠️ Debes configurar las credenciales de Tuya en /admin/conexiones primero')
+                console.error('Credenciales Tuya no configuradas - ve a /admin/conexiones y haz clic en Guardar')
+                // Solo mostrar alert si no hay datos históricos (primera vez)
+                if (allMeasurements.length === 0) {
+                    alert('⚠️ Debes configurar las credenciales de Tuya en /admin/conexiones primero')
+                }
                 setRefreshing(false)
                 return
             }
