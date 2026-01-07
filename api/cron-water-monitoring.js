@@ -113,12 +113,31 @@ function calculateMaxCubicVolume(height, length, width) {
 }
 
 /**
- * Cron Job que se ejecuta cada 30 minutos
+ * Cron Job que se ejecuta automáticamente
  */
 export default async function handler(req, res) {
     // Verificar secret para seguridad
-    if (req.query.secret !== process.env.CRON_SECRET) {
-        return res.status(401).json({ error: 'Unauthorized' })
+    const providedSecret = req.query.secret
+    const expectedSecret = process.env.CRON_SECRET
+
+    console.log('🔐 Verificando autorización:', {
+        provided: providedSecret ? `${providedSecret.substring(0, 10)}...` : 'MISSING',
+        expected: expectedSecret ? `${expectedSecret.substring(0, 10)}...` : 'NOT_SET',
+        match: providedSecret === expectedSecret
+    })
+
+    if (!expectedSecret) {
+        return res.status(500).json({
+            error: 'CRON_SECRET not configured in Vercel environment variables',
+            hint: 'Go to Vercel → Settings → Environment Variables and add CRON_SECRET'
+        })
+    }
+
+    if (providedSecret !== expectedSecret) {
+        return res.status(401).json({
+            error: 'Unauthorized',
+            hint: 'Secret does not match. Check CRON_SECRET value in Vercel.'
+        })
     }
 
     try {
