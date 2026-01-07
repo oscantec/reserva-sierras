@@ -61,7 +61,7 @@ async function getAccessToken(clientId, clientSecret) {
     })
 
     const data = await response.json()
-    if (!data.success) throw new Error(`Tuya API error: ${data.msg}`)
+    if (!data.success) throw new Error(`Tuya API error (Token): ${data.msg}`)
     return data.result.access_token
 }
 
@@ -84,7 +84,7 @@ async function getDeviceStatusPercent(deviceId, accessToken, clientId, clientSec
     })
 
     const data = await response.json()
-    if (!data.success) throw new Error(`Tuya API error: ${data.msg}`)
+    if (!data.success) throw new Error(`Tuya API error (Device Status): ${data.msg}`)
 
     // Buscar porcentaje primero, luego nivel
     const percentItem = data.result.find(item => item.code === 'liquid_level_percent')
@@ -93,8 +93,6 @@ async function getDeviceStatusPercent(deviceId, accessToken, clientId, clientSec
     // Si no hay porcentaje, intentar convertir depth (menos confiable pero fallback)
     const depthItem = data.result.find(item => item.code === 'liquid_depth')
     if (depthItem) {
-        // Retornar null para indicar que necesitamos calcular basado en depth externamente (no soportado aqui por simplicidad)
-        // Preferimos que el sensor de el porcentaje
         return null
     }
 
@@ -123,36 +121,40 @@ export default async function handler(req, res) {
     }
 
     try {
-        // Obtener configuración TUYA desde Supabase
-        const { data: configData } = await supabase
+        // 1. Obtener configuración desde Supabase
+        const { data: siteConfig } = await supabase
             .from('site_config')
-            .select('config')
+            .select('config_data')  // <-- Corrected column name
             .eq('id', 1)
             .single()
 
-        if (!configData || !configData.config || !configData.config.waterMonitoringConfig) {
-            return res.status(400).json({ error: 'No configuration found' })
+        if (!siteConfig || !siteConfig.config_data) {
+            return res.status(400).json({ error: 'No configuration found in DB' })
         }
 
-        const { tuyaConfig } = configData.config.waterMonitoringConfig
-        if (!tuyaConfig || !tuyaConfig.clientId) {
-            return res.status(400).json({ error: 'Tuya credentials missing' })
+        const config = siteConfig.config_data
+
+        // 2. Extraer credenciales Tuya usando la estructura plana
+        const clientId = config.tuyaAccessId
+        const clientSecret = config.tuyaAccessSecret
+
+        if (!clientId || !clientSecret) {
+            return res.status(400).json({ error: 'Tuya credentials missing in config' })
         }
 
-        const { clientId, clientSecret, zonaBaja, zonaAlta, zonaCasa } = tuyaConfig
-
-        // Obtener access token de Tuya
+        // 3. Obtener access token
         const accessToken = await getAccessToken(clientId, clientSecret)
 
-        // Definir zonas a consultar
+        // 4. Definir zonas a consultar
         const zonesToProcess = [
-            { key: 'zonaBaja', deviceId: zonaBaja.deviceId, config: TANK_CONFIGS.zonaBaja },
-            { key: 'zonaAlta', deviceId: zonaAlta.deviceId, config: TANK_CONFIGS.zonaAlta },
-            { key: 'zonaCasa', deviceId: zonaCasa.deviceId, config: TANK_CONFIGS.zonaCasa }
+            { key: 'zonaBaja', deviceId: config.tuyaDeviceIdAbajo, config: TANK_CONFIGS.zonaBaja },
+            { key: 'zonaAlta', deviceId: config.tuyaDeviceIdArriba, config: TANK_CONFIGS.zonaAlta },
+            { key: 'zonaCasa', deviceId: config.tuyaDeviceIdCasa, config: TANK_CONFIGS.zonaCasa }
         ]
 
         const measurements = []
 
+        // 5. Procesar cada zona
         for (const zone of zonesToProcess) {
             try {
                 if (!zone.deviceId) continue;
@@ -184,10 +186,10 @@ export default async function handler(req, res) {
                         zone: zone.key,
                         level_cm: parseFloat(level_cm.toFixed(2)),
                         volume_m3: parseFloat(currentVolume.toFixed(3)),
-                        percentage: parseFloat(percentage.toFixed(2)),
+                        level_percent: parseFloat(percentage.toFixed(2)),
                         tuya_percent: parseFloat(percentage.toFixed(2)),
-                        level_percent: parseFloat(percentage.toFixed(2)), // Guardar en ambos campos por compatibilidad
-                        tank_count: zone.config.tankCount
+                        tank_count: zone.config.tankCount,
+                        timestamp: new Date().toISOString() // Explicit timestamp
                     })
                 }
             } catch (error) {
@@ -195,8 +197,9 @@ export default async function handler(req, res) {
             }
         }
 
-        // Guardar mediciones en Supabase
+        // 6. Guardar mediciones en Supabase
         if (measurements.length > 0) {
+            // Eliminar tuya_percent si no existe en la tabla (opcional, pero level_percent es el estandar)
             const { error } = await supabase
                 .from('water_measurements')
                 .insert(measurements)
