@@ -158,6 +158,7 @@ export default function AdminWaterStats() {
                     level_cm: parseFloat(data.level_cm)
                 })
             })
+            console.log(`💾 Guardando medición - Zona: ${zone}, % Calculado: ${data.percentage}%, % Tuya: ${tuyaPercent}%`)
             // Actualizar histórico después de guardar
             fetchHistoricalData()
         } catch (error) {
@@ -425,7 +426,7 @@ export default function AdminWaterStats() {
                 </div>
                 {chartPoints.length > 0 ? (
                     <div className="overflow-x-auto">
-                        <svg viewBox={`0 0 ${chartWidth} ${chartHeight + 60}`} className="w-full" style={{ minWidth: '800px' }}>
+                        <svg viewBox={`0 0 ${chartWidth} ${chartHeight + 80}`} className="w-full" style={{ minWidth: '800px' }}>
                             {/* Grid lines */}
                             {[0, 20, 40, 60, 80, 100].map(i => {
                                 const y = chartHeight - (i * chartHeight / 100)
