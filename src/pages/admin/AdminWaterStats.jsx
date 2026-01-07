@@ -248,7 +248,7 @@ export default function AdminWaterStats() {
             )}
 
             {/* Card de Agua Total */}
-            <div className="bg-gradient-to-br from-primary to-btn-primary-hover text-white rounded-xl p-6 mb-6 shadow-lg max-w-2xl">
+            <div className="bg-gradient-to-br from-primary to-btn-primary-hover text-white rounded-xl p-6 mb-6 shadow-lg">
                 <div className="flex items-center justify-between gap-6">
                     {/* Left: Icon and main info */}
                     <div className="flex items-center gap-4">
@@ -286,22 +286,22 @@ export default function AdminWaterStats() {
 
             {/* Estado por Zona */}
             <h2 className="text-2xl font-bold mb-4">Estado por Zona</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
                 {currentData?.zones.map((zone, idx) => {
                     const percent = parseFloat(zone.percentage)
                     const tuyaPercent = parseFloat(zone.sensorPercent)
 
                     return (
-                        <div key={idx} className="bg-surface-card border border-border-card rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
-                            <h3 className="text-lg font-bold mb-4">{zone.name}</h3>
+                        <div key={idx} className="bg-surface-card border border-border-card rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow">
+                            <h3 className="text-base font-bold mb-3">{zone.name}</h3>
 
                             {/* Nivel Calculado con Barra */}
-                            <div className="mb-4">
-                                <div className="flex items-center justify-between mb-2">
-                                    <span className="text-sm font-medium text-text-muted">Nivel Calculado</span>
-                                    <span className="text-2xl font-bold text-primary">{percent.toFixed(2)}%</span>
+                            <div className="mb-3">
+                                <div className="flex items-center justify-between mb-1">
+                                    <span className="text-xs font-medium text-text-muted">Nivel Calculado</span>
+                                    <span className="text-xl font-bold text-primary">{percent.toFixed(2)}%</span>
                                 </div>
-                                <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
+                                <div className="w-full h-2.5 bg-gray-200 rounded-full overflow-hidden">
                                     <div
                                         className="h-full bg-primary transition-all duration-500"
                                         style={{ width: `${percent}%` }}
@@ -310,36 +310,36 @@ export default function AdminWaterStats() {
                             </div>
 
                             {/* Tuya % */}
-                            <div className="flex items-center justify-between py-2 border-t border-border-card">
-                                <div className="flex items-center gap-2">
-                                    <span className="material-symbols-outlined text-lg text-primary">sensors</span>
-                                    <span className="text-sm text-text-muted">% Tuya (Sensor):</span>
+                            <div className="flex items-center justify-between py-1.5 border-t border-border-card">
+                                <div className="flex items-center gap-1.5">
+                                    <span className="material-symbols-outlined text-base text-primary">sensors</span>
+                                    <span className="text-xs text-text-muted">% Tuya (Sensor):</span>
                                 </div>
-                                <span className="font-medium text-primary">{tuyaPercent.toFixed(2)}%</span>
+                                <span className="font-medium text-primary text-sm">{tuyaPercent.toFixed(2)}%</span>
                             </div>
 
                             {/* Volumen Total */}
-                            <div className="flex items-center justify-between py-2">
-                                <span className="text-sm text-text-muted">Volumen Total:</span>
-                                <span className="font-bold">{parseFloat(zone.totalVolume).toFixed(2)} m³</span>
+                            <div className="flex items-center justify-between py-1.5">
+                                <span className="text-xs text-text-muted">Volumen Total:</span>
+                                <span className="font-bold text-sm">{parseFloat(zone.totalVolume).toFixed(2)} m³</span>
                             </div>
 
                             {/* Capacidad Máx */}
-                            <div className="flex items-center justify-between py-2">
-                                <span className="text-sm text-text-muted">Capacidad Máx:</span>
-                                <span className="font-medium">{parseFloat(zone.maxVolume).toFixed(2)} m³</span>
+                            <div className="flex items-center justify-between py-1.5">
+                                <span className="text-xs text-text-muted">Capacidad Máx:</span>
+                                <span className="font-medium text-sm">{parseFloat(zone.maxVolume).toFixed(2)} m³</span>
                             </div>
 
                             {/* Nivel de Agua */}
-                            <div className="flex items-center justify-between py-2">
-                                <span className="text-sm text-text-muted">Nivel de Agua:</span>
-                                <span className="font-medium">{parseFloat(zone.level_cm).toFixed(2)} cm</span>
+                            <div className="flex items-center justify-between py-1.5">
+                                <span className="text-xs text-text-muted">Nivel de Agua:</span>
+                                <span className="font-medium text-sm">{parseFloat(zone.level_cm).toFixed(2)} cm</span>
                             </div>
 
                             {/* Tanques */}
-                            <div className="flex items-center justify-between py-2">
-                                <span className="text-sm text-text-muted">Tanques:</span>
-                                <span className="font-medium">{zone.tankCount}</span>
+                            <div className="flex items-center justify-between py-1.5">
+                                <span className="text-xs text-text-muted">Tanques:</span>
+                                <span className="font-medium text-sm">{zone.tankCount}</span>
                             </div>
                         </div>
                     )
@@ -355,13 +355,13 @@ export default function AdminWaterStats() {
                     </div>
                     <div className="flex items-center gap-4 text-xs">
                         <span className="flex items-center gap-1">
-                            <span className="w-3 h-3 rounded-full bg-[#3b82f6]"></span> Tanque Abajo
+                            <span className="w-3 h-3 rounded-full bg-primary"></span> Tanque Abajo
                         </span>
                         <span className="flex items-center gap-1">
-                            <span className="w-3 h-3 rounded-full bg-[#10b981]"></span> Tanque Arriba
+                            <span className="w-3 h-3 rounded-full bg-primary opacity-70"></span> Tanque Arriba
                         </span>
                         <span className="flex items-center gap-1">
-                            <span className="w-3 h-3 rounded-full bg-[#8b5cf6]"></span> Tanque Casa
+                            <span className="w-3 h-3 rounded-full bg-primary opacity-40"></span> Tanque Casa
                         </span>
                     </div>
                 </div>
@@ -382,7 +382,7 @@ export default function AdminWaterStats() {
                                         {entry.zonaBaja && (
                                             <div className="flex-1">
                                                 <div className="h-7 bg-surface-light rounded-lg overflow-hidden relative">
-                                                    <div className="absolute inset-y-0 left-0 bg-[#3b82f6] rounded-lg flex items-center justify-end pr-2"
+                                                    <div className="absolute inset-y-0 left-0 bg-primary rounded-lg flex items-center justify-end pr-2"
                                                         style={{ width: `${Math.max((parseFloat(entry.zonaBaja) / maxVolume) * 100, 10)}%` }}>
                                                         <span className="text-xs font-bold text-white drop-shadow">{parseFloat(entry.zonaBaja).toFixed(2)} m³</span>
                                                     </div>
@@ -393,7 +393,7 @@ export default function AdminWaterStats() {
                                         {entry.zonaAlta && (
                                             <div className="flex-1">
                                                 <div className="h-7 bg-surface-light rounded-lg overflow-hidden relative">
-                                                    <div className="absolute inset-y-0 left-0 bg-[#10b981] rounded-lg flex items-center justify-end pr-2"
+                                                    <div className="absolute inset-y-0 left-0 bg-primary opacity-70 rounded-lg flex items-center justify-end pr-2"
                                                         style={{ width: `${Math.max((parseFloat(entry.zonaAlta) / maxVolume) * 100, 10)}%` }}>
                                                         <span className="text-xs font-bold text-white drop-shadow">{parseFloat(entry.zonaAlta).toFixed(2)} m³</span>
                                                     </div>
@@ -404,7 +404,7 @@ export default function AdminWaterStats() {
                                         {entry.zonaCasa && (
                                             <div className="flex-1">
                                                 <div className="h-7 bg-surface-light rounded-lg overflow-hidden relative">
-                                                    <div className="absolute inset-y-0 left-0 bg-[#8b5cf6] rounded-lg flex items-center justify-end pr-2"
+                                                    <div className="absolute inset-y-0 left-0 bg-primary opacity-40 rounded-lg flex items-center justify-end pr-2"
                                                         style={{ width: `${Math.max((parseFloat(entry.zonaCasa) / maxVolume) * 100, 10)}%` }}>
                                                         <span className="text-xs font-bold text-white drop-shadow">{parseFloat(entry.zonaCasa).toFixed(2)} m³</span>
                                                     </div>
