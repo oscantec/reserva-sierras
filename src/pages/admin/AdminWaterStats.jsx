@@ -14,53 +14,11 @@ export default function AdminWaterStats() {
     const [refreshing, setRefreshing] = useState(false)
     const [showConfig, setShowConfig] = useState(false)
 
-    // Función para calcular el tiempo hasta el próximo intervalo de 5 minutos
-    const getTimeUntilNextFiveMinutes = () => {
-        const now = new Date()
-        const minutes = now.getMinutes()
-        const seconds = now.getSeconds()
-        const milliseconds = now.getMilliseconds()
-
-        // Calcular próximo intervalo de 5 minutos
-        const nextFiveMinute = Math.ceil((minutes + 1) / 5) * 5
-        const minutesUntil = nextFiveMinute - minutes
-
-        // Tiempo total en milisegundos
-        return (minutesUntil * 60 * 1000) - (seconds * 1000) - milliseconds + 1000 // +1 seg de margen
-    }
-
-    // Cargar configuración de tanques y configurar auto-guardado cada 5 minutos exactos
+    // Cargar configuración al inicio (SIN auto-refresh para evitar bucles)
     useEffect(() => {
         loadConfig()
         fetchHistoricalData()
-
-        let timeoutId = null
-        let intervalId = null
-
-        const scheduleFetch = () => {
-            const timeUntilNext = getTimeUntilNextFiveMinutes()
-            console.log(`⏰ Próxima lectura automática en ${Math.round(timeUntilNext / 1000)} segundos`)
-
-            // Programar primera ejecución al próximo intervalo de 5 min
-            timeoutId = setTimeout(() => {
-                fetchSensorData()
-                // Después, repetir cada 5 minutos exactos
-                intervalId = setInterval(() => {
-                    fetchSensorData()
-                }, 300000) // 5 minutos = 300,000 ms
-            }, timeUntilNext)
-        }
-
-        // Iniciar el programador cuando config esté lista
-        if (config) {
-            scheduleFetch()
-        }
-
-        return () => {
-            if (timeoutId) clearTimeout(timeoutId)
-            if (intervalId) clearInterval(intervalId)
-        }
-    }, [config])
+    }, []) // Sin dependencias - solo se ejecuta una vez al montar
 
     const loadConfig = () => {
         try {
