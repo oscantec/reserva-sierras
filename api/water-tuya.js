@@ -1,161 +1,105 @@
-import crypto from 'crypto'
+import { TuyaContext } from '@tuya/tuya-connector-nodejs'
 
 /**
  * API endpoint para conectarse a sensores Tuya ultrasónicos
+ * Usa el SDK OFICIAL de Tuya para autenticación
  * Extrae el valor de liquid_level_percent de los dispositivos configurados
- * DP ID: 22 - Porcentaje de nivel (0-100%)
  */
 
-const TUYA_API_REGION = 'https://openapi.tuyaus.com' // Región USA
-
-// Función para generar firma de autenticación Tuya v1.0
-function generateSign(clientId, secret, t, nonce, accessToken = '', method = 'GET', url = '', body = '') {
-    // StringToSign según documentación oficial Tuya
-    // Para requests sin token: clientId + t + nonce
-    // Para requests con token: clientId + accessToken + t + nonce + stringToSign
-
-    let stringToSign = ''
-
-    if (url) {
-        // Extraer path de la URL (sin host ni query params para el stringToSign)
-        const urlParts = url.split('?')
-        const path = urlParts[0].replace(TUYA_API_REGION, '')
-
-        // Para GET/DELETE: method\ncontent-sha256\n\npath
-        // Para POST/PUT: method\ncontent-sha256\n\npath
-        const contentHash = crypto.createHash('sha256').update(body, 'utf8').digest('hex')
-        stringToSign = `${method}\n${contentHash}\n\n${path}`
-    }
-
-    // Construir string completo para firma
-    const str = clientId + (accessToken || '') + t + nonce + stringToSign
-    const hash = crypto.createHmac('sha256', secret).update(str, 'utf8').digest('hex')
-    return hash.toUpperCase()
-}
-
-// Función para obtener access token
-async function getAccessToken(clientId, clientSecret) {
-    const t = Date.now().toString()
-    const nonce = crypto.randomBytes(16).toString('hex')
-    const url = `${TUYA_API_REGION}/v1.0/token?grant_type=1`
-    const sign = generateSign(clientId, clientSecret, t, nonce, '', 'GET', url, '')
-
-    const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-            'client_id': clientId,
-            'sign': sign,
-            't': t,
-            'sign_method': 'HMAC-SHA256',
-            'nonce': nonce
-        }
-    })
-
-    if (!response.ok) {
-        throw new Error(`Error obteniendo token: ${response.statusText}`)
-    }
-
-    const data = await response.json()
-    if (!data.success) {
-        throw new Error(`Tuya API error: ${data.msg}`)
-    }
-
-    return data.result.access_token
-}
-
-// Función para obtener estado del dispositivo
-async function getDeviceStatus(deviceId, accessToken, clientId, clientSecret) {
-    const t = Date.now().toString()
-    const nonce = crypto.randomBytes(16).toString('hex')
-    const url = `${TUYA_API_REGION}/v1.0/devices/${deviceId}/status`
-    const sign = generateSign(clientId, clientSecret, t, nonce, accessToken, 'GET', url, '')
-
-    const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-            'client_id': clientId,
-            'sign': sign,
-            't': t,
-            'access_token': accessToken,
-            'sign_method': 'HMAC-SHA256',
-            'nonce': nonce
-        }
-    })
-
-    if (!response.ok) {
-        throw new Error(`Error obteniendo estado del dispositivo: ${response.statusText}`)
-    }
-
-    const data = await response.json()
-    if (!data.success) {
-        throw new Error(`Tuya API error: ${data.msg}`)
-    }
-
-    // Buscar el valor de liquid_level_percent (DP ID: 22)
-    // Intentar por código primero, luego por dp_id como fallback
-    let liquidLevelPercent = data.result.find(item => item.code === 'liquid_level_percent')
-    if (!liquidLevelPercent) {
-        liquidLevelPercent = data.result.find(item => item.dp_id === 22)
-    }
-    return liquidLevelPercent ? liquidLevelPercent.value : null
-}
-
 export default async function handler(req, res) {
-    // Solo aceptar GET requests
+    // Configuración CORS
+    res.setHeader('Access-Control-Allow-Credentials', true)
+    res.setHeader('Access-Control-Allow-Origin', '*')
+    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT')
+    res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version')
+
+    if (req.method === 'OPTIONS') {
+        res.status(200).end()
+        return
+    }
+
     if (req.method !== 'GET') {
-        return res.status(405).json({ error: 'Method not allowed' })
+        return res.status(405).json({ success: false, error: 'Método no permitido' })
     }
 
     try {
-        // Obtener credenciales de la configuración (enviadas como query params o desde env)
         const { clientId, clientSecret, deviceIds } = req.query
 
         if (!clientId || !clientSecret || !deviceIds) {
             return res.status(400).json({
-                error: 'Faltan parámetros requeridos: clientId, clientSecret, deviceIds'
+                success: false,
+                error: 'Faltan parámetros: clientId, clientSecret, deviceIds'
             })
         }
 
-        // Parsear deviceIds (puede ser un string separado por comas para múltiples sensores)
-        const deviceIdArray = deviceIds.split(',')
+        // Inicializar SDK de Tuya
+        const api = new TuyaContext({
+            baseUrl: 'https://openapi.tuyaus.com',
+            accessKey: clientId,
+            secretKey: clientSecret
+        })
 
-        // Obtener access token
-        const accessToken = await getAccessToken(clientId, clientSecret)
+        // Procesar múltiples dispositivos
+        const deviceIdArray = deviceIds.split(',').map(id => id.trim()).filter(Boolean)
+        const sensors = []
 
-        // Obtener datos de cada sensor
-        const sensorsData = await Promise.all(
-            deviceIdArray.map(async (deviceId) => {
-                try {
-                    const liquidLevelPercent = await getDeviceStatus(deviceId.trim(), accessToken, clientId, clientSecret)
-                    return {
-                        deviceId: deviceId.trim(),
-                        liquidLevelPercent,
-                        timestamp: new Date().toISOString(),
-                        success: true
-                    }
-                } catch (error) {
-                    return {
-                        deviceId: deviceId.trim(),
-                        liquidLevelPercent: null,
-                        timestamp: new Date().toISOString(),
+        console.log(`🔍 Consultando ${deviceIdArray.length} sensores Tuya...`)
+
+        for (const deviceId of deviceIdArray) {
+            try {
+                // Obtener estado del dispositivo usando SDK oficial
+                const statusResponse = await api.request({
+                    method: 'GET',
+                    path: `/v1.0/devices/${deviceId}/status`
+                })
+
+                if (statusResponse.success && statusResponse.result) {
+                    // Buscar liquid_level_percent en el resultado
+                    const percentData = statusResponse.result.find(item => item.code === 'liquid_level_percent')
+                    const depthData = statusResponse.result.find(item => item.code === 'liquid_depth')
+                    const depthMaxData = statusResponse.result.find(item => item.code === 'liquid_depth_max')
+
+                    sensors.push({
+                        success: true,
+                        deviceId,
+                        liquidLevelPercent: percentData ? percentData.value : null,
+                        liquidDepth: depthData ? depthData.value : null,
+                        liquidDepthMax: depthMaxData ? depthMaxData.value : null,
+                        rawData: statusResponse.result
+                    })
+
+                    console.log(`✅ Sensor ${deviceId}: ${percentData?.value}%`)
+                } else {
+                    sensors.push({
                         success: false,
-                        error: error.message
-                    }
+                        deviceId,
+                        error: 'No se pudo obtener el estado',
+                        liquidLevelPercent: null
+                    })
+                    console.log(`❌ Sensor ${deviceId}: Error obteniendo estado`)
                 }
-            })
-        )
+            } catch (deviceError) {
+                sensors.push({
+                    success: false,
+                    deviceId,
+                    error: deviceError.message,
+                    liquidLevelPercent: null
+                })
+                console.error(`❌ Error con sensor ${deviceId}:`, deviceError.message)
+            }
+        }
 
         return res.status(200).json({
             success: true,
             timestamp: new Date().toISOString(),
-            sensors: sensorsData
+            sensors
         })
 
     } catch (error) {
-        console.error('Error en API Tuya:', error)
+        console.error('❌ Error en water-tuya API:', error)
         return res.status(500).json({
             success: false,
-            error: error.message
+            error: `Tuya API error: ${error.message}`
         })
     }
 }
