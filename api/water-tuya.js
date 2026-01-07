@@ -49,7 +49,7 @@ async function getAccessToken(clientId, clientSecret) {
 async function getDeviceStatus(deviceId, accessToken, clientId, clientSecret) {
     const t = Date.now().toString()
     const nonce = crypto.randomBytes(16).toString('hex')
-    const signStr = ''
+    const signStr = accessToken  // IMPORTANTE: incluir access_token en la firma
     const sign = generateSign(clientId, clientSecret, t, nonce, signStr)
 
     const response = await fetch(`${TUYA_API_REGION}/v1.0/devices/${deviceId}/status`, {
