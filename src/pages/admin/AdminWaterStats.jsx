@@ -541,40 +541,74 @@ export default function AdminWaterStats() {
                                 <thead className="bg-background-light border-b border-border-card">
                                     <tr>
                                         <th className="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-text-secondary-light whitespace-nowrap">Fecha y Hora</th>
-                                        <th className="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-text-secondary-light whitespace-nowrap">Zona</th>
-                                        <th className="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-text-secondary-light whitespace-nowrap">Volumen (m³)</th>
-                                        <th className="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-text-secondary-light whitespace-nowrap">% Nivel</th>
-                                        <th className="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-text-secondary-light whitespace-nowrap">% Tuya</th>
-                                        <th className="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-text-secondary-light whitespace-nowrap">Nivel (cm)</th>
+                                        <th className="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-text-secondary-light whitespace-nowrap text-center">Tanque Abajo<br /><span className="text-[10px] font-normal normal-case opacity-70">Vol (m³) / % Calc</span></th>
+                                        <th className="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-text-secondary-light whitespace-nowrap text-center">Tanque Arriba<br /><span className="text-[10px] font-normal normal-case opacity-70">Vol (m³) / % Calc</span></th>
+                                        <th className="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-text-secondary-light whitespace-nowrap text-center">Tanque Casa<br /><span className="text-[10px] font-normal normal-case opacity-70">Vol (m³) / % Calc</span></th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-[#f0f4ef]">
-                                    {allMeasurements.slice(0, 50).map((measurement, index) => {
-                                        const zoneName = measurement.zone === 'zonaBaja' ? 'Tanque Abajo' :
-                                            measurement.zone === 'zonaAlta' ? 'Tanque Arriba' : 'Tanque Casa'
-                                        return (
-                                            <tr key={index} className={`hover:bg-gray-100 transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
-                                                <td className="py-2.5 px-6 text-sm text-text-main-light">
-                                                    {new Date(measurement.timestamp).toLocaleString('es-CO', {
-                                                        year: 'numeric',
-                                                        month: 'short',
-                                                        day: 'numeric',
-                                                        hour: '2-digit',
-                                                        minute: '2-digit'
-                                                    })}
-                                                </td>
-                                                <td className="py-2.5 px-6 text-sm text-text-main-light font-medium">{zoneName}</td>
-                                                <td className="py-2.5 px-6 text-sm text-text-main-light">{parseFloat(measurement.volume_m3).toFixed(2)}</td>
-                                                <td className="py-2.5 px-6 text-sm text-text-main-light">
-                                                    {!isNaN(parseFloat(measurement.level_percent))
-                                                        ? parseFloat(measurement.level_percent).toFixed(2) + '%'
-                                                        : '-'}
-                                                </td>
-                                                <td className="py-2.5 px-6 text-sm text-primary font-medium">{parseFloat(measurement.tuya_percent).toFixed(2)}%</td>
-                                                <td className="py-2.5 px-6 text-sm text-text-main-light">{parseFloat(measurement.level_cm).toFixed(2)}</td>
-                                            </tr>
+                                    {(() => {
+                                        // Group measurements by rounded timestamp (to nearest minute)
+                                        const grouped = allMeasurements.reduce((acc, curr) => {
+                                            const date = new Date(curr.timestamp)
+                                            date.setSeconds(0)
+                                            date.setMilliseconds(0)
+                                            const key = date.toISOString()
+
+                                            if (!acc[key]) acc[key] = { timestamp: key, readings: {} }
+                                            acc[key].readings[curr.zone] = {
+                                                volume: parseFloat(curr.volume_m3),
+                                                percent: parseFloat(curr.level_percent || 0) // Prefer calculated percent
+                                            }
+                                            return acc
+                                        }, {})
+
+                                        const sortedRows = Object.values(grouped).sort((a, b) =>
+                                            new Date(b.timestamp) - new Date(a.timestamp)
                                         )
-                                    })}
+
+                                        return sortedRows.slice(0, 50).map((row, index) => {
+                                            const baja = row.readings.zonaBaja
+                                            const alta = row.readings.zonaAlta
+                                            const casa = row.readings.zonaCasa
+
+                                            const CellContent = ({ data }) => {
+                                                if (!data) return <span className="text-gray-300">-</span>
+                                                return (
+                                                    <div className="flex flex-col items-center">
+                                                        <span className="font-bold text-gray-900">{data.volume.toFixed(2)} m³</span>
+                                                        <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${data.percent < 30 ? 'bg-red-100 text-red-700' :
+                                                                data.percent < 60 ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'
+                                                            }`}>
+                                                            {data.percent.toFixed(1)}%
+                                                        </span>
+                                                    </div>
+                                                )
+                                            }
+
+                                            return (
+                                                <tr key={index} className={`hover:bg-gray-100 transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
+                                                    <td className="py-3 px-6 text-sm text-text-main-light font-medium whitespace-nowrap">
+                                                        {new Date(row.timestamp).toLocaleString('es-CO', {
+                                                            month: 'short',
+                                                            day: 'numeric',
+                                                            hour: '2-digit',
+                                                            minute: '2-digit'
+                                                        })}
+                                                    </td>
+                                                    <td className="py-3 px-6 text-center border-l border-r border-gray-100">
+                                                        <CellContent data={baja} />
+                                                    </td>
+                                                    <td className="py-3 px-6 text-center border-r border-gray-100">
+                                                        <CellContent data={alta} />
+                                                    </td>
+                                                    <td className="py-3 px-6 text-center">
+                                                        <CellContent data={casa} />
+                                                    </td>
+                                                </tr>
+                                            )
+                                        })
+                                    })()}
                                 </tbody>
                             </table>
                         </div>
