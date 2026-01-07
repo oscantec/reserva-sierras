@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { processZoneDataFromPercent } from '../../utils/waterCalculations'
+import { getTuyaCredentials } from '../../utils/tuyaConfig'
 
 /**
  * Dashboard de Estadísticas de Agua
@@ -30,18 +31,31 @@ export default function AdminWaterStats() {
 
     // Fetch datos de sensores Tuya
     const fetchSensorData = async () => {
-        if (!config || !config.tuyaConfig) {
-            console.error('Configuración no disponible')
+        if (!config || !config.tankConfigs) {
+            console.error('Configuración de tanques no disponible')
             return
         }
 
         setRefreshing(true)
         try {
-            const { clientId, clientSecret, zonaBaja, zonaAlta, zonaCasa } = config.tuyaConfig
-            const deviceIds = [zonaBaja.deviceId, zonaAlta.deviceId, zonaCasa.deviceId].filter(Boolean).join(',')
+            // Obtener credenciales Tuya desde config global
+            const tuya = await getTuyaCredentials()
 
-            const response = await fetch(`/api/water-tuya?clientId=${clientId}&clientSecret=${clientSecret}&deviceIds=${deviceIds}`)
+            if (!tuya || !tuya.clientId || !tuya.clientSecret) {
+                console.error('Credenciales Tuya no configuradas')
+                alert('⚠️ Debes configurar las credenciales de Tuya en /admin/conexiones primero')
+                setRefreshing(false)
+                return
+            }
+
+            const deviceIds = [tuya.deviceIdAbajo, tuya.deviceIdArriba, tuya.deviceIdCasa].filter(Boolean).join(',')
+
+            console.log('🔍 Consultando sensores Tuya...', { clientId: tuya.clientId, deviceIds })
+
+            const response = await fetch(`/api/water-tuya?clientId=${tuya.clientId}&clientSecret=${tuya.clientSecret}&deviceIds=${deviceIds}`)
             const data = await response.json()
+
+            console.log('✅ Respuesta de Tuya:', data)
 
             if (data.success && data.sensors) {
                 // Procesar datos de cada zona
