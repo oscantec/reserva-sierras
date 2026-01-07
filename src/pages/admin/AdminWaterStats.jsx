@@ -568,31 +568,16 @@ export default function AdminWaterStats() {
                                         )
 
                                         return sortedRows.slice(0, 50).map((row, index) => {
-                                            // Helper to recalculate percent if missing/zero but volume exists
-                                            const getFixedData = (data, zoneKey) => {
-                                                if (!data) return null
-                                                let { volume, percent } = data
-
-                                                // Si el porcentaje es 0 o muy bajo pero hay volumen, recalculamos usando maxCapacities
-                                                if ((percent <= 0.1) && volume > 0 && maxCapacities[zoneKey]) {
-                                                    percent = (volume / maxCapacities[zoneKey]) * 100
-                                                }
-                                                return { ...data, percent }
-                                            }
-
-                                            const baja = getFixedData(row.readings.zonaBaja, 'zonaBaja')
-                                            const alta = getFixedData(row.readings.zonaAlta, 'zonaAlta')
-                                            const casa = getFixedData(row.readings.zonaCasa, 'zonaCasa')
+                                            const baja = row.readings.zonaBaja
+                                            const alta = row.readings.zonaAlta
+                                            const casa = row.readings.zonaCasa
 
                                             const CellContent = ({ data }) => {
                                                 if (!data) return <span className="text-gray-300">-</span>
                                                 return (
                                                     <div className="flex flex-col items-center">
                                                         <span className="font-bold text-gray-900">{data.volume.toFixed(2)} m³</span>
-                                                        <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${data.percent === 0 ? 'bg-gray-100 text-gray-500' : // Neutral for 0
-                                                                data.percent < 30 ? 'bg-red-100 text-red-700' :
-                                                                    data.percent < 60 ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'
-                                                            }`}>
+                                                        <span className="text-xs font-bold text-black px-2 py-0.5">
                                                             {data.percent.toFixed(1)}%
                                                         </span>
                                                     </div>
