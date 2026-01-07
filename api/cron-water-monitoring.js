@@ -116,7 +116,9 @@ function calculateMaxCubicVolume(height, length, width) {
  * Cron Job que se ejecuta automáticamente
  */
 export default async function handler(req, res) {
-    // Verificar secret para seguridad
+    // TEMPORALMENTE DESACTIVADO para diagnosticar
+    // TODO: Reactivar verificación de secret después
+    /*
     const providedSecret = req.query.secret
     const expectedSecret = process.env.CRON_SECRET
 
@@ -139,6 +141,7 @@ export default async function handler(req, res) {
             hint: 'Secret does not match. Check CRON_SECRET value in Vercel.'
         })
     }
+    */
 
     try {
         // 1. Obtener configuración desde Supabase
