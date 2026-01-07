@@ -577,7 +577,7 @@ export default function AdminWaterStats() {
                                                 return (
                                                     <div className="flex flex-col items-center">
                                                         <span className="font-bold text-gray-900">{data.volume.toFixed(2)} m³</span>
-                                                        <span className="text-xs font-bold text-black px-2 py-0.5">
+                                                        <span className="text-xs font-bold text-black">
                                                             {data.percent.toFixed(1)}%
                                                         </span>
                                                     </div>
