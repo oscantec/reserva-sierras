@@ -9,30 +9,31 @@ const supabase = createClient(
 const TUYA_API_REGION = 'https://openapi.tuyaus.com'
 
 // Configuración de Tanques (IMPORTANTE: Mantener sincronizado con AdminWaterStats.jsx)
+// Configuración de Tanques (IMPORTANTE: Mantener sincronizado con AdminWaterStats.jsx)
 const TANK_CONFIGS = {
     zonaBaja: {
         name: 'Tanque Abajo',
         type: 'conic',
         tankCount: 3,
-        height: 160,       // ~1.6m altura
-        topRadius: 80,     // ~1.6m diámetro
-        bottomRadius: 70   // ~1.4m diámetro base
+        height: 155,       // REAL: 155 cm
+        topRadius: 70.25,  // REAL: 70.25 cm
+        bottomRadius: 57.25 // REAL: 57.25 cm
     },
     zonaAlta: {
         name: 'Tanque Arriba',
         type: 'conic',
         tankCount: 2,
-        height: 160,
-        topRadius: 80,
-        bottomRadius: 70
+        height: 155,       // REAL: 155 cm
+        topRadius: 70.25,  // REAL: 70.25 cm
+        bottomRadius: 57.25 // REAL: 57.25 cm
     },
     zonaCasa: {
         name: 'Tanque Casa',
         type: 'cubic',
         tankCount: 1,
-        height: 200,    // 2m alto
-        length: 220,    // 2.2m largo
-        width: 215      // 2.15m ancho
+        height: 140,    // REAL: 140 cm
+        length: 280,    // REAL: 280 cm
+        width: 240      // REAL: 240 cm
     }
 }
 

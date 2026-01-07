@@ -21,25 +21,25 @@ export default function AdminWaterConfig() {
             name: 'Tanque Abajo',
             type: 'conic',
             tankCount: 3,
-            height: 23,  // 230 mm liquid_depth_max convertido a cm
-            topRadius: 40,  // Ajusta según tu tanque real
-            bottomRadius: 30  // Ajusta según tu tanque real
+            height: 155,       // REAL: 155 cm
+            topRadius: 70.25,  // REAL: 70.25 cm
+            bottomRadius: 57.25 // REAL: 57.25 cm
         },
         zonaAlta: {
             name: 'Tanque Arriba',
             type: 'conic',
             tankCount: 2,
-            height: 30,  // 300 mm liquid_depth_max convertido a cm
-            topRadius: 37.5,  // Ajusta según tu tanque real
-            bottomRadius: 27.5  // Ajusta según tu tanque real
+            height: 155,       // REAL: 155 cm
+            topRadius: 70.25,  // REAL: 70.25 cm
+            bottomRadius: 57.25 // REAL: 57.25 cm
         },
         zonaCasa: {
             name: 'Zona Casa - Tanque Casa',
             type: 'cubic',
             tankCount: 1,
-            height: 25,  // 250 mm liquid_depth_max convertido a cm
-            length: 50,  // Ajusta según tu tanque real (cm)
-            width: 50   // Ajusta según tu tanque real (cm)
+            height: 140,    // REAL: 140 cm
+            length: 280,    // REAL: 280 cm
+            width: 240      // REAL: 240 cm
         }
     })
 
