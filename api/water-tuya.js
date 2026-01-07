@@ -8,9 +8,27 @@ import crypto from 'crypto'
 
 const TUYA_API_REGION = 'https://openapi.tuyaus.com' // Región USA
 
-// Función para generar firma de autenticación Tuya
-function generateSign(clientId, secret, t, nonce, signStr) {
-    const str = clientId + t + nonce + signStr
+// Función para generar firma de autenticación Tuya v1.0
+function generateSign(clientId, secret, t, nonce, accessToken = '', method = 'GET', url = '', body = '') {
+    // StringToSign según documentación oficial Tuya
+    // Para requests sin token: clientId + t + nonce
+    // Para requests con token: clientId + accessToken + t + nonce + stringToSign
+
+    let stringToSign = ''
+
+    if (url) {
+        // Extraer path de la URL (sin host ni query params para el stringToSign)
+        const urlParts = url.split('?')
+        const path = urlParts[0].replace(TUYA_API_REGION, '')
+
+        // Para GET/DELETE: method\ncontent-sha256\n\npath
+        // Para POST/PUT: method\ncontent-sha256\n\npath
+        const contentHash = crypto.createHash('sha256').update(body, 'utf8').digest('hex')
+        stringToSign = `${method}\n${contentHash}\n\n${path}`
+    }
+
+    // Construir string completo para firma
+    const str = clientId + (accessToken || '') + t + nonce + stringToSign
     const hash = crypto.createHmac('sha256', secret).update(str, 'utf8').digest('hex')
     return hash.toUpperCase()
 }
@@ -19,10 +37,10 @@ function generateSign(clientId, secret, t, nonce, signStr) {
 async function getAccessToken(clientId, clientSecret) {
     const t = Date.now().toString()
     const nonce = crypto.randomBytes(16).toString('hex')
-    const signStr = ''
-    const sign = generateSign(clientId, clientSecret, t, nonce, signStr)
+    const url = `${TUYA_API_REGION}/v1.0/token?grant_type=1`
+    const sign = generateSign(clientId, clientSecret, t, nonce, '', 'GET', url, '')
 
-    const response = await fetch(`${TUYA_API_REGION}/v1.0/token?grant_type=1`, {
+    const response = await fetch(url, {
         method: 'GET',
         headers: {
             'client_id': clientId,
@@ -49,10 +67,10 @@ async function getAccessToken(clientId, clientSecret) {
 async function getDeviceStatus(deviceId, accessToken, clientId, clientSecret) {
     const t = Date.now().toString()
     const nonce = crypto.randomBytes(16).toString('hex')
-    const signStr = accessToken  // IMPORTANTE: incluir access_token en la firma
-    const sign = generateSign(clientId, clientSecret, t, nonce, signStr)
+    const url = `${TUYA_API_REGION}/v1.0/devices/${deviceId}/status`
+    const sign = generateSign(clientId, clientSecret, t, nonce, accessToken, 'GET', url, '')
 
-    const response = await fetch(`${TUYA_API_REGION}/v1.0/devices/${deviceId}/status`, {
+    const response = await fetch(url, {
         method: 'GET',
         headers: {
             'client_id': clientId,
