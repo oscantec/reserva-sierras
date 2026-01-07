@@ -24,11 +24,44 @@ export default function AdminWaterStats() {
         return () => clearInterval(interval)
     }, [])
 
-    const loadConfig = async () => {
+    const loadConfig = () => {
         try {
-            const response = await fetch('/api/water-config')
-            const data = await response.json()
-            setConfig(data)
+            const CONFIG_KEY = 'water_monitoring_config'
+            const savedConfig = localStorage.getItem(CONFIG_KEY)
+            if (savedConfig) {
+                const parsed = JSON.parse(savedConfig)
+                setConfig(parsed)
+            } else {
+                // Default config if nothing is saved
+                setConfig({
+                    tankConfigs: {
+                        zonaBaja: {
+                            name: 'Zona Baja - Tanque Abajo',
+                            type: 'conic',
+                            tankCount: 3,
+                            height: 23,
+                            topRadius: 40,
+                            bottomRadius: 30
+                        },
+                        zonaAlta: {
+                            name: 'Zona Alta - Tanque Arriba',
+                            type: 'conic',
+                            tankCount: 2,
+                            height: 30,
+                            topRadius: 37.5,
+                            bottomRadius: 27.5
+                        },
+                        zonaCasa: {
+                            name: 'Zona Casa - Tanque Casa',
+                            type: 'cubic',
+                            tankCount: 1,
+                            height: 25,
+                            length: 50,
+                            width: 50
+                        }
+                    }
+                })
+            }
         } catch (error) {
             console.error('Error loading config:', error)
         }
