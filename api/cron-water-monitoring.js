@@ -8,6 +8,34 @@ const supabase = createClient(
 
 const TUYA_API_REGION = 'https://openapi.tuyaus.com'
 
+// Configuración de Tanques (IMPORTANTE: Mantener sincronizado con AdminWaterStats.jsx)
+const TANK_CONFIGS = {
+    zonaBaja: {
+        name: 'Tanque Abajo',
+        type: 'conic',
+        tankCount: 3,
+        height: 160,       // ~1.6m altura
+        topRadius: 80,     // ~1.6m diámetro
+        bottomRadius: 70   // ~1.4m diámetro base
+    },
+    zonaAlta: {
+        name: 'Tanque Arriba',
+        type: 'conic',
+        tankCount: 2,
+        height: 160,
+        topRadius: 80,
+        bottomRadius: 70
+    },
+    zonaCasa: {
+        name: 'Tanque Casa',
+        type: 'cubic',
+        tankCount: 1,
+        height: 200,    // 2m alto
+        length: 220,    // 2.2m largo
+        width: 215      // 2.15m ancho
+    }
+}
+
 // Funciones auxiliares de Tuya
 function generateSign(clientId, secret, t, nonce, signStr) {
     const str = clientId + t + nonce + signStr
@@ -37,7 +65,7 @@ async function getAccessToken(clientId, clientSecret) {
     return data.result.access_token
 }
 
-async function getDeviceStatus(deviceId, accessToken, clientId, clientSecret) {
+async function getDeviceStatusPercent(deviceId, accessToken, clientId, clientSecret) {
     const t = Date.now().toString()
     const nonce = crypto.randomBytes(16).toString('hex')
     const signStr = ''
@@ -58,32 +86,22 @@ async function getDeviceStatus(deviceId, accessToken, clientId, clientSecret) {
     const data = await response.json()
     if (!data.success) throw new Error(`Tuya API error: ${data.msg}`)
 
-    const liquidDepth = data.result.find(item => item.code === 'liquid_depth')
-    return liquidDepth ? liquidDepth.value : null
+    // Buscar porcentaje primero, luego nivel
+    const percentItem = data.result.find(item => item.code === 'liquid_level_percent')
+    if (percentItem) return parseFloat(percentItem.value)
+
+    // Si no hay porcentaje, intentar convertir depth (menos confiable pero fallback)
+    const depthItem = data.result.find(item => item.code === 'liquid_depth')
+    if (depthItem) {
+        // Retornar null para indicar que necesitamos calcular basado en depth externamente (no soportado aqui por simplicidad)
+        // Preferimos que el sensor de el porcentaje
+        return null
+    }
+
+    return 0
 }
 
-// Funciones de cálculo de volumen
-function calculateConicTankVolume(depth, totalHeight, topRadius, bottomRadius) {
-    if (depth === 0) return 0
-    const waterHeight = totalHeight - depth
-    if (waterHeight <= 0) return 0
-
-    const radiusAtWaterLevel = bottomRadius + (topRadius - bottomRadius) * (waterHeight / totalHeight)
-    const volume = (Math.PI * waterHeight / 3) * (
-        Math.pow(radiusAtWaterLevel, 2) +
-        radiusAtWaterLevel * bottomRadius +
-        Math.pow(bottomRadius, 2)
-    )
-    return volume / 1000000
-}
-
-function calculateCubicTankVolume(depth, totalHeight, length, width) {
-    if (depth === 0) return 0
-    const waterHeight = totalHeight - depth
-    if (waterHeight <= 0) return 0
-    return (length * width * waterHeight) / 1000000
-}
-
+// Funciones de cálculo
 function calculateMaxConicVolume(height, topRadius, bottomRadius) {
     const volume = (Math.PI * height / 3) * (
         Math.pow(topRadius, 2) + topRadius * bottomRadius + Math.pow(bottomRadius, 2)
@@ -97,7 +115,6 @@ function calculateMaxCubicVolume(height, length, width) {
 
 /**
  * Cron Job que se ejecuta cada 30 minutos
- * Consulta sensores Tuya y guarda mediciones en Supabase
  */
 export default async function handler(req, res) {
     // Verificar secret para seguridad
@@ -106,22 +123,20 @@ export default async function handler(req, res) {
     }
 
     try {
-        // Obtener configuración desde Supabase o variable de entorno
+        // Obtener configuración TUYA desde Supabase
         const { data: configData } = await supabase
             .from('site_config')
             .select('config')
             .eq('id', 1)
             .single()
 
-        if (!configData || !configData.config) {
-            return res.status(400).json({ error: 'No water monitoring config found' })
+        if (!configData || !configData.config || !configData.config.waterMonitoringConfig) {
+            return res.status(400).json({ error: 'No configuration found' })
         }
 
-        const waterConfig = configData.config.waterMonitoringConfig || {}
-        const { tuyaConfig, tankConfigs } = waterConfig
-
-        if (!tuyaConfig || !tankConfigs) {
-            return res.status(400).json({ error: 'Incomplete water monitoring config' })
+        const { tuyaConfig } = configData.config.waterMonitoringConfig
+        if (!tuyaConfig || !tuyaConfig.clientId) {
+            return res.status(400).json({ error: 'Tuya credentials missing' })
         }
 
         const { clientId, clientSecret, zonaBaja, zonaAlta, zonaCasa } = tuyaConfig
@@ -129,41 +144,31 @@ export default async function handler(req, res) {
         // Obtener access token de Tuya
         const accessToken = await getAccessToken(clientId, clientSecret)
 
-        // Procesar cada zona
-        const zones = [
-            { key: 'zonaBaja', deviceId: zonaBaja.deviceId, config: tankConfigs.zonaBaja },
-            { key: 'zonaAlta', deviceId: zonaAlta.deviceId, config: tankConfigs.zonaAlta },
-            { key: 'zonaCasa', deviceId: zonaCasa.deviceId, config: tankConfigs.zonaCasa }
+        // Definir zonas a consultar
+        const zonesToProcess = [
+            { key: 'zonaBaja', deviceId: zonaBaja.deviceId, config: TANK_CONFIGS.zonaBaja },
+            { key: 'zonaAlta', deviceId: zonaAlta.deviceId, config: TANK_CONFIGS.zonaAlta },
+            { key: 'zonaCasa', deviceId: zonaCasa.deviceId, config: TANK_CONFIGS.zonaCasa }
         ]
 
         const measurements = []
 
-        for (const zone of zones) {
+        for (const zone of zonesToProcess) {
             try {
-                const liquidDepth = await getDeviceStatus(zone.deviceId, accessToken, clientId, clientSecret)
+                if (!zone.deviceId) continue;
 
-                if (liquidDepth !== null) {
-                    let volumePerTank, maxVolumePerTank
+                const percentage = await getDeviceStatusPercent(zone.deviceId, accessToken, clientId, clientSecret)
 
+                if (percentage !== null) {
+                    // Calcular volúmenes
+                    let maxVolumePerTank
                     if (zone.config.type === 'conic') {
-                        volumePerTank = calculateConicTankVolume(
-                            liquidDepth,
-                            zone.config.height,
-                            zone.config.topRadius,
-                            zone.config.bottomRadius
-                        )
                         maxVolumePerTank = calculateMaxConicVolume(
                             zone.config.height,
                             zone.config.topRadius,
                             zone.config.bottomRadius
                         )
                     } else {
-                        volumePerTank = calculateCubicTankVolume(
-                            liquidDepth,
-                            zone.config.height,
-                            zone.config.length,
-                            zone.config.width
-                        )
                         maxVolumePerTank = calculateMaxCubicVolume(
                             zone.config.height,
                             zone.config.length,
@@ -171,16 +176,17 @@ export default async function handler(req, res) {
                         )
                     }
 
-                    const totalVolume = volumePerTank * zone.config.tankCount
                     const totalMaxVolume = maxVolumePerTank * zone.config.tankCount
-                    const percentage = (totalVolume / totalMaxVolume) * 100
-                    const level_cm = zone.config.height - liquidDepth
+                    const currentVolume = (totalMaxVolume * percentage) / 100
+                    const level_cm = (zone.config.height * percentage) / 100 // Aproximado
 
                     measurements.push({
                         zone: zone.key,
                         level_cm: parseFloat(level_cm.toFixed(2)),
-                        volume_m3: parseFloat(totalVolume.toFixed(3)),
+                        volume_m3: parseFloat(currentVolume.toFixed(3)),
                         percentage: parseFloat(percentage.toFixed(2)),
+                        tuya_percent: parseFloat(percentage.toFixed(2)),
+                        level_percent: parseFloat(percentage.toFixed(2)), // Guardar en ambos campos por compatibilidad
                         tank_count: zone.config.tankCount
                     })
                 }
@@ -196,6 +202,8 @@ export default async function handler(req, res) {
                 .insert(measurements)
 
             if (error) throw error
+
+            console.log(`✅ Saved ${measurements.length} measurements automatically`)
         }
 
         return res.status(200).json({
