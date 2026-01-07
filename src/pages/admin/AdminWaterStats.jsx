@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { processZoneDataFromPercent } from '../../utils/waterCalculations'
+import { processZoneDataFromPercent, calculateMaxConicVolume, calculateMaxCubicVolume } from '../../utils/waterCalculations'
 import { getTuyaCredentials } from '../../utils/tuyaConfig'
 
 /**
@@ -44,31 +44,32 @@ export default function AdminWaterStats() {
             }
 
             // Default config if nothing is saved OR old config was cleaned
+            // Using REALISTIC default values (approx 2000L tanks)
             setConfig({
                 tankConfigs: {
                     zonaBaja: {
                         name: 'Tanque Abajo',
                         type: 'conic',
                         tankCount: 3,
-                        height: 23,
-                        topRadius: 40,
-                        bottomRadius: 30
+                        height: 160,       // ~1.6m altura
+                        topRadius: 80,     // ~1.6m diámetro
+                        bottomRadius: 70   // ~1.4m diámetro base
                     },
                     zonaAlta: {
                         name: 'Tanque Arriba',
                         type: 'conic',
                         tankCount: 2,
-                        height: 30,
-                        topRadius: 37.5,
-                        bottomRadius: 27.5
+                        height: 160,
+                        topRadius: 80,
+                        bottomRadius: 70
                     },
                     zonaCasa: {
                         name: 'Tanque Casa',
                         type: 'cubic',
                         tankCount: 1,
-                        height: 25,
-                        length: 50,
-                        width: 50
+                        height: 200,    // 2m alto
+                        length: 220,    // 2.2m largo
+                        width: 215      // 2.15m ancho (~9.4m3 total)
                     }
                 }
             })
@@ -221,34 +222,46 @@ export default function AdminWaterStats() {
     // Prepare chart data
     const chartPoints = historicalData.slice(-48) // Last 48 measurements (24 hours at 30min intervals)
 
-    // Calculate max capacities for percentage calculation
+    // Calculate max capacities for percentage calculation using imported shared functions
     const maxCapacities = {
         zonaBaja: config.tankConfigs.zonaBaja ?
             (config.tankConfigs.zonaBaja.type === 'conic' ?
-                (Math.PI * config.tankConfigs.zonaBaja.height / 3) * (
-                    Math.pow(config.tankConfigs.zonaBaja.topRadius, 2) +
-                    config.tankConfigs.zonaBaja.topRadius * config.tankConfigs.zonaBaja.bottomRadius +
-                    Math.pow(config.tankConfigs.zonaBaja.bottomRadius, 2)
-                ) / 1000000 * config.tankConfigs.zonaBaja.tankCount
-                : config.tankConfigs.zonaBaja.height * config.tankConfigs.zonaBaja.length * config.tankConfigs.zonaBaja.width / 1000000
+                calculateMaxConicVolume(
+                    config.tankConfigs.zonaBaja.height,
+                    config.tankConfigs.zonaBaja.topRadius,
+                    config.tankConfigs.zonaBaja.bottomRadius
+                ) * config.tankConfigs.zonaBaja.tankCount
+                : calculateMaxCubicVolume(
+                    config.tankConfigs.zonaBaja.height,
+                    config.tankConfigs.zonaBaja.length,
+                    config.tankConfigs.zonaBaja.width
+                ) * config.tankConfigs.zonaBaja.tankCount
             ) : 1,
         zonaAlta: config.tankConfigs.zonaAlta ?
             (config.tankConfigs.zonaAlta.type === 'conic' ?
-                (Math.PI * config.tankConfigs.zonaAlta.height / 3) * (
-                    Math.pow(config.tankConfigs.zonaAlta.topRadius, 2) +
-                    config.tankConfigs.zonaAlta.topRadius * config.tankConfigs.zonaAlta.bottomRadius +
-                    Math.pow(config.tankConfigs.zonaAlta.bottomRadius, 2)
-                ) / 1000000 * config.tankConfigs.zonaAlta.tankCount
-                : config.tankConfigs.zonaAlta.height * config.tankConfigs.zonaAlta.length * config.tankConfigs.zonaAlta.width / 1000000
+                calculateMaxConicVolume(
+                    config.tankConfigs.zonaAlta.height,
+                    config.tankConfigs.zonaAlta.topRadius,
+                    config.tankConfigs.zonaAlta.bottomRadius
+                ) * config.tankConfigs.zonaAlta.tankCount
+                : calculateMaxCubicVolume(
+                    config.tankConfigs.zonaAlta.height,
+                    config.tankConfigs.zonaAlta.length,
+                    config.tankConfigs.zonaAlta.width
+                ) * config.tankConfigs.zonaAlta.tankCount
             ) : 1,
         zonaCasa: config.tankConfigs.zonaCasa ?
             (config.tankConfigs.zonaCasa.type === 'conic' ?
-                (Math.PI * config.tankConfigs.zonaCasa.height / 3) * (
-                    Math.pow(config.tankConfigs.zonaCasa.topRadius, 2) +
-                    config.tankConfigs.zonaCasa.topRadius * config.tankConfigs.zonaCasa.bottomRadius +
-                    Math.pow(config.tankConfigs.zonaCasa.bottomRadius, 2)
-                ) / 1000000 * config.tankConfigs.zonaCasa.tankCount
-                : config.tankConfigs.zonaCasa.height * config.tankConfigs.zonaCasa.length * config.tankConfigs.zonaCasa.width / 1000000
+                calculateMaxConicVolume(
+                    config.tankConfigs.zonaCasa.height,
+                    config.tankConfigs.zonaCasa.topRadius,
+                    config.tankConfigs.zonaCasa.bottomRadius
+                ) * config.tankConfigs.zonaCasa.tankCount
+                : calculateMaxCubicVolume(
+                    config.tankConfigs.zonaCasa.height,
+                    config.tankConfigs.zonaCasa.length,
+                    config.tankConfigs.zonaCasa.width
+                ) * config.tankConfigs.zonaCasa.tankCount
             ) : 1
     }
 
@@ -429,7 +442,7 @@ export default function AdminWaterStats() {
                         <svg viewBox={`0 0 ${chartWidth} ${chartHeight + 80}`} className="w-full" style={{ minWidth: '800px' }}>
                             {/* Grid lines */}
                             {[0, 20, 40, 60, 80, 100].map(i => {
-                                const y = chartHeight - (i * chartHeight / 100)
+                                const y = 20 + (chartHeight - 20) - (i * (chartHeight - 20) / 100)
                                 return (
                                     <g key={i}>
                                         <line x1="60" y1={y} x2={chartWidth - 20} y2={y} stroke="#e5e7eb" strokeWidth="1" />
@@ -449,7 +462,9 @@ export default function AdminWaterStats() {
                                     const value = point[zone.key] || 0
                                     const maxCap = maxCapacities[zone.key]
                                     const percent = maxCap > 0 ? (value / maxCap) * 100 : 0
-                                    const y = chartHeight - (percent * chartHeight / 100)
+
+                                    // Use same Y calculation as grid
+                                    const y = 20 + (chartHeight - 20) - (percent * (chartHeight - 20) / 100)
                                     return { x, y, percent }
                                 }).filter(p => p.percent > 0)
 
@@ -480,8 +495,11 @@ export default function AdminWaterStats() {
                                 const totalPoints = chartPoints.map((point, i) => {
                                     const x = 60 + (i * (chartWidth - 80) / (chartPoints.length - 1 || 1))
                                     const total = (point.zonaBaja || 0) + (point.zonaAlta || 0) + (point.zonaCasa || 0)
-                                    const percent = totalMaxCapacity > 0 ? (total / totalMaxCapacity) * 100 : 0
-                                    const y = chartHeight - (percent * chartHeight / 100)
+                                    const totalCapacity = Object.values(maxCapacities).reduce((a, b) => a + b, 0)
+                                    const percent = totalCapacity > 0 ? (total / totalCapacity) * 100 : 0
+
+                                    // Use same Y calculation as grid
+                                    const y = 20 + (chartHeight - 20) - (percent * (chartHeight - 20) / 100)
                                     return { x, y, percent }
                                 }).filter(p => p.percent > 0)
 
@@ -506,7 +524,7 @@ export default function AdminWaterStats() {
                                 if (i % Math.ceil(chartPoints.length / 8) !== 0 && i !== chartPoints.length - 1) return null
                                 const x = 60 + (i * (chartWidth - 80) / (chartPoints.length - 1 || 1))
                                 return (
-                                    <text key={i} x={x} y={chartHeight + 20} textAnchor="middle" fontSize="11" fill="#6b7280">
+                                    <text key={i} x={x} y={chartHeight + 40} textAnchor="middle" fontSize="11" fill="#6b7280">
                                         {point.date.split(',')[0]}
                                     </text>
                                 )
@@ -564,7 +582,11 @@ export default function AdminWaterStats() {
                                                 </td>
                                                 <td className="py-2.5 px-6 text-sm text-text-main-light font-medium">{zoneName}</td>
                                                 <td className="py-2.5 px-6 text-sm text-text-main-light">{parseFloat(measurement.volume_m3).toFixed(2)}</td>
-                                                <td className="py-2.5 px-6 text-sm text-text-main-light">{parseFloat(measurement.level_percent).toFixed(2)}%</td>
+                                                <td className="py-2.5 px-6 text-sm text-text-main-light">
+                                                    {!isNaN(parseFloat(measurement.level_percent))
+                                                        ? parseFloat(measurement.level_percent).toFixed(2) + '%'
+                                                        : '-'}
+                                                </td>
                                                 <td className="py-2.5 px-6 text-sm text-primary font-medium">{parseFloat(measurement.tuya_percent).toFixed(2)}%</td>
                                                 <td className="py-2.5 px-6 text-sm text-text-main-light">{parseFloat(measurement.level_cm).toFixed(2)}</td>
                                             </tr>
