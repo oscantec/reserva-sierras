@@ -388,63 +388,150 @@ export default function AdminWaterStats() {
             {/* Estado por Zona */}
             <h2 className="text-2xl font-bold mb-4">Estado por Zona</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                {currentData?.zones.map((zone, idx) => {
-                    const percent = parseFloat(zone.percentage)
-                    const tuyaPercent = parseFloat(zone.sensorPercent)
+                {currentData?.zones?.length > 0 ? (
+                    // Mostrar datos en tiempo real
+                    currentData.zones.map((zone, idx) => {
+                        const percent = parseFloat(zone.percentage)
+                        const tuyaPercent = parseFloat(zone.sensorPercent)
 
-                    return (
-                        <div key={idx} className="bg-surface-card border border-border-card rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow">
-                            <h3 className="text-base font-bold mb-3">{zone.name}</h3>
+                        return (
+                            <div key={idx} className="bg-surface-card border border-border-card rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow">
+                                <h3 className="text-base font-bold mb-3">{zone.name}</h3>
 
-                            {/* Nivel Calculado con Barra */}
-                            <div className="mb-3">
-                                <div className="flex items-center justify-between mb-1">
-                                    <span className="text-xs font-medium text-text-muted">Nivel Calculado</span>
-                                    <span className="text-xl font-bold text-primary">{percent.toFixed(2)}%</span>
+                                {/* Nivel Calculado con Barra */}
+                                <div className="mb-3">
+                                    <div className="flex items-center justify-between mb-1">
+                                        <span className="text-xs font-medium text-text-muted">Nivel Calculado</span>
+                                        <span className="text-xl font-bold text-primary">{percent.toFixed(2)}%</span>
+                                    </div>
+                                    <div className="w-full h-2.5 bg-gray-200 rounded-full overflow-hidden">
+                                        <div
+                                            className="h-full bg-primary transition-all duration-500"
+                                            style={{ width: `${percent}%` }}
+                                        />
+                                    </div>
                                 </div>
-                                <div className="w-full h-2.5 bg-gray-200 rounded-full overflow-hidden">
-                                    <div
-                                        className="h-full bg-primary transition-all duration-500"
-                                        style={{ width: `${percent}%` }}
-                                    />
+
+                                {/* Tuya % */}
+                                <div className="flex items-center justify-between py-1.5 border-t border-border-card">
+                                    <div className="flex items-center gap-1.5">
+                                        <span className="material-symbols-outlined text-base text-primary">sensors</span>
+                                        <span className="text-xs text-text-muted">% Tuya (Sensor):</span>
+                                    </div>
+                                    <span className="font-medium text-primary text-sm">{tuyaPercent.toFixed(2)}%</span>
+                                </div>
+
+                                {/* Volumen Total */}
+                                <div className="flex items-center justify-between py-1.5">
+                                    <span className="text-xs text-text-muted">Volumen Total:</span>
+                                    <span className="font-bold text-sm">{parseFloat(zone.totalVolume).toFixed(2)} m³</span>
+                                </div>
+
+                                {/* Capacidad Máx */}
+                                <div className="flex items-center justify-between py-1.5">
+                                    <span className="text-xs text-text-muted">Capacidad Máx:</span>
+                                    <span className="font-medium text-sm">{parseFloat(zone.maxVolume).toFixed(2)} m³</span>
+                                </div>
+
+                                {/* Nivel de Agua */}
+                                <div className="flex items-center justify-between py-1.5">
+                                    <span className="text-xs text-text-muted">Nivel de Agua:</span>
+                                    <span className="font-medium text-sm">{parseFloat(zone.level_cm).toFixed(2)} cm</span>
+                                </div>
+
+                                {/* Tanques */}
+                                <div className="flex items-center justify-between py-1.5">
+                                    <span className="text-xs text-text-muted">Tanques:</span>
+                                    <span className="font-medium text-sm">{zone.tankCount}</span>
                                 </div>
                             </div>
+                        )
+                    })
+                ) : (
+                    // Fallback: Mostrar datos del último registro histórico por zona
+                    (() => {
+                        const zoneNames = { zonaBaja: 'Tanque Abajo', zonaAlta: 'Tanque Arriba', zonaCasa: 'Tanque Casa' }
+                        const tankCounts = { zonaBaja: 3, zonaAlta: 2, zonaCasa: 1 }
+                        const zones = ['zonaBaja', 'zonaAlta', 'zonaCasa']
 
-                            {/* Tuya % */}
-                            <div className="flex items-center justify-between py-1.5 border-t border-border-card">
-                                <div className="flex items-center gap-1.5">
-                                    <span className="material-symbols-outlined text-base text-primary">sensors</span>
-                                    <span className="text-xs text-text-muted">% Tuya (Sensor):</span>
+                        // Obtener el último dato de cada zona
+                        const latestByZone = {}
+                        allMeasurements.forEach(m => {
+                            if (!latestByZone[m.zone] || new Date(m.timestamp) > new Date(latestByZone[m.zone].timestamp)) {
+                                latestByZone[m.zone] = m
+                            }
+                        })
+
+                        return zones.map((zoneKey, idx) => {
+                            const data = latestByZone[zoneKey]
+                            const maxCap = maxCapacities[zoneKey] || 1
+
+                            if (!data) {
+                                return (
+                                    <div key={idx} className="bg-surface-card border border-border-card rounded-xl p-4 shadow-sm">
+                                        <h3 className="text-base font-bold mb-3">{zoneNames[zoneKey]}</h3>
+                                        <div className="text-center py-4 text-text-muted">
+                                            <span className="material-symbols-outlined text-3xl mb-2">water_drop</span>
+                                            <p className="text-sm">Sin datos</p>
+                                            <p className="text-xs">Haz clic en "Actualizar Ahora"</p>
+                                        </div>
+                                    </div>
+                                )
+                            }
+
+                            const percent = parseFloat(data.level_percent || 0)
+                            const volume = parseFloat(data.volume_m3 || 0)
+
+                            return (
+                                <div key={idx} className="bg-surface-card border border-border-card rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow">
+                                    <div className="flex items-center justify-between mb-3">
+                                        <h3 className="text-base font-bold">{zoneNames[zoneKey]}</h3>
+                                        <span className="text-xs text-text-muted bg-icon-bg-primary px-2 py-1 rounded">Último registro</span>
+                                    </div>
+
+                                    {/* Nivel con Barra */}
+                                    <div className="mb-3">
+                                        <div className="flex items-center justify-between mb-1">
+                                            <span className="text-xs font-medium text-text-muted">Nivel</span>
+                                            <span className="text-xl font-bold text-primary">{percent.toFixed(2)}%</span>
+                                        </div>
+                                        <div className="w-full h-2.5 bg-gray-200 rounded-full overflow-hidden">
+                                            <div
+                                                className="h-full bg-primary transition-all duration-500"
+                                                style={{ width: `${Math.min(percent, 100)}%` }}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Volumen */}
+                                    <div className="flex items-center justify-between py-1.5 border-t border-border-card">
+                                        <span className="text-xs text-text-muted">Volumen:</span>
+                                        <span className="font-bold text-sm">{volume.toFixed(2)} m³</span>
+                                    </div>
+
+                                    {/* Capacidad */}
+                                    <div className="flex items-center justify-between py-1.5">
+                                        <span className="text-xs text-text-muted">Capacidad:</span>
+                                        <span className="font-medium text-sm">{maxCap.toFixed(2)} m³</span>
+                                    </div>
+
+                                    {/* Tanques */}
+                                    <div className="flex items-center justify-between py-1.5">
+                                        <span className="text-xs text-text-muted">Tanques:</span>
+                                        <span className="font-medium text-sm">{tankCounts[zoneKey]}</span>
+                                    </div>
+
+                                    {/* Última actualización */}
+                                    <div className="mt-2 pt-2 border-t border-border-card">
+                                        <p className="text-xs text-text-muted text-center">
+                                            {new Date(data.timestamp).toLocaleString('es-CO', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                                        </p>
+                                    </div>
                                 </div>
-                                <span className="font-medium text-primary text-sm">{tuyaPercent.toFixed(2)}%</span>
-                            </div>
-
-                            {/* Volumen Total */}
-                            <div className="flex items-center justify-between py-1.5">
-                                <span className="text-xs text-text-muted">Volumen Total:</span>
-                                <span className="font-bold text-sm">{parseFloat(zone.totalVolume).toFixed(2)} m³</span>
-                            </div>
-
-                            {/* Capacidad Máx */}
-                            <div className="flex items-center justify-between py-1.5">
-                                <span className="text-xs text-text-muted">Capacidad Máx:</span>
-                                <span className="font-medium text-sm">{parseFloat(zone.maxVolume).toFixed(2)} m³</span>
-                            </div>
-
-                            {/* Nivel de Agua */}
-                            <div className="flex items-center justify-between py-1.5">
-                                <span className="text-xs text-text-muted">Nivel de Agua:</span>
-                                <span className="font-medium text-sm">{parseFloat(zone.level_cm).toFixed(2)} cm</span>
-                            </div>
-
-                            {/* Tanques */}
-                            <div className="flex items-center justify-between py-1.5">
-                                <span className="text-xs text-text-muted">Tanques:</span>
-                                <span className="font-medium text-sm">{zone.tankCount}</span>
-                            </div>
-                        </div>
-                    )
-                })}
+                            )
+                        })
+                    })()
+                )}
             </div>
 
             {/* Gráfica de Líneas - Histórico */}
