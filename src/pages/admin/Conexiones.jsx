@@ -96,6 +96,13 @@ YfU9ug2VqA7hLh83iLYP
         sheetNameHuespedes: '2. BH',
         // Hero Blur Amount
         heroBlurAmount: 15,
+        // Tuya API Credentials (Monitoreo de Agua)
+        tuyaAccessId: 'aw59ugmntjfevwdkx8py',
+        tuyaAccessSecret: '43fd349daf50449d8c2b061e25118c8e',
+        tuyaDeviceIdAbajo: 'ebd09863004e52db0ehcrq',
+        tuyaDeviceIdArriba: 'ebc4697fd7293917feksfa',
+        tuyaDeviceIdCasa: 'eb04c0fcf71d11da80m8rm',
+        tuyaApiRegion: 'https://openapi.tuyaus.com',
     }
 
     const [config, setConfig] = useState(DEFAULT_CONFIG)
@@ -645,7 +652,7 @@ YfU9ug2VqA7hLh83iLYP
                             </label>
                             <input
                                 type="text"
-                                value={config.tuyaAccessId || 'aw59ugmntjfevwdkx8py'}
+                                value={config.tuyaAccessId || ''}
                                 onChange={(e) => handleChange('tuyaAccessId', e.target.value)}
                                 placeholder="Access ID de Tuya IoT Platform"
                                 className="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-surface-dark text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary text-sm font-mono"
@@ -662,7 +669,7 @@ YfU9ug2VqA7hLh83iLYP
                             </label>
                             <input
                                 type="password"
-                                value={config.tuyaAccessSecret || '43fd349daf50449d8c2b061e25118c8e'}
+                                value={config.tuyaAccessSecret || ''}
                                 onChange={(e) => handleChange('tuyaAccessSecret', e.target.value)}
                                 placeholder="Access Secret de Tuya IoT Platform"
                                 className="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-surface-dark text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary text-sm font-mono"
@@ -681,7 +688,7 @@ YfU9ug2VqA7hLh83iLYP
                                 </label>
                                 <input
                                     type="text"
-                                    value={config.tuyaDeviceIdAbajo || 'ebd09863004e52db0ehcrq'}
+                                    value={config.tuyaDeviceIdAbajo || ''}
                                     onChange={(e) => handleChange('tuyaDeviceIdAbajo', e.target.value)}
                                     placeholder="Device ID"
                                     className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-surface-card dark:bg-surface-card-dark text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary text-xs font-mono"
@@ -699,7 +706,7 @@ YfU9ug2VqA7hLh83iLYP
                                 </label>
                                 <input
                                     type="text"
-                                    value={config.tuyaDeviceIdArriba || 'ebc4697fd7293917feksfa'}
+                                    value={config.tuyaDeviceIdArriba || ''}
                                     onChange={(e) => handleChange('tuyaDeviceIdArriba', e.target.value)}
                                     placeholder="Device ID"
                                     className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-surface-card dark:bg-surface-card-dark text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary text-xs font-mono"
@@ -717,7 +724,7 @@ YfU9ug2VqA7hLh83iLYP
                                 </label>
                                 <input
                                     type="text"
-                                    value={config.tuyaDeviceIdCasa || 'eb04c0fcf71d11da80m8rm'}
+                                    value={config.tuyaDeviceIdCasa || ''}
                                     onChange={(e) => handleChange('tuyaDeviceIdCasa', e.target.value)}
                                     placeholder="Device ID"
                                     className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-surface-card dark:bg-surface-card-dark text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary text-xs font-mono"
