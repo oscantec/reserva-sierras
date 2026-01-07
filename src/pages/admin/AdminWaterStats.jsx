@@ -10,6 +10,7 @@ export default function AdminWaterStats() {
     const [config, setConfig] = useState(null)
     const [currentData, setCurrentData] = useState(null)
     const [historicalData, setHistoricalData] = useState([])
+    const [allMeasurements, setAllMeasurements] = useState([])
     const [refreshing, setRefreshing] = useState(false)
     const [showConfig, setShowConfig] = useState(false)
 
@@ -35,7 +36,7 @@ export default function AdminWaterStats() {
                 setConfig({
                     tankConfigs: {
                         zonaBaja: {
-                            name: 'Zona Baja - Tanque Abajo',
+                            name: 'Tanque Abajo',
                             type: 'conic',
                             tankCount: 3,
                             height: 23,
@@ -43,7 +44,7 @@ export default function AdminWaterStats() {
                             bottomRadius: 30
                         },
                         zonaAlta: {
-                            name: 'Zona Alta - Tanque Arriba',
+                            name: 'Tanque Arriba',
                             type: 'conic',
                             tankCount: 2,
                             height: 30,
@@ -51,7 +52,7 @@ export default function AdminWaterStats() {
                             bottomRadius: 27.5
                         },
                         zonaCasa: {
-                            name: 'Zona Casa - Tanque Casa',
+                            name: 'Tanque Casa',
                             type: 'cubic',
                             tankCount: 1,
                             height: 25,
@@ -161,7 +162,10 @@ export default function AdminWaterStats() {
             const data = await response.json()
 
             if (data.success) {
-                // Procesar datos para gráfica
+                // Guardar todas las mediciones para la tabla
+                setAllMeasurements(data.measurements || [])
+
+                // Procesar datos para gráfica de líneas
                 const chartData = {}
                 data.measurements.forEach(m => {
                     const date = new Date(m.timestamp).toLocaleString('es-CO', {
@@ -171,11 +175,13 @@ export default function AdminWaterStats() {
                         minute: '2-digit'
                     })
                     if (!chartData[date]) {
-                        chartData[date] = { date }
+                        chartData[date] = { date, timestamp: m.timestamp }
                     }
                     chartData[date][m.zone] = parseFloat(m.volume_m3)
                 })
-                setHistoricalData(Object.values(chartData))
+                setHistoricalData(Object.values(chartData).sort((a, b) =>
+                    new Date(a.timestamp) - new Date(b.timestamp)
+                ))
             }
         } catch (error) {
             console.error('Error loading historical data:', error)
@@ -200,6 +206,12 @@ export default function AdminWaterStats() {
     }
 
     const totalWater = getTotalWater()
+
+    // Prepare chart data
+    const chartPoints = historicalData.slice(-48) // Last 48 measurements (24 hours at 30min intervals)
+    const maxValue = Math.max(...chartPoints.flatMap(p => [p.zonaBaja || 0, p.zonaAlta || 0, p.zonaCasa || 0]), 10)
+    const chartHeight = 300
+    const chartWidth = 1000
 
     return (
         <div className="p-6 max-w-7xl mx-auto">
@@ -346,12 +358,12 @@ export default function AdminWaterStats() {
                 })}
             </div>
 
-            {/* Histórico de Consumo */}
-            <div className="bg-surface-card border border-border-card rounded-xl p-6 shadow-sm">
+            {/* Gráfica de Líneas - Histórico */}
+            <div className="bg-surface-card border border-border-card rounded-xl p-6 shadow-sm mb-6">
                 <div className="flex items-center justify-between mb-4">
                     <div>
                         <h2 className="text-2xl font-bold">Histórico de Agua (últimas 48 horas)</h2>
-                        <p className="text-sm text-text-muted">Mediciones automáticas cada 30 minutos</p>
+                        <p className="text-sm text-text-muted">Mediciones cada 30 minutos</p>
                     </div>
                     <div className="flex items-center gap-4 text-xs">
                         <span className="flex items-center gap-1">
@@ -365,62 +377,128 @@ export default function AdminWaterStats() {
                         </span>
                     </div>
                 </div>
-                {historicalData.length > 0 ? (
-                    <div className="space-y-3">
-                        {historicalData.slice(-20).reverse().map((entry, idx) => {
-                            const maxVolume = Math.max(
-                                parseFloat(entry.zonaBaja || 0),
-                                parseFloat(entry.zonaAlta || 0),
-                                parseFloat(entry.zonaCasa || 0),
-                                5 // Minimum scale
-                            )
-                            return (
-                                <div key={idx} className="flex items-center gap-3">
-                                    <span className="w-24 text-xs font-medium text-text-muted text-right">{entry.date}</span>
-                                    <div className="flex-1 flex items-center gap-2">
-                                        {/* Zona Baja */}
-                                        {entry.zonaBaja && (
-                                            <div className="flex-1">
-                                                <div className="h-7 bg-surface-light rounded-lg overflow-hidden relative">
-                                                    <div className="absolute inset-y-0 left-0 bg-primary rounded-lg flex items-center justify-end pr-2"
-                                                        style={{ width: `${Math.max((parseFloat(entry.zonaBaja) / maxVolume) * 100, 10)}%` }}>
-                                                        <span className="text-xs font-bold text-white drop-shadow">{parseFloat(entry.zonaBaja).toFixed(2)} m³</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )}
-                                        {/* Zona Alta */}
-                                        {entry.zonaAlta && (
-                                            <div className="flex-1">
-                                                <div className="h-7 bg-surface-light rounded-lg overflow-hidden relative">
-                                                    <div className="absolute inset-y-0 left-0 bg-primary opacity-70 rounded-lg flex items-center justify-end pr-2"
-                                                        style={{ width: `${Math.max((parseFloat(entry.zonaAlta) / maxVolume) * 100, 10)}%` }}>
-                                                        <span className="text-xs font-bold text-white drop-shadow">{parseFloat(entry.zonaAlta).toFixed(2)} m³</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )}
-                                        {/* Zona Casa */}
-                                        {entry.zonaCasa && (
-                                            <div className="flex-1">
-                                                <div className="h-7 bg-surface-light rounded-lg overflow-hidden relative">
-                                                    <div className="absolute inset-y-0 left-0 bg-primary opacity-40 rounded-lg flex items-center justify-end pr-2"
-                                                        style={{ width: `${Math.max((parseFloat(entry.zonaCasa) / maxVolume) * 100, 10)}%` }}>
-                                                        <span className="text-xs font-bold text-white drop-shadow">{parseFloat(entry.zonaCasa).toFixed(2)} m³</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            )
-                        })}
+                {chartPoints.length > 0 ? (
+                    <div className="overflow-x-auto">
+                        <svg viewBox={`0 0 ${chartWidth} ${chartHeight + 60}`} className="w-full" style={{ minWidth: '800px' }}>
+                            {/* Grid lines */}
+                            {[0, 1, 2, 3, 4, 5].map(i => {
+                                const y = chartHeight - (i * chartHeight / 5)
+                                return (
+                                    <g key={i}>
+                                        <line x1="60" y1={y} x2={chartWidth - 20} y2={y} stroke="#e5e7eb" strokeWidth="1" />
+                                        <text x="50" y={y + 4} textAnchor="end" fontSize="12" fill="#6b7280">
+                                            {(maxValue * i / 5).toFixed(1)}
+                                        </text>
+                                    </g>
+                                )
+                            })}
+
+                            {/* Lines for each zone */}
+                            {['zonaBaja', 'zonaAlta', 'zonaCasa'].map((zoneKey, zoneIdx) => {
+                                const colors = ['#3db814', 'rgba(61, 184, 20, 0.7)', 'rgba(61, 184, 20, 0.4)']
+                                const points = chartPoints.map((point, i) => {
+                                    const x = 60 + (i * (chartWidth - 80) / (chartPoints.length - 1 || 1))
+                                    const value = point[zoneKey] || 0
+                                    const y = chartHeight - (value / maxValue * chartHeight)
+                                    return { x, y, value }
+                                }).filter(p => p.value > 0)
+
+                                if (points.length === 0) return null
+
+                                const pathData = points.map((p, i) =>
+                                    `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`
+                                ).join(' ')
+
+                                return (
+                                    <g key={zoneKey}>
+                                        <path d={pathData} fill="none" stroke={colors[zoneIdx]} strokeWidth="2.5" />
+                                        {points.map((p, i) => (
+                                            <circle key={i} cx={p.x} cy={p.y} r="4" fill={colors[zoneIdx]} />
+                                        ))}
+                                    </g>
+                                )
+                            })}
+
+                            {/* X-axis labels */}
+                            {chartPoints.map((point, i) => {
+                                if (i % Math.ceil(chartPoints.length / 8) !== 0 && i !== chartPoints.length - 1) return null
+                                const x = 60 + (i * (chartWidth - 80) / (chartPoints.length - 1 || 1))
+                                return (
+                                    <text key={i} x={x} y={chartHeight + 20} textAnchor="middle" fontSize="11" fill="#6b7280">
+                                        {point.date.split(',')[0]}
+                                    </text>
+                                )
+                            })}
+
+                            {/* Axis labels */}
+                            <text x="10" y={chartHeight / 2} textAnchor="middle" fontSize="12" fill="#6b7280" transform={`rotate(-90, 10, ${chartHeight / 2})`}>
+                                Volumen (m³)
+                            </text>
+                        </svg>
                     </div>
                 ) : (
                     <div className="text-center py-12 text-text-muted">
                         <span className="material-symbols-outlined text-5xl mb-4">show_chart</span>
                         <p>No hay datos históricos disponibles</p>
                         <p className="text-sm mt-2">Los datos se guardarán automáticamente cada 30 minutos</p>
+                    </div>
+                )}
+            </div>
+
+            {/* Tabla de Registros */}
+            <div className="bg-surface-card border border-border-card rounded-xl shadow-sm overflow-hidden">
+                <div className="bg-background-light px-6 py-4 border-b border-border-card">
+                    <h2 className="text-xl font-bold">Registros de Mediciones</h2>
+                    <p className="text-sm text-text-muted">Últimas 50 mediciones guardadas</p>
+                </div>
+                {allMeasurements.length > 0 ? (
+                    <>
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-left border-collapse">
+                                <thead className="bg-background-light border-b border-border-card">
+                                    <tr>
+                                        <th className="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-text-secondary-light whitespace-nowrap">Fecha y Hora</th>
+                                        <th className="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-text-secondary-light whitespace-nowrap">Zona</th>
+                                        <th className="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-text-secondary-light whitespace-nowrap">Volumen (m³)</th>
+                                        <th className="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-text-secondary-light whitespace-nowrap">% Nivel</th>
+                                        <th className="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-text-secondary-light whitespace-nowrap">% Tuya</th>
+                                        <th className="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-text-secondary-light whitespace-nowrap">Nivel (cm)</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-[#f0f4ef]">
+                                    {allMeasurements.slice(0, 50).map((measurement, index) => {
+                                        const zoneName = measurement.zone === 'zonaBaja' ? 'Tanque Abajo' :
+                                            measurement.zone === 'zonaAlta' ? 'Tanque Arriba' : 'Tanque Casa'
+                                        return (
+                                            <tr key={index} className={`hover:bg-gray-100 transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
+                                                <td className="py-2.5 px-6 text-sm text-text-main-light">
+                                                    {new Date(measurement.timestamp).toLocaleString('es-CO', {
+                                                        year: 'numeric',
+                                                        month: 'short',
+                                                        day: 'numeric',
+                                                        hour: '2-digit',
+                                                        minute: '2-digit'
+                                                    })}
+                                                </td>
+                                                <td className="py-2.5 px-6 text-sm text-text-main-light font-medium">{zoneName}</td>
+                                                <td className="py-2.5 px-6 text-sm text-text-main-light">{parseFloat(measurement.volume_m3).toFixed(2)}</td>
+                                                <td className="py-2.5 px-6 text-sm text-text-main-light">{parseFloat(measurement.level_percent).toFixed(2)}%</td>
+                                                <td className="py-2.5 px-6 text-sm text-primary font-medium">{parseFloat(measurement.tuya_percent).toFixed(2)}%</td>
+                                                <td className="py-2.5 px-6 text-sm text-text-main-light">{parseFloat(measurement.level_cm).toFixed(2)}</td>
+                                            </tr>
+                                        )
+                                    })}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div className="bg-icon-bg-primary px-6 py-3 border-t border-border-card flex justify-between items-center">
+                            <span className="text-xs text-text-muted">Mostrando {Math.min(50, allMeasurements.length)} de {allMeasurements.length} registros</span>
+                        </div>
+                    </>
+                ) : (
+                    <div className="p-8 text-center text-text-muted">
+                        <span className="material-symbols-outlined text-4xl mb-2">table_view</span>
+                        <p>No hay registros disponibles</p>
                     </div>
                 )}
             </div>
