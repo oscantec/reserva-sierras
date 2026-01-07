@@ -269,7 +269,7 @@ export default function AdminWaterStats() {
             <h2 className="text-2xl font-bold mb-4">Estado por Zona</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 {currentData?.zones.map((zone, idx) => {
-                    const percent = parseFloat(zone.levelPercent)
+                    const percent = parseFloat(zone.percentage)
                     const tuyaPercent = parseFloat(zone.sensorPercent)
 
                     return (
@@ -308,13 +308,13 @@ export default function AdminWaterStats() {
                             {/* Capacidad Máx */}
                             <div className="flex items-center justify-between py-2">
                                 <span className="text-sm text-text-muted">Capacidad Máx:</span>
-                                <span className="font-medium">{parseFloat(zone.maxCapacity).toFixed(2)} m³</span>
+                                <span className="font-medium">{parseFloat(zone.maxVolume).toFixed(2)} m³</span>
                             </div>
 
                             {/* Nivel de Agua */}
                             <div className="flex items-center justify-between py-2">
                                 <span className="text-sm text-text-muted">Nivel de Agua:</span>
-                                <span className="font-medium">{parseFloat(zone.totalHeight).toFixed(2)} cm</span>
+                                <span className="font-medium">{parseFloat(zone.level_cm).toFixed(2)} cm</span>
                             </div>
 
                             {/* Tanques */}
