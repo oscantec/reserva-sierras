@@ -146,10 +146,26 @@ export default async function handler(req, res) {
         const accessToken = await getAccessToken(clientId, clientSecret)
 
         // 4. Definir zonas a consultar
+        // 4. Definir zonas a consultar
+        // Priorizar configuración guardada en DB (siteConfig.tankConfigs) sobre la hardcoded
+        const savedTanks = config.tankConfigs || {}
+
         const zonesToProcess = [
-            { key: 'zonaBaja', deviceId: config.tuyaDeviceIdAbajo, config: TANK_CONFIGS.zonaBaja },
-            { key: 'zonaAlta', deviceId: config.tuyaDeviceIdArriba, config: TANK_CONFIGS.zonaAlta },
-            { key: 'zonaCasa', deviceId: config.tuyaDeviceIdCasa, config: TANK_CONFIGS.zonaCasa }
+            {
+                key: 'zonaBaja',
+                deviceId: config.tuyaDeviceIdAbajo,
+                config: savedTanks.zonaBaja || TANK_CONFIGS.zonaBaja
+            },
+            {
+                key: 'zonaAlta',
+                deviceId: config.tuyaDeviceIdArriba,
+                config: savedTanks.zonaAlta || TANK_CONFIGS.zonaAlta
+            },
+            {
+                key: 'zonaCasa',
+                deviceId: config.tuyaDeviceIdCasa,
+                config: savedTanks.zonaCasa || TANK_CONFIGS.zonaCasa
+            }
         ]
 
         const measurements = []
