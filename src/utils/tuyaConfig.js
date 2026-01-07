@@ -4,12 +4,15 @@ export async function getTuyaCredentials() {
         const response = await fetch('/api/config')
         const config = await response.json()
 
+        // Detectar si viene en estructura nueva (anidada) o antigua (plana)
+        const tuyaData = config.tuyaConfig || {}
+
         return {
-            clientId: config.tuyaAccessId || '',
-            clientSecret: config.tuyaAccessSecret || '',
-            deviceIdAbajo: config.tuyaDeviceIdAbajo || '',
-            deviceIdArriba: config.tuyaDeviceIdArriba || '',
-            deviceIdCasa: config.tuyaDeviceIdCasa || ''
+            clientId: tuyaData.clientId || config.tuyaAccessId || '',
+            clientSecret: tuyaData.clientSecret || config.tuyaAccessSecret || '',
+            deviceIdAbajo: tuyaData.zonaBaja?.deviceId || config.tuyaDeviceIdAbajo || '',
+            deviceIdArriba: tuyaData.zonaAlta?.deviceId || config.tuyaDeviceIdArriba || '',
+            deviceIdCasa: tuyaData.zonaCasa?.deviceId || config.tuyaDeviceIdCasa || ''
         }
     } catch (error) {
         console.error('Error loading Tuya credentials:', error)
