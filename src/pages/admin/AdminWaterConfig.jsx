@@ -18,7 +18,7 @@ export default function AdminWaterConfig() {
     // Estado para configuración de tanques (con alturas reales de liquid_depth_max)
     const [tankConfigs, setTankConfigs] = useState({
         zonaBaja: {
-            name: 'Zona Baja - Tanque Abajo (Suministro Principal)',
+            name: 'Zona Baja - Tanque Abajo',
             type: 'conic',
             tankCount: 3,
             height: 23,  // 230 mm liquid_depth_max convertido a cm
@@ -26,7 +26,7 @@ export default function AdminWaterConfig() {
             bottomRadius: 30  // Ajusta según tu tanque real
         },
         zonaAlta: {
-            name: 'Zona Alta - Tanque Arriba (Reserva)',
+            name: 'Zona Alta - Tanque Arriba',
             type: 'conic',
             tankCount: 2,
             height: 30,  // 300 mm liquid_depth_max convertido a cm

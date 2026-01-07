@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import { processZoneDataFromPercent } from '../../utils/waterCalculations'
 import { getTuyaCredentials } from '../../utils/tuyaConfig'
 
@@ -249,19 +248,39 @@ export default function AdminWaterStats() {
             )}
 
             {/* Card de Agua Total */}
-            <div className="bg-gradient-to-br from-primary to-btn-primary-hover text-white rounded-xl p-8 mb-6 shadow-lg">
-                <div className="flex items-center gap-4">
-                    <span className="material-symbols-outlined text-6xl">water_drop</span>
-                    <div>
-                        <h2 className="text-xl opacity-90">Agua Total Disponible</h2>
-                        <p className="text-sm opacity-75">En todo el complejo</p>
-                        <p className="text-5xl font-bold mt-2">{totalWater.toFixed(2)} m³</p>
-                        {currentData && (
-                            <p className="text-sm opacity-75 mt-2">
-                                Última actualización: {new Date(currentData.timestamp).toLocaleString('es-CO')}
-                            </p>
-                        )}
+            <div className="bg-gradient-to-br from-primary to-btn-primary-hover text-white rounded-xl p-6 mb-6 shadow-lg max-w-2xl">
+                <div className="flex items-center justify-between gap-6">
+                    {/* Left: Icon and main info */}
+                    <div className="flex items-center gap-4">
+                        <span className="material-symbols-outlined text-5xl">water_drop</span>
+                        <div>
+                            <h2 className="text-lg opacity-90">Agua Total Disponible</h2>
+                            <p className="text-xs opacity-75">En todo el complejo</p>
+                            <p className="text-4xl font-bold mt-1">{totalWater.toFixed(2)} m³</p>
+                            {currentData && (
+                                <p className="text-xs opacity-75 mt-1">
+                                    Última actualización: {new Date(currentData.timestamp).toLocaleString('es-CO')}
+                                </p>
+                            )}
+                        </div>
                     </div>
+                    {/* Right: Stats */}
+                    {currentData && (
+                        <div className="text-right">
+                            <div className="mb-2">
+                                <p className="text-xs opacity-75">Capacidad Máxima</p>
+                                <p className="text-lg font-bold">
+                                    {currentData.zones.reduce((sum, zone) => sum + parseFloat(zone.maxVolume), 0).toFixed(2)} m³
+                                </p>
+                            </div>
+                            <div>
+                                <p className="text-xs opacity-75">Porcentaje Actual</p>
+                                <p className="text-lg font-bold">
+                                    {((totalWater / currentData.zones.reduce((sum, zone) => sum + parseFloat(zone.maxVolume), 0)) * 100).toFixed(1)}%
+                                </p>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
 
@@ -296,7 +315,7 @@ export default function AdminWaterStats() {
                                     <span className="material-symbols-outlined text-lg text-primary">sensors</span>
                                     <span className="text-sm text-text-muted">% Tuya (Sensor):</span>
                                 </div>
-                                <span className="font-medium" style={{ color: 'rgb(59, 130, 246)' }}>{tuyaPercent.toFixed(2)}%</span>
+                                <span className="font-medium text-primary">{tuyaPercent.toFixed(2)}%</span>
                             </div>
 
                             {/* Volumen Total */}
