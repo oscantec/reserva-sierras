@@ -568,9 +568,24 @@ export default function AdminWaterStats() {
                                         )
 
                                         return sortedRows.slice(0, 50).map((row, index) => {
-                                            const baja = row.readings.zonaBaja
-                                            const alta = row.readings.zonaAlta
-                                            const casa = row.readings.zonaCasa
+                                            // Lógica de corrección: Si el porcentaje es 0 pero hay volumen, lo calculamos
+                                            const getFixedData = (data, zoneKey) => {
+                                                if (!data) return null
+                                                let { volume, percent } = data
+
+                                                // Si el porcentaje es 0 o inexistente, pero tenemos volumen y capacidad maxima conocida
+                                                if ((!percent || percent <= 0.1) && volume > 0) {
+                                                    const maxCap = maxCapacities[zoneKey]
+                                                    if (maxCap > 0) {
+                                                        percent = (volume / maxCap) * 100
+                                                    }
+                                                }
+                                                return { ...data, percent }
+                                            }
+
+                                            const baja = getFixedData(row.readings.zonaBaja, 'zonaBaja')
+                                            const alta = getFixedData(row.readings.zonaAlta, 'zonaAlta')
+                                            const casa = getFixedData(row.readings.zonaCasa, 'zonaCasa')
 
                                             const CellContent = ({ data }) => {
                                                 if (!data) return <span className="text-gray-300">-</span>
