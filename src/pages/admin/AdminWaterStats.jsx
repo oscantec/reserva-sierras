@@ -142,9 +142,9 @@ export default function AdminWaterStats() {
                 body: JSON.stringify({
                     zone,
                     volume_m3: parseFloat(data.totalVolume),
-                    level_percent: parseFloat(data.levelPercent),
+                    level_percent: parseFloat(data.percentage),
                     tuya_percent: parseFloat(tuyaPercent),
-                    level_cm: parseFloat(data.totalHeight)
+                    level_cm: parseFloat(data.level_cm)
                 })
             })
             // Actualizar histórico después de guardar
@@ -164,7 +164,7 @@ export default function AdminWaterStats() {
                 // Procesar datos para gráfica
                 const chartData = {}
                 data.measurements.forEach(m => {
-                    const date = new Date(m.timestamp).toLocaleDateString('es-CO', {
+                    const date = new Date(m.timestamp).toLocaleString('es-CO', {
                         month: 'short',
                         day: 'numeric',
                         hour: '2-digit',
@@ -348,20 +348,74 @@ export default function AdminWaterStats() {
 
             {/* Histórico de Consumo */}
             <div className="bg-surface-card border border-border-card rounded-xl p-6 shadow-sm">
-                <h2 className="text-2xl font-bold mb-4">Histórico de Consumo (7 días)</h2>
+                <div className="flex items-center justify-between mb-4">
+                    <div>
+                        <h2 className="text-2xl font-bold">Histórico de Agua (últimas 48 horas)</h2>
+                        <p className="text-sm text-text-muted">Mediciones automáticas cada 30 minutos</p>
+                    </div>
+                    <div className="flex items-center gap-4 text-xs">
+                        <span className="flex items-center gap-1">
+                            <span className="w-3 h-3 rounded-full bg-[#3b82f6]"></span> Tanque Abajo
+                        </span>
+                        <span className="flex items-center gap-1">
+                            <span className="w-3 h-3 rounded-full bg-[#10b981]"></span> Tanque Arriba
+                        </span>
+                        <span className="flex items-center gap-1">
+                            <span className="w-3 h-3 rounded-full bg-[#8b5cf6]"></span> Tanque Casa
+                        </span>
+                    </div>
+                </div>
                 {historicalData.length > 0 ? (
-                    <ResponsiveContainer width="100%" height={400}>
-                        <LineChart data={historicalData}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="date" />
-                            <YAxis label={{ value: 'm³', angle: -90, position: 'insideLeft' }} />
-                            <Tooltip />
-                            <Legend />
-                            <Line type="monotone" dataKey="zonaBaja" stroke="#3b82f6" name="Tanque Abajo" strokeWidth={2} />
-                            <Line type="monotone" dataKey="zonaAlta" stroke="#10b981" name="Tanque Arriba" strokeWidth={2} />
-                            <Line type="monotone" dataKey="zonaCasa" stroke="#8b5cf6" name="Tanque Casa" strokeWidth={2} />
-                        </LineChart>
-                    </ResponsiveContainer>
+                    <div className="space-y-3">
+                        {historicalData.slice(-20).reverse().map((entry, idx) => {
+                            const maxVolume = Math.max(
+                                parseFloat(entry.zonaBaja || 0),
+                                parseFloat(entry.zonaAlta || 0),
+                                parseFloat(entry.zonaCasa || 0),
+                                5 // Minimum scale
+                            )
+                            return (
+                                <div key={idx} className="flex items-center gap-3">
+                                    <span className="w-24 text-xs font-medium text-text-muted text-right">{entry.date}</span>
+                                    <div className="flex-1 flex items-center gap-2">
+                                        {/* Zona Baja */}
+                                        {entry.zonaBaja && (
+                                            <div className="flex-1">
+                                                <div className="h-7 bg-surface-light rounded-lg overflow-hidden relative">
+                                                    <div className="absolute inset-y-0 left-0 bg-[#3b82f6] rounded-lg flex items-center justify-end pr-2"
+                                                        style={{ width: `${Math.max((parseFloat(entry.zonaBaja) / maxVolume) * 100, 10)}%` }}>
+                                                        <span className="text-xs font-bold text-white drop-shadow">{parseFloat(entry.zonaBaja).toFixed(2)} m³</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+                                        {/* Zona Alta */}
+                                        {entry.zonaAlta && (
+                                            <div className="flex-1">
+                                                <div className="h-7 bg-surface-light rounded-lg overflow-hidden relative">
+                                                    <div className="absolute inset-y-0 left-0 bg-[#10b981] rounded-lg flex items-center justify-end pr-2"
+                                                        style={{ width: `${Math.max((parseFloat(entry.zonaAlta) / maxVolume) * 100, 10)}%` }}>
+                                                        <span className="text-xs font-bold text-white drop-shadow">{parseFloat(entry.zonaAlta).toFixed(2)} m³</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+                                        {/* Zona Casa */}
+                                        {entry.zonaCasa && (
+                                            <div className="flex-1">
+                                                <div className="h-7 bg-surface-light rounded-lg overflow-hidden relative">
+                                                    <div className="absolute inset-y-0 left-0 bg-[#8b5cf6] rounded-lg flex items-center justify-end pr-2"
+                                                        style={{ width: `${Math.max((parseFloat(entry.zonaCasa) / maxVolume) * 100, 10)}%` }}>
+                                                        <span className="text-xs font-bold text-white drop-shadow">{parseFloat(entry.zonaCasa).toFixed(2)} m³</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            )
+                        })}
+                    </div>
                 ) : (
                     <div className="text-center py-12 text-text-muted">
                         <span className="material-symbols-outlined text-5xl mb-4">show_chart</span>
