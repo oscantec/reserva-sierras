@@ -1,0 +1,23 @@
+name: Monitoreo Agua 30min
+
+on:
+  schedule:
+    - cron: '*/30 * * * *' # Ejecutar cada 30 minutos
+  workflow_dispatch: # Permite ejecutarlo manualmente desde GitHub
+
+jobs:
+  ping-vercel:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Llamar endpoint de monitoreo
+        run: |
+          # Intenta llamar a la URL de producción
+          # Verifica que la respuesta sea 200 OK
+          response=$(curl -s -w "%{http_code}" -o /dev/null "https://reservadelassierras.com/api/cron-water-monitoring?secret=${{ secrets.CRON_SECRET }}")
+          
+          if [ "$response" -ne 200 ]; then
+            echo "Error: El servidor respondió con código $response"
+            exit 1
+          else
+            echo "Éxito: Medición automática disparada correctamente."
+          fi
