@@ -1,10 +1,11 @@
 import { TuyaContext } from '@tuya/tuya-connector-nodejs'
 import { createClient } from '@supabase/supabase-js'
 
-const supabase = createClient(
-    process.env.VITE_SUPABASE_URL,
-    process.env.VITE_SUPABASE_ANON_KEY
-)
+// Vercel uses process.env without VITE_ prefix, development uses VITE_ prefix
+const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL
+const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY
+
+const supabase = createClient(supabaseUrl || '', supabaseAnonKey || '')
 
 const TUYA_API_REGION = 'https://openapi.tuyaus.com'
 
