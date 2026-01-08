@@ -38,10 +38,9 @@ function App() {
     useEffect(() => {
         initializeConfig()
 
-        // Apply ALL custom colors from localStorage
-        const savedConfig = localStorage.getItem('casacampestre_config')
-        if (savedConfig) {
-            const config = JSON.parse(savedConfig)
+        // Function to apply colors from config
+        const applyColorsFromConfig = (config) => {
+            if (!config) return
             const root = document.documentElement
 
             // Apply legacy siteColors for backwards compatibility
@@ -143,6 +142,36 @@ function App() {
                 if (f.fontGlobal) root.style.setProperty('--font-display', `"${f.fontGlobal}", sans-serif`)
             }
         }
+
+        // Load config from localStorage first, then fallback to API
+        const loadAndApplyConfig = async () => {
+            const savedConfig = localStorage.getItem('casacampestre_config')
+
+            if (savedConfig) {
+                // localStorage exists, apply it
+                const config = JSON.parse(savedConfig)
+                applyColorsFromConfig(config)
+            } else {
+                // No localStorage (incognito mode, new device, etc.)
+                // Try to fetch from API (Supabase)
+                try {
+                    const response = await fetch('/api/config')
+                    if (response.ok) {
+                        const apiConfig = await response.json()
+                        if (Object.keys(apiConfig).length > 0) {
+                            applyColorsFromConfig(apiConfig)
+                            // Save to localStorage for future use
+                            localStorage.setItem('casacampestre_config', JSON.stringify(apiConfig))
+                            console.log('✅ Configuración cargada desde Supabase (sin localStorage)')
+                        }
+                    }
+                } catch (e) {
+                    console.log('No config available from API')
+                }
+            }
+        }
+
+        loadAndApplyConfig()
     }, [])
 
     return (
