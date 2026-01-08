@@ -143,31 +143,31 @@ function App() {
             }
         }
 
-        // Load config from localStorage first, then fallback to API
+        // SIEMPRE cargar desde API (Supabase) primero - localStorage es solo cache
         const loadAndApplyConfig = async () => {
-            const savedConfig = localStorage.getItem('casacampestre_config')
+            try {
+                // PRIORIDAD 1: Siempre intentar cargar desde API (Supabase)
+                const response = await fetch('/api/config')
+                if (response.ok) {
+                    const apiConfig = await response.json()
+                    if (Object.keys(apiConfig).length > 0) {
+                        applyColorsFromConfig(apiConfig)
+                        // Actualizar cache local
+                        localStorage.setItem('casacampestre_config', JSON.stringify(apiConfig))
+                        console.log('✅ Configuración cargada desde Supabase')
+                        return
+                    }
+                }
+            } catch (e) {
+                console.log('API no disponible, usando cache local')
+            }
 
+            // PRIORIDAD 2: Solo usar localStorage si API falló
+            const savedConfig = localStorage.getItem('casacampestre_config')
             if (savedConfig) {
-                // localStorage exists, apply it
                 const config = JSON.parse(savedConfig)
                 applyColorsFromConfig(config)
-            } else {
-                // No localStorage (incognito mode, new device, etc.)
-                // Try to fetch from API (Supabase)
-                try {
-                    const response = await fetch('/api/config')
-                    if (response.ok) {
-                        const apiConfig = await response.json()
-                        if (Object.keys(apiConfig).length > 0) {
-                            applyColorsFromConfig(apiConfig)
-                            // Save to localStorage for future use
-                            localStorage.setItem('casacampestre_config', JSON.stringify(apiConfig))
-                            console.log('✅ Configuración cargada desde Supabase (sin localStorage)')
-                        }
-                    }
-                } catch (e) {
-                    console.log('No config available from API')
-                }
+                console.log('⚠️ Usando configuración de cache local')
             }
         }
 
