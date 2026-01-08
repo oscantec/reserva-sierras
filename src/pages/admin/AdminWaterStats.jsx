@@ -437,7 +437,7 @@ export default function AdminWaterStats() {
                                 )
                             }
 
-                            const percent = parseFloat(data.level_percent || 0)
+                            const percent = parseFloat(data.percentage || 0)
                             const volume = parseFloat(data.volume_m3 || 0)
 
                             return (
