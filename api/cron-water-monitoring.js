@@ -192,7 +192,7 @@ export default async function handler(req, res) {
                         zone: zone.key,
                         level_cm: parseFloat(level_cm.toFixed(2)),
                         volume_m3: parseFloat(currentVolume.toFixed(3)),
-                        percentage: parseFloat(percentage.toFixed(2)), // CORREGIDO: era level_percent
+                        level_percent: parseFloat(percentage.toFixed(2)), // Porcentaje de Tuya directo
                         tank_count: zone.config.tankCount,
                         timestamp: roundedTimestamp
                     })

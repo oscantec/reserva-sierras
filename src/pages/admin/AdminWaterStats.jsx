@@ -153,6 +153,8 @@ export default function AdminWaterStats() {
     }
 
     // Guardar medición en base de datos
+    // IMPORTANTE: Guardamos el porcentaje de Tuya directamente porque es el valor real del sensor
+    // Esto evita problemas con configuraciones locales diferentes entre dispositivos
     const saveMeasurement = async (zone, data, tuyaPercent) => {
         try {
             await fetch('/api/water-measurements', {
@@ -161,12 +163,12 @@ export default function AdminWaterStats() {
                 body: JSON.stringify({
                     zone,
                     volume_m3: parseFloat(data.totalVolume),
-                    level_percent: parseFloat(data.percentage),
+                    level_percent: parseFloat(tuyaPercent), // Usar porcentaje de Tuya directamente
                     tuya_percent: parseFloat(tuyaPercent),
                     level_cm: parseFloat(data.level_cm)
                 })
             })
-            console.log(`💾 Guardando medición - Zona: ${zone}, % Calculado: ${data.percentage}%, % Tuya: ${tuyaPercent}%`)
+            console.log(`💾 Guardando medición - Zona: ${zone}, % Tuya: ${tuyaPercent}%`)
             // Actualizar histórico después de guardar
             fetchHistoricalData()
         } catch (error) {
