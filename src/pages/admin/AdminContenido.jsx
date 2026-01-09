@@ -719,42 +719,59 @@ export default function AdminContenido() {
 
     const saveConfig = async () => {
         setSaving(true)
-        const updated = {
-            ...config,
-            inicioContent: content,
-            registroContent,
-            reservasContent,
-            galeriaContent,
-            guiaContent,
-            galeriaLabels,
-            siteColors,
-            siteFonts, // Tipografías
-            checkInTime: generalConfig.checkInTime,
-            checkOutTime: generalConfig.checkOutTime,
-            whatsappNumber: generalConfig.whatsappNumber,
-            hostName: generalConfig.hostName,
-            // Payment config
-            paymentSubtitlePart1: paymentConfig.paymentSubtitlePart1,
-            paymentSubtitleHighlight: paymentConfig.paymentSubtitleHighlight,
-            paymentSubtitlePart2: paymentConfig.paymentSubtitlePart2,
-            paymentBbreEmail: paymentConfig.paymentBbreEmail,
-            paymentBbrePhone: paymentConfig.paymentBbrePhone,
-            paymentNequiNumber: paymentConfig.paymentNequiNumber,
-            paymentNequiName: paymentConfig.paymentNequiName,
-            paymentWhatsappNumber: paymentConfig.paymentWhatsappNumber,
-            paymentWhatsappMessage: paymentConfig.paymentWhatsappMessage
-        }
 
-        // IMPORTANT: Save to API (Supabase) FIRST for persistence
         try {
+            // CRÍTICO: Obtener config actual de Supabase antes de guardar
+            // para no perder datos que no estamos editando
+            let currentDbConfig = {}
+            try {
+                const getResponse = await fetch('/api/config')
+                if (getResponse.ok) {
+                    currentDbConfig = await getResponse.json()
+                    console.log('📥 Config actual de Supabase obtenida para merge')
+                }
+            } catch (e) {
+                console.warn('No se pudo obtener config actual de Supabase')
+            }
+
+            // MERGE: Config de DB + config local + cambios actuales
+            // Los cambios actuales tienen prioridad sobre todo
+            const updated = {
+                ...currentDbConfig,  // Primero: datos existentes en Supabase
+                ...config,           // Luego: config local actual
+                // Finalmente: los campos que estamos editando explícitamente
+                inicioContent: content,
+                registroContent,
+                reservasContent,
+                galeriaContent,
+                guiaContent,
+                galeriaLabels,
+                siteColors,
+                siteFonts,
+                checkInTime: generalConfig.checkInTime,
+                checkOutTime: generalConfig.checkOutTime,
+                whatsappNumber: generalConfig.whatsappNumber,
+                hostName: generalConfig.hostName,
+                paymentSubtitlePart1: paymentConfig.paymentSubtitlePart1,
+                paymentSubtitleHighlight: paymentConfig.paymentSubtitleHighlight,
+                paymentSubtitlePart2: paymentConfig.paymentSubtitlePart2,
+                paymentBbreEmail: paymentConfig.paymentBbreEmail,
+                paymentBbrePhone: paymentConfig.paymentBbrePhone,
+                paymentNequiNumber: paymentConfig.paymentNequiNumber,
+                paymentNequiName: paymentConfig.paymentNequiName,
+                paymentWhatsappNumber: paymentConfig.paymentWhatsappNumber,
+                paymentWhatsappMessage: paymentConfig.paymentWhatsappMessage
+            }
+
+            // Guardar en Supabase
             const response = await fetch('/api/config', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(updated)
             })
+
             if (response.ok) {
                 console.log('✅ Configuración guardada en Supabase')
-                // Only sync to localStorage after successful API save
                 localStorage.setItem(CONFIG_KEY, JSON.stringify(updated))
                 setConfig(updated)
                 applyColors(siteColors)
@@ -765,11 +782,7 @@ export default function AdminContenido() {
             }
         } catch (e) {
             console.error('❌ Error guardando en Supabase:', e)
-            // Fallback: save to localStorage but warn user
-            localStorage.setItem(CONFIG_KEY, JSON.stringify(updated))
-            setConfig(updated)
-            applyColors(siteColors)
-            alert('⚠️ Los cambios se guardaron localmente pero NO en la nube. Verifica tu conexión a internet.')
+            alert('⚠️ Error al guardar. Verifica tu conexión a internet.')
         }
 
         setSaving(false)
