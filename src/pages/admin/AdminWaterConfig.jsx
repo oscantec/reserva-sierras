@@ -4,8 +4,6 @@ import { useState, useEffect } from 'react'
  * Componente para configurar dimensiones de tanques y credenciales API de Tuya
  */
 export default function AdminWaterConfig() {
-    const CONFIG_KEY = 'water_monitoring_config'
-
     // Estado para configuración de Tuya API (precargado con tus datos)
     const [tuyaConfig, setTuyaConfig] = useState({
         clientId: 'aw59ugmntjfevwdkx8py',
@@ -52,21 +50,51 @@ export default function AdminWaterConfig() {
     const [saving, setSaving] = useState(false)
     const [saved, setSaved] = useState(false)
 
-    // Cargar configuración guardada
+    // Cargar configuración desde API (Supabase) primero
     useEffect(() => {
-        const loadConfig = () => {
-            const savedConfig = localStorage.getItem(CONFIG_KEY)
-            if (savedConfig) {
-                const parsed = JSON.parse(savedConfig)
-                setTuyaConfig(prev => ({ ...prev, ...parsed.tuyaConfig }))
-                setTankConfigs(prev => ({ ...prev, ...parsed.tankConfigs }))
-                setAlertConfig(prev => ({ ...prev, ...parsed.alertConfig }))
+        const loadConfig = async () => {
+            try {
+                // 1. Intentar cargar desde API (Supabase)
+                const response = await fetch('/api/config')
+                if (response.ok) {
+                    const data = await response.json()
+
+                    // Cargar configuración de Tuya
+                    if (data.tuyaAccessId) {
+                        setTuyaConfig(prev => ({
+                            ...prev,
+                            clientId: data.tuyaAccessId || prev.clientId,
+                            clientSecret: data.tuyaAccessSecret || prev.clientSecret,
+                            zonaBaja: { deviceId: data.tuyaDeviceIdAbajo || prev.zonaBaja.deviceId },
+                            zonaAlta: { deviceId: data.tuyaDeviceIdArriba || prev.zonaAlta.deviceId },
+                            zonaCasa: { deviceId: data.tuyaDeviceIdCasa || prev.zonaCasa.deviceId }
+                        }))
+                    }
+
+                    // Cargar configuración de tanques
+                    if (data.tankConfigs) {
+                        setTankConfigs(prev => ({ ...prev, ...data.tankConfigs }))
+                    }
+
+                    // Cargar configuración de alertas
+                    if (data.alertConfig) {
+                        setAlertConfig(prev => ({ ...prev, ...data.alertConfig }))
+                    }
+
+                    console.log('✅ Config de agua cargada desde Supabase')
+                    return
+                }
+            } catch (error) {
+                console.warn('No se pudo cargar config desde API:', error)
             }
+
+            // 2. Fallback: usar valores por defecto (ya están en el estado inicial)
+            console.log('⚠️ Usando configuración por defecto')
         }
         loadConfig()
     }, [])
 
-    // Guardar configuración
+    // Guardar configuración en Supabase (sin localStorage)
     const saveConfig = async () => {
         setSaving(true)
         const newConfig = {
@@ -76,10 +104,7 @@ export default function AdminWaterConfig() {
             lastUpdated: new Date().toISOString()
         }
 
-        // 1. Save to Local Storage (Immediate feedback/offline)
-        localStorage.setItem(CONFIG_KEY, JSON.stringify(newConfig))
-
-        // 2. Save to Supabase (for Backup & Cron Jobs)
+        // Guardar en Supabase
         try {
             // First, get credentials if we need to call an API. 
             // Or use direct update if we have supabase client.
