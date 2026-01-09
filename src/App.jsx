@@ -23,6 +23,7 @@ import Login from './pages/admin/Login'
 import Seguridad from './pages/admin/Seguridad'
 import AdminWaterConfig from './pages/admin/AdminWaterConfig'
 import AdminWaterStats from './pages/admin/AdminWaterStats'
+import TestSparkles from './pages/TestSparkles'
 
 // Scroll to top on every page change
 function ScrollToTop() {
@@ -184,6 +185,7 @@ function App() {
                 <Route path="/reservas" element={<Reservas />} />
                 <Route path="/registro" element={<Registro />} />
                 <Route path="/guia" element={<Guia />} />
+                <Route path="/test-sparkles" element={<TestSparkles />} />
 
                 {/* Admin Login (public) */}
                 <Route path="/admin/login" element={<Login />} />
