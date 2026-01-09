@@ -278,7 +278,7 @@ export default function AdminWaterStats() {
     const chartWidth = 1000
 
     return (
-        <div className="p-3 md:p-6 max-w-7xl mx-auto">
+        <div className="p-3 md:p-6 w-full md:max-w-7xl md:mx-auto overflow-x-hidden">
             {/* Header - Responsive */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                 <div>
