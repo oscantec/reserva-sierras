@@ -9,9 +9,9 @@ const getDefaultContent = () => ({
         description: 'Reserva de las Sierras no es solo un alojamiento, es una experiencia diseñada para tu descanso y conexión con la naturaleza.'
     },
     amenidades: [
-        { icon: 'pool', title: 'Piscina Privada', description: 'Disfruta de un baño refrescante en total privacidad.' },
-        { icon: 'wifi', title: 'Wi-Fi Alta Velocidad', description: 'Mantente conectado con Starlink.' },
-        { icon: 'pets', title: 'Pet Friendly', description: 'Tus mascotas son bienvenidas.' }
+        { icon: 'landscape', title: 'Entorno Natural', description: 'La casa se encuentra rodeada de zonas verdes y vegetación propia del clima de Anapoima. El entorno natural hace parte del lugar y acompaña toda la estadía, ofreciendo un ambiente abierto, verde y conectado con el paisaje rural de la zona.' },
+        { icon: 'home_work', title: 'Ubicación Tranquila', description: 'La casa se encuentra a 4,5 km antes de llegar al casco urbano y a solo 6 minutos en carro del centro de Anapoima, en un entorno calmado, pensado para el descanso y la desconexión del entorno urbano.' },
+        { icon: 'pets', title: 'Pet Friendly', description: 'Se permiten mascotas con previo aviso. Los huéspedes son responsables del cuidado, supervisión y comportamiento de sus mascotas durante toda la estadía, así como de mantener los espacios limpios y en buen estado.' }
     ],
     destacados: {
         title: 'Nuestra Casa',
