@@ -20,58 +20,55 @@ export default function AdminWaterStats() {
         fetchHistoricalData()
     }, []) // Sin dependencias - solo se ejecuta una vez al montar
 
-    const loadConfig = () => {
-        try {
-            const CONFIG_KEY = 'water_monitoring_config'
-            const savedConfig = localStorage.getItem(CONFIG_KEY)
+    // Configuración REAL de tanques (igual que en cron-water-monitoring.js)
+    // Usada como fallback si no hay config en Supabase
+    const REAL_TANK_CONFIGS = {
+        zonaBaja: {
+            name: 'Tanque Abajo',
+            type: 'conic',
+            tankCount: 3,
+            height: 155,       // REAL: 155 cm
+            topRadius: 70.25,  // REAL: 70.25 cm
+            bottomRadius: 57.25 // REAL: 57.25 cm
+        },
+        zonaAlta: {
+            name: 'Tanque Arriba',
+            type: 'conic',
+            tankCount: 2,
+            height: 155,       // REAL: 155 cm
+            topRadius: 70.25,  // REAL: 70.25 cm
+            bottomRadius: 57.25 // REAL: 57.25 cm
+        },
+        zonaCasa: {
+            name: 'Tanque Casa',
+            type: 'cubic',
+            tankCount: 1,
+            height: 140,    // REAL: 140 cm
+            length: 280,    // REAL: 280 cm
+            width: 240      // REAL: 240 cm
+        }
+    }
 
-            // Auto-cleanup: Remove old config with bad names
-            if (savedConfig) {
-                const parsed = JSON.parse(savedConfig)
-                if (parsed.tankConfigs?.zonaBaja?.name?.includes('Suministro Principal') ||
-                    parsed.tankConfigs?.zonaAlta?.name?.includes('Reserva')) {
-                    console.log('🧹 Limpiando configuración antigua...')
-                    localStorage.removeItem(CONFIG_KEY)
-                    // Will use default config below
-                } else {
-                    setConfig(parsed)
+    // Cargar configuración desde API (Supabase) primero, fallback a valores reales
+    const loadConfig = async () => {
+        try {
+            // 1. Intentar cargar desde API (Supabase)
+            const response = await fetch('/api/config')
+            if (response.ok) {
+                const data = await response.json()
+                if (data.tankConfigs) {
+                    console.log('✅ Config de tanques cargada desde Supabase')
+                    setConfig({ tankConfigs: data.tankConfigs })
                     return
                 }
             }
-
-            // Default config if nothing is saved OR old config was cleaned
-            // Using REALISTIC default values (approx 2000L tanks)
-            setConfig({
-                tankConfigs: {
-                    zonaBaja: {
-                        name: 'Tanque Abajo',
-                        type: 'conic',
-                        tankCount: 3,
-                        height: 160,       // ~1.6m altura
-                        topRadius: 80,     // ~1.6m diámetro
-                        bottomRadius: 70   // ~1.4m diámetro base
-                    },
-                    zonaAlta: {
-                        name: 'Tanque Arriba',
-                        type: 'conic',
-                        tankCount: 2,
-                        height: 160,
-                        topRadius: 80,
-                        bottomRadius: 70
-                    },
-                    zonaCasa: {
-                        name: 'Tanque Casa',
-                        type: 'cubic',
-                        tankCount: 1,
-                        height: 200,    // 2m alto
-                        length: 220,    // 2.2m largo
-                        width: 215      // 2.15m ancho (~9.4m3 total)
-                    }
-                }
-            })
         } catch (error) {
-            console.error('Error loading config:', error)
+            console.warn('No se pudo cargar config desde API:', error)
         }
+
+        // 2. Fallback: usar valores REALES hardcodeados (igual que el cron)
+        console.log('⚠️ Usando configuración de tanques por defecto (valores reales)')
+        setConfig({ tankConfigs: REAL_TANK_CONFIGS })
     }
 
     // Fetch datos de sensores Tuya
