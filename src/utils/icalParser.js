@@ -77,20 +77,30 @@ function parseICS(icsData) {
 function parseICSDate(dateStr) {
     // Handle different date formats
     // YYYYMMDD or YYYYMMDDTHHmmssZ
-    const cleaned = dateStr.replace(/[^0-9T]/g, '')
+    const cleaned = dateStr.replace(/[^0-9TZ]/g, '')
 
     if (cleaned.length >= 8) {
-        const year = cleaned.substring(0, 4)
-        const month = cleaned.substring(4, 6)
-        const day = cleaned.substring(6, 8)
+        const year = parseInt(cleaned.substring(0, 4), 10)
+        const month = parseInt(cleaned.substring(4, 6), 10) - 1 // JavaScript months are 0-indexed
+        const day = parseInt(cleaned.substring(6, 8), 10)
 
-        if (cleaned.length > 8) {
-            const hour = cleaned.substring(9, 11) || '00'
-            const minute = cleaned.substring(11, 13) || '00'
-            return new Date(`${year}-${month}-${day}T${hour}:${minute}:00`)
+        if (cleaned.length > 8 && cleaned.includes('T')) {
+            const hour = parseInt(cleaned.substring(9, 11) || '0', 10)
+            const minute = parseInt(cleaned.substring(11, 13) || '0', 10)
+            const second = parseInt(cleaned.substring(13, 15) || '0', 10)
+
+            // If the original string ends with 'Z', it's UTC time
+            if (dateStr.endsWith('Z')) {
+                return new Date(Date.UTC(year, month, day, hour, minute, second))
+            }
+            // Otherwise treat as local time
+            return new Date(year, month, day, hour, minute, second)
         }
 
-        return new Date(`${year}-${month}-${day}`)
+        // For date-only values (YYYYMMDD like "20260303"), use LOCAL timezone
+        // This prevents the date from shifting when converting to local time
+        // Example: "20260303" should be March 3rd in local time, not March 2nd
+        return new Date(year, month, day, 12, 0, 0) // Use noon to avoid any edge cases
     }
 
     return new Date(dateStr)
