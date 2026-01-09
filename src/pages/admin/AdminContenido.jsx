@@ -847,6 +847,22 @@ export default function AdminContenido() {
             if (paymentConfig.paymentWhatsappNumber) updated.paymentWhatsappNumber = paymentConfig.paymentWhatsappNumber
             if (paymentConfig.paymentWhatsappMessage) updated.paymentWhatsappMessage = paymentConfig.paymentWhatsappMessage
 
+            // CRÍTICO: Verificar que tenemos la config actual
+            if (!currentDbConfig || Object.keys(currentDbConfig).length === 0) {
+                console.error('❌ CRÍTICO: No se pudo obtener config actual de Supabase')
+                alert('⚠️ ERROR CRÍTICO: No se pudo cargar la configuración actual de Supabase. No se guardará nada para evitar pérdida de datos. Por favor, recarga la página e intenta de nuevo.')
+                setSaving(false)
+                return
+            }
+
+            console.log('✅ Config actual obtenida correctamente:', {
+                totalFields: Object.keys(currentDbConfig).length,
+                hasTuyaConfig: !!currentDbConfig.tuyaConfig,
+                hasTuyaAccessId: !!currentDbConfig.tuyaAccessId,
+                hasSiteColors: !!currentDbConfig.siteColors,
+                hasInicioContent: !!currentDbConfig.inicioContent
+            })
+
             // Guardar en Supabase
             const response = await fetch('/api/config', {
                 method: 'POST',
@@ -855,18 +871,21 @@ export default function AdminContenido() {
             })
 
             if (response.ok) {
-                console.log('✅ Configuración guardada en Supabase')
+                console.log('✅ Configuración guardada en Supabase exitosamente')
+                console.log('📊 Campos guardados:', Object.keys(updated).length)
                 localStorage.setItem(CONFIG_KEY, JSON.stringify(updated))
                 setConfig(updated)
                 applyColors(updated.siteColors || siteColors)
                 setSaved(true)
                 setTimeout(() => setSaved(false), 2000)
             } else {
-                throw new Error('API response not OK')
+                const errorText = await response.text()
+                console.error('❌ Error en respuesta de API:', errorText)
+                throw new Error(`API response not OK: ${response.status}`)
             }
         } catch (e) {
             console.error('❌ Error guardando en Supabase:', e)
-            alert('⚠️ Error al guardar. Verifica tu conexión a internet.')
+            alert('⚠️ Error al guardar. Verifica tu conexión a internet y recarga la página antes de intentar de nuevo.')
         }
 
         setSaving(false)
