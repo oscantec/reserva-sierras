@@ -721,47 +721,104 @@ export default function AdminContenido() {
         setSaving(true)
 
         try {
-            // CRÍTICO: Obtener config actual de Supabase antes de guardar
-            // para no perder datos que no estamos editando
+            // CRÍTICO: Obtener config actual de Supabase PRIMERO
+            // Esta es la fuente de verdad - NUNCA la perdemos
             let currentDbConfig = {}
             try {
                 const getResponse = await fetch('/api/config')
                 if (getResponse.ok) {
                     currentDbConfig = await getResponse.json()
-                    console.log('📥 Config actual de Supabase obtenida para merge')
+                    console.log('📥 Config actual de Supabase obtenida:', Object.keys(currentDbConfig).length, 'campos')
                 }
             } catch (e) {
                 console.warn('No se pudo obtener config actual de Supabase')
             }
 
-            // MERGE: Config de DB + config local + cambios actuales
-            // Los cambios actuales tienen prioridad sobre todo
-            const updated = {
-                ...currentDbConfig,  // Primero: datos existentes en Supabase
-                ...config,           // Luego: config local actual
-                // Finalmente: los campos que estamos editando explícitamente
-                inicioContent: content,
-                registroContent,
-                reservasContent,
-                galeriaContent,
-                guiaContent,
-                galeriaLabels,
-                siteColors,
-                siteFonts,
-                checkInTime: generalConfig.checkInTime,
-                checkOutTime: generalConfig.checkOutTime,
-                whatsappNumber: generalConfig.whatsappNumber,
-                hostName: generalConfig.hostName,
-                paymentSubtitlePart1: paymentConfig.paymentSubtitlePart1,
-                paymentSubtitleHighlight: paymentConfig.paymentSubtitleHighlight,
-                paymentSubtitlePart2: paymentConfig.paymentSubtitlePart2,
-                paymentBbreEmail: paymentConfig.paymentBbreEmail,
-                paymentBbrePhone: paymentConfig.paymentBbrePhone,
-                paymentNequiNumber: paymentConfig.paymentNequiNumber,
-                paymentNequiName: paymentConfig.paymentNequiName,
-                paymentWhatsappNumber: paymentConfig.paymentWhatsappNumber,
-                paymentWhatsappMessage: paymentConfig.paymentWhatsappMessage
+            // MERGE SEGURO: Empezamos con lo que hay en Supabase
+            // y solo actualizamos los campos que estamos editando
+            const updated = { ...currentDbConfig }
+
+            // Solo actualizar inicioContent si tiene datos reales (no defaults vacíos)
+            if (content && Object.keys(content).length > 0) {
+                // Merge profundo: mantener campos existentes, actualizar los editados
+                updated.inicioContent = {
+                    ...(currentDbConfig.inicioContent || {}),
+                    ...content
+                }
             }
+
+            // Solo actualizar siteColors si tiene datos
+            if (siteColors && Object.keys(siteColors).length > 0) {
+                updated.siteColors = {
+                    ...(currentDbConfig.siteColors || {}),
+                    ...siteColors
+                }
+            }
+
+            // Solo actualizar siteFonts si tiene datos
+            if (siteFonts && Object.keys(siteFonts).length > 0) {
+                updated.siteFonts = {
+                    ...(currentDbConfig.siteFonts || {}),
+                    ...siteFonts
+                }
+            }
+
+            // Solo actualizar registroContent si tiene datos
+            if (registroContent && Object.keys(registroContent).length > 0) {
+                updated.registroContent = {
+                    ...(currentDbConfig.registroContent || {}),
+                    ...registroContent
+                }
+            }
+
+            // Solo actualizar reservasContent si tiene datos
+            if (reservasContent && Object.keys(reservasContent).length > 0) {
+                updated.reservasContent = {
+                    ...(currentDbConfig.reservasContent || {}),
+                    ...reservasContent
+                }
+            }
+
+            // Solo actualizar galeriaContent si tiene datos
+            if (galeriaContent && Object.keys(galeriaContent).length > 0) {
+                updated.galeriaContent = {
+                    ...(currentDbConfig.galeriaContent || {}),
+                    ...galeriaContent
+                }
+            }
+
+            // Solo actualizar guiaContent si tiene datos
+            if (guiaContent && Object.keys(guiaContent).length > 0) {
+                updated.guiaContent = {
+                    ...(currentDbConfig.guiaContent || {}),
+                    ...guiaContent
+                }
+            }
+
+            // Solo actualizar galeriaLabels si tiene datos
+            if (galeriaLabels && Object.keys(galeriaLabels).length > 0) {
+                updated.galeriaLabels = {
+                    ...(currentDbConfig.galeriaLabels || {}),
+                    ...galeriaLabels
+                }
+            }
+
+            // Campos simples: solo actualizar si tienen valor
+            if (generalConfig.checkInTime) updated.checkInTime = generalConfig.checkInTime
+            if (generalConfig.checkOutTime) updated.checkOutTime = generalConfig.checkOutTime
+            if (generalConfig.whatsappNumber) updated.whatsappNumber = generalConfig.whatsappNumber
+            if (generalConfig.hostName) updated.hostName = generalConfig.hostName
+
+            // Payment config
+            if (paymentConfig.paymentSubtitlePart1) updated.paymentSubtitlePart1 = paymentConfig.paymentSubtitlePart1
+            if (paymentConfig.paymentSubtitleHighlight) updated.paymentSubtitleHighlight = paymentConfig.paymentSubtitleHighlight
+            if (paymentConfig.paymentSubtitlePart2) updated.paymentSubtitlePart2 = paymentConfig.paymentSubtitlePart2
+            if (paymentConfig.paymentBbreEmail) updated.paymentBbreEmail = paymentConfig.paymentBbreEmail
+            if (paymentConfig.paymentBbrePhone) updated.paymentBbrePhone = paymentConfig.paymentBbrePhone
+            if (paymentConfig.paymentNequiNumber) updated.paymentNequiNumber = paymentConfig.paymentNequiNumber
+            if (paymentConfig.paymentNequiName) updated.paymentNequiName = paymentConfig.paymentNequiName
+            if (paymentConfig.paymentWhatsappNumber) updated.paymentWhatsappNumber = paymentConfig.paymentWhatsappNumber
+            if (paymentConfig.paymentWhatsappMessage) updated.paymentWhatsappMessage = paymentConfig.paymentWhatsappMessage
 
             // Guardar en Supabase
             const response = await fetch('/api/config', {
@@ -774,7 +831,7 @@ export default function AdminContenido() {
                 console.log('✅ Configuración guardada en Supabase')
                 localStorage.setItem(CONFIG_KEY, JSON.stringify(updated))
                 setConfig(updated)
-                applyColors(siteColors)
+                applyColors(updated.siteColors || siteColors)
                 setSaved(true)
                 setTimeout(() => setSaved(false), 2000)
             } else {
