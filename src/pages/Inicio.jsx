@@ -286,17 +286,17 @@ export default function Landing() {
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6 mb-4 md:mb-8">
                     {amenidades.map((item, i) => (
                         <div key={i} className={`relative bg-surface-card dark:bg-surface-card-dark rounded-xl p-3 md:p-6 border border-border-card dark:border-border-card-dark hover:shadow-xl hover:scale-[1.03] transition-all duration-500 ease-out overflow-hidden ${i === amenidades.length - 1 && amenidades.length % 2 !== 0 ? 'col-span-2 md:col-span-1' : ''}`}>
-                            {/* Efecto Sparkles de fondo - Muy sutil */}
-                            <div className="absolute inset-0 opacity-0 hover:opacity-30 transition-opacity duration-700 pointer-events-none">
+                            {/* Efecto Sparkles de fondo - PERMANENTE */}
+                            <div className="absolute inset-0 opacity-50 pointer-events-none">
                                 <SparklesCore
                                     id={`amenity-sparkles-${i}`}
                                     background="transparent"
-                                    minSize={0.3}
-                                    maxSize={0.8}
-                                    particleDensity={40}
+                                    minSize={0.4}
+                                    maxSize={1.2}
+                                    particleDensity={80}
                                     className="w-full h-full"
                                     particleColor="#3db814"
-                                    speed={0.5}
+                                    speed={0.8}
                                 />
                             </div>
 
@@ -324,17 +324,17 @@ export default function Landing() {
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6">
                             {destacados.items.map((item, i) => (
                                 <div key={i} className="relative bg-surface-card dark:bg-surface-card-dark rounded-xl p-4 md:p-6 border border-border-card dark:border-border-card-dark hover:shadow-xl hover:scale-[1.03] transition-all duration-500 ease-out overflow-hidden flex items-start gap-4">
-                                    {/* Efecto Sparkles de fondo - Muy sutil */}
-                                    <div className="absolute inset-0 opacity-0 hover:opacity-30 transition-opacity duration-700 pointer-events-none">
+                                    {/* Efecto Sparkles de fondo - PERMANENTE */}
+                                    <div className="absolute inset-0 opacity-50 pointer-events-none">
                                         <SparklesCore
                                             id={`destacado-sparkles-${i}`}
                                             background="transparent"
-                                            minSize={0.3}
-                                            maxSize={0.8}
-                                            particleDensity={40}
+                                            minSize={0.4}
+                                            maxSize={1.2}
+                                            particleDensity={80}
                                             className="w-full h-full"
                                             particleColor="#3db814"
-                                            speed={0.5}
+                                            speed={0.8}
                                         />
                                     </div>
 
@@ -387,17 +387,17 @@ export default function Landing() {
                                                 className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110"
                                             />
 
-                                            {/* Efecto Sparkles - Solo visible en hover */}
-                                            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                                            {/* Efecto Sparkles - PERMANENTE */}
+                                            <div className="absolute inset-0 opacity-60 pointer-events-none">
                                                 <SparklesCore
                                                     id={`sparkles-${i}`}
                                                     background="transparent"
-                                                    minSize={0.4}
-                                                    maxSize={1.2}
-                                                    particleDensity={80}
+                                                    minSize={0.5}
+                                                    maxSize={1.5}
+                                                    particleDensity={100}
                                                     className="w-full h-full"
                                                     particleColor="#3db814"
-                                                    speed={0.8}
+                                                    speed={1.0}
                                                 />
                                             </div>
 
