@@ -461,7 +461,7 @@ export default function Booking() {
                     <div className="bg-surface-card dark:bg-surface-card-dark rounded-xl p-6 shadow-sm border border-border-card dark:border-border-card-dark">
                         <div className="flex flex-col xl:flex-row gap-8 justify-center">
                             <div className="flex-1 min-w-[300px]">
-                                {/* Month Navigation */}
+                                {/* Month Navigation with Refresh Button */}
                                 <div className="flex items-center justify-between mb-4">
                                     <button
                                         onClick={() => navigateMonth(-1)}
@@ -469,7 +469,32 @@ export default function Booking() {
                                     >
                                         <span className="material-symbols-outlined text-icon-color">chevron_left</span>
                                     </button>
-                                    <span className="text-lg font-bold">{monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}</span>
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-lg font-bold">{monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}</span>
+                                        <button
+                                            onClick={async () => {
+                                                setIsLoading(true)
+                                                try {
+                                                    const events = await fetchAllCalendars()
+                                                    const reserved = events.map(event => ({
+                                                        start: new Date(event.start),
+                                                        end: new Date(event.end),
+                                                        source: event.source,
+                                                        title: event.title
+                                                    }))
+                                                    setReservedDates(reserved)
+                                                } catch (error) {
+                                                    console.error('Error refreshing calendars:', error)
+                                                }
+                                                setIsLoading(false)
+                                            }}
+                                            disabled={isLoading}
+                                            className="w-8 h-8 flex items-center justify-center rounded-full bg-primary/10 hover:bg-primary/20 text-primary transition-all hover:scale-110 active:scale-95 disabled:opacity-50"
+                                            title="Actualizar disponibilidad"
+                                        >
+                                            <span className={`material-symbols-outlined text-base ${isLoading ? 'animate-spin' : ''}`}>refresh</span>
+                                        </button>
+                                    </div>
                                     <button
                                         onClick={() => navigateMonth(1)}
                                         className="w-10 h-10 flex items-center justify-center bg-icon-bg-primary dark:bg-icon-bg-dark rounded-lg hover:bg-primary hover:text-white transition-colors"
@@ -622,7 +647,7 @@ export default function Booking() {
                                                     key={index}
                                                     onClick={() => handleDateClick(date)}
                                                     disabled={past || resState === 'middle'}
-                                                    className={`h-12 w-full flex items-start justify-end p-1.5 text-xs transition-all relative ${cursorClass} ${textClass} ${shapeClass} ${borderClass} ${hoverClass}`}
+                                                    className={`h-12 w-full flex items-start justify-end p-1.5 text-xs transition-all relative border border-gray-300 dark:border-gray-600 ${cursorClass} ${textClass} ${shapeClass} ${borderClass} ${hoverClass}`}
                                                     style={{ background: gradient }}
                                                     title={holiday ? holiday.name : ''}
                                                 >

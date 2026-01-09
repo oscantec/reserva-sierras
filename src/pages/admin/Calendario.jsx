@@ -163,12 +163,22 @@ export default function Calendario() {
                 <div className="bg-surface-card dark:bg-surface-card-dark rounded-xl p-6 shadow-sm border border-border-card dark:border-border-card-dark max-w-4xl mx-auto">
                     <div className="flex flex-col xl:flex-row gap-8 justify-center">
                         <div className="flex-1 min-w-[300px]">
-                            {/* Month Navigation */}
+                            {/* Month Navigation with Refresh Button */}
                             <div className="flex items-center justify-between mb-4">
                                 <button onClick={prevMonth} className="size-10 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-full transition-colors">
                                     <span className="material-symbols-outlined text-gray-700">chevron_left</span>
                                 </button>
-                                <span className="text-lg font-bold text-gray-900">{monthNames[month]} {year}</span>
+                                <div className="flex items-center gap-2">
+                                    <span className="text-lg font-bold text-gray-900">{monthNames[month]} {year}</span>
+                                    <button
+                                        onClick={loadCalendars}
+                                        disabled={loading}
+                                        className="w-8 h-8 flex items-center justify-center rounded-full bg-primary/10 hover:bg-primary/20 text-primary transition-all hover:scale-110 active:scale-95 disabled:opacity-50"
+                                        title="Actualizar calendarios iCal"
+                                    >
+                                        <span className={`material-symbols-outlined text-base ${loading ? 'animate-spin' : ''}`}>refresh</span>
+                                    </button>
+                                </div>
                                 <button onClick={nextMonth} className="size-10 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-full transition-colors">
                                     <span className="material-symbols-outlined text-gray-700">chevron_right</span>
                                 </button>
