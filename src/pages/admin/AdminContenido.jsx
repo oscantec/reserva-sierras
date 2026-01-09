@@ -136,6 +136,25 @@ const getDefaultContent = () => ({
         overlayOpacity: 70,
         logoHeight: 32,
         adminLogoHeight: 24
+    },
+    sparklesConfig: {
+        enabled: true,
+        particleColor: '#3db814',
+        particleDensity: {
+            amenidades: 80,
+            destacados: 80,
+            explora: 100
+        },
+        particleSize: {
+            min: 0.4,
+            max: 1.2
+        },
+        speed: 0.8,
+        opacity: {
+            amenidades: 50,
+            destacados: 50,
+            explora: 60
+        }
     }
 })
 
@@ -259,6 +278,7 @@ const INICIO_SUBTABS = [
     { id: 'amenidades', label: 'Amenidades', icon: 'star' },
     { id: 'casa', label: 'Casa', icon: 'home_work' },
     { id: 'explora', label: 'Explora', icon: 'explore' },
+    { id: 'efectos', label: 'Efectos', icon: 'auto_awesome' },
     { id: 'footer', label: 'Footer', icon: 'bottom_navigation' }
 ]
 
@@ -1346,6 +1366,307 @@ export default function AdminContenido() {
                         ))}
                     </div>
                     <p className="text-xs text-text-muted">Las rutas están predefinidas y conectan con las páginas del sitio.</p>
+                </div>
+            </div>
+        </div>
+    )
+
+    const renderEfectosTab = () => (
+        <div className="space-y-6">
+            <div className="bg-white rounded-xl p-6 border border-border-card">
+                <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+                    <span className="material-symbols-outlined text-icon-color">auto_awesome</span>
+                    Efectos de Partículas (Sparkles)
+                </h3>
+
+                {/* Toggle para habilitar/deshabilitar */}
+                <div className="mb-6 p-4 bg-surface-section rounded-lg">
+                    <label className="flex items-center gap-3 cursor-pointer">
+                        <input
+                            type="checkbox"
+                            checked={content.sparklesConfig?.enabled !== false}
+                            onChange={e => setContent(prev => ({
+                                ...prev,
+                                sparklesConfig: {
+                                    ...(prev.sparklesConfig || {}),
+                                    enabled: e.target.checked
+                                }
+                            }))}
+                            className="w-5 h-5 text-primary rounded focus:ring-2 focus:ring-primary"
+                        />
+                        <div>
+                            <span className="font-medium">Activar efectos de partículas</span>
+                            <p className="text-xs text-text-muted">Mostrar partículas animadas en las cards de Inicio</p>
+                        </div>
+                    </label>
+                </div>
+
+                {/* Configuración global */}
+                <div className="space-y-6">
+                    {/* Color de partículas */}
+                    <div>
+                        <label className="block text-sm font-medium text-text-muted mb-2">
+                            Color de Partículas
+                        </label>
+                        <PaletteColorPicker
+                            value={content.sparklesConfig?.particleColor || '#3db814'}
+                            onChange={value => setContent(prev => ({
+                                ...prev,
+                                sparklesConfig: {
+                                    ...(prev.sparklesConfig || {}),
+                                    particleColor: value
+                                }
+                            }))}
+                        />
+                    </div>
+
+                    {/* Tamaño de partículas */}
+                    <div className="grid grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-sm font-medium text-text-muted mb-2">
+                                Tamaño Mínimo (px)
+                            </label>
+                            <input
+                                type="number"
+                                min="0.1"
+                                max="5"
+                                step="0.1"
+                                value={content.sparklesConfig?.particleSize?.min || 0.4}
+                                onChange={e => setContent(prev => ({
+                                    ...prev,
+                                    sparklesConfig: {
+                                        ...(prev.sparklesConfig || {}),
+                                        particleSize: {
+                                            ...(prev.sparklesConfig?.particleSize || {}),
+                                            min: parseFloat(e.target.value)
+                                        }
+                                    }
+                                }))}
+                                className="w-full px-3 py-2 border border-border-card rounded-lg text-sm"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-text-muted mb-2">
+                                Tamaño Máximo (px)
+                            </label>
+                            <input
+                                type="number"
+                                min="0.1"
+                                max="5"
+                                step="0.1"
+                                value={content.sparklesConfig?.particleSize?.max || 1.2}
+                                onChange={e => setContent(prev => ({
+                                    ...prev,
+                                    sparklesConfig: {
+                                        ...(prev.sparklesConfig || {}),
+                                        particleSize: {
+                                            ...(prev.sparklesConfig?.particleSize || {}),
+                                            max: parseFloat(e.target.value)
+                                        }
+                                    }
+                                }))}
+                                className="w-full px-3 py-2 border border-border-card rounded-lg text-sm"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Velocidad */}
+                    <div>
+                        <label className="block text-sm font-medium text-text-muted mb-2">
+                            Velocidad de Movimiento
+                        </label>
+                        <input
+                            type="range"
+                            min="0.1"
+                            max="2"
+                            step="0.1"
+                            value={content.sparklesConfig?.speed || 0.8}
+                            onChange={e => setContent(prev => ({
+                                ...prev,
+                                sparklesConfig: {
+                                    ...(prev.sparklesConfig || {}),
+                                    speed: parseFloat(e.target.value)
+                                }
+                            }))}
+                            className="w-full"
+                        />
+                        <div className="flex justify-between text-xs text-text-muted mt-1">
+                            <span>Lento (0.1)</span>
+                            <span className="font-medium">{content.sparklesConfig?.speed || 0.8}</span>
+                            <span>Rápido (2.0)</span>
+                        </div>
+                    </div>
+
+                    {/* Configuración por sección */}
+                    <div className="border-t border-border-card pt-6">
+                        <h4 className="font-semibold mb-4">Configuración por Sección</h4>
+
+                        {/* Amenidades */}
+                        <div className="mb-6 p-4 bg-surface-section rounded-lg">
+                            <h5 className="font-medium mb-3 flex items-center gap-2">
+                                <span className="material-symbols-outlined text-sm">star</span>
+                                Amenidades
+                            </h5>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-xs text-text-muted mb-1">Densidad (partículas)</label>
+                                    <input
+                                        type="number"
+                                        min="10"
+                                        max="200"
+                                        value={content.sparklesConfig?.particleDensity?.amenidades || 80}
+                                        onChange={e => setContent(prev => ({
+                                            ...prev,
+                                            sparklesConfig: {
+                                                ...(prev.sparklesConfig || {}),
+                                                particleDensity: {
+                                                    ...(prev.sparklesConfig?.particleDensity || {}),
+                                                    amenidades: parseInt(e.target.value)
+                                                }
+                                            }
+                                        }))}
+                                        className="w-full px-3 py-2 border border-border-card rounded-lg text-sm"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-xs text-text-muted mb-1">Opacidad (%)</label>
+                                    <input
+                                        type="number"
+                                        min="0"
+                                        max="100"
+                                        value={content.sparklesConfig?.opacity?.amenidades || 50}
+                                        onChange={e => setContent(prev => ({
+                                            ...prev,
+                                            sparklesConfig: {
+                                                ...(prev.sparklesConfig || {}),
+                                                opacity: {
+                                                    ...(prev.sparklesConfig?.opacity || {}),
+                                                    amenidades: parseInt(e.target.value)
+                                                }
+                                            }
+                                        }))}
+                                        className="w-full px-3 py-2 border border-border-card rounded-lg text-sm"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Destacados */}
+                        <div className="mb-6 p-4 bg-surface-section rounded-lg">
+                            <h5 className="font-medium mb-3 flex items-center gap-2">
+                                <span className="material-symbols-outlined text-sm">home_work</span>
+                                Destacados (Nuestra Casa)
+                            </h5>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-xs text-text-muted mb-1">Densidad (partículas)</label>
+                                    <input
+                                        type="number"
+                                        min="10"
+                                        max="200"
+                                        value={content.sparklesConfig?.particleDensity?.destacados || 80}
+                                        onChange={e => setContent(prev => ({
+                                            ...prev,
+                                            sparklesConfig: {
+                                                ...(prev.sparklesConfig || {}),
+                                                particleDensity: {
+                                                    ...(prev.sparklesConfig?.particleDensity || {}),
+                                                    destacados: parseInt(e.target.value)
+                                                }
+                                            }
+                                        }))}
+                                        className="w-full px-3 py-2 border border-border-card rounded-lg text-sm"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-xs text-text-muted mb-1">Opacidad (%)</label>
+                                    <input
+                                        type="number"
+                                        min="0"
+                                        max="100"
+                                        value={content.sparklesConfig?.opacity?.destacados || 50}
+                                        onChange={e => setContent(prev => ({
+                                            ...prev,
+                                            sparklesConfig: {
+                                                ...(prev.sparklesConfig || {}),
+                                                opacity: {
+                                                    ...(prev.sparklesConfig?.opacity || {}),
+                                                    destacados: parseInt(e.target.value)
+                                                }
+                                            }
+                                        }))}
+                                        className="w-full px-3 py-2 border border-border-card rounded-lg text-sm"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Explora el Sitio */}
+                        <div className="p-4 bg-surface-section rounded-lg">
+                            <h5 className="font-medium mb-3 flex items-center gap-2">
+                                <span className="material-symbols-outlined text-sm">explore</span>
+                                Explora el Sitio
+                            </h5>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-xs text-text-muted mb-1">Densidad (partículas)</label>
+                                    <input
+                                        type="number"
+                                        min="10"
+                                        max="200"
+                                        value={content.sparklesConfig?.particleDensity?.explora || 100}
+                                        onChange={e => setContent(prev => ({
+                                            ...prev,
+                                            sparklesConfig: {
+                                                ...(prev.sparklesConfig || {}),
+                                                particleDensity: {
+                                                    ...(prev.sparklesConfig?.particleDensity || {}),
+                                                    explora: parseInt(e.target.value)
+                                                }
+                                            }
+                                        }))}
+                                        className="w-full px-3 py-2 border border-border-card rounded-lg text-sm"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-xs text-text-muted mb-1">Opacidad (%)</label>
+                                    <input
+                                        type="number"
+                                        min="0"
+                                        max="100"
+                                        value={content.sparklesConfig?.opacity?.explora || 60}
+                                        onChange={e => setContent(prev => ({
+                                            ...prev,
+                                            sparklesConfig: {
+                                                ...(prev.sparklesConfig || {}),
+                                                opacity: {
+                                                    ...(prev.sparklesConfig?.opacity || {}),
+                                                    explora: parseInt(e.target.value)
+                                                }
+                                            }
+                                        }))}
+                                        className="w-full px-3 py-2 border border-border-card rounded-lg text-sm"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Nota informativa */}
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                        <div className="flex gap-3">
+                            <span className="material-symbols-outlined text-blue-600">info</span>
+                            <div className="text-sm text-blue-800">
+                                <p className="font-medium mb-1">Consejos de configuración:</p>
+                                <ul className="list-disc list-inside space-y-1 text-xs">
+                                    <li>Mayor densidad = más partículas (más vistoso pero más pesado)</li>
+                                    <li>Mayor opacidad = partículas más visibles</li>
+                                    <li>Velocidad entre 0.5-1.0 es ideal para un efecto sutil</li>
+                                    <li>Los cambios se guardan en Supabase al hacer clic en "Guardar Cambios"</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -2878,6 +3199,7 @@ export default function AdminContenido() {
                 case 'amenidades': return renderAmenidadesTab()
                 case 'casa': return renderCasaTab()
                 case 'explora': return renderExploraTab()
+                case 'efectos': return renderEfectosTab()
                 case 'footer': return renderFooterTab()
                 default: return renderGeneralTab()
             }
