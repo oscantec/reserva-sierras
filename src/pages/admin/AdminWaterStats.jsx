@@ -278,62 +278,61 @@ export default function AdminWaterStats() {
     const chartWidth = 1000
 
     return (
-        <div className="p-6 max-w-7xl mx-auto">
-            {/* Header */}
-            <div className="flex items-center justify-between mb-6">
+        <div className="p-3 md:p-6 max-w-7xl mx-auto">
+            {/* Header - Responsive */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                 <div>
-                    <h1 className="text-3xl font-bold text-text-title">Estadísticas de Agua</h1>
-                    <p className="text-text-muted">Monitoreo en tiempo real del sistema de agua</p>
+                    <h1 className="text-xl md:text-3xl font-bold text-text-title">Estadísticas de Agua</h1>
+                    <p className="text-sm text-text-muted">Monitoreo en tiempo real</p>
                 </div>
-                <div className="flex gap-3">
+                <div className="flex gap-2 sm:gap-3">
                     <button
                         onClick={() => window.location.href = '/admin/agua/config'}
-                        className="flex items-center gap-2 px-4 py-2 bg-surface-card hover:bg-surface-card-hover border border-border-card rounded-lg transition-colors"
+                        className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 bg-surface-card hover:bg-surface-card-hover border border-border-card rounded-lg transition-colors text-sm"
                     >
-                        <span className="material-symbols-outlined text-xl">settings</span>
-                        <span>Configuración</span>
+                        <span className="material-symbols-outlined text-lg sm:text-xl">settings</span>
+                        <span className="hidden sm:inline">Configuración</span>
                     </button>
                     <button
                         onClick={fetchSensorData}
                         disabled={refreshing}
-                        className="flex items-center gap-2 px-6 py-2 bg-primary hover:bg-btn-primary-hover text-white rounded-lg font-medium transition-colors disabled:opacity-50"
+                        className="flex items-center gap-1 sm:gap-2 px-4 sm:px-6 py-2 bg-primary hover:bg-btn-primary-hover text-white rounded-lg font-medium transition-colors disabled:opacity-50 text-sm"
                     >
                         <span className={`material-symbols-outlined ${refreshing ? 'animate-spin' : ''}`}>refresh</span>
-                        <span>Actualizar Ahora</span>
+                        <span className="hidden sm:inline">Actualizar</span>
                     </button>
                 </div>
             </div>
 
 
 
-            {/* Card de Agua Total */}
-            <div className="bg-gradient-to-br from-primary to-btn-primary-hover text-white rounded-xl p-6 mb-6 shadow-lg">
-                <div className="flex items-center justify-between gap-6">
+            {/* Card de Agua Total - Responsive */}
+            <div className="bg-gradient-to-br from-primary to-btn-primary-hover text-white rounded-xl p-4 md:p-6 mb-6 shadow-lg">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                     {/* Left: Icon and main info */}
-                    <div className="flex items-center gap-4">
-                        <span className="material-symbols-outlined text-5xl">water_drop</span>
+                    <div className="flex items-center gap-3 md:gap-4">
+                        <span className="material-symbols-outlined text-4xl md:text-5xl">water_drop</span>
                         <div>
-                            <h2 className="text-lg opacity-90">Agua Total Disponible</h2>
-                            <p className="text-xs opacity-75">En todo el complejo</p>
-                            <p className="text-4xl font-bold mt-1">{totalWater.toFixed(2)} m³</p>
+                            <h2 className="text-base md:text-lg opacity-90">Agua Total Disponible</h2>
+                            <p className="text-3xl md:text-4xl font-bold mt-1">{totalWater.toFixed(2)} m³</p>
                             {currentData && (
                                 <p className="text-xs opacity-75 mt-1">
-                                    Última actualización: {new Date(currentData.timestamp).toLocaleString('es-CO')}
+                                    Últ. act: {new Date(currentData.timestamp).toLocaleString('es-CO', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                                 </p>
                             )}
                         </div>
                     </div>
                     {/* Right: Stats */}
                     {currentData && (
-                        <div className="text-right">
-                            <div className="mb-2">
-                                <p className="text-xs opacity-75">Capacidad Máxima</p>
+                        <div className="flex gap-6 sm:gap-8 text-left sm:text-right w-full sm:w-auto justify-start sm:justify-end">
+                            <div>
+                                <p className="text-xs opacity-75">Capacidad Máx</p>
                                 <p className="text-lg font-bold">
                                     {currentData.zones.reduce((sum, zone) => sum + parseFloat(zone.maxVolume), 0).toFixed(2)} m³
                                 </p>
                             </div>
                             <div>
-                                <p className="text-xs opacity-75">Porcentaje Actual</p>
+                                <p className="text-xs opacity-75">% Actual</p>
                                 <p className="text-lg font-bold">
                                     {((totalWater / currentData.zones.reduce((sum, zone) => sum + parseFloat(zone.maxVolume), 0)) * 100).toFixed(1)}%
                                 </p>
@@ -492,25 +491,25 @@ export default function AdminWaterStats() {
                 )}
             </div>
 
-            {/* Gráfica de Líneas - Histórico */}
-            <div className="bg-surface-card border border-border-card rounded-xl p-6 shadow-sm mb-6">
-                <div className="flex items-center justify-between mb-4">
+            {/* Gráfica de Líneas - Histórico - Responsive */}
+            <div className="bg-surface-card border border-border-card rounded-xl p-4 md:p-6 shadow-sm mb-6">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
                     <div>
-                        <h2 className="text-2xl font-bold">Histórico de Agua (últimos 7 días)</h2>
-                        <p className="text-sm text-text-muted">Mediciones automáticas cada 5 minutos</p>
+                        <h2 className="text-lg md:text-2xl font-bold">Histórico (7 días)</h2>
+                        <p className="text-xs text-text-muted">Mediciones cada 5 min</p>
                     </div>
-                    <div className="flex items-center gap-4 text-xs">
+                    <div className="flex flex-wrap items-center gap-2 md:gap-4 text-xs">
                         <span className="flex items-center gap-1">
-                            <span className="w-3 h-3 rounded-full bg-black"></span> Tanque Abajo
+                            <span className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-black"></span> Abajo
                         </span>
                         <span className="flex items-center gap-1">
-                            <span className="w-3 h-3 rounded-full bg-gray-600"></span> Tanque Arriba
+                            <span className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-gray-600"></span> Arriba
                         </span>
                         <span className="flex items-center gap-1">
-                            <span className="w-3 h-3 rounded-full bg-gray-400"></span> Tanque Casa
+                            <span className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-gray-400"></span> Casa
                         </span>
-                        <span className="flex items-center gap-1 ml-4 font-bold">
-                            <span className="w-4 h-4 rounded-full bg-primary"></span> TOTAL
+                        <span className="flex items-center gap-1 font-bold">
+                            <span className="w-3 h-3 md:w-4 md:h-4 rounded-full bg-primary"></span> TOTAL
                         </span>
                     </div>
                 </div>
@@ -622,22 +621,22 @@ export default function AdminWaterStats() {
                 )}
             </div>
 
-            {/* Tabla de Registros */}
+            {/* Tabla de Registros - Responsive */}
             <div className="bg-surface-card border border-border-card rounded-xl shadow-sm overflow-hidden">
-                <div className="bg-background-light px-6 py-4 border-b border-border-card">
-                    <h2 className="text-xl font-bold">Registros de Mediciones</h2>
-                    <p className="text-sm text-text-muted">Últimas 50 mediciones guardadas</p>
+                <div className="bg-background-light px-4 md:px-6 py-3 md:py-4 border-b border-border-card">
+                    <h2 className="text-lg md:text-xl font-bold">Registros</h2>
+                    <p className="text-xs text-text-muted">Últimas 50 mediciones</p>
                 </div>
                 {allMeasurements.length > 0 ? (
                     <>
                         <div className="overflow-x-auto">
-                            <table className="w-full text-left border-collapse">
+                            <table className="w-full text-left border-collapse text-sm">
                                 <thead className="bg-background-light border-b border-border-card">
                                     <tr>
-                                        <th className="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-text-secondary-light whitespace-nowrap">Fecha y Hora</th>
-                                        <th className="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-text-secondary-light whitespace-nowrap text-center">Tanque Abajo<br /><span className="text-[10px] font-normal normal-case opacity-70">Vol (m³) / % Calc</span></th>
-                                        <th className="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-text-secondary-light whitespace-nowrap text-center">Tanque Arriba<br /><span className="text-[10px] font-normal normal-case opacity-70">Vol (m³) / % Calc</span></th>
-                                        <th className="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-text-secondary-light whitespace-nowrap text-center">Tanque Casa<br /><span className="text-[10px] font-normal normal-case opacity-70">Vol (m³) / % Calc</span></th>
+                                        <th className="py-2 md:py-3 px-3 md:px-6 text-xs font-semibold uppercase tracking-wider text-text-secondary-light whitespace-nowrap">Fecha</th>
+                                        <th className="py-2 md:py-3 px-3 md:px-6 text-xs font-semibold uppercase tracking-wider text-text-secondary-light whitespace-nowrap text-center">Abajo<br /><span className="text-[10px] font-normal normal-case opacity-70">m³ / %</span></th>
+                                        <th className="py-2 md:py-3 px-3 md:px-6 text-xs font-semibold uppercase tracking-wider text-text-secondary-light whitespace-nowrap text-center">Arriba<br /><span className="text-[10px] font-normal normal-case opacity-70">m³ / %</span></th>
+                                        <th className="py-2 md:py-3 px-3 md:px-6 text-xs font-semibold uppercase tracking-wider text-text-secondary-light whitespace-nowrap text-center">Casa<br /><span className="text-[10px] font-normal normal-case opacity-70">m³ / %</span></th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-[#f0f4ef]">
@@ -695,7 +694,7 @@ export default function AdminWaterStats() {
 
                                             return (
                                                 <tr key={index} className={`hover:bg-gray-100 transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
-                                                    <td className="py-3 px-6 text-sm text-text-main-light font-medium whitespace-nowrap">
+                                                    <td className="py-2 md:py-3 px-3 md:px-6 text-xs md:text-sm text-text-main-light font-medium whitespace-nowrap">
                                                         {new Date(row.timestamp).toLocaleString('es-CO', {
                                                             month: 'short',
                                                             day: 'numeric',
@@ -703,13 +702,13 @@ export default function AdminWaterStats() {
                                                             minute: '2-digit'
                                                         })}
                                                     </td>
-                                                    <td className="py-3 px-6 text-center border-l border-r border-gray-100">
+                                                    <td className="py-2 md:py-3 px-3 md:px-6 text-center border-l border-r border-gray-100">
                                                         <CellContent data={baja} />
                                                     </td>
-                                                    <td className="py-3 px-6 text-center border-r border-gray-100">
+                                                    <td className="py-2 md:py-3 px-3 md:px-6 text-center border-r border-gray-100">
                                                         <CellContent data={alta} />
                                                     </td>
-                                                    <td className="py-3 px-6 text-center">
+                                                    <td className="py-2 md:py-3 px-3 md:px-6 text-center">
                                                         <CellContent data={casa} />
                                                     </td>
                                                 </tr>

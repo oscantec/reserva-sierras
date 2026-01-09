@@ -130,6 +130,14 @@ export default function Booking() {
         return date < today
     }
 
+    // Check if date is today
+    const isToday = (date) => {
+        const today = new Date()
+        return date.getDate() === today.getDate() &&
+            date.getMonth() === today.getMonth() &&
+            date.getFullYear() === today.getFullYear()
+    }
+
     // Helper para normalizar fecha a solo día (sin hora)
     const getDateOnly = (date) => new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime()
 
@@ -585,12 +593,21 @@ export default function Booking() {
                                                 if (isSelStart) rightColor = cGreen // Mi entrada pinta derecha verde
                                             }
 
+                                            // Check if this is today
+                                            const today = isToday(date)
+
                                             // 4. ESTILOS DE TEXTO Y CURSOR
                                             // Unificado: todas las fechas usan gris oscuro (gray-800)
                                             let textClass = "text-gray-800 dark:text-white font-medium"
                                             let cursorClass = "cursor-pointer"
                                             let borderClass = ""
                                             let hoverClass = "hover:ring-2 hover:ring-primary/30"
+
+                                            // Día de hoy - borde verde destacado
+                                            if (today && resState !== 'middle' && !isSelStart && !isSelEnd && !isSelMiddle) {
+                                                borderClass = "ring-2 ring-primary"
+                                                textClass = "text-primary font-bold"
+                                            }
 
                                             // Días pasados - gris claro para indicar no disponible
                                             if (past) {
@@ -653,8 +670,16 @@ export default function Booking() {
                                                 >
                                                     <span className="relative z-10">{date.getDate()}</span>
 
+                                                    {/* Today indicator - pulsing dot */}
+                                                    {today && resState !== 'middle' && !isSelStart && !isSelEnd && !isSelMiddle && (
+                                                        <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
+                                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                                                            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary"></span>
+                                                        </span>
+                                                    )}
+
                                                     {/* Indicador de festivo - Ahora en la izquierda */}
-                                                    {holiday && !isSelMiddle && !isSelStart && !isSelEnd && resState !== 'middle' && (
+                                                    {holiday && !isSelMiddle && !isSelStart && !isSelEnd && resState !== 'middle' && !today && (
                                                         <span className="absolute bottom-1.5 left-1.5 w-1.5 h-1.5 bg-primary rounded-full"></span>
                                                     )}
                                                 </button>
