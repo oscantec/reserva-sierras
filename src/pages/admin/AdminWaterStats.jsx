@@ -160,7 +160,7 @@ export default function AdminWaterStats() {
                 body: JSON.stringify({
                     zone,
                     volume_m3: parseFloat(data.totalVolume),
-                    level_percent: parseFloat(tuyaPercent), // Usar porcentaje de Tuya directamente
+                    percentage: parseFloat(tuyaPercent), // Usar porcentaje de Tuya directamente
                     tuya_percent: parseFloat(tuyaPercent),
                     level_cm: parseFloat(data.level_cm)
                 })
@@ -418,7 +418,7 @@ export default function AdminWaterStats() {
 
                         if (data) {
                             volume = parseFloat(data.volume_m3) || 0
-                            percent = parseFloat(data.level_percent) || 0
+                            percent = parseFloat(data.percentage) || 0
                             // Si no hay porcentaje, calcularlo
                             if (!percent && volume > 0 && maxCap > 0) {
                                 percent = (volume / maxCap) * 100
@@ -644,7 +644,7 @@ export default function AdminWaterStats() {
                                             if (!acc[key]) acc[key] = { timestamp: key, readings: {} }
                                             acc[key].readings[curr.zone] = {
                                                 volume: parseFloat(curr.volume_m3),
-                                                percent: parseFloat(curr.level_percent || 0) // Prefer calculated percent
+                                                percent: parseFloat(curr.percentage || 0) // Porcentaje de Tuya
                                             }
                                             return acc
                                         }, {})

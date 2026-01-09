@@ -20,7 +20,7 @@ export default async function handler(req, res) {
     if (req.method === 'POST') {
         // Guardar nueva medición
         try {
-            const { zone, volume_m3, level_percent, tuya_percent, level_cm, timestamp: requestTimestamp } = req.body
+            const { zone, volume_m3, percentage, tuya_percent, level_cm, timestamp: requestTimestamp } = req.body
 
             if (!zone || volume_m3 === undefined) {
                 return res.status(400).json({
@@ -44,8 +44,7 @@ export default async function handler(req, res) {
                 .insert([{
                     zone,
                     volume_m3,
-                    level_percent,
-                    tuya_percent,
+                    percentage, // Porcentaje de Tuya directo
                     level_cm,
                     timestamp: roundedTimestamp
                 }])
