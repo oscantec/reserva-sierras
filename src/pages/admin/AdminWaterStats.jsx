@@ -14,11 +14,19 @@ export default function AdminWaterStats() {
     const [refreshing, setRefreshing] = useState(false)
     const [showConfig, setShowConfig] = useState(false)
 
-    // Cargar configuración al inicio (SIN auto-refresh para evitar bucles)
+    // Cargar configuración e histórico al inicio
     useEffect(() => {
         loadConfig()
         fetchHistoricalData()
     }, []) // Sin dependencias - solo se ejecuta una vez al montar
+
+    // Cargar datos de sensores automáticamente cuando config esté disponible
+    useEffect(() => {
+        if (config && config.tankConfigs) {
+            console.log('✅ Config disponible, cargando datos de sensores...')
+            fetchSensorData()
+        }
+    }, [config]) // Se ejecuta cuando config cambia
 
     // Configuración REAL de tanques (igual que en cron-water-monitoring.js)
     // Usada como fallback si no hay config en Supabase
@@ -508,7 +516,7 @@ export default function AdminWaterStats() {
                 </div>
                 {chartPoints.length > 0 ? (
                     <div className="overflow-x-auto">
-                        <svg viewBox={`0 0 ${chartWidth} ${chartHeight + 80}`} className="w-full" style={{ minWidth: '800px' }}>
+                        <svg viewBox={`0 0 ${chartWidth} ${chartHeight + 100}`} className="w-full" style={{ minWidth: '600px' }}>
                             {/* Grid lines */}
                             {[0, 20, 40, 60, 80, 100].map(i => {
                                 const y = 20 + (chartHeight - 20) - (i * (chartHeight - 20) / 100)
@@ -588,14 +596,42 @@ export default function AdminWaterStats() {
                                 )
                             })()}
 
-                            {/* X-axis labels */}
+                            {/* X-axis labels - Rotados verticalmente para mejor legibilidad */}
                             {chartPoints.map((point, i) => {
-                                if (i % Math.ceil(chartPoints.length / 8) !== 0 && i !== chartPoints.length - 1) return null
+                                // Mostrar menos etiquetas en móvil para evitar superposición
+                                if (i % Math.ceil(chartPoints.length / 6) !== 0 && i !== chartPoints.length - 1) return null
                                 const x = 60 + (i * (chartWidth - 80) / (chartPoints.length - 1 || 1))
+
+                                // Formatear fecha de forma compacta: "dd/MM HH:mm"
+                                const date = new Date(point.timestamp)
+                                const formattedDate = `${date.getDate()}/${date.getMonth() + 1}`
+                                const formattedTime = `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`
+
                                 return (
-                                    <text key={i} x={x} y={chartHeight + 40} textAnchor="middle" fontSize="11" fill="#6b7280">
-                                        {point.date.split(',')[0]}
-                                    </text>
+                                    <g key={i}>
+                                        {/* Fecha */}
+                                        <text
+                                            x={x}
+                                            y={chartHeight + 35}
+                                            textAnchor="end"
+                                            fontSize="10"
+                                            fill="#6b7280"
+                                            transform={`rotate(-45, ${x}, ${chartHeight + 35})`}
+                                        >
+                                            {formattedDate}
+                                        </text>
+                                        {/* Hora */}
+                                        <text
+                                            x={x}
+                                            y={chartHeight + 48}
+                                            textAnchor="end"
+                                            fontSize="9"
+                                            fill="#9ca3af"
+                                            transform={`rotate(-45, ${x}, ${chartHeight + 48})`}
+                                        >
+                                            {formattedTime}
+                                        </text>
+                                    </g>
                                 )
                             })}
 

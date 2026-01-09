@@ -168,7 +168,7 @@ export default function AdminWaterConfig() {
     }
 
     return (
-        <div className="min-h-screen bg-page-bg-admin p-8">
+        <div className="min-h-screen bg-page-bg-admin p-3 md:p-8 pb-24 md:pb-8">
             <div className="max-w-6xl mx-auto">
                 {/* Header */}
                 <div className="mb-8">
@@ -481,12 +481,12 @@ export default function AdminWaterConfig() {
                     </div>
                 </section>
 
-                {/* Botón de Guardar */}
-                <div className="flex justify-end">
+                {/* Botón de Guardar - Fijo en móvil, normal en desktop */}
+                <div className="fixed md:relative bottom-0 left-0 right-0 md:bottom-auto md:left-auto md:right-auto bg-white md:bg-transparent p-4 md:p-0 border-t md:border-t-0 border-border-card md:border-none shadow-lg md:shadow-none z-50 flex justify-center md:justify-end">
                     <button
                         onClick={saveConfig}
                         disabled={saving}
-                        className="px-8 py-3 bg-btn-primary hover:bg-btn-primary-hover text-white font-semibold rounded-lg shadow-lg transition-all disabled:opacity-50 flex items-center gap-2"
+                        className="w-full md:w-auto px-8 py-3 bg-btn-primary hover:bg-btn-primary-hover text-white font-semibold rounded-lg shadow-lg transition-all disabled:opacity-50 flex items-center justify-center gap-2"
                     >
                         {saving ? (
                             <>
