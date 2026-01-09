@@ -767,20 +767,27 @@ export default function AdminContenido() {
                 }
             }
 
-            // Solo actualizar siteColors si tiene datos
-            if (siteColors && Object.keys(siteColors).length > 0) {
+            // CRÍTICO: Solo actualizar siteColors si estamos en el tab de COLORES
+            // Esto previene que se sobrescriban los colores cuando guardamos desde otros tabs
+            if (activePageTab === 'colores' && siteColors && Object.keys(siteColors).length > 0) {
                 updated.siteColors = {
                     ...(currentDbConfig.siteColors || {}),
                     ...siteColors
                 }
+                console.log('💾 Guardando colores actualizados')
+            } else {
+                console.log('⏭️  Saltando actualización de colores (no estamos en tab Colores)')
             }
 
-            // Solo actualizar siteFonts si tiene datos
-            if (siteFonts && Object.keys(siteFonts).length > 0) {
+            // Solo actualizar siteFonts si estamos en el tab de TIPOGRAFÍA
+            if (activePageTab === 'tipografia' && siteFonts && Object.keys(siteFonts).length > 0) {
                 updated.siteFonts = {
                     ...(currentDbConfig.siteFonts || {}),
                     ...siteFonts
                 }
+                console.log('💾 Guardando fuentes actualizadas')
+            } else {
+                console.log('⏭️  Saltando actualización de fuentes (no estamos en tab Tipografía)')
             }
 
             // Solo actualizar registroContent si tiene datos
