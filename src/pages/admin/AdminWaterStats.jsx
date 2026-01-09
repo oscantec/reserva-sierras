@@ -216,8 +216,23 @@ export default function AdminWaterStats() {
 
     // Calcular total de agua disponible
     const getTotalWater = () => {
-        if (!currentData || !currentData.zones) return 0
-        return currentData.zones.reduce((sum, zone) => sum + parseFloat(zone.totalVolume), 0)
+        // 1. Primero intentar con datos en tiempo real
+        if (currentData && currentData.zones && currentData.zones.length > 0) {
+            return currentData.zones.reduce((sum, zone) => sum + (parseFloat(zone.totalVolume) || 0), 0)
+        }
+
+        // 2. Fallback: usar datos históricos (igual que las tarjetas)
+        if (allMeasurements && allMeasurements.length > 0) {
+            const latestByZone = {}
+            allMeasurements.forEach(m => {
+                if (!latestByZone[m.zone] || new Date(m.timestamp) > new Date(latestByZone[m.zone].timestamp)) {
+                    latestByZone[m.zone] = m
+                }
+            })
+            return Object.values(latestByZone).reduce((sum, m) => sum + (parseFloat(m.volume_m3) || 0), 0)
+        }
+
+        return 0
     }
 
     if (!config) {
