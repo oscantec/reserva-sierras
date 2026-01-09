@@ -72,7 +72,12 @@ export const SparklesCore = ({
     });
 
     return (
-        <motion.div animate={controls} className={`opacity-0 ${className}`}>
+        <motion.div
+            animate={controls}
+            initial={{ opacity: 0 }}
+            className={className}
+            style={{ width: '100%', height: '100%' }}
+        >
             <Particles
                 id={id || generatedId}
                 className="h-full w-full"
