@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { DEFAULT_CONFIG } from '../utils/config'
 import PageHeader from '../components/PageHeader'
+import { SparklesCore } from '../components/SparklesCore'
 
 // Imágenes de previsualizaciones para las cards de Explora el Sitio
 import previewReservas from '../images/imagesinicio/reservas.png'
@@ -284,15 +285,31 @@ export default function Landing() {
                 {/* Amenities Grid - Compact 2-column mobile layout */}
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6 mb-4 md:mb-8">
                     {amenidades.map((item, i) => (
-                        <div key={i} className={`bg-surface-card dark:bg-surface-card-dark rounded-xl p-3 md:p-6 border border-border-card dark:border-border-card-dark hover:shadow-xl hover:scale-[1.03] transition-all duration-500 ease-out ${i === amenidades.length - 1 && amenidades.length % 2 !== 0 ? 'col-span-2 md:col-span-1' : ''}`}>
-                            <div
-                                className="w-8 h-8 md:w-12 md:h-12 rounded-xl flex items-center justify-center mb-2 md:mb-4"
-                                style={{ backgroundColor: 'var(--color-icon-bg)' }}
-                            >
-                                <span className="material-symbols-outlined text-lg md:text-2xl" style={{ color: 'var(--color-primary)' }}>{item.icon}</span>
+                        <div key={i} className={`relative bg-surface-card dark:bg-surface-card-dark rounded-xl p-3 md:p-6 border border-border-card dark:border-border-card-dark hover:shadow-xl hover:scale-[1.03] transition-all duration-500 ease-out overflow-hidden ${i === amenidades.length - 1 && amenidades.length % 2 !== 0 ? 'col-span-2 md:col-span-1' : ''}`}>
+                            {/* Efecto Sparkles de fondo - Muy sutil */}
+                            <div className="absolute inset-0 opacity-0 hover:opacity-30 transition-opacity duration-700 pointer-events-none">
+                                <SparklesCore
+                                    id={`amenity-sparkles-${i}`}
+                                    background="transparent"
+                                    minSize={0.3}
+                                    maxSize={0.8}
+                                    particleDensity={40}
+                                    className="w-full h-full"
+                                    particleColor="#3db814"
+                                    speed={0.5}
+                                />
                             </div>
-                            <h3 className="text-base md:text-lg font-bold mb-1">{item.title}</h3>
-                            <p className="text-sm text-text-muted dark:text-text-muted">{item.description}</p>
+
+                            <div className="relative z-10">
+                                <div
+                                    className="w-8 h-8 md:w-12 md:h-12 rounded-xl flex items-center justify-center mb-2 md:mb-4"
+                                    style={{ backgroundColor: 'var(--color-icon-bg)' }}
+                                >
+                                    <span className="material-symbols-outlined text-lg md:text-2xl" style={{ color: 'var(--color-primary)' }}>{item.icon}</span>
+                                </div>
+                                <h3 className="text-base md:text-lg font-bold mb-1">{item.title}</h3>
+                                <p className="text-sm text-text-muted dark:text-text-muted">{item.description}</p>
+                            </div>
                         </div>
                     ))}
                 </div>
@@ -306,16 +323,32 @@ export default function Landing() {
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6">
                             {destacados.items.map((item, i) => (
-                                <div key={i} className="bg-surface-card dark:bg-surface-card-dark rounded-xl p-4 md:p-6 border border-border-card dark:border-border-card-dark hover:shadow-xl hover:scale-[1.03] transition-all duration-500 ease-out flex items-start gap-4">
-                                    <div
-                                        className="w-12 h-12 md:w-14 md:h-14 rounded-xl flex items-center justify-center flex-shrink-0"
-                                        style={{ backgroundColor: 'var(--color-icon-bg)' }}
-                                    >
-                                        <span className="material-symbols-outlined text-2xl md:text-3xl" style={{ color: 'var(--color-primary)' }}>{item.icon}</span>
+                                <div key={i} className="relative bg-surface-card dark:bg-surface-card-dark rounded-xl p-4 md:p-6 border border-border-card dark:border-border-card-dark hover:shadow-xl hover:scale-[1.03] transition-all duration-500 ease-out overflow-hidden flex items-start gap-4">
+                                    {/* Efecto Sparkles de fondo - Muy sutil */}
+                                    <div className="absolute inset-0 opacity-0 hover:opacity-30 transition-opacity duration-700 pointer-events-none">
+                                        <SparklesCore
+                                            id={`destacado-sparkles-${i}`}
+                                            background="transparent"
+                                            minSize={0.3}
+                                            maxSize={0.8}
+                                            particleDensity={40}
+                                            className="w-full h-full"
+                                            particleColor="#3db814"
+                                            speed={0.5}
+                                        />
                                     </div>
-                                    <div>
-                                        <h3 className="text-base md:text-lg font-bold mb-1">{item.title}</h3>
-                                        <p className="text-sm text-text-muted dark:text-text-muted">{item.description}</p>
+
+                                    <div className="relative z-10 flex items-start gap-4 w-full">
+                                        <div
+                                            className="w-12 h-12 md:w-14 md:h-14 rounded-xl flex items-center justify-center flex-shrink-0"
+                                            style={{ backgroundColor: 'var(--color-icon-bg)' }}
+                                        >
+                                            <span className="material-symbols-outlined text-2xl md:text-3xl" style={{ color: 'var(--color-primary)' }}>{item.icon}</span>
+                                        </div>
+                                        <div>
+                                            <h3 className="text-base md:text-lg font-bold mb-1">{item.title}</h3>
+                                            <p className="text-sm text-text-muted dark:text-text-muted">{item.description}</p>
+                                        </div>
                                     </div>
                                 </div>
                             ))}
@@ -346,15 +379,33 @@ export default function Landing() {
                                         to={item.path}
                                         className="group bg-surface-card dark:bg-surface-card-dark rounded-xl border border-border-card dark:border-border-card-dark hover:shadow-2xl hover:scale-[1.04] transition-all duration-500 ease-out overflow-hidden"
                                     >
-                                        {/* Preview Area - Imagen panorámica */}
+                                        {/* Preview Area - Imagen panorámica con efecto sparkles */}
                                         <div className="aspect-[2/1] border-b border-border-card dark:border-border-card-dark overflow-hidden relative bg-white">
                                             <img
                                                 src={previewImages[item.path]}
                                                 alt={`Vista previa de ${item.title}`}
                                                 className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110"
                                             />
+
+                                            {/* Efecto Sparkles - Solo visible en hover */}
+                                            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                                                <SparklesCore
+                                                    id={`sparkles-${i}`}
+                                                    background="transparent"
+                                                    minSize={0.4}
+                                                    maxSize={1.2}
+                                                    particleDensity={80}
+                                                    className="w-full h-full"
+                                                    particleColor="#3db814"
+                                                    speed={0.8}
+                                                />
+                                            </div>
+
+                                            {/* Gradiente sutil para mejor legibilidad */}
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none"></div>
+
                                             {/* Icono flotante */}
-                                            <div className="absolute top-2 left-2">
+                                            <div className="absolute top-2 left-2 z-10">
                                                 <div
                                                     className="w-7 h-7 md:w-8 md:h-8 rounded-lg flex items-center justify-center bg-white dark:bg-surface-card-dark shadow-sm border border-border-card dark:border-border-card-dark group-hover:bg-primary group-hover:border-primary transition-all"
                                                 >
