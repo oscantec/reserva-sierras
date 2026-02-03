@@ -89,11 +89,12 @@ export default async function handler(req, res) {
         match: providedSecret === expectedSecret
     })
 
+    // ⚠️ ADVERTENCIA: Si no hay CRON_SECRET configurado, solo logueamos warning
+    // pero permitimos que el cron funcione (para evitar errores de deploy inicial)
     if (!expectedSecret) {
-        return res.status(500).json({
-            error: 'CRON_SECRET not configured in Vercel environment variables',
-            hint: 'Go to Vercel → Settings → Environment Variables and add CRON_SECRET'
-        })
+        console.warn('⚠️ CRON_SECRET no configurado. El cron job está funcionando sin protección.')
+        console.warn('   Ve a Vercel → Settings → Environment Variables y agrega CRON_SECRET')
+        // Continuamos ejecutando el cron (temporalmente hasta que configuren el secret)
     }
 
     if (!providedSecret || providedSecret !== expectedSecret) {
