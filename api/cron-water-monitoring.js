@@ -76,12 +76,11 @@ function calculateMaxCubicVolume(height, length, width) {
 
 /**
  * Cron Job que se ejecuta automáticamente
+ * REQUIERE: CRON_SECRET configurado en variables de entorno de Vercel
  */
 export default async function handler(req, res) {
-    // TEMPORALMENTE DESACTIVADO para diagnosticar
-    // TODO: Reactivar verificación de secret después
-    /*
-    const providedSecret = req.query.secret
+    // 🔒 SEGURIDAD: Verificar secreto del cron job
+    const providedSecret = req.query.secret || req.headers['x-cron-secret']
     const expectedSecret = process.env.CRON_SECRET
 
     console.log('🔐 Verificando autorización:', {
@@ -97,13 +96,12 @@ export default async function handler(req, res) {
         })
     }
 
-    if (providedSecret !== expectedSecret) {
+    if (!providedSecret || providedSecret !== expectedSecret) {
         return res.status(401).json({
             error: 'Unauthorized',
-            hint: 'Secret does not match. Check CRON_SECRET value in Vercel.'
+            hint: 'Invalid or missing secret. Use ?secret=YOUR_CRON_SECRET or X-Cron-Secret header'
         })
     }
-    */
 
     try {
         // 1. Obtener configuración desde Supabase

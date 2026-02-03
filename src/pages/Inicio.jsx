@@ -5,6 +5,7 @@ import Footer from '../components/Footer'
 import { DEFAULT_CONFIG } from '../utils/config'
 import PageHeader from '../components/PageHeader'
 import { SparklesCore } from '../components/SparklesCore'
+import LazyImage from '../components/LazyImage'
 
 // Imágenes de previsualizaciones para las cards de Explora el Sitio
 import previewReservas from '../images/imagesinicio/reservas.png'
@@ -394,10 +395,11 @@ export default function Landing() {
                                     >
                                         {/* Preview Area - Imagen panorámica con efecto sparkles */}
                                         <div className="aspect-[2/1] border-b border-border-card dark:border-border-card-dark overflow-hidden relative bg-white">
-                                            <img
+                                            <LazyImage
                                                 src={previewImages[item.path]}
                                                 alt={`Vista previa de ${item.title}`}
                                                 className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110"
+                                                loading="lazy"
                                             />
 
                                             {/* Efecto Sparkles - PERMANENTE */}

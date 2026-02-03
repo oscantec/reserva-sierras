@@ -1,29 +1,32 @@
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useEffect, lazy, Suspense } from 'react'
 import { initializeConfig } from './utils/config'
 import { AuthProvider } from './contexts/AuthContext'
 import ProtectedRoute from './components/ProtectedRoute'
+import PageLoader from './components/PageLoader'
 
-// Pages (Spanish names)
+// Pages - Inicio se carga inmediatamente (LCP crítica)
 import Inicio from './pages/Inicio'
-import Galeria from './pages/Galeria'
-import Reservas from './pages/Reservas'
-import Registro from './pages/Registro'
-import Guia from './pages/Guia'
 
-// Admin pages
-import AdminLayout from './pages/admin/AdminLayout'
-import Dashboard from './pages/admin/Dashboard'
-import Conexiones from './pages/admin/Conexiones'
-import BaseDatos from './pages/admin/BaseDatos'
-import Calendario from './pages/admin/Calendario'
-import Tarifas from './pages/admin/Tarifas'
-import AdminContenido from './pages/admin/AdminContenido'
-import Login from './pages/admin/Login'
-import Seguridad from './pages/admin/Seguridad'
-import AdminWaterConfig from './pages/admin/AdminWaterConfig'
-import AdminWaterStats from './pages/admin/AdminWaterStats'
-import TestSparkles from './pages/TestSparkles'
+// Pages - Lazy loaded (mejora performance inicial)
+const Galeria = lazy(() => import('./pages/Galeria'))
+const Reservas = lazy(() => import('./pages/Reservas'))
+const Registro = lazy(() => import('./pages/Registro'))
+const Guia = lazy(() => import('./pages/Guia'))
+const TestSparkles = lazy(() => import('./pages/TestSparkles'))
+
+// Admin pages - Lazy loaded
+const AdminLayout = lazy(() => import('./pages/admin/AdminLayout'))
+const Dashboard = lazy(() => import('./pages/admin/Dashboard'))
+const Conexiones = lazy(() => import('./pages/admin/Conexiones'))
+const BaseDatos = lazy(() => import('./pages/admin/BaseDatos'))
+const Calendario = lazy(() => import('./pages/admin/Calendario'))
+const Tarifas = lazy(() => import('./pages/admin/Tarifas'))
+const AdminContenido = lazy(() => import('./pages/admin/AdminContenido'))
+const Login = lazy(() => import('./pages/admin/Login'))
+const Seguridad = lazy(() => import('./pages/admin/Seguridad'))
+const AdminWaterConfig = lazy(() => import('./pages/admin/AdminWaterConfig'))
+const AdminWaterStats = lazy(() => import('./pages/admin/AdminWaterStats'))
 
 // Scroll to top on every page change
 function ScrollToTop() {
@@ -178,35 +181,39 @@ function App() {
     return (
         <AuthProvider>
             <ScrollToTop />
-            <Routes>
-                {/* Public routes */}
-                <Route path="/" element={<Inicio />} />
-                <Route path="/galeria" element={<Galeria />} />
-                <Route path="/reservas" element={<Reservas />} />
-                <Route path="/registro" element={<Registro />} />
-                <Route path="/guia" element={<Guia />} />
-                <Route path="/test-sparkles" element={<TestSparkles />} />
+            <Suspense fallback={<PageLoader />}>
+                <Routes>
+                    {/* Public routes - Inicio carga inmediatamente (LCP crítica) */}
+                    <Route path="/" element={<Inicio />} />
+                    
+                    {/* Public routes - Lazy loaded */}
+                    <Route path="/galeria" element={<Galeria />} />
+                    <Route path="/reservas" element={<Reservas />} />
+                    <Route path="/registro" element={<Registro />} />
+                    <Route path="/guia" element={<Guia />} />
+                    <Route path="/test-sparkles" element={<TestSparkles />} />
 
-                {/* Admin Login (public) */}
-                <Route path="/admin/login" element={<Login />} />
+                    {/* Admin Login (public) - Lazy loaded */}
+                    <Route path="/admin/login" element={<Login />} />
 
-                {/* Protected Admin routes */}
-                <Route path="/admin" element={
-                    <ProtectedRoute>
-                        <AdminLayout />
-                    </ProtectedRoute>
-                }>
-                    <Route index element={<Dashboard />} />
-                    <Route path="conexiones" element={<Conexiones />} />
-                    <Route path="base-datos" element={<BaseDatos />} />
-                    <Route path="calendario" element={<Calendario />} />
-                    <Route path="tarifas" element={<Tarifas />} />
-                    <Route path="contenido" element={<AdminContenido />} />
-                    <Route path="seguridad" element={<Seguridad />} />
-                    <Route path="agua/config" element={<AdminWaterConfig />} />
-                    <Route path="agua/stats" element={<AdminWaterStats />} />
-                </Route>
-            </Routes>
+                    {/* Protected Admin routes - Lazy loaded */}
+                    <Route path="/admin" element={
+                        <ProtectedRoute>
+                            <AdminLayout />
+                        </ProtectedRoute>
+                    }>
+                        <Route index element={<Dashboard />} />
+                        <Route path="conexiones" element={<Conexiones />} />
+                        <Route path="base-datos" element={<BaseDatos />} />
+                        <Route path="calendario" element={<Calendario />} />
+                        <Route path="tarifas" element={<Tarifas />} />
+                        <Route path="contenido" element={<AdminContenido />} />
+                        <Route path="seguridad" element={<Seguridad />} />
+                        <Route path="agua/config" element={<AdminWaterConfig />} />
+                        <Route path="agua/stats" element={<AdminWaterStats />} />
+                    </Route>
+                </Routes>
+            </Suspense>
         </AuthProvider>
     )
 }

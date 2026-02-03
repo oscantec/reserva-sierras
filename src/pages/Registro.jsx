@@ -36,6 +36,7 @@ export default function CheckIn() {
     // Estados del formulario
     const [step, setStep] = useState(1)
     const [noReserva, setNoReserva] = useState('')
+    const [codigoUnico, setCodigoUnico] = useState('')
     const [reservaValidada, setReservaValidada] = useState(null)
     const [validando, setValidando] = useState(false)
     const [errorValidacion, setErrorValidacion] = useState('')
@@ -140,6 +141,10 @@ export default function CheckIn() {
             setErrorValidacion('Ingresa un número de reserva')
             return
         }
+        if (!codigoUnico.trim()) {
+            setErrorValidacion('Ingresa el código único de tu reserva')
+            return
+        }
 
         setValidando(true)
         setErrorValidacion('')
@@ -147,10 +152,13 @@ export default function CheckIn() {
 
         try {
             const reservas = await fetchReservasData()
-            // Buscar reserva por No Reserva (columna "No Reserva" o similar)
+            // Buscar reserva por No Reserva Y Código Único
             const reserva = reservas?.find(r => {
                 const id = r['No Reserva'] || r['no_reserva'] || r['ID'] || r['id'] || ''
-                return id.toString().toLowerCase().trim() === noReserva.toLowerCase().trim()
+                const codigo = r['Código Único'] || r['Codigo Unico'] || r['codigo_unico'] || r['CodigoUnico'] || ''
+                const matchId = id.toString().toLowerCase().trim() === noReserva.toLowerCase().trim()
+                const matchCodigo = codigo.toString().trim() === codigoUnico.trim()
+                return matchId && matchCodigo
             })
 
             if (reserva) {
@@ -166,6 +174,7 @@ export default function CheckIn() {
 
                 console.log('✅ Reserva encontrada:', {
                     noReserva,
+                    codigoUnico,
                     checkIn,
                     checkOut,
                     plataforma: plataformaReserva,
@@ -175,6 +184,7 @@ export default function CheckIn() {
 
                 setReservaValidada({
                     noReserva: noReserva,
+                    codigoUnico: codigoUnico,
                     checkIn,
                     checkOut,
                     plataforma: plataformaReserva,
@@ -184,7 +194,7 @@ export default function CheckIn() {
                 setPlataforma(plataformaReserva)
                 setStep(2)
             } else {
-                setErrorValidacion('No se encontró una reserva con ese número. Verifica e intenta nuevamente.')
+                setErrorValidacion('No se encontró una reserva con ese número y código único. Verifica ambos datos e intenta nuevamente.')
             }
         } catch (error) {
             console.error('Error validando reserva:', error)
@@ -322,8 +332,8 @@ export default function CheckIn() {
                                     <div className={`flex items-center justify-center size-8 rounded-full ${step >= 1 ? 'bg-primary text-white' : 'bg-icon-bg-secondary dark:bg-border-card-dark'} font-bold text-sm`}>1</div>
                                     <h2 className="text-xl font-bold">{pageContent.step1Title}</h2>
                                 </div>
-                                <div className="flex flex-col md:flex-row gap-4 items-end">
-                                    <div className="flex-grow w-full md:max-w-md">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                    <div className="w-full">
                                         <label className="block text-sm font-medium text-text-main-light dark:text-text-muted mb-2">Número de Reserva</label>
                                         <div className="relative">
                                             <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-text-muted">
@@ -331,7 +341,7 @@ export default function CheckIn() {
                                             </span>
                                             <input
                                                 className="block w-full pl-10 pr-3 py-3 border border-border-card dark:border-border-card-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-2 focus:ring-primary focus:border-primary placeholder:text-text-muted transition-all"
-                                                placeholder="Ej: R001"
+                                                placeholder="Ej: R189"
                                                 type="text"
                                                 value={noReserva}
                                                 onChange={(e) => setNoReserva(e.target.value.toUpperCase())}
@@ -340,6 +350,25 @@ export default function CheckIn() {
                                         </div>
                                         <p className="mt-1 text-xs text-text-muted">Ingresa la letra R seguida de los números de tu reserva</p>
                                     </div>
+                                    <div className="w-full">
+                                        <label className="block text-sm font-medium text-text-main-light dark:text-text-muted mb-2">Código Único</label>
+                                        <div className="relative">
+                                            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-text-muted">
+                                                <span className="material-symbols-outlined text-xl">pin</span>
+                                            </span>
+                                            <input
+                                                className="block w-full pl-10 pr-3 py-3 border border-border-card dark:border-border-card-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-2 focus:ring-primary focus:border-primary placeholder:text-text-muted transition-all"
+                                                placeholder="Ej: 579"
+                                                type="text"
+                                                value={codigoUnico}
+                                                onChange={(e) => setCodigoUnico(e.target.value)}
+                                                disabled={reservaValidada !== null}
+                                            />
+                                        </div>
+                                        <p className="mt-1 text-xs text-text-muted">Código único de 3 dígitos de tu reserva</p>
+                                    </div>
+                                </div>
+                                <div className="flex justify-end">
                                     <button
                                         className="w-full md:w-auto px-6 py-3 bg-[#2d6a4f] hover:opacity-90 text-white font-bold rounded-lg shadow-lg transition-all flex items-center justify-center gap-2"
                                         type="button"
