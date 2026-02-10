@@ -514,7 +514,7 @@ export default function AdminWaterStats() {
             <div className="bg-surface-card border border-border-card rounded-xl p-4 md:p-6 shadow-sm mb-6">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
                     <div>
-                        <h2 className="text-lg md:text-2xl font-bold">Histórico (7 días)</h2>
+                        <h2 className="text-lg md:text-2xl font-bold">Histórico de Niveles (7 días)</h2>
                         <p className="text-xs text-text-muted">Mediciones cada hora (cron-job)</p>
                     </div>
                     <div className="flex flex-wrap items-center gap-2 md:gap-4 text-xs">
@@ -528,7 +528,7 @@ export default function AdminWaterStats() {
                             <span className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-gray-400"></span> Casa
                         </span>
                         <span className="flex items-center gap-1 font-bold">
-                            <span className="w-3 h-3 md:w-4 md:h-4 rounded-full bg-primary"></span> TOTAL
+                            <span className="w-3 h-3 md:w-4 md:h-4 rounded-full bg-[#22c55e]"></span> TOTAL
                         </span>
                     </div>
                 </div>
