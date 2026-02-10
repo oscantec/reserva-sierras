@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import { fetchSheetData, appendSheetData } from './lib/sheets-utils.js'
+// Google Sheets utils will be dynamically imported to avoid build-time dependencies
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const CONFIG_FILE = path.join(__dirname, 'saved-config.json')
@@ -25,6 +25,7 @@ export default defineConfig({
                 if (!sheetId || !email || !privateKey) {
                   throw new Error('Missing required credentials');
                 }
+                const { fetchSheetData } = await import('./lib/sheets-utils.js');
                 const data = await fetchSheetData(sheetId, sheetName, email, privateKey);
                 res.setHeader('Content-Type', 'application/json');
                 res.end(JSON.stringify({ success: true, data }));
@@ -51,6 +52,7 @@ export default defineConfig({
                 if (!sheetId || !email || !privateKey || !rowData) {
                   throw new Error('Missing required data');
                 }
+                const { appendSheetData } = await import('./lib/sheets-utils.js');
                 const result = await appendSheetData(sheetId, sheetName, email, privateKey, rowData);
                 res.setHeader('Content-Type', 'application/json');
                 res.end(JSON.stringify({ success: true, data: result }));
