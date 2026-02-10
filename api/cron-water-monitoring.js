@@ -181,8 +181,7 @@ export default async function handler(req, res) {
 
                     // Redondear timestamp al intervalo de 5 minutos cerrado
                     const now = new Date()
-                    const roundedMinutes = Math.floor(now.getMinutes() / 5) * 5
-                    now.setMinutes(roundedMinutes)
+                    now.setMinutes(0)
                     now.setSeconds(0)
                     now.setMilliseconds(0)
                     const roundedTimestamp = now.toISOString()

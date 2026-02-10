@@ -33,8 +33,7 @@ export default async function handler(req, res) {
             // Ejemplo: 2:07:32 -> 2:05:00, 2:13:45 -> 2:10:00
             const now = requestTimestamp ? new Date(requestTimestamp) : new Date()
             const minutes = now.getMinutes()
-            const roundedMinutes = Math.floor(minutes / 5) * 5
-            now.setMinutes(roundedMinutes)
+            now.setMinutes(0)
             now.setSeconds(0)
             now.setMilliseconds(0)
             const roundedTimestamp = now.toISOString()
@@ -77,6 +76,7 @@ export default async function handler(req, res) {
                 .select('*')
                 .gte('timestamp', since.toISOString())
                 .order('timestamp', { ascending: true })
+                .limit(3000)
 
             if (error) throw error
 

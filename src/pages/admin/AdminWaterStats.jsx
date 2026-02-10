@@ -248,8 +248,11 @@ export default function AdminWaterStats() {
 
     const totalWater = getTotalWater()
 
-    // Prepare chart data
-    const chartPoints = historicalData.slice(-48) // Last 48 measurements (24 hours at 30min intervals)
+    // Prepare chart data - Filtrar para no saturar la gráfica si hay muchos datos
+    // Si hay más de 200 puntos, tomamos muestras equitativas
+    const maxPoints = 200
+    const step = Math.ceil(historicalData.length / maxPoints)
+    const chartPoints = historicalData.filter((_, i) => i % step === 0 || i === historicalData.length - 1)
 
     // Calculate max capacities for percentage calculation using imported shared functions
     const maxCapacities = {
@@ -512,7 +515,7 @@ export default function AdminWaterStats() {
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
                     <div>
                         <h2 className="text-lg md:text-2xl font-bold">Histórico (7 días)</h2>
-                        <p className="text-xs text-text-muted">Mediciones cada 5 min</p>
+                        <p className="text-xs text-text-muted">Mediciones cada hora (cron-job)</p>
                     </div>
                     <div className="flex flex-wrap items-center gap-2 md:gap-4 text-xs">
                         <span className="flex items-center gap-1">
@@ -532,51 +535,50 @@ export default function AdminWaterStats() {
                 {chartPoints.length > 0 ? (
                     <div className="overflow-x-auto">
                         <svg viewBox={`0 0 ${chartWidth} ${chartHeight + 100}`} className="w-full" style={{ minWidth: '600px' }}>
-                            {/* Grid lines */}
+                            {/* Grid lines - HORIZONTAL */}
                             {[0, 20, 40, 60, 80, 100].map(i => {
                                 const y = 20 + (chartHeight - 20) - (i * (chartHeight - 20) / 100)
                                 return (
                                     <g key={i}>
                                         <line x1="60" y1={y} x2={chartWidth - 20} y2={y} stroke="#e5e7eb" strokeWidth="1" />
-                                        <text x="50" y={y + 4} textAnchor="end" fontSize="12" fill="#6b7280">
+                                        <text x="50" y={y + 4} textAnchor="end" fontSize="11" fill="#6b7280">
                                             {i}%
                                         </text>
                                     </g>
                                 )
                             })}
 
-                            {/* Lines for individual zones - solid black with different patterns */}
-                            {[{ key: 'zonaBaja', dash: 'none', width: 2 },
-                            { key: 'zonaAlta', dash: '8,4', width: 2 },
-                            { key: 'zonaCasa', dash: '2,2', width: 2 }].map((zone, zoneIdx) => {
+                            {/* Grid lines - VERTICAL (00:00 and 12:00) */}
+                            {chartPoints.map((point, i) => {
+                                const date = new Date(point.timestamp)
+                                if (date.getHours() % 12 !== 0) return null
+                                const x = 60 + (i * (chartWidth - 80) / (chartPoints.length - 1 || 1))
+                                return (
+                                    <line key={`v-${i}`} x1={x} y1="20" x2={x} y2={chartHeight} stroke="#e5e7eb" strokeWidth="1" strokeDasharray="4,4" />
+                                )
+                            })}
+
+                            {/* Lines for individual zones */}
+                            {[{ key: 'zonaBaja', dash: 'none', width: 2, color: '#000000' },
+                            { key: 'zonaAlta', dash: '8,4', width: 2, color: '#4b5563' },
+                            { key: 'zonaCasa', dash: '2,2', width: 2, color: '#9ca3af' }].map((zone, zoneIdx) => {
                                 const points = chartPoints.map((point, i) => {
                                     const x = 60 + (i * (chartWidth - 80) / (chartPoints.length - 1 || 1))
                                     const value = point[zone.key] || 0
                                     const maxCap = maxCapacities[zone.key]
                                     const percent = maxCap > 0 ? (value / maxCap) * 100 : 0
-
-                                    // Use same Y calculation as grid
                                     const y = 20 + (chartHeight - 20) - (percent * (chartHeight - 20) / 100)
                                     return { x, y, percent }
-                                }).filter(p => p.percent > 0)
+                                }).filter(p => !isNaN(p.y))
 
                                 if (points.length === 0) return null
-
-                                const pathData = points.map((p, i) =>
-                                    `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`
-                                ).join(' ')
+                                const pathData = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ')
 
                                 return (
                                     <g key={zone.key}>
-                                        <path
-                                            d={pathData}
-                                            fill="none"
-                                            stroke="#000000"
-                                            strokeWidth={zone.width}
-                                            strokeDasharray={zone.dash}
-                                        />
-                                        {points.map((p, i) => (
-                                            <circle key={i} cx={p.x} cy={p.y} r="3" fill="#000000" />
+                                        <path d={pathData} fill="none" stroke={zone.color} strokeWidth={zone.width} strokeDasharray={zone.dash} />
+                                        {points.length < 100 && points.map((p, i) => (
+                                            <circle key={i} cx={p.x} cy={p.y} r="2" fill={zone.color} />
                                         ))}
                                     </g>
                                 )
@@ -611,41 +613,30 @@ export default function AdminWaterStats() {
                                 )
                             })()}
 
-                            {/* X-axis labels - Rotados verticalmente para mejor legibilidad */}
+                            {/* X-axis labels - TOTALMENTE VERTICALES (90 grados) */}
                             {chartPoints.map((point, i) => {
-                                // Mostrar menos etiquetas en móvil para evitar superposición
-                                if (i % Math.ceil(chartPoints.length / 6) !== 0 && i !== chartPoints.length - 1) return null
-                                const x = 60 + (i * (chartWidth - 80) / (chartPoints.length - 1 || 1))
-
-                                // Formatear fecha de forma compacta: "dd/MM HH:mm"
                                 const date = new Date(point.timestamp)
-                                const formattedDate = `${date.getDate()}/${date.getMonth() + 1}`
-                                const formattedTime = `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`
+                                // Mostrar etiquetas solo a las 00:00 y 12:00 (2 por día)
+                                if (date.getHours() % 12 !== 0) return null
+
+                                const x = 60 + (i * (chartWidth - 80) / (chartPoints.length - 1 || 1))
+                                const dayName = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'][date.getDay()]
+                                const label = `${dayName} ${date.getDate()}/${date.getMonth() + 1} ${String(date.getHours()).padStart(2, '0')}:00`
 
                                 return (
                                     <g key={i}>
-                                        {/* Fecha */}
                                         <text
-                                            x={x}
-                                            y={chartHeight + 35}
-                                            textAnchor="end"
+                                            x={x + 3}
+                                            y={chartHeight + 12}
+                                            textAnchor="start"
                                             fontSize="10"
-                                            fill="#6b7280"
-                                            transform={`rotate(-45, ${x}, ${chartHeight + 35})`}
+                                            fill="#374151"
+                                            fontWeight="bold"
+                                            transform={`rotate(90, ${x}, ${chartHeight + 12})`}
                                         >
-                                            {formattedDate}
+                                            {label}
                                         </text>
-                                        {/* Hora */}
-                                        <text
-                                            x={x}
-                                            y={chartHeight + 48}
-                                            textAnchor="end"
-                                            fontSize="9"
-                                            fill="#9ca3af"
-                                            transform={`rotate(-45, ${x}, ${chartHeight + 48})`}
-                                        >
-                                            {formattedTime}
-                                        </text>
+                                        <line x1={x} y1={chartHeight} x2={x} y2={chartHeight + 10} stroke="#374151" strokeWidth="2" />
                                     </g>
                                 )
                             })}
@@ -660,7 +651,7 @@ export default function AdminWaterStats() {
                     <div className="text-center py-12 text-text-muted">
                         <span className="material-symbols-outlined text-5xl mb-4">show_chart</span>
                         <p>No hay datos históricos disponibles</p>
-                        <p className="text-sm mt-2">Los datos se guardan automáticamente cada 5 minutos (:00, :05, :10...)</p>
+                        <p className="text-sm mt-2">Los datos se guardan automáticamente cada hora (:00)</p>
                     </div>
                 )}
             </div>
