@@ -1,280 +1,203 @@
 {
+  "heroVideoUrl": "https://www.youtube.com/watch?v=yzjFNEuWwFI",
+  "heroFilterColor": "#22c55e",
+  "heroFilterOpacity": 4,
+  "heroRotatingPhrases": [
+    "Somos Reserva de las Sierras",
+    "Somos Tranquilidad",
+    "Somos Aire Puro",
+    "Somos Espacio Verde"
+  ],
+  "airbnbUrl": "https://www.airbnb.com.co/calendar/ical/1164759440955486077.ics?s=556ea5347565316f2bf679394086236b",
+  "bookingUrl": "https://ical.booking.com/v1/export?t=1f8d5ee8-e773-4d57-a0a7-cb23c241ea8c",
+  "googleCalendarUrl": "https://calendar.google.com/calendar/ical/b529ad8b58ec0ce1bd3c82399f798123c7e8d383bd73754ae640df211d9b16e7%40group.calendar.google.com/public/basic.ics",
+  "sessionSecret": "n+uFNISXYwdqITVZBkJa1lqzpw1w1LA84JpuP40ZHjV6q62fEX82+GTOQh111RzgMQEFN6WCj0wOuTHAp1YPQw==",
+  "googleSheetsId": "1zUe1X-4OofPnDw8i74Llc3f6t1VlZrfmOppYT1-ntB8",
+  "googlePrivateKey": "-----BEGIN PRIVATE KEY-----\nMIIEuwIBADANBgkqhkiG9w0BAQEFAASCBKUwggShAgEAAoIBAQCf0a5oijHm9f+t\ntHyLQtdMLJ+r+Zx4Xn8WZbRSwbSKWUsF2/j2Wm1Dq62IazSD5WmqT0QkRO0uBqP8\nii+JBKPZnhBZ4V+kQ9iUIqrwGx9CznW+xzZnoQk87eD9PeM8hHD4v4oM76TK5Iyc\nNrmM0ObqSWXCplx+jdm0CQVQHeC8qCkO2FDdZfkxgrwl8LtOO4/XLNk0FprE3cwe\nnk+99oP4XeULGJF3zHqmc3gV3lErOUsd2RzQaUhQ76iNBpijfVoDODZCXd4ZrbPR\notPGrS/e1s88nwaT5p9/mUHC1sC+rkUt5PvIXgGWcxk24YwLIqVpvFfli/NWTDHK\nXtWV8nB3AgMBAAECgf99SzKKKQDDKrJhldFBXHJtxcFoXsiZlXvZxnvlMiqlGMJr\niLwmAIt1m6Ijneh0S+bX6xmaiNVpJmU2fewszCmoi8LfgOqT9wMhH6ZJ/V/RgD41\nn8Ug358RpWykUC1WKuUzUcNo+neEMqmjaBCpbrbNKb23KU8nG3SrMGdGtPKVWgGv\n7avJfPYp60B3MHbE/3l+vcAr7zm8x+8TDdj24wU4t9Z45+U0A6YXNLyKbrkBQc1v\n0aZNjS1jMXbVe6FLcbydXRf1aRfUjr7y2qKDsf1Qs2DbKP5RaYu5WSOY9L4dh3nr\nF9MTWGdV+U2KAphaOqVntXjRMogSCBrslgMeDxUCgYEA35lxkLJVGYa0wylWu7ae\nasg8i6l5Qi9WF0ZJAswguQtsTZHg3XgO1t+aGC3EkePxQJg+FQcK6W2zeYzBeNEG\nylhDssIbjp/ttOgYa1KYWw4cXXo1w0bjHFSz2fwmy5QDYSLIFun/ntfxSztF3ucy\nCM5fkMlJa/CHurRwRL/jekMCgYEAtvpEffK9Q5pgAGeRCDDasmWHA0n2w8PS3z/s\nCnc2Xr/eQWMYXcLisQk8EQTW9Kz3rESGo6EPcLIJepsPV7gXnwbLDFZqjSjQ/aD2\nd4uDSaQY15oux7qz1mnqTK0u0oI0iCTq90a++GN2Zyh9h6/2eyTsLWAHqiIVXYD1\n6uJ3z70CgYA/R1qXW5Cv16qCbMmJ+CWfDKnt0HlrnJ/dmFuDOieslqoAzd74bkis\n0Lz4SMOPkhWtdShkpQiWhSA8rvP18Bne29nU1hAcbfBEuUZn4QkTA8xNPA/JAt+1\nHdeEQlLsXCgUrlY3/eMEnhJAezbL3VwQl+79t6larciLsxLuset7pwKBgQC2lX0L\nANGDR+RMAwxh0/4mzdCvo3qtVhZx12M9/j8uxN6O+MczqGh0p/ZcNSwZ8w8hwy9m\n0CyME9wJj/j7WyOW+DxdD047lWMV8yx9laVoMmrnmV7cxpz1c7Ls2FNEk9C/mbct\nEFc3nGhl/61jXF7j+rABhzWeu2v+ZdT+kQVlMQKBgGAfTHKhFAkQuYbEldRjm+Kk\nhtiZWQSYziMhYgmJDCy1tNeFZ27sth/CDjM4vzqfOMJH7BoJ2mYxAIlsRnDew8U/\nn9qtNfQkpDzzWsL38zX9XjYTdxaxb3QPwKp1F1henB39iDPt92R5ynsPUkiGzcnq\nYfU9ug2VqA7hLh83iLYP\n-----END PRIVATE KEY-----",
+  "googleServiceAccountEmail": "datosreserva@reserva-rs-api.iam.gserviceaccount.com",
+  "sheetNameReservas": "1. BD",
+  "sheetNameHuespedes": "2. BH",
+  "heroBlurAmount": 2,
+  "paymentAdvancePercent": 25,
+  "paymentBalancePercent": 75,
+  "paymentBbreEmail": "ingenierocante@gmail.com",
+  "paymentBbrePhone": "3057501023",
+  "paymentNequiNumber": "3057501023",
+  "paymentNequiName": "Osc_Can (Oscar Cante)",
+  "paymentQRImageUrl": "",
+  "paymentWhatsappNumber": "3027857026",
+  "paymentWhatsappMessage": "Hola, adjunto mi comprobante de pago para la reserva",
+  "paymentBankName": "Bancolombia",
+  "paymentBankAccountType": "Ahorros",
+  "paymentBankAccountNumber": "123-456789-00",
+  "paymentBankAccountHolder": "Reserva de las Sierras S.A.S",
+  "paymentBankAccountNit": "901.234.567-8",
+  "paymentBbreLink": "",
   "pricing": {
+    "baseRates": {
+      "weekday": 350000,
+      "weekend": 450000,
+      "cleaningFee": 80000,
+      "cleaningEnabled": true,
+      "currency": "COP",
+      "ivaEnabled": false,
+      "ivaPercent": 19
+    },
     "seasons": [
       {
         "id": 1,
         "name": "Temporada Alta",
-        "color": "#ef4444",
-        "endDay": 15,
-        "endMonth": 1,
-        "startDay": 15,
         "multiplier": 1.3,
-        "startMonth": 12
+        "startMonth": 12,
+        "startDay": 15,
+        "endMonth": 1,
+        "endDay": 15,
+        "color": "#ef4444"
       },
       {
         "id": 2,
         "name": "Semana Santa",
-        "color": "#f59e0b",
-        "endDay": 31,
-        "endMonth": 3,
-        "startDay": 24,
         "multiplier": 1.4,
-        "startMonth": 3
+        "startMonth": 3,
+        "startDay": 24,
+        "endMonth": 3,
+        "endDay": 31,
+        "color": "#f59e0b"
       }
     ],
-    "baseRates": {
-      "weekday": 350000,
-      "weekend": 450000,
-      "currency": "COP",
-      "ivaEnabled": false,
-      "ivaPercent": 19,
-      "cleaningFee": 80000,
-      "cleaningEnabled": true
-    },
-    "discounts": {
-      "longStay": {
-        "nights": 7,
-        "enabled": true,
-        "percent": 15
-      },
-      "lastMinute": {
-        "hours": 48,
-        "enabled": false,
-        "percent": 10
-      }
-    },
     "specialDates": [
       {
         "id": 1,
         "date": "2024-12-24",
-        "label": "Nochebuena",
-        "price": 600000
+        "price": 600000,
+        "label": "Nochebuena"
       },
       {
         "id": 2,
         "date": "2024-12-31",
-        "label": "Año Nuevo",
-        "price": 700000
+        "price": 700000,
+        "label": "Año Nuevo"
       }
-    ]
-  },
-  "hostName": "Nuestra Administradora",
-  "airbnbUrl": "https://www.airbnb.com.co/calendar/ical/1164759440955486077.ics?s=556ea5347565316f2bf679394086236b",
-  "siteFonts": {
-    "fontNav": "Inter",
-    "fontBody": "Inter",
-    "fontCard": "Inter",
-    "fontAlert": "Inter",
-    "fontTitle": "Outfit",
-    "fontButton": "Poppins",
-    "fontGlobal": "Inter"
-  },
-  "bookingUrl": "https://ical.booking.com/v1/export?t=1f8d5ee8-e773-4d57-a0a7-cb23c241ea8c",
-  "siteColors": {
-    "infoBg": "#e0f7f4",
-    "badgeBg": "#3db814",
-    "errorBg": "#b7e4c7",
-    "navMaps": "#006076",
-    "navWaze": "#007983",
-    "infoIcon": "#1b4332",
-    "infoText": "#1b4332",
-    "textLink": "#3db814",
-    "textMain": "#1b4332",
-    "badgeText": "#000000",
-    "errorIcon": "#ef4444",
-    "errorText": "#2d6a4f",
-    "iconColor": "#ffffff",
-    "successBg": "#40916c",
-    "textMuted": "#081c15",
-    "textTitle": "#1b4332",
-    "warningBg": "#2f4858",
-    "waterGlow": "#000000",
-    "waterText": "#ffffff",
-    "borderCard": "#f5f5f5",
-    "btnPrimary": "#2d6a4f",
-    "cardShadow": "#1b4332",
-    "iconBgDark": "#2d6a4f",
-    "iconBorder": "#1b4332",
-    "infoBorder": "#081c15",
-    "pageBgGuia": "#ffffff",
-    "surfaceNav": "#ffffff",
-    "textAccent": "#2a8a0e",
-    "waterWaves": "#3db814",
-    "errorBorder": "#1b4332",
-    "pageBgAdmin": "#ffffff",
-    "successIcon": "#081c15",
-    "successText": "#2a8a0e",
-    "surfaceCard": "#fafafa",
-    "surfacePage": "#f8fcf6",
-    "warningIcon": "#ff6600",
-    "warningText": "#ffffff",
-    "waterCardBg": "#006076",
-    "pageBgInicio": "#ffffff",
-    "surfaceLight": "#ffffff",
-    "textSubtitle": "#081c15",
-    "waterBadgeBg": "#2f4858",
-    "waterBubbles": "#0094a8",
-    "waterTipIcon": "#00a658",
-    "waterTipText": "#ffffff",
-    "waterWaveMid": "#ffffff",
-    "iconBgPrimary": "#1b4332",
-    "iconColorDark": "#ffffff",
-    "pageBgGaleria": "#ffffff",
-    "successBorder": "#1b4332",
-    "surfaceFooter": "#2f4858",
-    "textOnPrimary": "#ffffff",
-    "warningBorder": "#3db814",
-    "waterDroplets": "#0084c3",
-    "waterThanksBg": "#00af52",
-    "waterTipTitle": "#2a8a0e",
-    "waterWaveBack": "#ffffff",
-    "borderCardDark": "#2a3d24",
-    "pageBgRegistro": "#ffffff",
-    "pageBgReservas": "#ffffff",
-    "platformAirbnb": "#FF5A5F",
-    "platformGoogle": "#4285F4",
-    "surfaceSection": "#ffffff",
-    "waterBadgeGlow": "#006076",
-    "waterBadgeText": "#ffffff",
-    "waterBgPrimary": "#000000",
-    "waterTextMuted": "#ffffff",
-    "waterTipCardBg": "#000000",
-    "waterTipIconBg": "#000000",
-    "waterWarningBg": "#ffffff",
-    "waterWaveFront": "#ffffff",
-    "btnPrimaryHover": "#3db814",
-    "iconBgSecondary": "#ffffff",
-    "platformBooking": "#003580",
-    "platformDirecta": "#00A658",
-    "surfaceCardDark": "#081c15",
-    "surfacePageDark": "#111b0e",
-    "waterCardBorder": "#2f4858",
-    "waterThanksIcon": "#ffffff",
-    "waterThanksText": "#ffffff",
-    "surfaceCardHover": "#f7fdf8",
-    "textSubtitleDark": "#1b4332",
-    "waterBgSecondary": "#000000",
-    "waterThanksTitle": "#ffffff",
-    "waterWarningIcon": "#ffffff",
-    "waterWarningText": "#ffffff",
-    "waterBubblesInner": "#ffffff",
-    "waterThanksBorder": "#00a658",
-    "waterThanksIconBg": "#3db814",
-    "waterWarningTitle": "#ffffff",
-    "iconColorSecondary": "#2d6a4f",
-    "waterTipCardBorder": "#000000",
-    "waterTipIconBgDark": "#006076",
-    "waterWarningBorder": "#009178",
-    "waterWarningIconBg": "#009178",
-    "waterThanksIconBgDark": "#2a8a0e"
+    ],
+    "discounts": {
+      "longStay": {
+        "enabled": true,
+        "nights": 7,
+        "percent": 15
+      },
+      "lastMinute": {
+        "enabled": false,
+        "hours": 48,
+        "percent": 10
+      }
+    }
   },
   "checkInTime": "3:00 PM",
   "checkOutTime": "1:00 PM",
-  "heroVideoUrl": "https://www.youtube.com/watch?v=yzjFNEuWwFI",
-  "tuyaAccessId": "aw59ugmntjfevwdkx8py",
-  "galeriaLabels": {},
+  "whatsappNumber": "573115565483",
+  "hostName": "Nuestra Administradora",
+  "siteColors": {
+    "pageBgInicio": "#ffffff",
+    "pageBgReservas": "#ffffff",
+    "pageBgGaleria": "#ffffff",
+    "pageBgRegistro": "#ffffff",
+    "pageBgGuia": "#ffffff",
+    "pageBgAdmin": "#ffffff",
+    "btnPrimary": "#2d6a4f",
+    "btnPrimaryHover": "#3db814",
+    "textMain": "#081c15",
+    "textTitle": "#1b4332",
+    "textMuted": "#081c15",
+    "textSubtitle": "#081c15",
+    "textSubtitleDark": "#1b4332",
+    "textLink": "#3db814",
+    "textAccent": "#2a8a0e",
+    "textOnPrimary": "#ffffff",
+    "iconColor": "#ffffff",
+    "iconColorSecondary": "#3db814",
+    "iconColorDark": "#ffffff",
+    "iconBgPrimary": "#2d6a4f",
+    "iconBgSecondary": "#ffffff",
+    "iconBgDark": "#2d6a4f",
+    "iconBorder": "#1b4332",
+    "surfaceCard": "#fafafa",
+    "surfaceCardHover": "#f7fdf8",
+    "surfaceLight": "#ffffff",
+    "surfaceSection": "#ffffff",
+    "surfaceNav": "#ffffff",
+    "surfaceFooter": "#2f4858",
+    "surfaceCardDark": "#081c15",
+    "borderCard": "#f5f5f5",
+    "borderCardDark": "#2a3d24",
+    "cardShadow": "#1b4332",
+    "badgeBg": "#3db814",
+    "badgeText": "#000000",
+    "platformAirbnb": "#FF5A5F",
+    "platformBooking": "#003580",
+    "platformGoogle": "#4285F4",
+    "platformDirecta": "#00A658",
+    "navWaze": "#007983",
+    "navMaps": "#006076",
+    "warningBg": "#2f4858",
+    "warningText": "#ffffff",
+    "warningIcon": "#ff6600",
+    "warningBorder": "#3db814",
+    "infoBg": "#e0f7f4",
+    "infoText": "#1b4332",
+    "infoIcon": "#1b4332",
+    "infoBorder": "#081c15",
+    "successBg": "#40916c",
+    "successText": "#2a8a0e",
+    "successIcon": "#081c15",
+    "successBorder": "#1b4332",
+    "errorBg": "#b7e4c7",
+    "errorText": "#2d6a4f",
+    "errorIcon": "#ef4444",
+    "errorBorder": "#1b4332",
+    "waterBgPrimary": "#000000",
+    "waterBgSecondary": "#000000",
+    "waterGlow": "#000000",
+    "waterText": "#ffffff",
+    "waterTextMuted": "#ffffff",
+    "waterTipCardBg": "#000000",
+    "waterTipCardBorder": "#000000",
+    "waterTipIconBg": "#000000",
+    "waterTipIconBgDark": "#006076",
+    "waterTipIcon": "#00a658",
+    "waterTipTitle": "#2a8a0e",
+    "waterTipText": "#ffffff",
+    "waterWarningBg": "#ffffff",
+    "waterWarningBorder": "#009178",
+    "waterWarningIconBg": "#009178",
+    "waterWarningIcon": "#ffffff",
+    "waterWarningTitle": "#ffffff",
+    "waterWarningText": "#ffffff",
+    "waterThanksBg": "#00af52",
+    "waterThanksBorder": "#00a658",
+    "waterThanksIconBg": "#3db814",
+    "waterThanksIconBgDark": "#2a8a0e",
+    "waterThanksIcon": "#ffffff",
+    "waterThanksTitle": "#ffffff",
+    "waterThanksText": "#ffffff",
+    "waterBadgeBg": "#2f4858",
+    "waterBadgeText": "#ffffff",
+    "waterBadgeGlow": "#006076",
+    "waterBubbles": "#0094a8",
+    "waterBubblesInner": "#ffffff",
+    "waterWaveBack": "#ffffff",
+    "waterWaveMid": "#ffffff",
+    "waterWaveFront": "#ffffff",
+    "surfacePage": "#f8fcf6",
+    "surfacePageDark": "#111b0e",
+    "waterCardBg": "#006076",
+    "waterCardBorder": "#2f4858",
+    "waterDroplets": "#0084c3",
+    "waterWaves": "#3db814"
+  },
   "inicioContent": {
     "intro": {
       "title": "Bienvenidos a Reserva de las Sierras, Anapoima",
       "description": "Un espacio rodeado de zonas verdes y naturaleza, ubicado en un entorno tranquilo de Anapoima, pensado para disfrutar la calma del lugar y el contacto con el entorno natural."
-    },
-    "rules": [
-      {
-        "desc": "Entrada: 3:00 PM. Salida: 1:00 PM. Flexible bajo petición.",
-        "icon": "schedule",
-        "title": "Check-in / Check-out"
-      },
-      {
-        "desc": "A partir de las 10:00 PM, se recomienda mantener un nivel de ruido moderado para conservar el ambiente tranquilo del lugar.",
-        "icon": "volume_off",
-        "title": "Horas de Silencio"
-      },
-      {
-        "desc": "Bienvenidas con previo aviso. Se recomienda mantenerlas siempre vigiladas en zonas comunes y evitar su acceso a la piscina, jacuzzi y camas.",
-        "icon": "pets",
-        "title": "Mascotas"
-      },
-      {
-        "desc": "Prohibido fumar en espacios interiores. Usar zonas externas.",
-        "icon": "smoke_free",
-        "title": "No Fumar"
-      },
-      {
-        "desc": "No se permiten fiestas o eventos ruidosos sin autorización escrita.",
-        "icon": "celebration",
-        "title": "Eventos"
-      },
-      {
-        "desc": "Ayúdanos a cuidar el entorno: no arrojar basura en la finca ni en los senderos, y evita tomar frutos de la propiedad sin autorización previa.",
-        "icon": "nature_people",
-        "title": "Cuidado Ambiental"
-      }
-    ],
-    "footer": {
-      "icon": "nature_people",
-      "email": "info@reservadelassierras",
-      "logoSize": 6,
-      "copyright": "© 2026 Reserva de las Sierras. Todos los derechos reservados.",
-      "poweredBy": "IngenieroCante - NextCan",
-      "showAdmin": false,
-      "logoHeight": 80,
-      "overlayOpacity": 37,
-      "adminLogoHeight": 60
-    },
-    "location": {
-      "title": "Cómo llegar a Reserva de las Sierras",
-      "mapUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5741.0303595935075!2d-74.50134553522518!3d4.572667298532009!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3f6d0065c5f583%3A0xc21f397c14d02b89!2sReserva%20de%20las%20Sierras!5e1!3m2!1ses-419!2sco!4v1766608366219!5m2!1ses-419!2sco\" width=\"600\" height=\"450\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade",
-      "mapsUrl": "https://maps.app.goo.gl/5NTm5pEhuWkniKp26",
-      "wazeUrl": "https://waze.com/ul/hd2g40b20f",
-      "stepsBus": [
-        {
-          "desc": "Desde la Terminal de Transporte El Salitre (Bogotá) toma la ruta con destino a Anapoima, operada por la empresa Flota San Vicente",
-          "title": "Terminal de Transporte"
-        },
-        {
-          "desc": "El recorrido se realiza por la vía principal Bogotá – Anapoima, en transporte intermunicipal.",
-          "title": "Trayecto hacia Anapoima"
-        },
-        {
-          "desc": "Desde el punto de descenso, camina hasta ubicar el sendero peatonal de ingreso, el cual conduce directamente hacia la finca.",
-          "title": "Punto de descenso"
-        },
-        {
-          "desc": "Busca el letrero \"Reserva de las Sierras\" a la izquierda.",
-          "title": "Sendero peatonal de ingreso"
-        },
-        {
-          "desc": "se recomienda coordinar previamente el transporte desde el punto de descenso o consultar directamente con la empresa Flota San Vicente para confirmar paradas y horarios. – Teléfono: 318 363 6775.",
-          "title": "Recomendaciones de transporte público"
-        }
-      ],
-      "subtitle": "La finca se encuentra a solo 200 metros de la vía principal Bogotá – Anapoima, con un tramo final de acceso por vía destapada.",
-      "stepsCarro": [
-        {
-          "desc": "Circula por la vía principal Bogotá – Anapoima. La finca se encuentra  5Km antes de llegar al casco urbano, a solo 200 metros de esta vía principal.",
-          "title": "Vía principal Bogotá – Anapoima"
-        },
-        {
-          "desc": "Identifica el desvío sobre la vía destapada que conduce al acceso de la finca, ubicado directamente sobre la vía principal.",
-          "title": "Punto de acceso a la finca"
-        },
-        {
-          "desc": "Desde el desvío, continúa aproximadamente 100 metros por vía destapada, transitable para vehículos particulares.",
-          "title": "Tramo final de acceso"
-        },
-        {
-          "desc": "Al finalizar el acceso encontrarás el área de estacionamiento dispuesta para los huéspedes.",
-          "title": "Estacionamiento"
-        },
-        {
-          "desc": "Aunque existe acceso en placa huella hasta la casa, se recomienda dejar el vehículo en el parqueadero dispuesto en el acceso de la finca, ya que el ingreso final requiere mayor destreza al volante.",
-          "title": "Recomendación de estacionamiento"
-        }
-      ],
-      "helpMessage": "¿Te perdiste? Llámanos, te guiaremos inmediatamente.",
-      "roadCondition": "Carretera pavimentada en 95%. Últimos 500m de vía destapada accesible. asi es",
-      "referenceImage": "/src/images/Acceso Casa2.webp",
-      "referenceCaption": "Acceso a la Finca"
     },
     "amenidades": [
       {
@@ -293,31 +216,34 @@
         "description": "Se permiten mascotas con previo aviso. Los huéspedes son responsables del cuidado, supervisión y comportamiento de sus mascotas durante toda la estadía, así como de mantener los espacios limpios y en buen estado."
       }
     ],
+    "contactoInicial": {
+      "sectionTitle": "Contacto Inicial",
+      "sectionSubtitle": "Coordina los detalles de tu llegada con nuestra anfitriona.",
+      "welcomeText": "¡Gracias por elegir Reserva de las Sierras! Para coordinar adecuadamente tu llegada, es necesario comunicarte previamente con nuestra administradora y confirmar los detalles correspondientes.",
+      "items": [
+        {
+          "icon": "schedule",
+          "title": "Hora de llegada",
+          "description": "Confirma tu hora aproximada de check-in"
+        },
+        {
+          "icon": "directions_car",
+          "title": "Indicaciones",
+          "description": "Recibe instrucciones detalladas para llegar"
+        },
+        {
+          "icon": "key",
+          "title": "Acceso",
+          "description": "Coordina la entrega de la casa y la explicación de los aspectos importantes."
+        }
+      ],
+      "whatsappMessage": "Hola Marcela, quiero comunicarme contigo por una reserva que realizamos en \"Reserva de las Sierras\", para coordinar los detalles de llegada y el acceso a la casa. Gracias.",
+      "whatsappButtonText": "Contacto por WhatsApp"
+    },
     "zonasHumedas": {
-      "jacuzzi": {
-        "badge": "Exclusivo",
-        "rules": [
-          {
-            "icon": "thermostat",
-            "text": "El agua no cuenta con sistema de calefacción; su temperatura es ambiente y suele ser fresca, propia del entorno natural."
-          },
-          {
-            "icon": "timer",
-            "text": "Máximo 90 minutos por día, por conservación y requerimientos de los equipos."
-          },
-          {
-            "icon": "wb_sunny",
-            "text": "Horario de uso: 8:00 AM – 9:00 PM. Se recomienda su uso durante el día, ya que la temperatura del agua es ambiente."
-          },
-          {
-            "icon": "favorite",
-            "text": "Cuida el jacuzzi como si fuera tuyo"
-          }
-        ],
-        "title": "Jacuzzi Privado",
-        "subtitle": "Relájate en total privacidad"
-      },
       "piscina": {
+        "title": "Piscina Pequeña",
+        "subtitle": "Uso exclusivo durante tu estadía",
         "badge": "Privada",
         "rules": [
           {
@@ -336,196 +262,265 @@
             "icon": "warning",
             "text": "No ingresar alimentos, bebidas  o mascotas al área de la piscina"
           }
-        ],
-        "title": "Piscina Pequeña",
-        "subtitle": "Uso exclusivo durante tu estadía"
+        ]
+      },
+      "jacuzzi": {
+        "title": "Jacuzzi Privado",
+        "subtitle": "Relájate en total privacidad",
+        "badge": "Exclusivo",
+        "rules": [
+          {
+            "icon": "thermostat",
+            "text": "El agua no cuenta con sistema de calefacción; su temperatura es ambiente y suele ser fresca, propia del entorno natural."
+          },
+          {
+            "icon": "timer",
+            "text": "Máximo 90 minutos por día, por conservación y requerimientos de los equipos."
+          },
+          {
+            "icon": "wb_sunny",
+            "text": "Horario de uso: 8:00 AM – 9:00 PM. Se recomienda su uso durante el día, ya que la temperatura del agua es ambiente."
+          },
+          {
+            "icon": "favorite",
+            "text": "Cuida el jacuzzi como si fuera tuyo"
+          }
+        ]
       },
       "bottomMessage": "Las zonas húmedas son de uso exclusivo para los huéspedes de la reserva. Por favor, respeta las normas para mantener las instalaciones en óptimas condiciones."
     },
+    "waterConservation": {
+      "title": "Cuidado del Agua – Un compromiso vital",
+      "subtitle": "Anapoima, y en especial la zona donde se encuentra la vivienda, enfrenta una problemática real y constante en el suministro de agua. Este no es un recurso abundante ni garantizado.  Cada gota cuenta.  Por eso, les pedimos de manera muy consciente y responsable hacer un uso estrictamente racional del agua durante su estadía. Un consumo excesivo o descuidado puede afectar no solo la operación de la casa",
+      "tips": [
+        {
+          "icon": "shower",
+          "title": "Duchas Cortas",
+          "desc": "Intenta que las duchas sean breves. Reducir solo unos minutos marca una gran diferencia en el consumo de agua."
+        },
+        {
+          "icon": "local_laundry_service",
+          "title": "Sin Lavandería",
+          "desc": "Evitar lavar ropa durante la estadía contribuye significativamente al ahorro de agua y al buen funcionamiento de la casa."
+        },
+        {
+          "icon": "water_drop",
+          "title": "Cierra el Grifo",
+          "desc": "Mientras te enjabonas o te cepillas los dientes, mantener el grifo cerrado ayuda a evitar desperdicios innecesarios"
+        },
+        {
+          "icon": "report",
+          "title": "Reporta Fugas",
+          "desc": "Si notas alguna fuga o goteo, avísanos de inmediato. Detectarlas a tiempo permite ahorrar grandes cantidades de agua."
+        }
+      ],
+      "bottomTitle": "Gracias por tu compromiso",
+      "bottomMessage": "En esta zona el agua no es constante ni abundante y los cortes son frecuentes. Un consumo responsable es fundamental para que el servicio se mantenga durante toda la estadía.",
+      "showUrgencyBadge": false,
+      "bubbleMaxSize": 2,
+      "bubbleSpeed": 30,
+      "bubbleColor": "#040e01",
+      "bubbleCount": 250
+    },
+    "rules": [
+      {
+        "icon": "schedule",
+        "title": "Check-in / Check-out",
+        "desc": "Entrada: 3:00 PM. Salida: 1:00 PM. Flexible bajo petición."
+      },
+      {
+        "icon": "volume_off",
+        "title": "Horas de Silencio",
+        "desc": "A partir de las 10:00 PM, se recomienda mantener un nivel de ruido moderado para conservar el ambiente tranquilo del lugar."
+      },
+      {
+        "icon": "pets",
+        "title": "Mascotas",
+        "desc": "Bienvenidas con previo aviso. Se recomienda mantenerlas siempre vigiladas en zonas comunes y evitar su acceso a la piscina, jacuzzi y camas."
+      },
+      {
+        "icon": "smoke_free",
+        "title": "No Fumar",
+        "desc": "Prohibido fumar en espacios interiores. Usar zonas externas."
+      },
+      {
+        "icon": "celebration",
+        "title": "Eventos",
+        "desc": "No se permiten fiestas o eventos ruidosos sin autorización escrita."
+      },
+      {
+        "icon": "nature_people",
+        "title": "Cuidado Ambiental",
+        "desc": "Ayúdanos a cuidar el entorno: no arrojar basura en la finca ni en los senderos, y evita tomar frutos de la propiedad sin autorización previa."
+      }
+    ],
+    "location": {
+      "title": "Cómo llegar a Reserva de las Sierras",
+      "subtitle": "La finca se encuentra a solo 200 metros de la vía principal Bogotá – Anapoima, con un tramo final de acceso por vía destapada.",
+      "mapUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5741.0303595935075!2d-74.50134553522518!3d4.572667298532009!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3f6d0065c5f583%3A0xc21f397c14d02b89!2sReserva%20de%20las%20Sierras!5e1!3m2!1ses-419!2sco!4v1766608366219!5m2!1ses-419!2sco\" width=\"600\" height=\"450\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade",
+      "wazeUrl": "https://waze.com/ul/hd2g40b20f",
+      "mapsUrl": "https://maps.app.goo.gl/5NTm5pEhuWkniKp26",
+      "referenceImage": "/src/images/Acceso Casa2.webp",
+      "referenceCaption": "Acceso a la Finca",
+      "roadCondition": "Carretera pavimentada en 95%. Últimos 500m de vía destapada accesible. asi es",
+      "stepsCarro": [
+        {
+          "title": "Vía principal Bogotá – Anapoima",
+          "desc": "Circula por la vía principal Bogotá – Anapoima. La finca se encuentra  5Km antes de llegar al casco urbano, a solo 200 metros de esta vía principal."
+        },
+        {
+          "title": "Punto de acceso a la finca",
+          "desc": "Identifica el desvío sobre la vía destapada que conduce al acceso de la finca, ubicado directamente sobre la vía principal."
+        },
+        {
+          "title": "Tramo final de acceso",
+          "desc": "Desde el desvío, continúa aproximadamente 100 metros por vía destapada, transitable para vehículos particulares."
+        },
+        {
+          "title": "Estacionamiento",
+          "desc": "Al finalizar el acceso encontrarás el área de estacionamiento dispuesta para los huéspedes."
+        },
+        {
+          "title": "Recomendación de estacionamiento",
+          "desc": "Aunque existe acceso en placa huella hasta la casa, se recomienda dejar el vehículo en el parqueadero dispuesto en el acceso de la finca, ya que el ingreso final requiere mayor destreza al volante."
+        }
+      ],
+      "stepsBus": [
+        {
+          "title": "Terminal de Transporte",
+          "desc": "Desde la Terminal de Transporte El Salitre (Bogotá) toma la ruta con destino a Anapoima, operada por la empresa Flota San Vicente"
+        },
+        {
+          "title": "Trayecto hacia Anapoima",
+          "desc": "El recorrido se realiza por la vía principal Bogotá – Anapoima, en transporte intermunicipal."
+        },
+        {
+          "title": "Punto de descenso",
+          "desc": "Desde el punto de descenso, camina hasta ubicar el sendero peatonal de ingreso, el cual conduce directamente hacia la finca."
+        },
+        {
+          "title": "Sendero peatonal de ingreso",
+          "desc": "Busca el letrero \"Reserva de las Sierras\" a la izquierda."
+        },
+        {
+          "title": "Recomendaciones de transporte público",
+          "desc": "se recomienda coordinar previamente el transporte desde el punto de descenso o consultar directamente con la empresa Flota San Vicente para confirmar paradas y horarios. – Teléfono: 318 363 6775."
+        }
+      ],
+      "helpMessage": "¿Te perdiste? Llámanos, te guiaremos inmediatamente."
+    },
     "antesDePartir": {
+      "title": "Al momento del check-out",
+      "subtitle": "Para un cierre de estadía adecuado, les pedimos tener en cuenta las siguientes recomendaciones y dejar la casa en buenas condiciones, similares a como fue entregada.",
       "items": [
         {
           "icon": "schedule",
           "title": "Horario de salida",
-          "isWarning": false,
-          "description": "El check-out se realiza a la 1:00 PM o a la  hora acordada, con el fin de permitir la limpieza y preparación de la casa para los siguientes huéspedes"
+          "description": "El check-out se realiza a la 1:00 PM o a la  hora acordada, con el fin de permitir la limpieza y preparación de la casa para los siguientes huéspedes",
+          "isWarning": false
         },
         {
           "icon": "delete",
           "title": "Manejo de Residuos",
-          "isWarning": false,
-          "description": "Depositar los residuos en las bolsas o contenedores correspondientes y colocarlos en el lugar indicado para su recolección."
+          "description": "Depositar los residuos en las bolsas o contenedores correspondientes y colocarlos en el lugar indicado para su recolección.",
+          "isWarning": false
         },
         {
           "icon": "cleaning_services",
           "title": "Limpieza general",
-          "isWarning": false,
-          "description": "Dejar la cocina, utensilios, baños y demás espacios en buen estado, en condiciones similares a las encontradas al ingreso."
+          "description": "Dejar la cocina, utensilios, baños y demás espacios en buen estado, en condiciones similares a las encontradas al ingreso.",
+          "isWarning": false
         },
         {
           "icon": "chair",
           "title": "Mobiliario y enseres",
-          "isWarning": false,
-          "description": "Cuidar los muebles y elementos de la casa. Si algún mueble fue movido durante la estadía, dejarlo nuevamente en su lugar original."
+          "description": "Cuidar los muebles y elementos de la casa. Si algún mueble fue movido durante la estadía, dejarlo nuevamente en su lugar original.",
+          "isWarning": false
         },
         {
           "icon": "warning",
           "title": "Reporte de Daños",
-          "isWarning": false,
-          "description": "Informar oportunamente cualquier daño, rotura o mal funcionamiento ocurrido durante la estadía, para poder gestionarlo adecuadamente."
+          "description": "Informar oportunamente cualquier daño, rotura o mal funcionamiento ocurrido durante la estadía, para poder gestionarlo adecuadamente.",
+          "isWarning": false
         },
         {
           "icon": "key",
           "title": "Entrega de Llaves",
-          "isWarning": false,
-          "description": "Dejar las llaves en el lugar indicado o entregarlas según lo previamente coordinado."
+          "description": "Dejar las llaves en el lugar indicado o entregarlas según lo previamente coordinado.",
+          "isWarning": false
         }
-      ],
-      "title": "Al momento del check-out",
-      "subtitle": "Para un cierre de estadía adecuado, les pedimos tener en cuenta las siguientes recomendaciones y dejar la casa en buenas condiciones, similares a como fue entregada."
+      ]
     },
-    "contactoInicial": {
-      "items": [
-        {
-          "icon": "schedule",
-          "title": "Hora de llegada",
-          "description": "Confirma tu hora aproximada de check-in"
-        },
-        {
-          "icon": "directions_car",
-          "title": "Indicaciones",
-          "description": "Recibe instrucciones detalladas para llegar"
-        },
-        {
-          "icon": "key",
-          "title": "Acceso",
-          "description": "Coordina la entrega de la casa y la explicación de los aspectos importantes."
-        }
-      ],
-      "welcomeText": "¡Gracias por elegir Reserva de las Sierras! Para coordinar adecuadamente tu llegada, es necesario comunicarte previamente con nuestra administradora y confirmar los detalles correspondientes.",
-      "sectionTitle": "Contacto Inicial",
-      "sectionSubtitle": "Coordina los detalles de tu llegada con nuestra anfitriona.",
-      "whatsappMessage": "Hola Marcela, quiero comunicarme contigo por una reserva que realizamos en \"Reserva de las Sierras\", para coordinar los detalles de llegada y el acceso a la casa. Gracias.",
-      "whatsappButtonText": "Contacto por WhatsApp"
-    },
-    "waterConservation": {
-      "tips": [
-        {
-          "desc": "Intenta que las duchas sean breves. Reducir solo unos minutos marca una gran diferencia en el consumo de agua.",
-          "icon": "shower",
-          "title": "Duchas Cortas"
-        },
-        {
-          "desc": "Evitar lavar ropa durante la estadía contribuye significativamente al ahorro de agua y al buen funcionamiento de la casa.",
-          "icon": "local_laundry_service",
-          "title": "Sin Lavandería"
-        },
-        {
-          "desc": "Mientras te enjabonas o te cepillas los dientes, mantener el grifo cerrado ayuda a evitar desperdicios innecesarios",
-          "icon": "water_drop",
-          "title": "Cierra el Grifo"
-        },
-        {
-          "desc": "Si notas alguna fuga o goteo, avísanos de inmediato. Detectarlas a tiempo permite ahorrar grandes cantidades de agua.",
-          "icon": "report",
-          "title": "Reporta Fugas"
-        }
-      ],
-      "title": "Cuidado del Agua – Un compromiso vital",
-      "subtitle": "Anapoima, y en especial la zona donde se encuentra la vivienda, enfrenta una problemática real y constante en el suministro de agua. Este no es un recurso abundante ni garantizado.  Cada gota cuenta.  Por eso, les pedimos de manera muy consciente y responsable hacer un uso estrictamente racional del agua durante su estadía. Un consumo excesivo o descuidado puede afectar no solo la operación de la casa",
-      "bottomTitle": "Gracias por tu compromiso",
-      "bubbleColor": "#040e01",
-      "bubbleCount": 250,
-      "bubbleSpeed": 30,
-      "bottomMessage": "En esta zona el agua no es constante ni abundante y los cortes son frecuentes. Un consumo responsable es fundamental para que el servicio se mantenga durante toda la estadía.",
-      "bubbleMaxSize": 2,
-      "showUrgencyBadge": false
+    "footer": {
+      "icon": "nature_people",
+      "copyright": "© 2026 Reserva de las Sierras. Todos los derechos reservados.",
+      "showAdmin": false,
+      "poweredBy": "IngenieroCante - NextCan",
+      "email": "info@reservadelassierras",
+      "overlayColor": "#2f4858",
+      "overlayOpacity": 37,
+      "adminLogoHeight": 60,
+      "logoHeight": 80,
+      "logoSize": 6
     }
   },
-  "sessionSecret": "n+uFNISXYwdqITVZBkJa1lqzpw1w1LA84JpuP40ZHjV6q62fEX82+GTOQh111RzgMQEFN6WCj0wOuTHAp1YPQw==",
-  "tuyaApiRegion": "https://openapi.tuyaus.com",
-  "galeriaContent": {
-    "heroTitle": "Nuestros Espacios",
-    "pageTitle": "Nuestra Galería",
-    "categoryAll": "Galería Completa",
-    "pageSubtitle": "Explora cada rincón de Reserva de las Sierras.",
-    "categoryHumedas": "Zonas Húmedas",
-    "categoryExternas": "Externas",
-    "categoryInternas": "Internas"
-  },
-  "googleSheetsId": "1zUe1X-4OofPnDw8i74Llc3f6t1VlZrfmOppYT1-ntB8",
-  "heroBlurAmount": 2,
-  "whatsappNumber": "573115565483",
-  "heroFilterColor": "#22c55e",
-  "paymentBankName": "Bancolombia",
-  "paymentBbreLink": "",
+  "galeriaLabels": {},
   "registroContent": {
     "pageTitle": "Registro de Huéspedes",
-    "step1Title": "Valida tu Reserva",
-    "step2Title": "Datos del Huésped Principal",
-    "step3Title": "Acompañantes",
-    "step4Title": "Confirmar Registro",
     "pageSubtitle": "Completa el registro de todos los huéspedes para tu estadía.",
-    "successTitle": "¡Registro Exitoso!",
+    "step1Title": "Valida tu Reserva",
     "step1Subtitle": "Ingresa tu número de reserva para continuar.",
+    "step2Title": "Datos del Huésped Principal",
     "step2Subtitle": "Completa la información del titular de la reserva.",
+    "step3Title": "Acompañantes",
     "step3Subtitle": "Registra a las personas que te acompañarán.",
+    "step4Title": "Confirmar Registro",
     "step4Subtitle": "Revisa la información antes de enviar.",
+    "successTitle": "¡Registro Exitoso!",
     "successMessage": "Tu registro ha sido completado. Te esperamos pronto."
   },
   "reservasContent": {
     "pageTitle": "Reserva tu hospedaje",
-    "stepLabel": "Fechas",
-    "weekdayDesc": "Perfecto para desconectar y trabajar en remoto.",
-    "weekendDesc": "Disfruta de actividades al aire libre y eventos.",
-    "arrivalLabel": "Llegada",
-    "discountDesc": "días y ahorra.",
     "pageSubtitle": "Selecciona tus fechas de llegada y salida.",
-    "sidebarTitle": "Tu Reserva",
+    "stepIndicator": "Paso 1 de 4",
+    "stepLabel": "Fechas",
+    "calendarLoading": "Cargando disponibilidad...",
+    "legendSelected": "Seleccionado",
+    "legendAvailable": "Disponible",
+    "legendReserved": "Reservado",
     "tarifasTitle": "Nuestras Tarifas",
     "weekdayLabel": "Lun - Jue",
+    "weekdayDesc": "Perfecto para desconectar y trabajar en remoto.",
     "weekendLabel": "Vie - Dom",
+    "weekendDesc": "Disfruta de actividades al aire libre y eventos.",
     "discountLabel": "OFF",
-    "stepIndicator": "Paso 1 de 4",
-    "continueButton": "Continuar Reserva",
+    "discountDesc": "días y ahorra.",
+    "sidebarTitle": "Tu Reserva",
+    "arrivalLabel": "Llegada",
     "departureLabel": "Salida",
-    "legendReserved": "Reservado",
-    "legendSelected": "Seleccionado",
-    "calendarLoading": "Cargando disponibilidad...",
-    "legendAvailable": "Disponible",
+    "continueButton": "Continuar Reserva",
     "emptyCalendarText": "Selecciona fechas en el calendario para ver el precio"
   },
-  "googlePrivateKey": "-----BEGIN PRIVATE KEY-----\nMIIEuwIBADANBgkqhkiG9w0BAQEFAASCBKUwggShAgEAAoIBAQCf0a5oijHm9f+t\ntHyLQtdMLJ+r+Zx4Xn8WZbRSwbSKWUsF2/j2Wm1Dq62IazSD5WmqT0QkRO0uBqP8\nii+JBKPZnhBZ4V+kQ9iUIqrwGx9CznW+xzZnoQk87eD9PeM8hHD4v4oM76TK5Iyc\nNrmM0ObqSWXCplx+jdm0CQVQHeC8qCkO2FDdZfkxgrwl8LtOO4/XLNk0FprE3cwe\nnk+99oP4XeULGJF3zHqmc3gV3lErOUsd2RzQaUhQ76iNBpijfVoDODZCXd4ZrbPR\notPGrS/e1s88nwaT5p9/mUHC1sC+rkUt5PvIXgGWcxk24YwLIqVpvFfli/NWTDHK\nXtWV8nB3AgMBAAECgf99SzKKKQDDKrJhldFBXHJtxcFoXsiZlXvZxnvlMiqlGMJr\niLwmAIt1m6Ijneh0S+bX6xmaiNVpJmU2fewszCmoi8LfgOqT9wMhH6ZJ/V/RgD41\nn8Ug358RpWykUC1WKuUzUcNo+neEMqmjaBCpbrbNKb23KU8nG3SrMGdGtPKVWgGv\n7avJfPYp60B3MHbE/3l+vcAr7zm8x+8TDdj24wU4t9Z45+U0A6YXNLyKbrkBQc1v\n0aZNjS1jMXbVe6FLcbydXRf1aRfUjr7y2qKDsf1Qs2DbKP5RaYu5WSOY9L4dh3nr\nF9MTWGdV+U2KAphaOqVntXjRMogSCBrslgMeDxUCgYEA35lxkLJVGYa0wylWu7ae\nasg8i6l5Qi9WF0ZJAswguQtsTZHg3XgO1t+aGC3EkePxQJg+FQcK6W2zeYzBeNEG\nylhDssIbjp/ttOgYa1KYWw4cXXo1w0bjHFSz2fwmy5QDYSLIFun/ntfxSztF3ucy\nCM5fkMlJa/CHurRwRL/jekMCgYEAtvpEffK9Q5pgAGeRCDDasmWHA0n2w8PS3z/s\nCnc2Xr/eQWMYXcLisQk8EQTW9Kz3rESGo6EPcLIJepsPV7gXnwbLDFZqjSjQ/aD2\nd4uDSaQY15oux7qz1mnqTK0u0oI0iCTq90a++GN2Zyh9h6/2eyTsLWAHqiIVXYD1\n6uJ3z70CgYA/R1qXW5Cv16qCbMmJ+CWfDKnt0HlrnJ/dmFuDOieslqoAzd74bkis\n0Lz4SMOPkhWtdShkpQiWhSA8rvP18Bne29nU1hAcbfBEuUZn4QkTA8xNPA/JAt+1\nHdeEQlLsXCgUrlY3/eMEnhJAezbL3VwQl+79t6larciLsxLuset7pwKBgQC2lX0L\nANGDR+RMAwxh0/4mzdCvo3qtVhZx12M9/j8uxN6O+MczqGh0p/ZcNSwZ8w8hwy9m\n0CyME9wJj/j7WyOW+DxdD047lWMV8yx9laVoMmrnmV7cxpz1c7Ls2FNEk9C/mbct\nEFc3nGhl/61jXF7j+rABhzWeu2v+ZdT+kQVlMQKBgGAfTHKhFAkQuYbEldRjm+Kk\nhtiZWQSYziMhYgmJDCy1tNeFZ27sth/CDjM4vzqfOMJH7BoJ2mYxAIlsRnDew8U/\nn9qtNfQkpDzzWsL38zX9XjYTdxaxb3QPwKp1F1henB39iDPt92R5ynsPUkiGzcnq\nYfU9ug2VqA7hLh83iLYP\n-----END PRIVATE KEY-----",
-  "paymentBbreEmail": "ingenierocante@gmail.com",
-  "paymentBbrePhone": "3057501023",
-  "paymentNequiName": "Osc_Can (Oscar Cante)",
-  "tuyaAccessSecret": "43fd349daf50449d8c2b061e25118c8e",
-  "tuyaDeviceIdCasa": "eb04c0fcf71d11da80m8rm",
-  "googleCalendarUrl": "https://calendar.google.com/calendar/ical/b529ad8b58ec0ce1bd3c82399f798123c7e8d383bd73754ae640df211d9b16e7%40group.calendar.google.com/public/basic.ics",
-  "heroFilterOpacity": 4,
-  "paymentQRImageUrl": "",
-  "sheetNameReservas": "1. BD",
-  "tuyaDeviceIdAbajo": "ebd09863004e52db0ehcrq",
-  "paymentNequiNumber": "3057501023",
-  "sheetNameHuespedes": "2. BH",
-  "tuyaDeviceIdArriba": "ebc4697fd7293917feksfa",
-  "heroRotatingPhrases": [
-    "Somos Reserva de las Sierras",
-    "Somos Tranquilidad",
-    "Somos Aire Puro",
-    "Somos Espacio Verde"
-  ],
-  "paymentSubtitlePart1": "Si tu reserva fue realizada a través de Airbnb, no es necesario efectuar pagos adicionales, ya que todo el proceso se gestiona directamente por la plataforma. Para reservas directas o realizadas por Booking, se solicita un",
-  "paymentSubtitlePart2": "al momento de confirmar la reserva para asegurar la fecha, y el saldo restante se paga al llegar a la casa. FInal Fimal",
-  "paymentAdvancePercent": 25,
-  "paymentBalancePercent": 75,
-  "paymentBankAccountNit": "901.234.567-8",
-  "paymentWhatsappNumber": "3027857026",
-  "paymentBankAccountType": "Ahorros",
+  "galeriaContent": {
+    "pageTitle": "Nuestra Galería",
+    "pageSubtitle": "Explora cada rincón de Reserva de las Sierras.",
+    "heroTitle": "Nuestros Espacios",
+    "categoryAll": "Galería Completa",
+    "categoryExternas": "Externas",
+    "categoryInternas": "Internas",
+    "categoryHumedas": "Zonas Húmedas"
+  },
   "paymentSectionSubtitle": "Si tu reserva fue realizada a través de Airbnb, no es necesario efectuar pagos adicionales, ya que todo el proceso se gestiona directamente por la plataforma. Para reservas directas o realizadas por Booking, se solicita un ABONO OBLIGATORIO del 25 % al momento de confirmar la reserva para asegurar la fecha, y el saldo restante se paga al llegar a la casa.",
-  "paymentWhatsappMessage": "Hola, adjunto mi comprobante de pago para la reserva",
-  "paymentBankAccountHolder": "Reserva de las Sierras S.A.S",
-  "paymentBankAccountNumber": "123-456789-00",
+  "paymentSubtitlePart1": "Si tu reserva fue realizada a través de Airbnb, no es necesario efectuar pagos adicionales, ya que todo el proceso se gestiona directamente por la plataforma. Para reservas directas o realizadas por Booking, se solicita un",
   "paymentSubtitleHighlight": "ABONO OBLIGATORIO DEL 25 %",
-  "googleServiceAccountEmail": "datosreserva@reserva-rs-api.iam.gserviceaccount.com"
+  "paymentSubtitlePart2": "al momento de confirmar la reserva para asegurar la fecha, y el saldo restante se paga al llegar a la casa. FInal Fimal",
+  "siteFonts": {
+    "fontTitle": "Outfit",
+    "fontBody": "Inter",
+    "fontCard": "Inter",
+    "fontButton": "Poppins",
+    "fontAlert": "Inter",
+    "fontNav": "Inter",
+    "fontGlobal": "Inter"
+  }
 }
