@@ -534,7 +534,7 @@ export default function AdminWaterStats() {
                 </div>
                 {chartPoints.length > 0 ? (
                     <div className="overflow-x-auto">
-                        <svg viewBox={`0 0 ${chartWidth} ${chartHeight + 100}`} className="w-full" style={{ minWidth: '600px' }}>
+                        <svg viewBox={`0 0 ${chartWidth} ${chartHeight + 130}`} className="w-full" style={{ minWidth: '750px' }}>
                             {/* Grid lines - HORIZONTAL */}
                             {[0, 20, 40, 60, 80, 100].map(i => {
                                 const y = 20 + (chartHeight - 20) - (i * (chartHeight - 20) / 100)
