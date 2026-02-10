@@ -4,8 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "prebuild": "node scripts/generate-thumbnails.cjs",
-    "build": "npm run prebuild && vite build",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
