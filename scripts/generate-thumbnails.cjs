@@ -6,50 +6,93 @@ const IMAGES_DIR = path.join(__dirname, '../src/images');
 const MEDIUM_DIR = path.join(IMAGES_DIR, 'medium');
 const PLACEHOLDERS_FILE = path.join(IMAGES_DIR, 'placeholders.json');
 
-// Create medium directory if it doesn't exist
+// Ensure medium directories exist
 if (!fs.existsSync(MEDIUM_DIR)) {
     fs.mkdirSync(MEDIUM_DIR, { recursive: true });
 }
+const MEDIUM_INICIO_DIR = path.join(MEDIUM_DIR, 'imagesinicio');
+if (!fs.existsSync(MEDIUM_INICIO_DIR)) {
+    fs.mkdirSync(MEDIUM_INICIO_DIR, { recursive: true });
+}
 
 async function generateThumbnails() {
-    const placeholders = {};
+    // 1. Read existing placeholders to preserve manual entries or previous runs
+    let placeholders = {};
+    if (fs.existsSync(PLACEHOLDERS_FILE)) {
+        try {
+            placeholders = JSON.parse(fs.readFileSync(PLACEHOLDERS_FILE, 'utf8'));
+        } catch (e) {
+            console.warn('Could not read existing placeholders, starting fresh.');
+        }
+    }
 
-    // Get all .webp files in images directory (excluding medium subdirectory)
-    const files = fs.readdirSync(IMAGES_DIR)
+    // 2. Define files to process
+    // Scans:
+    // - src/images/*.webp (Gallery) -> src/images/medium/*.webp
+    // - src/images/imagesinicio/*.png (Inicio) -> src/images/medium/imagesinicio/*.webp
+    // - accesofinca.png -> src/images/medium/accesofinca.webp
+
+    const tasks = [];
+
+    // Helper to add tasks
+    const addTask = (inputPath, outputSubDir, outputNameVal) => {
+        tasks.push({
+            input: inputPath,
+            output: path.join(MEDIUM_DIR, outputSubDir, outputNameVal.replace(/\.(png|jpg|jpeg)$/, '.webp')), // Force webp output
+            key: outputSubDir ? `${outputSubDir}/${outputNameVal}` : outputNameVal
+        });
+    };
+
+    // A. Scan Gallery (.webp files in root)
+    const galleryFiles = fs.readdirSync(IMAGES_DIR)
         .filter(file => file.endsWith('.webp') && !file.startsWith('.'));
 
-    console.log(`Found ${files.length} images to process`);
+    galleryFiles.forEach(file => addTask(path.join(IMAGES_DIR, file), '', file));
 
-    for (const file of files) {
-        const inputPath = path.join(IMAGES_DIR, file);
-        const mediumPath = path.join(MEDIUM_DIR, file);
+    // B. Scan Inicio (.png files in imagesinicio/)
+    const inicioDir = path.join(IMAGES_DIR, 'imagesinicio');
+    if (fs.existsSync(inicioDir)) {
+        const inicioFiles = fs.readdirSync(inicioDir)
+            .filter(file => file.endsWith('.png') && !file.startsWith('.'));
+
+        inicioFiles.forEach(file => addTask(path.join(inicioDir, file), 'imagesinicio', file));
+    }
+
+    // C. Special files (accesofinca.png)
+    if (fs.existsSync(path.join(IMAGES_DIR, 'accesofinca.png'))) {
+        addTask(path.join(IMAGES_DIR, 'accesofinca.png'), '', 'accesofinca.png');
+    }
+
+    console.log(`Found ${tasks.length} images to process...`);
+
+    for (const task of tasks) {
+        const { input, output, key } = task;
 
         try {
+            // Check if output exists to skip? No, force regenerate to be safe.
+
             // Generate tiny blur placeholder (20x20, base64 data URL)
-            const tinyBuffer = await sharp(inputPath)
+            const tinyBuffer = await sharp(input)
                 .resize(20, 20, { fit: 'cover' })
                 .webp({ quality: 20 })
                 .toBuffer();
 
             const base64 = `data:image/webp;base64,${tinyBuffer.toString('base64')}`;
-            placeholders[file] = base64;
+            placeholders[key] = base64; // Update key
 
-            console.log(`✓ Placeholder: ${file} (${(tinyBuffer.length / 1024).toFixed(1)}KB)`);
-
-            // Generate medium quality image for gallery (800px max width)
-            await sharp(inputPath)
+            // Generate medium quality image (800px max width)
+            await sharp(input)
                 .resize(800, null, {
                     fit: 'inside',
                     withoutEnlargement: true
                 })
-                .webp({ quality: 70 })
-                .toFile(mediumPath);
+                .webp({ quality: 75 })
+                .toFile(output);
 
-            const mediumStats = fs.statSync(mediumPath);
-            console.log(`✓ Medium: ${file} (${(mediumStats.size / 1024).toFixed(1)}KB)`);
+            console.log(`✓ Processed: ${key}`);
 
         } catch (error) {
-            console.error(`✗ Error processing ${file}:`, error.message);
+            console.error(`✗ Error processing ${key}:`, error.message);
         }
     }
 
@@ -57,10 +100,6 @@ async function generateThumbnails() {
     fs.writeFileSync(PLACEHOLDERS_FILE, JSON.stringify(placeholders, null, 2));
     console.log(`\n✓ Generated ${Object.keys(placeholders).length} placeholders`);
     console.log(`✓ Saved to: ${PLACEHOLDERS_FILE}`);
-
-    // Summary
-    const placeholderSize = fs.statSync(PLACEHOLDERS_FILE).size;
-    console.log(`\nTotal placeholders file size: ${(placeholderSize / 1024).toFixed(1)}KB`);
 }
 
 generateThumbnails().catch(console.error);
