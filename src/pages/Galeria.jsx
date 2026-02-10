@@ -3,22 +3,47 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { DEFAULT_CONFIG } from '../utils/config'
 import PageHeader from '../components/PageHeader'
+// Load placeholders
 import placeholders from '../images/placeholders.json'
+
+// 1. Bulk import all original and medium images to establish mapping
+const originalGlob = import.meta.glob('../images/*.webp', { eager: true, import: 'default' })
+const mediumGlob = import.meta.glob('../images/medium/*.webp', { eager: true, import: 'default' })
+
+// 2. Build a map: FullURL -> MediumURL
+const mediumImageMap = {}
+
+Object.keys(originalGlob).forEach(originalPath => {
+    const fullUrl = originalGlob[originalPath]
+    // Construct expected medium path: ../images/File.webp -> ../images/medium/File.webp
+    const mediumPath = originalPath.replace('../images/', '../images/medium/')
+
+    // Check if medium exists
+    if (mediumGlob[mediumPath]) {
+        mediumImageMap[fullUrl] = mediumGlob[mediumPath]
+    }
+})
 
 // Helper to get medium quality image path
 const getMediumSrc = (fullSrc) => {
-    // Extract filename from full path
-    const parts = fullSrc.split('/');
-    const filename = parts[parts.length - 1];
-    // Return medium quality path
-    return fullSrc.replace(`/images/${filename}`, `/images/medium/${filename}`);
+    return mediumImageMap[fullSrc] || fullSrc
 }
 
 // Helper to get placeholder from filename
+// We can also improve this by mapping fullURL -> placeholder if needed, 
+// but existing filename extraction might work if we are careful.
+// A better way is to iterate keys again.
+const placeholderMap = {}
+Object.keys(originalGlob).forEach(originalPath => {
+    const fullUrl = originalGlob[originalPath]
+    const filename = originalPath.split('/').pop()
+    if (placeholders[filename]) {
+        placeholderMap[fullUrl] = placeholders[filename]
+    }
+})
+
 const getPlaceholder = (fullSrc) => {
-    const parts = fullSrc.split('/');
-    const filename = parts[parts.length - 1].split('?')[0]; // Remove query params if any
-    return placeholders[filename] || placeholders[filename.replace('.webp', ' .webp')] || '';
+    return placeholderMap[fullSrc] || ''
 }
 
 // Progressive loading: placeholder → medium → full (on lightbox)

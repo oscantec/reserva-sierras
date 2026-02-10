@@ -8,10 +8,11 @@ import { SparklesCore } from '../components/SparklesCore'
 import LazyImage from '../components/LazyImage'
 
 // Imágenes de previsualizaciones para las cards de Explora el Sitio
-import previewReservas from '../images/imagesinicio/reservas.png'
-import previewRegistro from '../images/imagesinicio/registro.png'
-import previewGaleria from '../images/imagesinicio/galeria.png'
-import previewGuia from '../images/imagesinicio/guia.png'
+import previewReservas from '../images/medium/imagesinicio/reservas.webp'
+import previewRegistro from '../images/medium/imagesinicio/registro.webp'
+import previewGaleria from '../images/medium/imagesinicio/galeria.webp'
+import previewGuia from '../images/medium/imagesinicio/guia.webp'
+import placeholders from '../images/placeholders.json'
 
 // Helper function to extract YouTube video ID from various URL formats
 function getYouTubeVideoId(url) {
@@ -387,6 +388,13 @@ export default function Landing() {
                                     '/guia': previewGuia
                                 };
 
+                                const placeholderKeys = {
+                                    '/reservas': 'imagesinicio/reservas.png',
+                                    '/registro': 'imagesinicio/registro.png',
+                                    '/galeria': 'imagesinicio/galeria.png',
+                                    '/guia': 'imagesinicio/guia.png',
+                                };
+
                                 return (
                                     <Link
                                         key={i}
@@ -397,6 +405,7 @@ export default function Landing() {
                                         <div className="aspect-[2/1] border-b border-border-card dark:border-border-card-dark overflow-hidden relative bg-white">
                                             <LazyImage
                                                 src={previewImages[item.path]}
+                                                placeholder={placeholders[placeholderKeys[item.path]]}
                                                 alt={`Vista previa de ${item.title}`}
                                                 className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110"
                                                 loading="lazy"

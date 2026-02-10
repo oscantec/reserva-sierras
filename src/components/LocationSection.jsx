@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { DEFAULT_CONFIG } from '../utils/config'
-import accesoImage from '../images/accesofinca.png'
+import accesoImage from '../images/medium/accesofinca.webp'
+import placeholders from '../images/placeholders.json'
+import ProgressiveImage from './ProgressiveImage'
 
 export default function LocationSection() {
     const locationConfig = DEFAULT_CONFIG.inicioContent?.location || {}
@@ -135,11 +137,12 @@ export default function LocationSection() {
                                 </h3>
                             </div>
                             <div className="relative">
-                                <img
+                                <ProgressiveImage
                                     src={accesoImage}
+                                    placeholder={placeholders['accesofinca.png']}
                                     className="w-full h-auto block"
                                     alt="Acceso a la Finca"
-                                    loading="eager"
+                                    loading="lazy"
                                 />
                                 <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent">
                                     <p className="text-white text-sm font-bold">{content.referenceCaption}</p>
