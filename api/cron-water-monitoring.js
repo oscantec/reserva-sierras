@@ -97,7 +97,8 @@ export default async function handler(req, res) {
         // Continuamos ejecutando el cron (temporalmente hasta que configuren el secret)
     }
 
-    if (!providedSecret || providedSecret !== expectedSecret) {
+    // Si CRON_SECRET está configurado, exigimos que coincida
+    if (expectedSecret && (!providedSecret || providedSecret !== expectedSecret)) {
         return res.status(401).json({
             error: 'Unauthorized',
             hint: 'Invalid or missing secret. Use ?secret=YOUR_CRON_SECRET or X-Cron-Secret header'
