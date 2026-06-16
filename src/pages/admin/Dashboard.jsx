@@ -440,11 +440,11 @@ export default function Dashboard() {
                                         </td>
                                         <td className="py-3 px-4 whitespace-nowrap">
                                             {r.isRegistered ? (
-                                                <span className="px-2 py-1 rounded text-xs font-semibold bg-emerald-600 text-white">
+                                                <span className="px-2 py-1 rounded text-xs font-semibold bg-green-50 text-green-700 border border-green-200">
                                                     Usuario Registrado
                                                 </span>
                                             ) : (
-                                                <span className="px-2 py-1 rounded text-xs font-semibold bg-rose-600 text-white">
+                                                <span className="px-2 py-1 rounded text-xs font-semibold bg-red-50 text-red-700 border border-red-200">
                                                     Usuario No registrado
                                                 </span>
                                             )}
