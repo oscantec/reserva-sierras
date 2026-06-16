@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { fetchReservasData } from '../../utils/googleSheets'
+import { fetchReservasData, fetchHuespedesData } from '../../utils/googleSheets'
 
 export default function Dashboard() {
     const [config, setConfig] = useState(null)
@@ -115,16 +115,31 @@ export default function Dashboard() {
     const loadData = async () => {
         setLoading(true)
         try {
-            const data = await fetchReservasData()
+            const [data, guests] = await Promise.all([
+                fetchReservasData(),
+                fetchHuespedesData()
+            ])
+            
+            const registeredIds = new Set()
+            if (guests?.length > 0) {
+                guests.forEach(row => {
+                    const noRes = getCol(row, 'No Reserva', 'NO RESERVA', 'No_Reserva', 'NoReserva', 'ID')?.toString().trim()
+                    if (noRes) {
+                        registeredIds.add(noRes)
+                    }
+                })
+            }
+
             if (data?.length > 0) {
                 const normalized = data.map(row => {
                     const fechaReservaStr = getCol(row, 'Fecha Reserva')
                     const parts = fechaReservaStr?.toString().split('→') || []
                     const fechaInicioStr = getCol(row, 'Fecha Inicio') || (parts[0]?.trim() || '')
                     const fechaSalidaStr = getCol(row, 'Fecha Salida') || (parts[1]?.trim() || '')
+                    const id = getCol(row, 'No Reserva', 'ID') || 'N/A'
 
                     return {
-                        id: getCol(row, 'No Reserva', 'ID') || 'N/A',
+                        id: id,
                         cliente: getCol(row, 'Nombre') || 'Desconocido',
                         telefono: getCol(row, 'Telefono', 'Teléfono', 'Tel', 'Celular') || '-',
                         estado: getCol(row, 'Estado').toString().trim() || 'Pendiente',
@@ -140,6 +155,7 @@ export default function Dashboard() {
                         fechaSalida: fechaSalidaStr,
                         fechaSalidaDate: parseSpanishDate(fechaSalidaStr),
                         tiempo: getCol(row, 'Tiempo').toString().trim().toLowerCase(),
+                        isRegistered: registeredIds.has(id.toString().trim())
                     }
                 })
                 setReservasData(normalized)
@@ -398,6 +414,7 @@ export default function Dashboard() {
                                     <th className="text-center py-3 px-4 font-semibold text-text-muted uppercase text-xs">Huéspedes</th>
                                     <th className="text-center py-3 px-4 font-semibold text-text-muted uppercase text-xs">Noches</th>
                                     <th className="text-left py-3 px-4 font-semibold text-text-muted uppercase text-xs">Plataforma</th>
+                                    <th className="text-left py-3 px-4 font-semibold text-text-muted uppercase text-xs">Registro</th>
                                     <th className="text-right py-3 px-4 font-semibold text-text-muted uppercase text-xs">Valor</th>
                                     <th className="text-right py-3 px-4 font-semibold text-text-muted uppercase text-xs">Abono</th>
                                     <th className="text-right py-3 px-4 font-semibold text-text-muted uppercase text-xs">Saldo</th>
@@ -420,6 +437,17 @@ export default function Dashboard() {
                                             <span className="px-2 py-1 rounded text-xs font-medium bg-primary text-white">
                                                 {r.fuente}
                                             </span>
+                                        </td>
+                                        <td className="py-3 px-4 whitespace-nowrap">
+                                            {r.isRegistered ? (
+                                                <span className="px-2 py-1 rounded text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                                    Usuario Registrado
+                                                </span>
+                                            ) : (
+                                                <span className="px-2 py-1 rounded text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200">
+                                                    Usuario No registrado
+                                                </span>
+                                            )}
                                         </td>
                                         <td className="py-3 px-4 text-right font-bold text-gray-900">{formatCurrency(r.total)}</td>
                                         <td className="py-3 px-4 text-right font-medium text-success-text">{formatCurrency(r.abonos)}</td>
