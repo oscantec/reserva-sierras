@@ -407,51 +407,51 @@ export default function Dashboard() {
                         <table className="w-full text-sm">
                             <thead className="bg-surface-light">
                                 <tr>
-                                    <th className="text-left py-3 px-4 font-semibold text-text-muted uppercase text-xs">Nombre</th>
-                                    <th className="text-left py-3 px-4 font-semibold text-text-muted uppercase text-xs">Teléfono</th>
-                                    <th className="text-left py-3 px-4 font-semibold text-text-muted uppercase text-xs">Entrada</th>
-                                    <th className="text-left py-3 px-4 font-semibold text-text-muted uppercase text-xs">Salida</th>
-                                    <th className="text-center py-3 px-4 font-semibold text-text-muted uppercase text-xs">Huéspedes</th>
-                                    <th className="text-center py-3 px-4 font-semibold text-text-muted uppercase text-xs">Noches</th>
-                                    <th className="text-left py-3 px-4 font-semibold text-text-muted uppercase text-xs">Plataforma</th>
-                                    <th className="text-left py-3 px-4 font-semibold text-text-muted uppercase text-xs">Registro</th>
-                                    <th className="text-right py-3 px-4 font-semibold text-text-muted uppercase text-xs">Valor</th>
-                                    <th className="text-right py-3 px-4 font-semibold text-text-muted uppercase text-xs">Abono</th>
-                                    <th className="text-right py-3 px-4 font-semibold text-text-muted uppercase text-xs">Saldo</th>
+                                    <th className="text-left py-3 px-4 font-semibold text-text-muted uppercase text-xs whitespace-nowrap">Nombre</th>
+                                    <th className="text-left py-3 px-4 font-semibold text-text-muted uppercase text-xs whitespace-nowrap">Teléfono</th>
+                                    <th className="text-left py-3 px-4 font-semibold text-text-muted uppercase text-xs whitespace-nowrap">Entrada</th>
+                                    <th className="text-left py-3 px-4 font-semibold text-text-muted uppercase text-xs whitespace-nowrap">Salida</th>
+                                    <th className="text-center py-3 px-4 font-semibold text-text-muted uppercase text-xs whitespace-nowrap">Huéspedes</th>
+                                    <th className="text-center py-3 px-4 font-semibold text-text-muted uppercase text-xs whitespace-nowrap">Noches</th>
+                                    <th className="text-left py-3 px-4 font-semibold text-text-muted uppercase text-xs whitespace-nowrap">Plataforma</th>
+                                    <th className="text-left py-3 px-4 font-semibold text-text-muted uppercase text-xs whitespace-nowrap">Registro</th>
+                                    <th className="text-right py-3 px-4 font-semibold text-text-muted uppercase text-xs whitespace-nowrap">Valor</th>
+                                    <th className="text-right py-3 px-4 font-semibold text-text-muted uppercase text-xs whitespace-nowrap">Abono</th>
+                                    <th className="text-right py-3 px-4 font-semibold text-text-muted uppercase text-xs whitespace-nowrap">Saldo</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-50">
                                 {upcomingReservations.map((r, i) => (
                                     <tr key={i} className="hover:bg-surface-light transition-colors">
-                                        <td className="py-3 px-4">
+                                        <td className="py-3 px-4 whitespace-nowrap">
                                             <span className="font-semibold text-gray-900">{r.cliente}</span>
                                         </td>
-                                        <td className="py-3 px-4 text-text-muted">{r.telefono}</td>
-                                        <td className="py-3 px-4 text-text-main-light">{formatShortDate(r.fechaInicio)}</td>
-                                        <td className="py-3 px-4 text-text-main-light">{formatShortDate(r.fechaSalida)}</td>
-                                        <td className="py-3 px-4 text-center font-medium text-text-main-light">{r.huespedes || '-'}</td>
-                                        <td className="py-3 px-4 text-center">
+                                        <td className="py-3 px-4 text-text-muted whitespace-nowrap">{r.telefono}</td>
+                                        <td className="py-3 px-4 text-text-main-light whitespace-nowrap">{formatShortDate(r.fechaInicio)}</td>
+                                        <td className="py-3 px-4 text-text-main-light whitespace-nowrap">{formatShortDate(r.fechaSalida)}</td>
+                                        <td className="py-3 px-4 text-center font-medium text-text-main-light whitespace-nowrap">{r.huespedes || '-'}</td>
+                                        <td className="py-3 px-4 text-center whitespace-nowrap">
                                             <span className="px-2 py-1 bg-primary text-white rounded-full text-xs font-bold">{r.noches}</span>
                                         </td>
-                                        <td className="py-3 px-4">
+                                        <td className="py-3 px-4 whitespace-nowrap">
                                             <span className="px-2 py-1 rounded text-xs font-medium bg-primary text-white">
                                                 {r.fuente}
                                             </span>
                                         </td>
                                         <td className="py-3 px-4 whitespace-nowrap">
                                             {r.isRegistered ? (
-                                                <span className="px-2 py-1 rounded text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                                <span className="px-2 py-1 rounded text-xs font-semibold bg-emerald-600 text-white">
                                                     Usuario Registrado
                                                 </span>
                                             ) : (
-                                                <span className="px-2 py-1 rounded text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200">
+                                                <span className="px-2 py-1 rounded text-xs font-semibold bg-rose-600 text-white">
                                                     Usuario No registrado
                                                 </span>
                                             )}
                                         </td>
-                                        <td className="py-3 px-4 text-right font-bold text-gray-900">{formatCurrency(r.total)}</td>
-                                        <td className="py-3 px-4 text-right font-medium text-success-text">{formatCurrency(r.abonos)}</td>
-                                        <td className="py-3 px-4 text-right font-medium text-primary">{formatCurrency(r.saldoPendiente)}</td>
+                                        <td className="py-3 px-4 text-right font-bold text-gray-900 whitespace-nowrap">{formatCurrency(r.total)}</td>
+                                        <td className="py-3 px-4 text-right font-medium text-success-text whitespace-nowrap">{formatCurrency(r.abonos)}</td>
+                                        <td className="py-3 px-4 text-right font-medium text-primary whitespace-nowrap">{formatCurrency(r.saldoPendiente)}</td>
                                     </tr>
                                 ))}
                                 {upcomingReservations.length === 0 && (
