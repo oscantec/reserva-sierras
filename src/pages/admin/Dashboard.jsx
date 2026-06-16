@@ -438,16 +438,8 @@ export default function Dashboard() {
                                                 {r.fuente}
                                             </span>
                                         </td>
-                                        <td className="py-3 px-4 whitespace-nowrap">
-                                            {r.isRegistered ? (
-                                                <span className="px-2 py-1 rounded text-xs font-semibold bg-green-50 text-green-700 border border-green-200">
-                                                    Usuario Registrado
-                                                </span>
-                                            ) : (
-                                                <span className="px-2 py-1 rounded text-xs font-semibold bg-red-50 text-red-700 border border-red-200">
-                                                    Usuario No registrado
-                                                </span>
-                                            )}
+                                        <td className="py-3 px-4 whitespace-nowrap text-gray-900 font-medium">
+                                            {r.isRegistered ? 'Registrado' : 'No registrado'}
                                         </td>
                                         <td className="py-3 px-4 text-right font-bold text-gray-900 whitespace-nowrap">{formatCurrency(r.total)}</td>
                                         <td className="py-3 px-4 text-right font-medium text-success-text whitespace-nowrap">{formatCurrency(r.abonos)}</td>
