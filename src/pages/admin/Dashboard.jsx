@@ -243,7 +243,7 @@ export default function Dashboard() {
     }
 
     return (
-        <div className="flex-1 flex flex-col overflow-y-auto bg-surface-page">
+        <div className="flex-1 flex flex-col overflow-y-auto bg-surface-page min-w-0 w-full max-w-full">
             {/* Header - Same style as Reservas */}
             <header className="bg-white border-b border-border-card px-3 md:px-6 py-3 md:py-4">
                 <div className="flex flex-col gap-3">
@@ -270,7 +270,7 @@ export default function Dashboard() {
                 </div>
             </header>
 
-            <div className="p-3 md:p-6">
+            <div className="p-3 md:p-6 min-w-0 w-full max-w-full">
                 {/* KPI Cards - Mobile optimized: 2x2 grid on mobile */}
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 mb-4 md:mb-6">
                     <div className="bg-white rounded-lg md:rounded-xl p-3 md:p-5 shadow-sm border-l-4 border-l-green-500 border border-border-card">
@@ -398,7 +398,7 @@ export default function Dashboard() {
 
 
                 {/* Detailed Próximas Reservas Table */}
-                <div className="bg-white rounded-xl shadow-sm border border-border-card overflow-hidden mt-6">
+                <div className="bg-white rounded-xl shadow-sm border border-border-card overflow-hidden mt-6 min-w-0 w-full max-w-full">
                     <div className="flex items-center justify-between p-5 border-b border-border-card">
                         <h3 className="text-base font-bold text-gray-900">Próximas Reservas - Detalle Completo</h3>
                         <span className="text-xs text-text-muted">{upcomingReservations.length} reservas próximas</span>
