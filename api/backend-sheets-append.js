@@ -6,10 +6,17 @@ export default async function handler(req, res) {
     }
 
     try {
-        const { sheetId, sheetName, email, privateKey, rowData } = req.body;
+        const { sheetId, sheetName, rowData } = req.body;
 
-        if (!sheetId || !email || !privateKey || !rowData) {
-            throw new Error('Missing required data');
+        if (!sheetId || !rowData) {
+            return res.status(400).json({ error: 'Missing sheetId or rowData' });
+        }
+
+        const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
+        const privateKey = (process.env.GOOGLE_PRIVATE_KEY || '').replace(/\\n/g, '\n');
+
+        if (!email || !privateKey) {
+            return res.status(500).json({ error: 'Credenciales de Google no configuradas en el servidor' });
         }
 
         const data = await appendSheetData(sheetId, sheetName, email, privateKey, rowData);

@@ -6,8 +6,8 @@ import { useState, useEffect } from 'react'
 export default function AdminWaterConfig() {
     // Estado para configuración de Tuya API (precargado con tus datos)
     const [tuyaConfig, setTuyaConfig] = useState({
-        clientId: 'aw59ugmntjfevwdkx8py',
-        clientSecret: '43fd349daf50449d8c2b061e25118c8e',
+        clientId: '',
+        clientSecret: '',
         zonaBaja: { deviceId: 'ebd09863004e52db0ehcrq' },  // Tanque Abajo
         zonaAlta: { deviceId: 'ebc4697fd7293917feksfa' },  // Tanque Arriba
         zonaCasa: { deviceId: 'eb04c0fcf71d11da80m8rm' }   // Tanque Casa

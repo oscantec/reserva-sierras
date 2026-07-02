@@ -454,11 +454,12 @@ export default function Booking() {
     }
 
     return (
-        <div className="flex flex-col min-h-screen bg-page-bg-reservas dark:bg-surface-card-dark text-text-main dark:text-white font-display">
+        <div className="flex flex-col min-h-screen bg-premium-cream text-premium-ink font-premium-body">
             <Navbar />
             <main className="max-w-7xl mx-auto px-4 md:px-8 py-8 flex flex-col lg:flex-row gap-8 w-full">
                 <div className="flex-1 flex flex-col gap-8">
                     <PageHeader
+                        eyebrow="Reserva tu estadía"
                         title={pageContent.pageTitle}
                         subtitle={pageContent.pageSubtitle}
                         currentStep={1}
@@ -466,19 +467,19 @@ export default function Booking() {
                         stepLabel={pageContent.stepLabel}
                     />
 
-                    <div className="bg-surface-card dark:bg-surface-card-dark rounded-xl p-6 shadow-sm border border-border-card dark:border-border-card-dark">
+                    <div className="bg-[#FFFEFB] rounded-premium p-6 shadow-premium-sm hairline">
                         <div className="flex flex-col xl:flex-row gap-8 justify-center">
                             <div className="flex-1 min-w-[300px]">
                                 {/* Month Navigation with Refresh Button */}
                                 <div className="flex items-center justify-between mb-4">
                                     <button
                                         onClick={() => navigateMonth(-1)}
-                                        className="w-10 h-10 flex items-center justify-center bg-icon-bg-primary dark:bg-icon-bg-dark rounded-lg hover:bg-primary hover:text-white transition-colors"
+                                        className="w-10 h-10 flex items-center justify-center bg-premium-forest text-premium-cream rounded-full hover:bg-premium-pine transition-colors duration-300 ease-premium"
                                     >
-                                        <span className="material-symbols-outlined text-icon-color">chevron_left</span>
+                                        <span className="material-symbols-outlined">chevron_left</span>
                                     </button>
                                     <div className="flex items-center gap-2">
-                                        <span className="text-lg font-bold">{monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}</span>
+                                        <span className="font-premium-display text-xl text-premium-forest">{monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}</span>
                                         <button
                                             onClick={async () => {
                                                 setIsLoading(true)
@@ -497,7 +498,7 @@ export default function Booking() {
                                                 setIsLoading(false)
                                             }}
                                             disabled={isLoading}
-                                            className="w-8 h-8 flex items-center justify-center rounded-full bg-primary/10 hover:bg-primary/20 text-primary transition-all hover:scale-110 active:scale-95 disabled:opacity-50"
+                                            className="w-8 h-8 flex items-center justify-center rounded-full bg-premium-forest/10 hover:bg-premium-forest/20 text-premium-forest transition-all ease-premium hover:scale-110 active:scale-95 disabled:opacity-50"
                                             title="Actualizar disponibilidad"
                                         >
                                             <span className={`material-symbols-outlined text-base ${isLoading ? 'animate-spin' : ''}`}>refresh</span>
@@ -505,24 +506,24 @@ export default function Booking() {
                                     </div>
                                     <button
                                         onClick={() => navigateMonth(1)}
-                                        className="w-10 h-10 flex items-center justify-center bg-icon-bg-primary dark:bg-icon-bg-dark rounded-lg hover:bg-primary hover:text-white transition-colors"
+                                        className="w-10 h-10 flex items-center justify-center bg-premium-forest text-premium-cream rounded-full hover:bg-premium-pine transition-colors duration-300 ease-premium"
                                     >
-                                        <span className="material-symbols-outlined text-icon-color">chevron_right</span>
+                                        <span className="material-symbols-outlined">chevron_right</span>
                                     </button>
                                 </div>
 
                                 {/* Day Headers */}
                                 <div className="grid grid-cols-7 gap-1 text-center mb-2">
                                     {['D', 'L', 'M', 'M', 'J', 'V', 'S'].map((d, i) => (
-                                        <span key={i} className="text-xs font-bold text-text-muted">{d}</span>
+                                        <span key={i} className="text-[10px] font-semibold uppercase tracking-[0.18em] text-premium-ink/40">{d}</span>
                                     ))}
                                 </div>
 
                                 {/* Calendar Grid */}
                                 <div className="grid grid-cols-7 gap-1">
                                     {isLoading ? (
-                                        <div className="col-span-7 py-12 text-center text-text-muted">
-                                            <span className="material-symbols-outlined animate-spin text-3xl">sync</span>
+                                        <div className="col-span-7 py-12 text-center text-premium-ink/50">
+                                            <span className="material-symbols-outlined animate-spin text-3xl text-premium-gold">sync</span>
                                             <p className="mt-2">Cargando disponibilidad...</p>
                                         </div>
                                     ) : (
@@ -571,11 +572,12 @@ export default function Booking() {
 
                                             // 3. DEFINICIÓN DE COLORES (IZQUIERDA | DERECHA)
                                             const cTrans = "transparent"
-                                            const cGray = "rgba(209, 213, 219, 1)" // gray-300
+                                            const cGray = "rgba(239, 233, 220, 0.85)" // premium-sand (reservado)
 
-                                            // IMPORTANTE: Usamos la variable CSS directa definida en index.css/tailwind
-                                            // 'primary' en Tailwind mapea a '--color-btn-primary'
-                                            const cGreen = "var(--color-btn-primary)"
+                                            // Selección: premium-forest sólido para inicio/fin,
+                                            // premium-pine al 15% para los días intermedios del rango
+                                            const cGreen = "#16302B" // premium-forest
+                                            const cRange = "rgba(31, 74, 62, 0.15)" // premium-pine/15
 
                                             let leftColor = cTrans
                                             let rightColor = cTrans
@@ -587,7 +589,7 @@ export default function Booking() {
 
                                             // --- APLICAR CAPA SELECCIÓN (SOBRESCRIBE/COMPLEMENTA) ---
                                             if (isSelMiddle) {
-                                                leftColor = cGreen; rightColor = cGreen;
+                                                leftColor = cRange; rightColor = cRange;
                                             } else {
                                                 if (isSelEnd) leftColor = cGreen // Mi salida pinta izquierda verde
                                                 if (isSelStart) rightColor = cGreen // Mi entrada pinta derecha verde
@@ -597,51 +599,54 @@ export default function Booking() {
                                             const today = isToday(date)
 
                                             // 4. ESTILOS DE TEXTO Y CURSOR
-                                            // Unificado: todas las fechas usan gris oscuro (gray-800)
-                                            let textClass = "text-gray-800 dark:text-white font-medium"
+                                            let textClass = "text-premium-ink font-medium"
                                             let cursorClass = "cursor-pointer"
                                             let borderClass = ""
-                                            let hoverClass = "hover:ring-2 hover:ring-primary/30"
+                                            let hoverClass = "hover:bg-premium-mist hover:border-premium-sage"
 
-                                            // Día de hoy - borde verde destacado
+                                            // Día de hoy - anillo dorado
                                             if (today && resState !== 'middle' && !isSelStart && !isSelEnd && !isSelMiddle) {
-                                                borderClass = "ring-2 ring-primary"
-                                                textClass = "text-primary font-bold"
+                                                borderClass = "ring-1 ring-premium-gold"
+                                                textClass = "text-premium-forest font-bold"
                                             }
 
-                                            // Días pasados - gris claro para indicar no disponible
+                                            // Días pasados - atenuados para indicar no disponible
                                             if (past) {
                                                 cursorClass = "cursor-not-allowed"
-                                                textClass = "text-gray-300 dark:text-gray-600"
+                                                textClass = "text-premium-ink/20"
                                                 hoverClass = ""
                                             } else if (resState === 'middle') {
-                                                // Días bloqueados completamente - gris oscuro uniforme
+                                                // Días bloqueados completamente
                                                 cursorClass = "cursor-not-allowed"
-                                                textClass = "text-gray-800 dark:text-gray-400"
+                                                textClass = "text-premium-ink/30"
                                                 hoverClass = ""
                                             } else if (resState === 'start' || resState === 'end') {
-                                                // Días parcialmente reservados - gris oscuro uniforme
-                                                textClass = "text-gray-800 dark:text-white font-medium"
+                                                // Días parcialmente reservados
+                                                textClass = "text-premium-ink font-medium"
                                             } else {
-                                                // Días completamente disponibles - gris oscuro uniforme
-                                                textClass = "text-gray-800 dark:text-white font-medium"
+                                                // Días completamente disponibles
+                                                textClass = "text-premium-ink font-medium"
                                             }
 
                                             // Texto para días seleccionados
                                             if (isSelStart || isSelEnd || isSelMiddle) {
-                                                // Si es el fin de la selección (ej: el 15), el número está a la derecha (fondo blanco)
-                                                // por lo tanto debe ser texto verde. Si es inicio o intermedio, fondo verde -> texto blanco.
-                                                if (isSelEnd && !isSelMiddle) {
-                                                    textClass = "text-primary font-bold"
+                                                // Si es el fin de la selección (ej: el 15), el número está a la derecha (fondo claro)
+                                                // por lo tanto debe ser texto forest. Si es inicio, fondo forest -> texto blanco.
+                                                if (isSelMiddle) {
+                                                    textClass = "text-premium-forest font-semibold"
+                                                    borderClass = ""
+                                                } else if (isSelEnd) {
+                                                    textClass = "text-premium-forest font-bold"
+                                                    borderClass = "shadow-premium-sm"
                                                 } else {
                                                     textClass = "text-white font-bold"
+                                                    borderClass = "shadow-premium-sm"
                                                 }
 
-                                                borderClass = "ring-2 ring-primary ring-inset"
-                                                hoverClass = "hover:ring-2 hover:ring-white"
+                                                hoverClass = "hover:ring-1 hover:ring-premium-gold/50"
                                             } else if (holiday && !past && resState !== 'middle') {
-                                                // Festivos mantienen el verde pero con gris oscuro de base
-                                                textClass = "text-primary font-bold dark:text-primary"
+                                                // Festivos - se destacan con tinta forest y el puntito dorado
+                                                textClass = "text-premium-forest font-semibold"
                                             }
 
                                             // 5. GENERAR GRADIENTE
@@ -664,8 +669,8 @@ export default function Booking() {
                                                     key={index}
                                                     onClick={() => handleDateClick(date)}
                                                     disabled={past || resState === 'middle'}
-                                                    className={`h-12 w-full flex items-start justify-end p-1.5 text-xs transition-all relative border border-gray-300 dark:border-gray-600 ${cursorClass} ${textClass} ${shapeClass} ${borderClass} ${hoverClass}`}
-                                                    style={{ background: gradient }}
+                                                    className={`h-12 w-full flex items-start justify-end p-1.5 text-xs transition-all duration-300 ease-premium relative border border-premium-ink/10 bg-[#FFFEFB] ${cursorClass} ${textClass} ${shapeClass} ${borderClass} ${hoverClass}`}
+                                                    style={{ backgroundImage: gradient }}
                                                     title={holiday ? holiday.name : ''}
                                                 >
                                                     <span className="relative z-10">{date.getDate()}</span>
@@ -673,14 +678,14 @@ export default function Booking() {
                                                     {/* Today indicator - pulsing dot */}
                                                     {today && resState !== 'middle' && !isSelStart && !isSelEnd && !isSelMiddle && (
                                                         <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
-                                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                                                            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary"></span>
+                                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-premium-gold opacity-75"></span>
+                                                            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-premium-gold"></span>
                                                         </span>
                                                     )}
 
                                                     {/* Indicador de festivo - Ahora en la izquierda */}
                                                     {holiday && !isSelMiddle && !isSelStart && !isSelEnd && resState !== 'middle' && !today && (
-                                                        <span className="absolute bottom-1.5 left-1.5 w-1.5 h-1.5 bg-primary rounded-full"></span>
+                                                        <span className="absolute bottom-1.5 left-1.5 w-1.5 h-1.5 bg-premium-gold rounded-full"></span>
                                                     )}
                                                 </button>
                                             )
@@ -691,72 +696,72 @@ export default function Booking() {
                         </div>
 
                         {/* Legend */}
-                        <div className="mt-6 flex flex-wrap gap-4 justify-center text-sm text-text-muted dark:text-text-muted border-t border-border-card dark:border-border-card-dark pt-4">
+                        <div className="mt-6 flex flex-wrap gap-4 justify-center text-sm text-premium-ink/60 border-t border-premium-ink/10 pt-4">
                             <div className="flex items-center gap-2">
-                                <div className="size-3 rounded-full bg-primary"></div>
+                                <div className="size-3 rounded-full bg-premium-forest"></div>
                                 <span>Seleccionado</span>
                             </div>
                             <div className="flex items-center gap-2">
-                                <div className="size-3 rounded-full border border-primary/30" style={{ backgroundColor: '#e8f5e9' }}></div>
+                                <div className="size-3 rounded-full bg-[#FFFEFB] border border-premium-sage"></div>
                                 <span>Disponible</span>
                             </div>
                             <div className="flex items-center gap-2">
-                                <div className="size-3 rounded-full bg-primary/10 border border-primary/30 relative">
-                                    <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-primary rounded-full"></span>
+                                <div className="size-3 rounded-full bg-[#FFFEFB] border border-premium-ink/10 relative">
+                                    <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-premium-gold rounded-full"></span>
                                 </div>
                                 <span>Festivo</span>
                             </div>
                             <div className="flex items-center gap-2">
-                                <div className="size-3 rounded-full bg-gray-300 dark:bg-gray-600"></div>
+                                <div className="size-3 rounded-full bg-premium-sand"></div>
                                 <span>Reservado</span>
                             </div>
                         </div>
                     </div>
 
                     {/* Tu Reserva - Mobile only (visible solo en móvil, en desktop está el sidebar) */}
-                    <div className="lg:hidden bg-surface-card dark:bg-surface-card-dark rounded-2xl p-6 shadow-xl shadow-gray-200/50 dark:shadow-black/20 border border-border-card dark:border-border-card-dark">
+                    <div className="lg:hidden card-premium p-6">
                         <div className="flex justify-between items-center mb-6">
-                            <h3 className="text-lg font-bold">Tu Reserva</h3>
-                            <span className="bg-icon-bg-primary dark:bg-icon-bg-dark text-icon-color text-xs font-bold px-2 py-1 rounded">
+                            <h3 className="font-premium-display text-xl text-premium-forest">Tu Reserva</h3>
+                            <span className="bg-premium-forest text-premium-cream text-xs font-semibold px-3 py-1 rounded-full">
                                 {nights} {nights === 1 ? 'Noche' : 'Noches'}
                             </span>
                         </div>
                         <div className="flex gap-4 mb-6">
-                            <div className="flex-1 p-3 rounded-lg border border-border-card dark:border-border-card-dark bg-background-light dark:bg-background-dark">
-                                <p className="text-xs text-text-muted uppercase font-bold mb-1">Llegada</p>
-                                <p className="font-bold text-sm">{formatDate(selectedRange.start)}</p>
+                            <div className="flex-1 p-3 rounded-premium hairline bg-premium-mist">
+                                <p className="eyebrow !text-[10px] mb-1">Llegada</p>
+                                <p className="font-premium-display font-semibold text-sm text-premium-forest">{formatDate(selectedRange.start)}</p>
                             </div>
-                            <div className="flex-1 p-3 rounded-lg border border-border-card dark:border-border-card-dark bg-background-light dark:bg-background-dark">
-                                <p className="text-xs text-text-muted uppercase font-bold mb-1">Salida</p>
-                                <p className="font-bold text-sm">{formatDate(selectedRange.end)}</p>
+                            <div className="flex-1 p-3 rounded-premium hairline bg-premium-mist">
+                                <p className="eyebrow !text-[10px] mb-1">Salida</p>
+                                <p className="font-premium-display font-semibold text-sm text-premium-forest">{formatDate(selectedRange.end)}</p>
                             </div>
                         </div>
 
                         {/* Guest count selector - Mobile */}
-                        <div className="mb-6 p-4 rounded-lg border border-border-card dark:border-border-card-dark bg-background-light dark:bg-background-dark">
-                            <label className="block text-xs text-text-muted uppercase font-bold mb-2">Número de Huéspedes</label>
+                        <div className="mb-6 p-4 rounded-premium hairline bg-premium-mist">
+                            <label className="eyebrow !text-[10px] block mb-2">Número de Huéspedes</label>
                             <div className="flex items-center gap-3">
                                 <button
                                     onClick={() => setNumberOfGuests(Math.max(1, numberOfGuests - 1))}
-                                    className="w-10 h-10 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary font-bold transition-colors"
+                                    className="w-10 h-10 rounded-full bg-premium-forest/10 hover:bg-premium-forest/20 text-premium-forest font-bold transition-colors duration-300 ease-premium"
                                 >
                                     -
                                 </button>
                                 <div className="flex-1 text-center">
-                                    <span className="text-2xl font-bold text-primary">{numberOfGuests}</span>
-                                    <p className="text-xs text-text-muted mt-1">
+                                    <span className="font-premium-display text-2xl font-semibold text-premium-forest">{numberOfGuests}</span>
+                                    <p className="text-xs text-premium-ink/50 mt-1">
                                         {numberOfGuests <= 7 ? 'Tarifa base' : `+${pricingDetails.extraGuests} extra`}
                                     </p>
                                 </div>
                                 <button
                                     onClick={() => setNumberOfGuests(Math.min(10, numberOfGuests + 1))}
-                                    className="w-10 h-10 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary font-bold transition-colors"
+                                    className="w-10 h-10 rounded-full bg-premium-forest/10 hover:bg-premium-forest/20 text-premium-forest font-bold transition-colors duration-300 ease-premium"
                                 >
                                     +
                                 </button>
                             </div>
                             {numberOfGuests > 7 && (
-                                <p className="text-xs text-warning-text dark:text-warning-text mt-2 text-center">
+                                <p className="text-xs text-premium-gold mt-2 text-center">
                                     +10% por cada persona adicional sobre 7
                                 </p>
                             )}
@@ -766,13 +771,13 @@ export default function Booking() {
                             <>
                                 <div className="flex flex-col gap-2 mb-6">
                                     {pricingDetails.weekdayNights > 0 && (
-                                        <div className="flex justify-between text-sm text-text-muted dark:text-text-muted">
+                                        <div className="flex justify-between text-sm text-premium-ink/70">
                                             <span>{formatPrice(pricing?.baseRates?.weekday || 350000)} x {pricingDetails.weekdayNights} {pricingDetails.weekdayNights === 1 ? 'noche L-J' : 'noches L-J'}</span>
                                             <span>{formatPrice((pricing?.baseRates?.weekday || 350000) * pricingDetails.weekdayNights)}</span>
                                         </div>
                                     )}
                                     {pricingDetails.weekendNights > 0 && (
-                                        <div className="flex justify-between text-sm text-text-muted dark:text-text-muted">
+                                        <div className="flex justify-between text-sm text-premium-ink/70">
                                             <span>{formatPrice(pricing?.baseRates?.weekend || 450000)} x {pricingDetails.weekendNights} {pricingDetails.weekendNights === 1 ? 'noche V-D' : 'noches V-D'}</span>
                                             <span>{formatPrice((pricing?.baseRates?.weekend || 450000) * pricingDetails.weekendNights)}</span>
                                         </div>
@@ -785,9 +790,9 @@ export default function Booking() {
                                     )}
                                     {/* Season Multiplier Display */}
                                     {pricingDetails.appliedSeasons && pricingDetails.appliedSeasons.length > 0 && pricingDetails.totalSeasonCharge > 0 && (
-                                        <div className="space-y-1 py-2 border-t border-border-card dark:border-border-card-dark mt-2">
+                                        <div className="space-y-1 py-2 border-t border-premium-ink/10 mt-2">
                                             {pricingDetails.appliedSeasons.map((season, idx) => (
-                                                <div key={idx} className="flex justify-between text-sm text-primary font-medium">
+                                                <div key={idx} className="flex justify-between text-sm text-premium-pine font-medium">
                                                     <div className="flex flex-col">
                                                         <span>Multiplicador {season.multiplier}x - {season.name}</span>
                                                         <span className="text-[10px] opacity-70">({season.datesFormatted})</span>
@@ -800,44 +805,44 @@ export default function Booking() {
 
                                     {/* Extra guest charge - Mobile BEFORE subtotal */}
                                     {pricingDetails.extraGuestCharge > 0 && (
-                                        <div className="flex justify-between text-sm text-primary font-medium">
+                                        <div className="flex justify-between text-sm text-premium-pine font-medium">
                                             <span>Multiplicador por Huésped adicional</span>
                                             <span>+{formatPrice(pricingDetails.extraGuestCharge)}</span>
                                         </div>
                                     )}
 
-                                    <div className="flex justify-between text-sm font-medium text-text-main-light dark:text-text-muted pt-1">
+                                    <div className="flex justify-between text-sm font-medium text-premium-ink pt-1">
                                         <span>Subtotal alojamiento</span>
                                         <span className="font-bold">{formatPrice(pricingDetails.subtotal)}</span>
                                     </div>
 
                                     {applyLongStayDiscount && (
-                                        <div className="flex justify-between text-sm text-primary font-medium">
+                                        <div className="flex justify-between text-sm text-premium-pine font-medium">
                                             <span>Descuento estadía larga (-{discountPercent}%)</span>
                                             <span>-{formatPrice(discountAmount)}</span>
                                         </div>
                                     )}
                                     {cleaningEnabled && cleaningFee > 0 && (
-                                        <div className="flex justify-between text-sm text-text-muted dark:text-text-muted">
+                                        <div className="flex justify-between text-sm text-premium-ink/70">
                                             <span>Tarifa de limpieza</span>
                                             <span>{formatPrice(cleaningFee)}</span>
                                         </div>
                                     )}
                                     {ivaEnabled && taxes > 0 && (
-                                        <div className="flex justify-between text-sm text-primary font-medium">
+                                        <div className="flex justify-between text-sm text-premium-pine font-medium">
                                             <span>IVA ({ivaPercent}%)</span>
                                             <span>{formatPrice(taxes)}</span>
                                         </div>
                                     )}
-                                    <div className="h-px bg-icon-bg-primary dark:bg-border-card-dark my-2"></div>
+                                    <div className="h-px bg-premium-gold/30 my-2"></div>
                                     <div className="flex justify-between items-center">
-                                        <span className="font-bold text-lg">Total</span>
-                                        <span className="font-black text-2xl text-primary">{formatPrice(total)}</span>
+                                        <span className="font-premium-display text-lg text-premium-forest">Total</span>
+                                        <span className="font-premium-display font-bold text-2xl text-premium-forest">{formatPrice(total)}</span>
                                     </div>
                                 </div>
                                 <button
                                     onClick={handleContinuarReserva}
-                                    className="w-full h-12 rounded-lg bg-primary hover:bg-btn-primary-hover text-white font-bold text-base shadow-lg shadow-card transition-all transform active:scale-95 flex items-center justify-center gap-2"
+                                    className="w-full h-12 rounded-premium bg-premium-forest hover:bg-premium-pine text-premium-cream font-semibold text-base shadow-premium-sm hover:shadow-gold-glow transition-all duration-300 ease-premium transform active:scale-95 flex items-center justify-center gap-2 disabled:bg-premium-sand disabled:text-premium-ink/40"
                                 >
                                     <span>Continuar Reserva</span>
                                     <span className="material-symbols-outlined text-sm">arrow_forward</span>
@@ -845,7 +850,7 @@ export default function Booking() {
                             </>
                         )}
                         {nights === 0 && (
-                            <p className="text-center text-text-muted text-sm py-4">
+                            <p className="text-center text-premium-ink/50 text-sm py-4">
                                 Selecciona fechas en el calendario para ver el precio
                             </p>
                         )}
@@ -853,40 +858,40 @@ export default function Booking() {
 
                     {/* Pricing Cards */}
                     <div>
-                        <h3 className="text-xl font-bold mb-4">{pageContent.tarifasTitle}</h3>
+                        <h3 className="font-premium-display text-xl text-premium-forest mb-4">{pageContent.tarifasTitle}</h3>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div className="bg-surface-card dark:bg-surface-card-dark rounded-xl p-5 border border-border-card dark:border-border-card-dark flex flex-col gap-2 hover:shadow-md transition-shadow">
+                            <div className="card-premium p-5 flex flex-col gap-2">
                                 <div className="flex justify-between items-start">
-                                    <div className="p-2 bg-icon-bg-primary dark:bg-icon-bg-dark rounded-lg text-icon-color">
+                                    <div className="p-2 bg-premium-mist rounded-lg text-premium-forest">
                                         <span className="material-symbols-outlined">wb_twilight</span>
                                     </div>
-                                    <span className="text-xs font-bold uppercase tracking-wider text-text-muted">{pageContent.weekdayLabel}</span>
+                                    <span className="text-xs font-semibold uppercase tracking-[0.18em] text-premium-ink/40">{pageContent.weekdayLabel}</span>
                                 </div>
-                                <p className="text-3xl font-bold mt-2">
+                                <p className="font-premium-display text-3xl font-semibold text-premium-forest mt-2">
                                     {pricing ? formatPrice(pricing.baseRates?.weekday || 350000) : '$350.000'}
-                                    <span className="text-sm font-normal text-text-muted">/noche</span>
+                                    <span className="text-sm font-normal font-premium-body text-premium-ink/50">/noche</span>
                                 </p>
-                                <p className="text-sm text-text-muted dark:text-text-muted">{pageContent.weekdayDesc}</p>
-                                <p className="text-xs text-primary font-semibold mt-2">Aplica para hasta 7 huéspedes</p>
+                                <p className="text-sm text-premium-ink/60">{pageContent.weekdayDesc}</p>
+                                <p className="text-xs text-premium-pine font-semibold mt-2">Aplica para hasta 7 huéspedes</p>
                             </div>
-                            <div className="bg-surface-card dark:bg-surface-card-dark rounded-xl p-5 pt-8 border border-primary/30 flex flex-col gap-2 shadow-sm relative overflow-hidden">
-                                <div className="absolute top-0 right-0 bg-primary text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg">POPULAR</div>
+                            <div className="card-premium p-5 pt-8 border-premium-gold/40 flex flex-col gap-2 relative overflow-hidden">
+                                <div className="absolute top-0 right-0 bg-premium-gold text-white text-[10px] font-bold tracking-[0.12em] px-2 py-1 rounded-bl-lg">POPULAR</div>
                                 <div className="flex justify-between items-start">
-                                    <div className="p-2 bg-icon-bg-primary dark:bg-icon-bg-dark rounded-lg text-icon-color">
+                                    <div className="p-2 bg-premium-mist rounded-lg text-premium-forest">
                                         <span className="material-symbols-outlined">weekend</span>
                                     </div>
-                                    <span className="text-xs font-bold uppercase tracking-wider text-primary">{pageContent.weekendLabel}</span>
+                                    <span className="text-xs font-semibold uppercase tracking-[0.18em] text-premium-gold">{pageContent.weekendLabel}</span>
                                 </div>
-                                <p className="text-3xl font-bold mt-2 text-primary">
+                                <p className="font-premium-display text-3xl font-semibold text-premium-forest mt-2">
                                     {pricing ? formatPrice(pricing.baseRates?.weekend || 450000) : '$450.000'}
-                                    <span className="text-sm font-normal text-text-muted dark:text-text-muted">/noche</span>
+                                    <span className="text-sm font-normal font-premium-body text-premium-ink/50">/noche</span>
                                 </p>
-                                <p className="text-sm text-text-muted dark:text-text-muted">{pageContent.weekendDesc}</p>
-                                <p className="text-xs text-primary font-semibold mt-2">Aplica para hasta 7 huéspedes</p>
+                                <p className="text-sm text-premium-ink/60">{pageContent.weekendDesc}</p>
+                                <p className="text-xs text-premium-pine font-semibold mt-2">Aplica para hasta 7 huéspedes</p>
                             </div>
-                            <div className="bg-surface-card dark:bg-surface-card-dark rounded-xl p-5 border border-border-card dark:border-border-card-dark flex flex-col gap-2 hover:shadow-md transition-shadow">
+                            <div className="card-premium p-5 flex flex-col gap-2">
                                 <div className="flex justify-between items-start">
-                                    <div className="p-2 bg-icon-bg-primary dark:bg-icon-bg-dark rounded-lg text-icon-color">
+                                    <div className="p-2 bg-premium-mist rounded-lg text-premium-forest">
                                         <span className="material-symbols-outlined">date_range</span>
                                     </div>
                                     <span
@@ -896,14 +901,14 @@ export default function Booking() {
                                         {pricing?.discounts?.longStay?.percent || 15}% OFF
                                     </span>
                                 </div>
-                                <p className="text-3xl font-bold mt-2">
+                                <p className="font-premium-display text-3xl font-semibold text-premium-forest mt-2">
                                     {formatPrice((pricing?.baseRates?.weekend || 450000) * (1 - (pricing?.discounts?.longStay?.percent || 15) / 100))}
-                                    <span className="text-sm font-normal text-text-muted">/noche</span>
+                                    <span className="text-sm font-normal font-premium-body text-premium-ink/50">/noche</span>
                                 </p>
-                                <p className="text-sm text-text-muted dark:text-text-muted">
+                                <p className="text-sm text-premium-ink/60">
                                     Reserva {pricing?.discounts?.longStay?.nights || 7}+ {pageContent.discountDesc}
                                 </p>
-                                <p className="text-xs text-primary font-semibold mt-2">Aplica para hasta 7 huéspedes</p>
+                                <p className="text-xs text-premium-pine font-semibold mt-2">Aplica para hasta 7 huéspedes</p>
                             </div>
                         </div>
                     </div>
@@ -912,49 +917,49 @@ export default function Booking() {
                 {/* Sidebar Summary - Desktop only */}
                 <div className="hidden lg:block lg:w-[380px] shrink-0">
                     <div className="sticky top-24 flex flex-col gap-6">
-                        <div className="bg-surface-card dark:bg-surface-card-dark rounded-2xl p-6 shadow-xl shadow-gray-200/50 dark:shadow-black/20 border border-border-card dark:border-border-card-dark">
+                        <div className="card-premium p-6">
                             <div className="flex justify-between items-center mb-6">
-                                <h3 className="text-lg font-bold">Tu Reserva</h3>
-                                <span className="bg-icon-bg-primary dark:bg-icon-bg-dark text-icon-color text-xs font-bold px-2 py-1 rounded">
+                                <h3 className="font-premium-display text-xl text-premium-forest">Tu Reserva</h3>
+                                <span className="bg-premium-forest text-premium-cream text-xs font-semibold px-3 py-1 rounded-full">
                                     {nights} {nights === 1 ? 'Noche' : 'Noches'}
                                 </span>
                             </div>
                             <div className="flex gap-4 mb-6">
-                                <div className="flex-1 p-3 rounded-lg border border-border-card dark:border-border-card-dark bg-background-light dark:bg-background-dark">
-                                    <p className="text-xs text-text-muted uppercase font-bold mb-1">Llegada</p>
-                                    <p className="font-bold text-sm">{formatDate(selectedRange.start)}</p>
+                                <div className="flex-1 p-3 rounded-premium hairline bg-premium-mist">
+                                    <p className="eyebrow !text-[10px] mb-1">Llegada</p>
+                                    <p className="font-premium-display font-semibold text-sm text-premium-forest">{formatDate(selectedRange.start)}</p>
                                 </div>
-                                <div className="flex-1 p-3 rounded-lg border border-border-card dark:border-border-card-dark bg-background-light dark:bg-background-dark">
-                                    <p className="text-xs text-text-muted uppercase font-bold mb-1">Salida</p>
-                                    <p className="font-bold text-sm">{formatDate(selectedRange.end)}</p>
+                                <div className="flex-1 p-3 rounded-premium hairline bg-premium-mist">
+                                    <p className="eyebrow !text-[10px] mb-1">Salida</p>
+                                    <p className="font-premium-display font-semibold text-sm text-premium-forest">{formatDate(selectedRange.end)}</p>
                                 </div>
                             </div>
 
                             {/* Guest count selector */}
-                            <div className="mb-6 p-4 rounded-lg border border-border-card dark:border-border-card-dark bg-background-light dark:bg-background-dark">
-                                <label className="block text-xs text-text-muted uppercase font-bold mb-2">Número de Huéspedes</label>
+                            <div className="mb-6 p-4 rounded-premium hairline bg-premium-mist">
+                                <label className="eyebrow !text-[10px] block mb-2">Número de Huéspedes</label>
                                 <div className="flex items-center gap-3">
                                     <button
                                         onClick={() => setNumberOfGuests(Math.max(1, numberOfGuests - 1))}
-                                        className="w-10 h-10 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary font-bold transition-colors"
+                                        className="w-10 h-10 rounded-full bg-premium-forest/10 hover:bg-premium-forest/20 text-premium-forest font-bold transition-colors duration-300 ease-premium"
                                     >
                                         -
                                     </button>
                                     <div className="flex-1 text-center">
-                                        <span className="text-2xl font-bold text-primary">{numberOfGuests}</span>
-                                        <p className="text-xs text-text-muted mt-1">
+                                        <span className="font-premium-display text-2xl font-semibold text-premium-forest">{numberOfGuests}</span>
+                                        <p className="text-xs text-premium-ink/50 mt-1">
                                             {numberOfGuests <= 7 ? 'Tarifa base' : `+${pricingDetails.extraGuests} extra`}
                                         </p>
                                     </div>
                                     <button
                                         onClick={() => setNumberOfGuests(Math.min(10, numberOfGuests + 1))}
-                                        className="w-10 h-10 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary font-bold transition-colors"
+                                        className="w-10 h-10 rounded-full bg-premium-forest/10 hover:bg-premium-forest/20 text-premium-forest font-bold transition-colors duration-300 ease-premium"
                                     >
                                         +
                                     </button>
                                 </div>
                                 {numberOfGuests > 7 && (
-                                    <p className="text-xs text-warning-text dark:text-warning-text mt-2 text-center">
+                                    <p className="text-xs text-premium-gold mt-2 text-center">
                                         +10% por cada persona adicional sobre 7
                                     </p>
                                 )}
@@ -965,13 +970,13 @@ export default function Booking() {
                                     <div className="flex flex-col gap-2 mb-6">
                                         {/* Nights breakdown */}
                                         {pricingDetails.weekdayNights > 0 && (
-                                            <div className="flex justify-between text-sm text-text-muted dark:text-text-muted">
+                                            <div className="flex justify-between text-sm text-premium-ink/70">
                                                 <span>{formatPrice(pricing?.baseRates?.weekday || 350000)} x {pricingDetails.weekdayNights} {pricingDetails.weekdayNights === 1 ? 'noche L-J' : 'noches L-J'}</span>
                                                 <span>{formatPrice((pricing?.baseRates?.weekday || 350000) * pricingDetails.weekdayNights)}</span>
                                             </div>
                                         )}
                                         {pricingDetails.weekendNights > 0 && (
-                                            <div className="flex justify-between text-sm text-text-muted dark:text-text-muted">
+                                            <div className="flex justify-between text-sm text-premium-ink/70">
                                                 <span>{formatPrice(pricing?.baseRates?.weekend || 450000)} x {pricingDetails.weekendNights} {pricingDetails.weekendNights === 1 ? 'noche V-D' : 'noches V-D'}</span>
                                                 <span>{formatPrice((pricing?.baseRates?.weekend || 450000) * pricingDetails.weekendNights)}</span>
                                             </div>
@@ -988,9 +993,9 @@ export default function Booking() {
 
                                         {/* Season Multiplier Display */}
                                         {pricingDetails.appliedSeasons && pricingDetails.appliedSeasons.length > 0 && pricingDetails.totalSeasonCharge > 0 && (
-                                            <div className="space-y-1 py-2 border-t border-border-card dark:border-border-card-dark mt-2">
+                                            <div className="space-y-1 py-2 border-t border-premium-ink/10 mt-2">
                                                 {pricingDetails.appliedSeasons.map((season, idx) => (
-                                                    <div key={idx} className="flex justify-between text-sm text-primary font-medium">
+                                                    <div key={idx} className="flex justify-between text-sm text-premium-pine font-medium">
                                                         <div className="flex flex-col">
                                                             <span>Multiplicador {season.multiplier}x - {season.name}</span>
                                                             <span className="text-[10px] opacity-70">({season.datesFormatted})</span>
@@ -1002,21 +1007,21 @@ export default function Booking() {
 
                                         {/* Extra guest charge - BEFORE subtotal */}
                                         {pricingDetails.extraGuestCharge > 0 && (
-                                            <div className="flex justify-between text-sm text-primary font-medium">
+                                            <div className="flex justify-between text-sm text-premium-pine font-medium">
                                                 <span>Multiplicador por Huésped adicional</span>
                                                 <span>+{formatPrice(pricingDetails.extraGuestCharge)}</span>
                                             </div>
                                         )}
 
                                         {/* Subtotal */}
-                                        <div className="flex justify-between text-sm font-medium text-text-main-light dark:text-text-muted pt-1">
+                                        <div className="flex justify-between text-sm font-medium text-premium-ink pt-1">
                                             <span>Subtotal alojamiento</span>
                                             <span className="font-bold">{formatPrice(pricingDetails.subtotal)}</span>
                                         </div>
 
                                         {/* Long stay discount */}
                                         {applyLongStayDiscount && (
-                                            <div className="flex justify-between text-sm text-primary font-medium">
+                                            <div className="flex justify-between text-sm text-premium-pine font-medium">
                                                 <span>Descuento estadía larga (-{discountPercent}%)</span>
                                                 <span>-{formatPrice(discountAmount)}</span>
                                             </div>
@@ -1024,7 +1029,7 @@ export default function Booking() {
 
                                         {/* Cleaning fee */}
                                         {cleaningEnabled && cleaningFee > 0 && (
-                                            <div className="flex justify-between text-sm text-text-muted dark:text-text-muted">
+                                            <div className="flex justify-between text-sm text-premium-ink/70">
                                                 <span>Tarifa de limpieza</span>
                                                 <span>{formatPrice(cleaningFee)}</span>
                                             </div>
@@ -1032,21 +1037,21 @@ export default function Booking() {
 
                                         {/* IVA */}
                                         {ivaEnabled && taxes > 0 && (
-                                            <div className="flex justify-between text-sm text-primary font-medium">
+                                            <div className="flex justify-between text-sm text-premium-pine font-medium">
                                                 <span>IVA ({ivaPercent}%)</span>
                                                 <span>{formatPrice(taxes)}</span>
                                             </div>
                                         )}
 
-                                        <div className="h-px bg-icon-bg-primary dark:bg-border-card-dark my-2"></div>
+                                        <div className="h-px bg-premium-gold/30 my-2"></div>
                                         <div className="flex justify-between items-center">
-                                            <span className="font-bold text-lg">Total</span>
-                                            <span className="font-black text-2xl text-primary">{formatPrice(total)}</span>
+                                            <span className="font-premium-display text-lg text-premium-forest">Total</span>
+                                            <span className="font-premium-display font-bold text-2xl text-premium-forest">{formatPrice(total)}</span>
                                         </div>
                                     </div>
                                     <button
                                         onClick={handleContinuarReserva}
-                                        className="w-full h-12 rounded-lg bg-primary hover:bg-btn-primary-hover text-white font-bold text-base shadow-lg shadow-card transition-all transform active:scale-95 flex items-center justify-center gap-2"
+                                        className="w-full h-12 rounded-premium bg-premium-forest hover:bg-premium-pine text-premium-cream font-semibold text-base shadow-premium-sm hover:shadow-gold-glow transition-all duration-300 ease-premium transform active:scale-95 flex items-center justify-center gap-2 disabled:bg-premium-sand disabled:text-premium-ink/40"
                                     >
                                         <span>Continuar Reserva</span>
                                         <span className="material-symbols-outlined text-sm">arrow_forward</span>
@@ -1054,7 +1059,7 @@ export default function Booking() {
                                 </>
                             )}
                             {nights === 0 && (
-                                <p className="text-center text-text-muted text-sm py-4">
+                                <p className="text-center text-premium-ink/50 text-sm py-4">
                                     Selecciona fechas en el calendario para ver el precio
                                 </p>
                             )}

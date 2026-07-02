@@ -98,11 +98,11 @@ export default function AdminWaterStats() {
                 deviceIdCasa: tuya?.deviceIdCasa || 'N/A'
             })
 
-            if (!tuya || !tuya.clientId || !tuya.clientSecret) {
-                console.error('Credenciales Tuya no configuradas - ve a /admin/conexiones y haz clic en Guardar')
+            if (!tuya || (!tuya.deviceIdAbajo && !tuya.deviceIdArriba && !tuya.deviceIdCasa)) {
+                console.error('Configura los deviceIds de Tuya en /admin/conexiones')
                 // Solo mostrar alert si no hay datos históricos (primera vez)
                 if (allMeasurements.length === 0) {
-                    alert('⚠️ Debes configurar las credenciales de Tuya en /admin/conexiones primero')
+                    alert('⚠️ Configura los deviceIds de Tuya en /admin/conexiones')
                 }
                 setRefreshing(false)
                 return
@@ -110,9 +110,9 @@ export default function AdminWaterStats() {
 
             const deviceIds = [tuya.deviceIdAbajo, tuya.deviceIdArriba, tuya.deviceIdCasa].filter(Boolean).join(',')
 
-            console.log('🔍 Consultando sensores Tuya...', { clientId: tuya.clientId, deviceIds })
+            console.log('🔍 Consultando sensores Tuya...', { deviceIds })
 
-            const response = await fetch(`/api/water-tuya?clientId=${tuya.clientId}&clientSecret=${tuya.clientSecret}&deviceIds=${deviceIds}`)
+            const response = await fetch(`/api/water-tuya?deviceIds=${deviceIds}`)
             const data = await response.json()
 
             console.log('✅ Respuesta de Tuya:', data)

@@ -23,12 +23,22 @@ export default async function handler(req, res) {
     }
 
     try {
-        const { clientId, clientSecret, deviceIds } = req.query
+        const { deviceIds } = req.query
 
-        if (!clientId || !clientSecret || !deviceIds) {
+        const clientId = process.env.TUYA_CLIENT_ID
+        const clientSecret = process.env.TUYA_CLIENT_SECRET
+
+        if (!clientId || !clientSecret) {
+            return res.status(500).json({
+                success: false,
+                error: 'Credenciales de Tuya no configuradas en el servidor'
+            })
+        }
+
+        if (!deviceIds) {
             return res.status(400).json({
                 success: false,
-                error: 'Faltan parámetros: clientId, clientSecret, deviceIds'
+                error: 'Falta parámetro: deviceIds'
             })
         }
 

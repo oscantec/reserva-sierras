@@ -52,7 +52,7 @@ function LazyImage({ placeholder, mediumSrc, fullSrc, alt, className, priority =
 
     return (
         <div
-            className="relative w-full h-full overflow-hidden bg-gray-200 dark:bg-gray-800 cursor-pointer"
+            className="relative w-full h-full overflow-hidden bg-premium-sand cursor-pointer"
             onClick={onImageClick}
         >
             {/* Phase 1: Tiny blur placeholder (Base64 - loads instantly) */}
@@ -379,11 +379,12 @@ export default function Gallery() {
     }
 
     return (
-        <div className="flex flex-col min-h-screen bg-page-bg-galeria dark:bg-surface-card-dark text-text-main dark:text-white font-display">
+        <div className="flex flex-col min-h-screen bg-premium-cream text-premium-ink font-premium-body">
             <Navbar />
 
-            {/* Header Section - Same style as Reservas */}
+            {/* Header Section - Premium variant */}
             <PageHeader
+                eyebrow="Nuestra galería"
                 title={pageContent.pageTitle}
                 subtitle={pageContent.pageSubtitle}
                 progress={100}
@@ -406,7 +407,7 @@ export default function Gallery() {
                     {[...marqueeImages, ...marqueeImages].map((img, idx) => (
                         <div
                             key={`row1-${idx}`}
-                            className="flex-shrink-0 w-40 h-28 md:w-56 md:h-36 rounded-xl overflow-hidden hover:scale-105 transition-transform duration-300 shadow-lg"
+                            className="flex-shrink-0 w-40 h-28 md:w-56 md:h-36 rounded-premium overflow-hidden hover:scale-105 transition-transform duration-300 ease-premium shadow-premium"
                         >
                             <img src={img.src} alt="" className="w-full h-full object-cover" />
                         </div>
@@ -418,7 +419,7 @@ export default function Gallery() {
                     {[...marqueeImages.slice().reverse(), ...marqueeImages.slice().reverse()].map((img, idx) => (
                         <div
                             key={`row2-${idx}`}
-                            className="flex-shrink-0 w-40 h-28 md:w-56 md:h-36 rounded-xl overflow-hidden hover:scale-105 transition-transform duration-300 shadow-lg"
+                            className="flex-shrink-0 w-40 h-28 md:w-56 md:h-36 rounded-premium overflow-hidden hover:scale-105 transition-transform duration-300 ease-premium shadow-premium"
                         >
                             <img src={img.src} alt="" className="w-full h-full object-cover" />
                         </div>
@@ -435,9 +436,9 @@ export default function Gallery() {
                     {/* Main gallery button on top */}
                     <button
                         onClick={() => handleCategoryChange('todas')}
-                        className={`w-full max-w-md flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-bold transition-all duration-300 shadow-lg ${activeCategory === 'todas'
-                            ? 'bg-primary text-white shadow-card'
-                            : 'bg-surface-card dark:bg-surface-card-dark text-text-muted dark:text-text-muted hover:bg-surface-light dark:hover:bg-gray-800 border border-border-card dark:border-border-card-dark'
+                        className={`w-full max-w-md flex items-center justify-center gap-2 px-6 py-3 rounded-full text-sm font-semibold transition-all duration-300 ease-premium ${activeCategory === 'todas'
+                            ? 'bg-premium-forest text-premium-cream shadow-premium hover:bg-premium-pine hover:shadow-gold-glow'
+                            : 'bg-white hairline text-premium-ink/60 hover:text-premium-forest hover:bg-premium-mist shadow-premium-sm'
                             }`}
                     >
                         <span className="material-symbols-outlined text-lg">photo_library</span>
@@ -450,9 +451,9 @@ export default function Gallery() {
                             <button
                                 key={cat.id}
                                 onClick={() => handleCategoryChange(cat.id)}
-                                className={`flex flex-col items-center justify-center gap-1 px-3 py-3 rounded-xl text-xs font-bold transition-all duration-300 shadow-lg ${activeCategory === cat.id
-                                    ? 'bg-primary text-white shadow-card'
-                                    : 'bg-surface-card dark:bg-surface-card-dark text-text-muted dark:text-text-muted hover:bg-surface-light dark:hover:bg-gray-800 border border-border-card dark:border-border-card-dark'
+                                className={`flex flex-col items-center justify-center gap-1 px-3 py-3 rounded-premium text-xs font-semibold transition-all duration-300 ease-premium ${activeCategory === cat.id
+                                    ? 'bg-premium-forest text-premium-cream shadow-premium hover:bg-premium-pine'
+                                    : 'bg-white hairline text-premium-ink/60 hover:text-premium-forest hover:bg-premium-mist shadow-premium-sm'
                                     }`}
                             >
                                 <span className="material-symbols-outlined text-xl">{cat.icon}</span>
@@ -471,7 +472,7 @@ export default function Gallery() {
                                 <div
                                     key={`todas-${index}`}
                                     onClick={() => openLightbox(image, index)}
-                                    className={`group relative overflow-hidden rounded-2xl cursor-pointer ${getBentoClass(index)} transition-all duration-500 hover:z-10`}
+                                    className={`group img-zoom relative overflow-hidden rounded-premium cursor-pointer shadow-premium-sm hover:shadow-premium ${getBentoClass(index)} transition-all duration-500 ease-premium hover:z-10`}
                                 >
                                     <LazyImage
                                         placeholder={getPlaceholder(image.src)}
@@ -488,7 +489,7 @@ export default function Gallery() {
                                         <h3 className="text-white font-bold text-sm">{image.title}</h3>
                                     </div>
                                     <div className="absolute top-3 right-3 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg">
-                                        <span className="material-symbols-outlined text-icon-color text-sm">fullscreen</span>
+                                        <span className="material-symbols-outlined text-premium-forest text-sm">fullscreen</span>
                                     </div>
                                 </div>
                             ))}
@@ -500,7 +501,7 @@ export default function Gallery() {
                                 <div
                                     key={`cat-${index}`}
                                     onClick={() => openLightbox(image, index)}
-                                    className="group relative overflow-hidden rounded-2xl cursor-pointer aspect-square bg-surface-card dark:bg-surface-card-dark border border-border-card dark:border-border-card-dark shadow-md hover:shadow-xl transition-all duration-300"
+                                    className="group img-zoom relative overflow-hidden rounded-premium cursor-pointer aspect-square bg-white hairline shadow-premium-sm hover:shadow-premium hover:-translate-y-1 transition-all duration-300 ease-premium"
                                 >
                                     <LazyImage
                                         placeholder={getPlaceholder(image.src)}
@@ -518,7 +519,7 @@ export default function Gallery() {
                                     </div>
                                     {/* Zoom icon on hover */}
                                     <div className="absolute top-3 right-3 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg">
-                                        <span className="material-symbols-outlined text-icon-color text-sm">fullscreen</span>
+                                        <span className="material-symbols-outlined text-premium-forest text-sm">fullscreen</span>
                                     </div>
                                 </div>
                             ))}
@@ -533,25 +534,25 @@ export default function Gallery() {
                     className="fixed inset-0 z-50 flex items-center justify-center animate-fadeIn"
                     onClick={closeLightbox}
                 >
-                    <div className="absolute inset-0 bg-black/95 backdrop-blur-xl"></div>
+                    <div className="absolute inset-0 bg-premium-ink/90 backdrop-blur-xl"></div>
 
                     <button
                         onClick={closeLightbox}
-                        className="absolute top-6 right-6 w-14 h-14 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center transition-all duration-300 z-50 group hover:scale-110"
+                        className="absolute top-6 right-6 w-14 h-14 bg-white/10 hover:bg-premium-gold/30 backdrop-blur-sm border border-white/15 rounded-full flex items-center justify-center transition-all duration-300 ease-premium z-50 group hover:scale-110"
                     >
                         <span className="material-symbols-outlined text-white text-2xl group-hover:rotate-90 transition-transform duration-300">close</span>
                     </button>
 
-                    <div className="absolute top-6 left-6 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 z-50">
+                    <div className="absolute top-6 left-6 bg-white/10 backdrop-blur-sm border border-white/15 rounded-full px-4 py-2 z-50">
                         <p className="text-white/90 text-sm font-medium">
-                            {lightboxIndex + 1} <span className="text-white/50">/ {filteredImages.length}</span>
+                            {lightboxIndex + 1} <span className="text-premium-gold-light">/ {filteredImages.length}</span>
                         </p>
                     </div>
 
                     {lightboxIndex > 0 && (
                         <button
                             onClick={(e) => { e.stopPropagation(); navigateLightbox(-1); }}
-                            className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 w-14 h-14 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center transition-all duration-300 group hover:scale-110"
+                            className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 w-14 h-14 bg-white/10 hover:bg-premium-gold/30 backdrop-blur-sm border border-white/15 rounded-full flex items-center justify-center transition-all duration-300 ease-premium group hover:scale-110"
                         >
                             <span className="material-symbols-outlined text-white text-2xl">chevron_left</span>
                         </button>
@@ -559,7 +560,7 @@ export default function Gallery() {
                     {lightboxIndex < filteredImages.length - 1 && (
                         <button
                             onClick={(e) => { e.stopPropagation(); navigateLightbox(1); }}
-                            className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 w-14 h-14 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center transition-all duration-300 group hover:scale-110"
+                            className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 w-14 h-14 bg-white/10 hover:bg-premium-gold/30 backdrop-blur-sm border border-white/15 rounded-full flex items-center justify-center transition-all duration-300 ease-premium group hover:scale-110"
                         >
                             <span className="material-symbols-outlined text-white text-2xl">chevron_right</span>
                         </button>
@@ -572,11 +573,11 @@ export default function Gallery() {
                         <img
                             src={lightboxImage.src}
                             alt={lightboxImage.title}
-                            className="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl"
+                            className="max-w-full max-h-[85vh] object-contain rounded-premium-lg shadow-premium-lg"
                         />
-                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-6 md:p-8 rounded-b-2xl">
+                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-premium-ink/90 via-premium-ink/50 to-transparent p-6 md:p-8 rounded-b-premium-lg">
 
-                            <h3 className="text-white font-bold text-xl md:text-2xl">{lightboxImage.title}</h3>
+                            <h3 className="text-white font-premium-display font-semibold text-xl md:text-2xl">{lightboxImage.title}</h3>
                         </div>
                     </div>
 
@@ -588,8 +589,8 @@ export default function Gallery() {
                                 <button
                                     key={actualIndex}
                                     onClick={(e) => { e.stopPropagation(); setLightboxImage(img); setLightboxIndex(actualIndex); }}
-                                    className={`w-12 h-12 rounded-lg overflow-hidden transition-all duration-300 flex-shrink-0 ${actualIndex === lightboxIndex
-                                        ? 'ring-2 ring-white scale-110'
+                                    className={`w-12 h-12 rounded-lg overflow-hidden transition-all duration-300 ease-premium flex-shrink-0 ${actualIndex === lightboxIndex
+                                        ? 'ring-2 ring-premium-gold scale-110'
                                         : 'opacity-50 hover:opacity-100'
                                         }`}
                                 >

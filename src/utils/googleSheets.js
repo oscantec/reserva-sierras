@@ -19,9 +19,7 @@ export async function fetchSheetData(sheetName) {
             },
             body: JSON.stringify({
                 sheetId: config.googleSheetsId,
-                sheetName: sheetName,
-                email: config.googleServiceAccountEmail,
-                privateKey: config.googlePrivateKey
+                sheetName: sheetName
             })
         })
 
@@ -74,8 +72,6 @@ export async function appendHuespedData(data) {
             body: JSON.stringify({
                 sheetId: config.googleSheetsId,
                 sheetName: sheetName,
-                email: config.googleServiceAccountEmail,
-                privateKey: config.googlePrivateKey,
                 rowData: [
                     data.noReserva || '',
                     data.plataforma || '',

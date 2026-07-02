@@ -87,7 +87,7 @@ export default function WaterConservationSection() {
     }, [rainCount, rainSpeed, rainOpacity])
 
     return (
-        <section className="px-4 py-8 md:py-12 bg-surface-card dark:bg-surface-card-dark overflow-hidden relative">
+        <section className="px-4 py-8 md:py-12 bg-premium-mist overflow-hidden relative">
             {/* Rain Animation with Splash Effect */}
             {showRain && (
                 <div className="absolute inset-0 overflow-hidden pointer-events-none z-30">
@@ -129,15 +129,15 @@ export default function WaterConservationSection() {
                 {/* Header */}
                 <div className="mb-6">
                     {content.showUrgencyBadge !== false && (
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-bold rounded-full mb-3 bg-badge-bg text-badge-text">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] rounded-full mb-3 bg-premium-gold/10 text-premium-gold">
                             <span className="material-symbols-outlined text-sm">warning</span>
                             {content.urgencyBadgeText}
                         </span>
                     )}
-                    <h2 className="text-2xl md:text-3xl font-bold text-text-main dark:text-white mb-2">
+                    <h2 className="font-premium-display text-premium-forest text-2xl md:text-3xl leading-tight tracking-tight mb-2 text-balance">
                         {content.title}
                     </h2>
-                    <p className="text-text-muted dark:text-text-muted">
+                    <p className="text-premium-ink/60">
                         {content.subtitle}
                     </p>
                 </div>
@@ -148,18 +148,18 @@ export default function WaterConservationSection() {
                         {duplicatedTips.map((tip, idx) => (
                             <div
                                 key={idx}
-                                className="bg-surface-card dark:bg-surface-card-dark rounded-xl p-5 border border-border-card dark:border-border-card-dark flex flex-col gap-3 hover:shadow-md hover:scale-[1.02] transition-all flex-shrink-0 w-72"
+                                className="card-premium p-5 flex flex-col gap-3 flex-shrink-0 w-72"
                             >
                                 <div className="flex justify-between items-start">
-                                    <div className="p-2 bg-icon-bg-primary dark:bg-icon-bg-dark rounded-lg text-icon-color">
+                                    <div className={`p-2 rounded-lg ${idx % 2 === 0 ? 'bg-premium-mist text-premium-pine' : 'bg-premium-sand text-premium-gold'}`}>
                                         <span className="material-symbols-outlined">{tip.icon}</span>
                                     </div>
                                 </div>
                                 <div>
-                                    <h3 className="font-bold text-base text-text-main dark:text-white mb-1">
+                                    <h3 className="font-semibold text-base text-premium-forest mb-1">
                                         {tip.title}
                                     </h3>
-                                    <p className="text-sm text-text-muted dark:text-text-muted leading-relaxed">
+                                    <p className="text-sm text-premium-ink/60 leading-relaxed">
                                         {tip.desc}
                                     </p>
                                 </div>
@@ -169,15 +169,15 @@ export default function WaterConservationSection() {
                 </div>
 
                 {/* Warning Card */}
-                <div className="bg-surface-card dark:bg-surface-card-dark rounded-xl p-5 pt-8 border border-primary/30 shadow-sm relative overflow-hidden">
-                    <div className="absolute top-0 right-0 bg-primary text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg">
+                <div className="bg-white rounded-premium p-5 pt-8 border border-premium-gold/30 shadow-premium-sm relative overflow-hidden">
+                    <div className="absolute top-0 right-0 bg-premium-forest text-premium-cream text-[10px] font-semibold tracking-[0.14em] px-2 py-1 rounded-bl-lg">
                         IMPORTANTE
                     </div>
                     <div className="flex items-start gap-4">
-                        <div className="p-2 bg-icon-bg-primary dark:bg-icon-bg-dark rounded-lg text-icon-color flex-shrink-0">
+                        <div className="p-2 bg-premium-sand rounded-lg text-premium-gold flex-shrink-0">
                             <span className="material-symbols-outlined">priority_high</span>
                         </div>
-                        <p className="text-sm text-text-muted dark:text-text-muted leading-relaxed pt-1">
+                        <p className="text-sm text-premium-ink/70 leading-relaxed pt-1">
                             {content.warningMessage}
                         </p>
                     </div>

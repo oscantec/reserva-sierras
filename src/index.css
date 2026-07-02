@@ -230,3 +230,61 @@ html {
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite linear;
 }
+
+/* === Premium design system === */
+@layer components {
+  .glass {
+    background: rgba(250, 247, 240, 0.72);
+    backdrop-filter: blur(16px) saturate(1.4);
+    -webkit-backdrop-filter: blur(16px) saturate(1.4);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+  }
+
+  .glass-dark {
+    background: rgba(22, 48, 43, 0.55);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .hairline {
+    border: 1px solid rgba(28, 25, 23, 0.08);
+  }
+
+  .card-premium {
+    background: #FFFEFB;
+    border-radius: 1.25rem;
+    box-shadow: 0 1px 2px rgba(22, 48, 43, 0.06), 0 2px 8px rgba(22, 48, 43, 0.04);
+    border: 1px solid rgba(28, 25, 23, 0.08);
+    transition: transform .45s cubic-bezier(0.22, 1, 0.36, 1), box-shadow .45s;
+  }
+
+  .card-premium:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 2px 8px rgba(22, 48, 43, 0.06), 0 12px 32px rgba(22, 48, 43, 0.10);
+  }
+
+  .img-zoom {
+    overflow: hidden;
+  }
+
+  .img-zoom img {
+    transition: transform .8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .img-zoom:hover img {
+    transform: scale(1.06);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .eyebrow {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: #2a8a0e;
+    font-weight: 600;
+  }
+}

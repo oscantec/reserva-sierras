@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom'
 import { useState, useEffect, useRef, memo } from 'react'
+import { motion } from 'framer-motion'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { DEFAULT_CONFIG } from '../utils/config'
-import PageHeader from '../components/PageHeader'
 import { SparklesCore } from '../components/SparklesCore'
 import LazyImage from '../components/LazyImage'
 
@@ -197,14 +197,14 @@ export default function Landing() {
     const mainText = words.join(' ')
 
     return (
-        <div className="flex flex-col min-h-screen bg-page-bg-inicio dark:bg-surface-card-dark text-text-main dark:text-white font-display">
+        <div className="flex flex-col min-h-screen bg-premium-cream text-premium-ink font-premium-body">
             <Navbar />
 
             {/* Hero Section - Optimized Iframe for INSTANT Mobile Autoplay */}
             <header className="relative w-full h-[500px] lg:h-[600px] flex items-center justify-center overflow-hidden">
                 {/* Background Placeholder - Thumbnail loads instantly */}
                 <div
-                    className="absolute inset-0 z-0 bg-cover bg-center"
+                    className="absolute inset-0 z-0 bg-cover bg-center animate-ken-burns"
                     style={{
                         backgroundImage: videoId
                             ? `url(https://img.youtube.com/vi/${videoId}/maxresdefault.jpg)`
@@ -231,25 +231,31 @@ export default function Landing() {
                     }}
                 ></div>
 
-                {/* Dark Gradient Overlay for text readability */}
-                <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/60 z-1 pointer-events-none"></div>
+                {/* Legibility overlay: dark only near the top, fully clear by mid-hero so the video stays visible */}
+                <div className="absolute inset-0 bg-gradient-to-b from-premium-ink/55 via-premium-ink/10 to-transparent z-1 pointer-events-none"></div>
+
+                {/* Fusion fade: short band at the very bottom edge to blend into the next section */}
+                <div className="absolute inset-x-0 bottom-0 h-24 md:h-32 bg-gradient-to-b from-transparent to-premium-cream z-1 pointer-events-none"></div>
 
                 {/* Content - Only Dynamic Rotating Text */}
                 <div className="relative z-20 text-center px-4 max-w-4xl mx-auto flex flex-col items-center justify-center h-full fade-in pointer-events-none">
+                    {/* Eyebrow */}
+                    <p className="eyebrow text-premium-gold-light mb-4 animate-fade-up">ANAPOIMA · COLOMBIA</p>
+
                     {/* Animated Rotating Text */}
                     <h1
-                        className={`text-2xl sm:text-4xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight tracking-tight shadow-sm transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+                        className={`font-premium-display text-[clamp(2rem,6vw,4.5rem)] font-semibold text-white leading-[1.1] tracking-tight text-balance transition-all duration-500 ease-premium ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
                             }`}
                     >
                         {mainText}{' '}
-                        <span className="block sm:inline" style={{ color: '#2a8a0e' }}>{lastWord}</span>
+                        <span className="block sm:inline text-premium-gold-light">{lastWord}</span>
                     </h1>
                 </div>
             </header>
 
             {/* Check-in / Check-out Info Bar */}
             <div className="relative z-30 -mt-8 px-4 mb-8">
-                <div className="max-w-3xl mx-auto bg-surface-card dark:bg-surface-card-dark rounded-xl shadow-sm p-4 md:p-5 border border-border-card dark:border-border-card-dark flex flex-col sm:flex-row gap-4 sm:gap-8 items-center justify-center">
+                <div className="max-w-3xl mx-auto glass rounded-premium shadow-premium-lg p-4 md:p-5 flex flex-col sm:flex-row gap-4 sm:gap-8 items-center justify-center">
                     {/* Check-in */}
                     <div className="flex items-center gap-3">
                         <div
@@ -259,14 +265,14 @@ export default function Landing() {
                             <span className="material-symbols-outlined text-2xl" style={{ color: 'var(--color-primary)' }}>login</span>
                         </div>
                         <div>
-                            <p className="text-xs font-bold text-text-muted uppercase tracking-wide">Check-in</p>
-                            <p className="text-xl font-black text-text-main-light dark:text-white">{checkTimes.checkIn}</p>
+                            <p className="eyebrow">Check-in</p>
+                            <p className="text-xl md:text-2xl font-premium-display font-semibold text-premium-forest">{checkTimes.checkIn}</p>
                         </div>
                     </div>
 
                     {/* Divider */}
-                    <div className="hidden sm:block h-10 w-px bg-border-card dark:bg-border-card-dark"></div>
-                    <div className="sm:hidden w-20 h-px bg-border-card dark:bg-border-card-dark"></div>
+                    <div className="hidden sm:block h-10 w-px bg-premium-gold/30"></div>
+                    <div className="sm:hidden w-20 h-px bg-premium-gold/30"></div>
 
                     {/* Check-out */}
                     <div className="flex items-center gap-3">
@@ -277,66 +283,98 @@ export default function Landing() {
                             <span className="material-symbols-outlined text-2xl" style={{ color: 'var(--color-accent-info-icon)' }}>logout</span>
                         </div>
                         <div>
-                            <p className="text-xs font-bold text-text-muted uppercase tracking-wide">Check-out</p>
-                            <p className="text-xl font-black text-text-main-light dark:text-white">{checkTimes.checkOut}</p>
+                            <p className="eyebrow">Check-out</p>
+                            <p className="text-xl md:text-2xl font-premium-display font-semibold text-premium-forest">{checkTimes.checkOut}</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* Main Content - Reservas container style */}
-            <div className="max-w-7xl mx-auto px-4 md:px-8 py-4 md:py-8 w-full">
-                <PageHeader
-                    title={intro.title}
-                    subtitle={intro.description}
-                    progress={100}
-                    className="mb-8"
-                />
+            {/* Bienvenida + Amenidades */}
+            <section className="bg-premium-cream">
+                <div className="max-w-7xl mx-auto px-4 md:px-8 pt-4 md:pt-8 pb-12 md:pb-16 w-full">
+                    <motion.div
+                        initial={{ opacity: 0, y: 24 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: '-80px' }}
+                        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                        className="mb-10 md:mb-14"
+                    >
+                        <p className="eyebrow mb-3">Bienvenidos</p>
+                        <h2 className="font-premium-display text-3xl md:text-4xl font-semibold leading-tight text-premium-forest text-balance mb-4">
+                            {intro.title}
+                        </h2>
+                        <p className="text-base md:text-lg text-premium-ink/70 leading-relaxed max-w-2xl">
+                            {intro.description}
+                        </p>
+                        <div className="mt-6 h-0.5 w-16 bg-premium-gold"></div>
+                    </motion.div>
 
-                {/* Amenities Grid - Compact 2-column mobile layout */}
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6 mb-4 md:mb-8">
-                    {amenidades.map((item, i) => (
-                        <div key={i} className={`relative bg-surface-card dark:bg-surface-card-dark rounded-xl p-3 md:p-6 border border-border-card dark:border-border-card-dark hover:shadow-xl hover:scale-[1.03] transition-all duration-500 ease-out overflow-hidden ${i === amenidades.length - 1 && amenidades.length % 2 !== 0 ? 'col-span-2 md:col-span-1' : ''}`}>
-                            {/* Efecto Sparkles de fondo - PERMANENTE */}
-                            {sparklesConfig?.enabled && (
-                                <div className="absolute inset-0 pointer-events-none" style={{ opacity: (sparklesConfig?.opacity?.amenidades || 50) / 100 }}>
-                                    <SparklesCore
-                                        id={`amenity-sparkles-${i}`}
-                                        background="transparent"
-                                        minSize={sparklesConfig?.particleSize?.min || 0.4}
-                                        maxSize={sparklesConfig?.particleSize?.max || 1.2}
-                                        particleDensity={sparklesConfig?.particleDensity?.amenidades || 80}
-                                        className="w-full h-full"
-                                        particleColor={sparklesConfig?.particleColor || '#3db814'}
-                                        speed={sparklesConfig?.speed || 0.8}
-                                    />
-                                </div>
-                            )}
+                    {/* Amenities Grid - Compact 2-column mobile layout */}
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6">
+                        {amenidades.map((item, i) => (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, y: 24 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true, margin: '-80px' }}
+                                transition={{ duration: 0.6, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+                                className={`card-premium relative p-3 md:p-6 overflow-hidden ${i === amenidades.length - 1 && amenidades.length % 2 !== 0 ? 'col-span-2 md:col-span-1' : ''}`}
+                            >
+                                {/* Efecto Sparkles de fondo - PERMANENTE */}
+                                {sparklesConfig?.enabled && (
+                                    <div className="absolute inset-0 pointer-events-none" style={{ opacity: (sparklesConfig?.opacity?.amenidades || 50) / 100 }}>
+                                        <SparklesCore
+                                            id={`amenity-sparkles-${i}`}
+                                            background="transparent"
+                                            minSize={sparklesConfig?.particleSize?.min || 0.4}
+                                            maxSize={sparklesConfig?.particleSize?.max || 1.2}
+                                            particleDensity={sparklesConfig?.particleDensity?.amenidades || 80}
+                                            className="w-full h-full"
+                                            particleColor={sparklesConfig?.particleColor || '#3db814'}
+                                            speed={sparklesConfig?.speed || 0.8}
+                                        />
+                                    </div>
+                                )}
 
-                            <div className="relative z-10">
-                                <div
-                                    className="w-8 h-8 md:w-12 md:h-12 rounded-xl flex items-center justify-center mb-2 md:mb-4"
-                                    style={{ backgroundColor: 'var(--color-icon-bg)' }}
-                                >
-                                    <span className="material-symbols-outlined text-lg md:text-2xl" style={{ color: 'var(--color-primary)' }}>{item.icon}</span>
+                                <div className="relative z-10">
+                                    <div className="w-8 h-8 md:w-12 md:h-12 rounded-xl flex items-center justify-center mb-2 md:mb-4 bg-premium-mist border border-premium-pine/10">
+                                        <span className="material-symbols-outlined text-lg md:text-2xl text-premium-pine">{item.icon}</span>
+                                    </div>
+                                    <h3 className="text-base md:text-lg font-premium-display font-semibold text-premium-forest mb-1">{item.title}</h3>
+                                    <p className="text-sm text-premium-ink/60 leading-relaxed">{item.description}</p>
                                 </div>
-                                <h3 className="text-base md:text-lg font-bold mb-1">{item.title}</h3>
-                                <p className="text-sm text-text-muted dark:text-text-muted">{item.description}</p>
-                            </div>
-                        </div>
-                    ))}
+                            </motion.div>
+                        ))}
+                    </div>
                 </div>
+            </section>
 
-                {/* Destacados de la Casa */}
-                {destacados?.items?.length > 0 && (
-                    <div className="mb-8 md:mb-12">
-                        <div className="flex flex-col gap-2 mb-4">
-                            <h2 className="text-2xl md:text-3xl font-black leading-tight tracking-[-0.033em]">{destacados.title}</h2>
-                            <p className="text-sm md:text-base text-text-subtitle dark:text-text-subtitle-dark">{destacados.subtitle}</p>
-                        </div>
+            {/* Destacados de la Casa */}
+            {destacados?.items?.length > 0 && (
+                <section className="bg-premium-mist">
+                    <div className="max-w-7xl mx-auto px-4 md:px-8 py-12 md:py-16 w-full">
+                        <motion.div
+                            initial={{ opacity: 0, y: 24 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: '-80px' }}
+                            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                            className="flex flex-col gap-2 mb-6 md:mb-8"
+                        >
+                            <p className="eyebrow">Destacados</p>
+                            <h2 className="font-premium-display text-2xl md:text-3xl font-semibold leading-tight text-premium-forest text-balance">{destacados.title}</h2>
+                            <p className="text-sm md:text-base text-premium-ink/70 leading-relaxed max-w-2xl">{destacados.subtitle}</p>
+                        </motion.div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6">
                             {destacados.items.map((item, i) => (
-                                <div key={i} className="relative bg-surface-card dark:bg-surface-card-dark rounded-xl p-4 md:p-6 border border-border-card dark:border-border-card-dark hover:shadow-xl hover:scale-[1.03] transition-all duration-500 ease-out overflow-hidden flex items-start gap-4">
+                                <motion.div
+                                    key={i}
+                                    initial={{ opacity: 0, y: 24 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true, margin: '-80px' }}
+                                    transition={{ duration: 0.6, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+                                    className="card-premium relative p-4 md:p-6 overflow-hidden flex items-start gap-4"
+                                >
                                     {/* Efecto Sparkles de fondo - PERMANENTE */}
                                     {sparklesConfig?.enabled && (
                                         <div className="absolute inset-0 pointer-events-none" style={{ opacity: (sparklesConfig?.opacity?.destacados || 50) / 100 }}>
@@ -354,30 +392,36 @@ export default function Landing() {
                                     )}
 
                                     <div className="relative z-10 flex items-start gap-4 w-full">
-                                        <div
-                                            className="w-12 h-12 md:w-14 md:h-14 rounded-xl flex items-center justify-center flex-shrink-0"
-                                            style={{ backgroundColor: 'var(--color-icon-bg)' }}
-                                        >
-                                            <span className="material-symbols-outlined text-2xl md:text-3xl" style={{ color: 'var(--color-primary)' }}>{item.icon}</span>
+                                        <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl flex items-center justify-center flex-shrink-0 bg-premium-sand border border-premium-gold/20">
+                                            <span className="material-symbols-outlined text-2xl md:text-3xl text-premium-gold">{item.icon}</span>
                                         </div>
                                         <div>
-                                            <h3 className="text-base md:text-lg font-bold mb-1">{item.title}</h3>
-                                            <p className="text-sm text-text-muted dark:text-text-muted">{item.description}</p>
+                                            <h3 className="text-base md:text-lg font-premium-display font-semibold text-premium-forest mb-1">{item.title}</h3>
+                                            <p className="text-sm text-premium-ink/60 leading-relaxed">{item.description}</p>
                                         </div>
                                     </div>
-                                </div>
+                                </motion.div>
                             ))}
                         </div>
                     </div>
-                )}
+                </section>
+            )}
 
-                {/* Explora el Sitio - Cards con preview */}
-                {exploraSitio?.items?.length > 0 && (
-                    <div className="mb-8 md:mb-12">
-                        <div className="flex flex-col gap-2 mb-4">
-                            <h2 className="text-2xl md:text-3xl font-black leading-tight tracking-[-0.033em]">{exploraSitio.title}</h2>
-                            <p className="text-sm md:text-base text-text-subtitle dark:text-text-subtitle-dark">{exploraSitio.subtitle}</p>
-                        </div>
+            {/* Explora el Sitio - Cards con preview */}
+            {exploraSitio?.items?.length > 0 && (
+                <section className="bg-premium-cream">
+                    <div className="max-w-7xl mx-auto px-4 md:px-8 py-12 md:py-16 w-full">
+                        <motion.div
+                            initial={{ opacity: 0, y: 24 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: '-80px' }}
+                            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                            className="flex flex-col gap-2 mb-6 md:mb-8"
+                        >
+                            <p className="eyebrow">Explora</p>
+                            <h2 className="font-premium-display text-2xl md:text-3xl font-semibold leading-tight text-premium-forest text-balance">{exploraSitio.title}</h2>
+                            <p className="text-sm md:text-base text-premium-ink/70 leading-relaxed max-w-2xl">{exploraSitio.subtitle}</p>
+                        </motion.div>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
                             {exploraSitio.items.map((item, i) => {
                                 // Mapeo de rutas a imágenes de previsualizaciones
@@ -396,62 +440,70 @@ export default function Landing() {
                                 };
 
                                 return (
-                                    <Link
+                                    <motion.div
                                         key={i}
-                                        to={item.path}
-                                        className="group bg-surface-card dark:bg-surface-card-dark rounded-xl border border-border-card dark:border-border-card-dark hover:shadow-2xl hover:scale-[1.04] transition-all duration-500 ease-out overflow-hidden"
+                                        initial={{ opacity: 0, y: 24 }}
+                                        whileInView={{ opacity: 1, y: 0 }}
+                                        viewport={{ once: true, margin: '-80px' }}
+                                        transition={{ duration: 0.6, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
                                     >
-                                        {/* Preview Area - Imagen panorámica con efecto sparkles */}
-                                        <div className="aspect-[2/1] border-b border-border-card dark:border-border-card-dark overflow-hidden relative bg-white">
-                                            <LazyImage
-                                                src={previewImages[item.path]}
-                                                placeholder={placeholders[placeholderKeys[item.path]]}
-                                                alt={`Vista previa de ${item.title}`}
-                                                className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110"
-                                                loading="lazy"
-                                            />
+                                        <Link
+                                            to={item.path}
+                                            className="group card-premium block h-full overflow-hidden"
+                                        >
+                                            {/* Preview Area - Imagen panorámica con efecto sparkles */}
+                                            <div className="img-zoom aspect-[2/1] border-b border-premium-ink/5 overflow-hidden relative bg-white">
+                                                <LazyImage
+                                                    src={previewImages[item.path]}
+                                                    placeholder={placeholders[placeholderKeys[item.path]]}
+                                                    alt={`Vista previa de ${item.title}`}
+                                                    className="w-full h-full object-cover object-top"
+                                                    loading="lazy"
+                                                />
 
-                                            {/* Efecto Sparkles - PERMANENTE */}
-                                            {sparklesConfig?.enabled && (
-                                                <div className="absolute inset-0 pointer-events-none" style={{ opacity: (sparklesConfig?.opacity?.explora || 60) / 100 }}>
-                                                    <SparklesCore
-                                                        id={`sparkles-${i}`}
-                                                        background="transparent"
-                                                        minSize={sparklesConfig?.particleSize?.min || 0.5}
-                                                        maxSize={sparklesConfig?.particleSize?.max || 1.5}
-                                                        particleDensity={sparklesConfig?.particleDensity?.explora || 100}
-                                                        className="w-full h-full"
-                                                        particleColor={sparklesConfig?.particleColor || '#3db814'}
-                                                        speed={sparklesConfig?.speed || 1.0}
-                                                    />
-                                                </div>
-                                            )}
+                                                {/* Efecto Sparkles - PERMANENTE */}
+                                                {sparklesConfig?.enabled && (
+                                                    <div className="absolute inset-0 pointer-events-none" style={{ opacity: (sparklesConfig?.opacity?.explora || 60) / 100 }}>
+                                                        <SparklesCore
+                                                            id={`sparkles-${i}`}
+                                                            background="transparent"
+                                                            minSize={sparklesConfig?.particleSize?.min || 0.5}
+                                                            maxSize={sparklesConfig?.particleSize?.max || 1.5}
+                                                            particleDensity={sparklesConfig?.particleDensity?.explora || 100}
+                                                            className="w-full h-full"
+                                                            particleColor={sparklesConfig?.particleColor || '#3db814'}
+                                                            speed={sparklesConfig?.speed || 1.0}
+                                                        />
+                                                    </div>
+                                                )}
 
-                                            {/* Gradiente sutil para mejor legibilidad */}
-                                            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none"></div>
+                                                {/* Gradiente sutil para mejor legibilidad */}
+                                                <div className="absolute inset-0 bg-gradient-to-t from-premium-ink/20 via-transparent to-transparent pointer-events-none"></div>
 
-                                            {/* Icono flotante */}
-                                            <div className="absolute top-2 left-2 z-10">
-                                                <div
-                                                    className="w-7 h-7 md:w-8 md:h-8 rounded-lg flex items-center justify-center bg-white dark:bg-surface-card-dark shadow-sm border border-border-card dark:border-border-card-dark group-hover:bg-primary group-hover:border-primary transition-all"
-                                                >
-                                                    <span className="material-symbols-outlined text-sm md:text-base group-hover:text-white transition-colors" style={{ color: 'var(--color-primary)' }}>{item.icon}</span>
+                                                {/* Icono flotante */}
+                                                <div className="absolute top-2 left-2 z-10">
+                                                    <div className="w-7 h-7 md:w-8 md:h-8 rounded-lg flex items-center justify-center bg-white/90 backdrop-blur-sm shadow-premium-sm border border-premium-ink/10 group-hover:bg-premium-forest group-hover:border-premium-forest transition-all duration-300 ease-premium">
+                                                        <span className="material-symbols-outlined text-sm md:text-base text-premium-pine group-hover:text-premium-gold-light transition-colors duration-300">{item.icon}</span>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        {/* Content */}
-                                        <div className="p-3 md:p-4">
-                                            <h3 className="text-base md:text-lg font-bold mb-1">{item.title}</h3>
-                                            <p className="text-xs md:text-sm text-text-muted dark:text-text-muted line-clamp-2">{item.description}</p>
-                                        </div>
-                                    </Link>
+                                            {/* Content */}
+                                            <div className="p-3 md:p-4">
+                                                <h3 className="text-base md:text-lg font-premium-display font-semibold text-premium-forest mb-1">{item.title}</h3>
+                                                <p className="text-xs md:text-sm text-premium-ink/60 line-clamp-2 leading-relaxed">{item.description}</p>
+                                                <p className="mt-2 text-xs font-medium text-premium-gold flex items-center gap-1 transition-all duration-300 ease-premium md:opacity-0 md:-translate-x-1 md:group-hover:opacity-100 md:group-hover:translate-x-0">
+                                                    Ver más <span aria-hidden="true">→</span>
+                                                </p>
+                                            </div>
+                                        </Link>
+                                    </motion.div>
                                 )
                             })}
                         </div>
                     </div>
-                )}
-            </div>
+                </section>
+            )}
 
 
             <Footer />

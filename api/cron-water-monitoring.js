@@ -120,8 +120,8 @@ export default async function handler(req, res) {
         const config = siteConfig.config_data
 
         // 2. Extraer credenciales Tuya usando la estructura plana
-        const clientId = config.tuyaAccessId
-        const clientSecret = config.tuyaAccessSecret
+        const clientId = process.env.TUYA_CLIENT_ID || config.tuyaAccessId
+        const clientSecret = process.env.TUYA_CLIENT_SECRET || config.tuyaAccessSecret
 
         if (!clientId || !clientSecret) {
             return res.status(400).json({ error: 'Tuya credentials missing in config' })

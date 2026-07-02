@@ -35,3 +35,6 @@ yarn-error.log*
 
 # Test files
 test-*.js
+
+# Config con posibles secretos (usar variables de entorno en producción)
+saved-config.json

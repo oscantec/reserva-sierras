@@ -6,10 +6,17 @@ export default async function handler(req, res) {
     }
 
     try {
-        const { sheetId, sheetName, email, privateKey } = req.body;
+        const { sheetId, sheetName } = req.body;
 
-        if (!sheetId || !email || !privateKey) {
-            throw new Error('Missing required credentials');
+        if (!sheetId) {
+            return res.status(400).json({ error: 'Missing sheetId' });
+        }
+
+        const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
+        const privateKey = (process.env.GOOGLE_PRIVATE_KEY || '').replace(/\\n/g, '\n');
+
+        if (!email || !privateKey) {
+            return res.status(500).json({ error: 'Credenciales de Google no configuradas en el servidor' });
         }
 
         const data = await fetchSheetData(sheetId, sheetName, email, privateKey);

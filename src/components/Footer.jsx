@@ -10,8 +10,8 @@ export default function Footer() {
         email: 'contacto@reservadelassierras.com',
         poweredBy: 'Ingenierocante',
         showAdmin: true,
-        overlayColor: '#2f4858',
-        overlayOpacity: 70,
+        overlayColor: '#16302B',
+        overlayOpacity: 90,
         logoSize: 5
     })
 
@@ -44,13 +44,13 @@ export default function Footer() {
     }, [])
 
     // Calculate overlay opacity (0-1 from 0-100)
-    const overlayOpacity = (config.overlayOpacity ?? 70) / 100
+    const overlayOpacity = (config.overlayOpacity ?? 90) / 100
 
     // Logo size in vh (viewport height) - responsive across all devices
     const logoSizeVh = config.logoSize || 5
 
     return (
-        <footer className="relative mt-auto overflow-hidden">
+        <footer className="relative mt-auto overflow-hidden border-t border-premium-gold/30">
             {/* Background Image */}
             <div className="absolute inset-0">
                 <img
@@ -64,33 +64,34 @@ export default function Footer() {
             <div
                 className="absolute inset-0"
                 style={{
-                    backgroundColor: config.overlayColor || '#2f4858',
+                    backgroundColor: config.overlayColor || '#16302B',
                     opacity: overlayOpacity
                 }}
             ></div>
 
-            {/* Content - Compact Layout */}
-            <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 text-center py-3">
-                <div className="flex items-center justify-center gap-2 text-white/90">
-                    <span className="material-symbols-outlined text-lg">{config.icon}</span>
+            {/* Content - Editorial Layout */}
+            <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 text-center py-16 md:py-20">
+                <div className="flex flex-col items-center justify-center gap-3 text-white/90">
+                    <span className="material-symbols-outlined text-2xl text-premium-gold-light">{config.icon}</span>
+                    <span className="font-premium-display text-xl md:text-2xl font-semibold tracking-tight text-white">Reserva de las Sierras</span>
                 </div>
-                <div className="flex flex-wrap justify-center gap-3 my-1 text-xs font-medium">
-                    <Link to="/" className="text-white/80 hover:text-white transition-colors">Inicio</Link>
-                    <Link to="/galeria" className="text-white/80 hover:text-white transition-colors">Galería</Link>
-                    <Link to="/reservas" className="text-white/80 hover:text-white transition-colors">Reservas</Link>
-                    <Link to="/registro" className="text-white/80 hover:text-white transition-colors">Registro</Link>
+                <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 mt-6 mb-8 text-sm font-premium-body font-medium">
+                    <Link to="/" className="text-white/80 hover:text-premium-gold-light transition-colors duration-300 ease-premium">Inicio</Link>
+                    <Link to="/galeria" className="text-white/80 hover:text-premium-gold-light transition-colors duration-300 ease-premium">Galería</Link>
+                    <Link to="/reservas" className="text-white/80 hover:text-premium-gold-light transition-colors duration-300 ease-premium">Reservas</Link>
+                    <Link to="/registro" className="text-white/80 hover:text-premium-gold-light transition-colors duration-300 ease-premium">Registro</Link>
                     {config.showAdmin !== false && (
-                        <Link to="/admin" className="text-white/80 hover:text-white transition-colors">Admin</Link>
+                        <Link to="/admin" className="text-white/80 hover:text-premium-gold-light transition-colors duration-300 ease-premium">Admin</Link>
                     )}
                 </div>
 
                 {/* Copyright & Email - Single Line */}
-                <div className="flex flex-wrap items-center justify-center gap-1 sm:gap-2 text-[10px] text-white/60">
+                <div className="flex flex-wrap items-center justify-center gap-1 sm:gap-2 text-xs font-premium-body text-white/60">
                     <span>{config.copyright}</span>
                     {config.email && (
                         <>
                             <span className="hidden sm:inline">•</span>
-                            <a href={`mailto:${config.email}`} className="hover:text-white transition-colors">
+                            <a href={`mailto:${config.email}`} className="hover:text-premium-gold-light transition-colors duration-300 ease-premium">
                                 {config.email}
                             </a>
                         </>
@@ -98,8 +99,8 @@ export default function Footer() {
                 </div>
 
                 {/* Powered By - Configurable Logo */}
-                <div className="flex items-center justify-center gap-2 mt-2">
-                    <span className="text-[9px] text-white/40 uppercase">Powered by</span>
+                <div className="flex items-center justify-center gap-2 mt-6">
+                    <span className="text-[10px] font-premium-body text-white/40 uppercase tracking-[0.18em]">Powered by</span>
                     <img
                         src={nextLogo}
                         alt="NextLogo"

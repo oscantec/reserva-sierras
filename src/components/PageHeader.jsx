@@ -9,6 +9,7 @@ import React from 'react'
  * @param {number} totalSteps - Total number of steps (optional)
  * @param {string} stepLabel - Label for the current step (optional)
  * @param {number} progress - Progress percentage (0-100) (optional, defaults to calculated if steps provided)
+ * @param {string} eyebrow - Optional eyebrow label; activates the premium visual variant
  */
 const PageHeader = ({
     title,
@@ -17,6 +18,7 @@ const PageHeader = ({
     totalSteps,
     stepLabel,
     progress,
+    eyebrow,
     className = ""
 }) => {
     // Calculate progress if steps are provided but progress is not
@@ -24,14 +26,24 @@ const PageHeader = ({
         ? progress
         : (currentStep && totalSteps ? (currentStep / totalSteps) * 100 : 100)
 
+    // Visual-only variant: premium design system styles when an eyebrow is provided
+    const premium = Boolean(eyebrow)
+
     return (
         <div className={`flex flex-col gap-3 w-full ${className}`}>
             <div className="flex justify-between items-end">
                 <div className="flex-1">
-                    <h1 className="text-3xl md:text-4xl font-black leading-tight tracking-[-0.033em] mb-2 dark:text-white">
+                    {eyebrow && (
+                        <p className="eyebrow mb-2">{eyebrow}</p>
+                    )}
+                    <h1 className={premium
+                        ? "font-premium-display text-premium-forest text-3xl md:text-4xl leading-tight tracking-tight mb-2 text-balance"
+                        : "text-3xl md:text-4xl font-black leading-tight tracking-[-0.033em] mb-2 dark:text-white"}>
                         {title}
                     </h1>
-                    <p className="text-text-subtitle dark:text-text-subtitle-dark text-base">
+                    <p className={premium
+                        ? "font-premium-body text-premium-ink/60 text-base"
+                        : "text-text-subtitle dark:text-text-subtitle-dark text-base"}>
                         {subtitle}
                     </p>
                 </div>
@@ -39,12 +51,18 @@ const PageHeader = ({
                 {(currentStep || stepLabel) && (
                     <div className="text-right hidden sm:block ml-4">
                         {currentStep && totalSteps && (
-                            <p className="text-sm font-bold text-primary">
-                                Paso {currentStep} de {totalSteps}
-                            </p>
+                            premium ? (
+                                <p className="text-sm text-premium-ink/60">
+                                    Paso <span className="font-semibold text-premium-forest">{currentStep}</span> de <span className="font-semibold text-premium-forest">{totalSteps}</span>
+                                </p>
+                            ) : (
+                                <p className="text-sm font-bold text-primary">
+                                    Paso {currentStep} de {totalSteps}
+                                </p>
+                            )
                         )}
                         {stepLabel && (
-                            <p className="text-xs text-text-muted dark:text-text-muted">
+                            <p className={premium ? "text-xs text-premium-ink/50" : "text-xs text-text-muted dark:text-text-muted"}>
                                 {stepLabel}
                             </p>
                         )}
@@ -52,9 +70,9 @@ const PageHeader = ({
                 )}
             </div>
 
-            <div className="h-1.5 w-full rounded-full bg-gray-100 dark:bg-border-card-dark mt-2 relative overflow-hidden">
+            <div className={`h-1.5 w-full rounded-full mt-2 relative overflow-hidden ${premium ? "bg-premium-sand" : "bg-gray-100 dark:bg-border-card-dark"}`}>
                 <div
-                    className="absolute top-0 left-0 h-full bg-[#3db814] rounded-full transition-all duration-500 ease-in-out shadow-[0_0_8px_rgba(61,184,20,0.3)]"
+                    className={`absolute top-0 left-0 h-full rounded-full transition-all duration-500 ${premium ? "bg-premium-gold ease-premium" : "bg-[#3db814] ease-in-out shadow-[0_0_8px_rgba(61,184,20,0.3)]"}`}
                     style={{ width: `${displayProgress}%` }}
                 ></div>
             </div>

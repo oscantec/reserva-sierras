@@ -70,17 +70,18 @@ export default function LocationSection() {
     const currentSteps = transportMode === 'carro' ? content.stepsCarro : content.stepsBus
 
     return (
-        <section className="px-4 py-6 md:py-10 bg-page-bg-inicio dark:bg-surface-card-dark">
+        <section className="px-4 py-6 md:py-10 bg-premium-cream">
             <div className="max-w-7xl mx-auto">
-                {/* Header - Same structure as ContactoInicialSection */}
+                {/* Header - Premium style */}
                 <div className="mb-4 md:mb-6">
-                    <h2 className="text-2xl md:text-3xl font-black leading-tight tracking-[-0.033em] mb-2">Ubicación</h2>
-                    <p className="text-sm md:text-base text-text-subtitle dark:text-text-subtitle-dark mb-4">{content.subtitle}</p>
+                    <p className="eyebrow mb-2">Cómo llegar</p>
+                    <h2 className="font-premium-display text-premium-forest text-2xl md:text-3xl leading-tight tracking-tight mb-2 text-balance">Ubicación</h2>
+                    <p className="text-sm md:text-base text-premium-ink/60 mb-4">{content.subtitle}</p>
 
                     {/* Waze and Maps buttons */}
                     <div className="flex gap-3">
-                        <a href={content.wazeUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 bg-surface-card dark:bg-surface-card-dark border border-border-card dark:border-border-card-dark rounded-lg text-sm font-bold hover:shadow-md hover:scale-[1.02] transition-all group">
-                            <svg width="20" height="20" viewBox="0 0 24 24" className="text-text-main-light dark:text-white group-hover:text-primary transition-colors">
+                        <a href={content.wazeUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 bg-white hairline rounded-premium text-sm font-semibold text-premium-ink/70 hover:text-premium-forest hover:shadow-premium-sm transition-all ease-premium group">
+                            <svg width="20" height="20" viewBox="0 0 24 24" className="text-premium-pine group-hover:text-premium-gold transition-colors">
                                 <path fill="currentColor" d="M12 2C6.5 2 2 6.5 2 12c0 2.3.8 4.4 2.1 6.1-.3 1.3-1 2.4-1.9 3.3-.2.2-.1.5.1.6.1.1.2.1.3.1 1.5 0 2.9-.6 4-1.5 1.6.8 3.4 1.3 5.4 1.3 5.5 0 10-4.5 10-10S17.5 2 12 2m0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8" />
                                 <circle fill="currentColor" cx="9" cy="10" r="1.5" />
                                 <circle fill="currentColor" cx="15" cy="10" r="1.5" />
@@ -88,8 +89,8 @@ export default function LocationSection() {
                             </svg>
                             Waze
                         </a>
-                        <a href={content.mapsUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 bg-surface-card dark:bg-surface-card-dark border border-border-card dark:border-border-card-dark rounded-lg text-sm font-bold hover:shadow-md hover:scale-[1.02] transition-all group">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="text-text-main-light dark:text-white group-hover:text-primary transition-colors">
+                        <a href={content.mapsUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 bg-white hairline rounded-premium text-sm font-semibold text-premium-ink/70 hover:text-premium-forest hover:shadow-premium-sm transition-all ease-premium group">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="text-premium-pine group-hover:text-premium-gold transition-colors">
                                 <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z" fill="currentColor" />
                             </svg>
                             Maps
@@ -101,7 +102,7 @@ export default function LocationSection() {
                     {/* Left - Map and References */}
                     <div className="flex-1 flex flex-col gap-3 md:gap-4">
                         {/* Map Card with Green Pin */}
-                        <div className="bg-surface-card dark:bg-surface-card-dark rounded-xl border border-border-card dark:border-border-card-dark overflow-hidden relative">
+                        <div className="card-premium overflow-hidden relative">
                             {/* Map with grayscale filter - same aspect ratio as accesofinca.png (450x170) */}
                             <div className="w-full" style={{ aspectRatio: '450/170', filter: 'grayscale(60%)' }}>
                                 <iframe
@@ -129,10 +130,10 @@ export default function LocationSection() {
                         </div>
 
                         {/* Visual References Card - Image fills full width, no border */}
-                        <div className="bg-surface-card dark:bg-surface-card-dark rounded-xl overflow-hidden">
+                        <div className="card-premium overflow-hidden">
                             <div className="p-3 md:p-5 pb-0">
-                                <h3 className="font-bold text-base md:text-lg mb-3 md:mb-4 flex items-center gap-2">
-                                    <span className="material-symbols-outlined text-icon-color">location_on</span>
+                                <h3 className="font-premium-display text-premium-forest text-base md:text-lg mb-3 md:mb-4 flex items-center gap-2">
+                                    <span className="material-symbols-outlined text-premium-gold">location_on</span>
                                     Puntos de Referencia
                                 </h3>
                             </div>
@@ -153,18 +154,18 @@ export default function LocationSection() {
 
                     {/* Right - Directions */}
                     <div className="lg:w-[380px] shrink-0">
-                        <div className="sticky top-24 bg-surface-card dark:bg-surface-card-dark rounded-xl p-3 md:p-5 border border-border-card dark:border-border-card-dark">
+                        <div className="sticky top-24 card-premium p-3 md:p-5">
                             <div className="flex justify-between items-center mb-4">
-                                <h3 className="text-lg font-bold">Instrucciones</h3>
+                                <h3 className="font-premium-display text-premium-forest text-lg">Instrucciones</h3>
                             </div>
 
                             {/* Transport Mode Selector */}
                             <div className="flex gap-2 mb-6">
                                 <button
                                     onClick={() => setTransportMode('carro')}
-                                    className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-bold transition-all ${transportMode === 'carro'
-                                        ? 'bg-primary text-white shadow-lg shadow-card'
-                                        : 'bg-page-bg-inicio dark:bg-surface-card-dark border border-border-card dark:border-border-card-dark text-text-muted dark:text-text-muted hover:bg-surface-light dark:hover:bg-border-card-dark'
+                                    className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-full text-sm font-semibold transition-all ease-premium ${transportMode === 'carro'
+                                        ? 'bg-premium-forest text-premium-cream shadow-premium'
+                                        : 'bg-premium-mist hairline text-premium-ink/60 hover:text-premium-forest hover:bg-white'
                                         }`}
                                 >
                                     <span className="material-symbols-outlined text-lg">directions_car</span>
@@ -172,9 +173,9 @@ export default function LocationSection() {
                                 </button>
                                 <button
                                     onClick={() => setTransportMode('bus')}
-                                    className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-bold transition-all ${transportMode === 'bus'
-                                        ? 'bg-primary text-white shadow-lg shadow-card'
-                                        : 'bg-page-bg-inicio dark:bg-surface-card-dark border border-border-card dark:border-border-card-dark text-text-muted dark:text-text-muted hover:bg-surface-light dark:hover:bg-border-card-dark'
+                                    className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-full text-sm font-semibold transition-all ease-premium ${transportMode === 'bus'
+                                        ? 'bg-premium-forest text-premium-cream shadow-premium'
+                                        : 'bg-premium-mist hairline text-premium-ink/60 hover:text-premium-forest hover:bg-white'
                                         }`}
                                 >
                                     <span className="material-symbols-outlined text-lg">directions_bus</span>
@@ -185,19 +186,19 @@ export default function LocationSection() {
                             <div className="space-y-4 md:space-y-6">
                                 {currentSteps.map((step, i) => (
                                     <div key={i} className="flex gap-4">
-                                        <div className="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center text-sm font-bold shrink-0">{i + 1}</div>
+                                        <div className="w-8 h-8 bg-premium-forest text-premium-cream rounded-full flex items-center justify-center text-sm font-premium-display font-semibold shrink-0">{i + 1}</div>
                                         <div>
-                                            <p className="font-bold text-base">{step.title}</p>
-                                            <p className="text-sm text-text-muted dark:text-text-muted">{step.desc}</p>
+                                            <p className="font-semibold text-base text-premium-forest">{step.title}</p>
+                                            <p className="text-sm text-premium-ink/60">{step.desc}</p>
                                         </div>
                                     </div>
                                 ))}
                             </div>
 
-                            <div className="h-px bg-icon-bg-primary dark:bg-border-card-dark my-6"></div>
+                            <div className="h-px bg-premium-ink/10 my-6"></div>
 
                             <div
-                                className="p-4 rounded-lg border"
+                                className="p-4 rounded-premium border"
                                 style={{
                                     backgroundColor: 'var(--color-accent-info)',
                                     borderColor: 'var(--color-accent-info)'

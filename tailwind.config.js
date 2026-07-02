@@ -100,11 +100,57 @@ export default {
                 "water-text": "var(--color-water-text)",
                 "water-badge-bg": "var(--color-water-badge-bg)",
                 "water-badge-text": "var(--color-water-badge-text)",
+
+                // === PREMIUM DESIGN SYSTEM (lujo natural editorial) ===
+                // Solo 2 verdes en toda la paleta: forest (oscuro) y gold (acento vivo).
+                // pine/sage/gold-light quedan como alias de los mismos 2 tonos para no reescribir cada uso.
+                premium: {
+                    forest: "#16302B",
+                    pine: "#16302B",
+                    sage: "#2a8a0e",
+                    cream: "#FAF7F0",
+                    sand: "#EFE9DC",
+                    gold: "#2a8a0e",
+                    "gold-light": "#2a8a0e",
+                    ink: "#1C1917",
+                    mist: "#F4F6F3",
+                },
             },
             fontFamily: {
                 // Tipografía configurable desde Admin Panel -> Tipografía
                 "display": ["var(--font-display)", "sans-serif"],
                 "body": ["var(--font-display)", "sans-serif"],
+                // Premium design system (no reemplazan a las anteriores,
+                // que están en uso vía Admin Panel)
+                "premium-display": ["Fraunces", "Georgia", "serif"],
+                "premium-body": ["Inter", "system-ui", "sans-serif"],
+            },
+            boxShadow: {
+                "premium-sm": "0 1px 2px rgba(22,48,43,0.06), 0 2px 8px rgba(22,48,43,0.04)",
+                "premium": "0 2px 8px rgba(22,48,43,0.06), 0 12px 32px rgba(22,48,43,0.10)",
+                "premium-lg": "0 4px 16px rgba(22,48,43,0.08), 0 24px 64px rgba(22,48,43,0.14)",
+                "gold-glow": "0 0 0 1px rgba(42,138,14,0.25), 0 8px 24px rgba(42,138,14,0.18)",
+            },
+            borderRadius: {
+                "premium": "1.25rem",
+                "premium-lg": "2rem",
+            },
+            transitionTimingFunction: {
+                "premium": "cubic-bezier(0.22, 1, 0.36, 1)",
+            },
+            keyframes: {
+                fadeUp: {
+                    "0%": { opacity: "0", transform: "translateY(24px)" },
+                    "100%": { opacity: "1", transform: "translateY(0)" },
+                },
+                kenBurns: {
+                    "0%": { transform: "scale(1)" },
+                    "100%": { transform: "scale(1.08)" },
+                },
+            },
+            animation: {
+                "fade-up": "fadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) both",
+                "ken-burns": "kenBurns 18s ease-in-out alternate infinite",
             },
         },
     },

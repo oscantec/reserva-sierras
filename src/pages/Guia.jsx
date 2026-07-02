@@ -52,10 +52,11 @@ export default function Guia() {
     }, [])
 
     return (
-        <div className="flex flex-col min-h-screen bg-page-bg-inicio dark:bg-surface-card-dark text-text-main dark:text-white font-display">
+        <div className="flex flex-col min-h-screen bg-premium-cream text-premium-ink font-premium-body">
             <Navbar />
 
             <PageHeader
+                eyebrow="Guía del huésped"
                 title={pageContent.pageTitle}
                 subtitle={pageContent.pageSubtitle}
                 progress={100}

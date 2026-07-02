@@ -8,9 +8,9 @@ export default function ZonasHumedasSection() {
             title: 'Piscina Privada',
             subtitle: 'Uso exclusivo durante tu estadía',
             badge: 'Privada',
-            badgeColor: 'bg-icon-bg-primary dark:bg-icon-bg-dark text-icon-color dark:text-icon-color-dark',
-            iconBg: 'bg-icon-bg-primary dark:bg-icon-bg-dark',
-            iconColor: 'text-icon-color dark:text-icon-color-dark',
+            badgeColor: 'bg-premium-pine/10 text-premium-pine',
+            iconBg: 'bg-premium-mist',
+            iconColor: 'text-premium-pine',
             rules: [
                 { icon: 'schedule', text: 'Horario de uso: 8:00 AM - 10:00 PM' },
                 { icon: 'checkroom', text: 'Se requiere gorro de baño obligatorio' },
@@ -24,9 +24,9 @@ export default function ZonasHumedasSection() {
             title: 'Jacuzzi Privado',
             subtitle: 'Relájate en total privacidad',
             badge: 'Exclusivo',
-            badgeColor: 'bg-icon-bg-primary dark:bg-icon-bg-dark text-icon-color dark:text-icon-color-dark',
-            iconBg: 'bg-icon-bg-primary dark:bg-icon-bg-dark',
-            iconColor: 'text-icon-color dark:text-icon-color-dark',
+            badgeColor: 'bg-premium-gold/10 text-premium-gold',
+            iconBg: 'bg-premium-sand',
+            iconColor: 'text-premium-gold',
             rules: [
                 { icon: 'wb_sunny', text: 'Recomendamos usarlo durante el día para mayor disfrute' },
                 { icon: 'timer', text: 'Máximo 90 minutos por día para conservación de equipos' },
@@ -81,14 +81,15 @@ export default function ZonasHumedasSection() {
     const zonas = [content.piscina, content.jacuzzi]
 
     return (
-        <section className="px-4 py-6 md:py-10 bg-page-bg-inicio dark:bg-surface-card-dark">
+        <section className="px-4 py-6 md:py-10 bg-premium-cream">
             <div className="max-w-7xl mx-auto">
-                {/* Header - Reservas style */}
+                {/* Header - Premium style */}
                 <div className="flex flex-col gap-2 mb-3 md:mb-4">
                     <div className="flex justify-between items-end">
                         <div>
-                            <h2 className="text-2xl md:text-3xl font-black leading-tight tracking-[-0.033em] mb-2">Zonas Húmedas</h2>
-                            <p className="text-sm md:text-base text-text-subtitle dark:text-text-subtitle-dark">Disfruta de nuestras instalaciones exclusivas para tu descanso.</p>
+                            <p className="eyebrow mb-2">Bienestar</p>
+                            <h2 className="font-premium-display text-premium-forest text-2xl md:text-3xl leading-tight tracking-tight mb-2 text-balance">Zonas Húmedas</h2>
+                            <p className="text-sm md:text-base text-premium-ink/60">Disfruta de nuestras instalaciones exclusivas para tu descanso.</p>
                         </div>
                     </div>
                 </div>
@@ -98,36 +99,36 @@ export default function ZonasHumedasSection() {
                     {zonas.map((zona) => (
                         <div
                             key={zona.id}
-                            className="bg-surface-card dark:bg-surface-card-dark rounded-2xl p-6 shadow-xl shadow-gray-200/50 dark:shadow-black/20 border border-border-card dark:border-border-card-dark hover:shadow-2xl transition-shadow"
+                            className="card-premium p-6"
                         >
                             {/* Card Header */}
                             <div className="flex items-start justify-between mb-6">
                                 <div className="flex items-center gap-4">
-                                    <div className={`w-14 h-14 ${zona.iconBg} rounded-xl flex items-center justify-center`}>
+                                    <div className={`w-14 h-14 ${zona.iconBg} rounded-premium flex items-center justify-center`}>
                                         <span className={`material-symbols-outlined text-3xl ${zona.iconColor}`}>{zona.icon}</span>
                                     </div>
                                     <div>
-                                        <h3 className="text-lg font-bold text-text-main-light dark:text-white">{zona.title}</h3>
-                                        <p className="text-sm text-text-muted dark:text-text-muted">{zona.subtitle}</p>
+                                        <h3 className="font-premium-display text-premium-forest text-lg">{zona.title}</h3>
+                                        <p className="text-sm text-premium-ink/60">{zona.subtitle}</p>
                                     </div>
                                 </div>
-                                <span className={`text-xs font-bold px-3 py-1 rounded-full ${zona.badgeColor}`}>
+                                <span className={`text-xs font-semibold px-3 py-1 rounded-full ${zona.badgeColor}`}>
                                     {zona.badge}
                                 </span>
                             </div>
 
                             {/* Rules List */}
                             <div className="space-y-3">
-                                <p className="text-xs font-bold text-text-muted uppercase tracking-wider mb-3">Normas de uso</p>
+                                <p className="text-xs font-semibold text-premium-ink/50 uppercase tracking-[0.18em] mb-3">Normas de uso</p>
                                 {zona.rules.map((rule, index) => (
                                     <div
                                         key={index}
-                                        className="flex items-start gap-3 p-3 rounded-xl bg-surface-card dark:bg-surface-card-dark border border-border-card dark:border-border-card-dark"
+                                        className="flex items-start gap-3 p-3 rounded-premium bg-premium-mist hairline"
                                     >
-                                        <div className="w-8 h-8 bg-icon-bg-primary rounded-lg flex items-center justify-center flex-shrink-0">
-                                            <span className="material-symbols-outlined text-icon-color text-lg">{rule.icon}</span>
+                                        <div className={`w-8 h-8 ${zona.iconBg === 'bg-premium-mist' ? 'bg-white text-premium-pine' : 'bg-white text-premium-gold'} rounded-lg flex items-center justify-center flex-shrink-0`}>
+                                            <span className="material-symbols-outlined text-lg">{rule.icon}</span>
                                         </div>
-                                        <p className="text-sm text-text-main-light dark:text-white leading-relaxed pt-1">{rule.text}</p>
+                                        <p className="text-sm text-premium-ink/70 leading-relaxed pt-1">{rule.text}</p>
                                     </div>
                                 ))}
                             </div>
@@ -137,11 +138,10 @@ export default function ZonasHumedasSection() {
 
                 {/* Bottom Info - Custom color via CSS variable */}
                 <div
-                    className="mt-6 rounded-xl p-4 flex items-start gap-3 border border-border-card dark:border-border-card-dark"
-                    style={{ backgroundColor: 'var(--color-surface-info)' }}
+                    className="mt-6 rounded-premium p-4 flex items-start gap-3 hairline bg-premium-sand"
                 >
-                    <span className="material-symbols-outlined text-icon-color mt-0.5">info</span>
-                    <p className="text-sm text-text-main-light dark:text-text-subtitle-dark">
+                    <span className="material-symbols-outlined text-premium-gold mt-0.5">info</span>
+                    <p className="text-sm text-premium-ink/70">
                         {content.bottomMessage.split('uso exclusivo').map((part, i) =>
                             i === 0 ? part : <><strong key={i}>uso exclusivo</strong>{part}</>
                         )}

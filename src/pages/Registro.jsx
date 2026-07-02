@@ -295,12 +295,13 @@ export default function CheckIn() {
     }
 
     return (
-        <div className="flex flex-col min-h-screen bg-page-bg-registro dark:bg-surface-card-dark text-text-main dark:text-white font-display">
+        <div className="flex flex-col min-h-screen bg-premium-cream text-premium-ink font-premium-body">
             <Navbar />
             <main className="max-w-7xl mx-auto px-4 md:px-8 py-8 flex flex-col lg:flex-row gap-8 w-full">
                 {/* Main Form */}
                 <div className="flex-1 flex flex-col gap-8">
                     <PageHeader
+                        eyebrow="Registro de huéspedes"
                         title={pageContent.pageTitle}
                         subtitle={pageContent.pageSubtitle}
                         currentStep={step}
@@ -310,16 +311,16 @@ export default function CheckIn() {
 
                     {enviado ? (
                         /* Confirmación exitosa */
-                        <div className="bg-surface-card dark:bg-surface-card-dark rounded-xl p-8 shadow-sm border border-border-card dark:border-border-card-dark text-center">
-                            <div className="w-20 h-20 mx-auto mb-6 bg-icon-bg-primary dark:bg-icon-bg-dark rounded-full flex items-center justify-center">
-                                <span className="material-symbols-outlined text-4xl text-primary">check_circle</span>
+                        <div className="card-premium p-8 text-center">
+                            <div className="w-20 h-20 mx-auto mb-6 bg-premium-pine/10 rounded-full flex items-center justify-center">
+                                <span className="material-symbols-outlined text-4xl text-premium-pine">check_circle</span>
                             </div>
-                            <h2 className="text-2xl font-bold mb-2">{pageContent.successTitle}</h2>
-                            <p className="text-text-muted dark:text-text-muted mb-4">
+                            <h2 className="font-premium-display text-premium-forest text-2xl mb-2">{pageContent.successTitle}</h2>
+                            <p className="text-premium-ink/70 mb-4">
                                 {pageContent.successMessage}
                             </p>
-                            <div className="bg-icon-bg-primary dark:bg-icon-bg-dark rounded-lg p-4 inline-block">
-                                <p className="text-sm text-success-text dark:text-green-300">
+                            <div className="bg-premium-mist rounded-premium hairline p-4 inline-block">
+                                <p className="text-sm text-premium-pine">
                                     <strong>Reserva:</strong> {noReserva} | <strong>Check-In:</strong> {reservaValidada?.checkIn}
                                 </p>
                             </div>
@@ -327,20 +328,20 @@ export default function CheckIn() {
                     ) : (
                         <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
                             {/* Step 1: Validate Reservation */}
-                            <div className="bg-surface-card dark:bg-surface-card-dark rounded-xl p-6 shadow-sm border border-border-card dark:border-border-card-dark">
+                            <div className="card-premium p-6">
                                 <div className="flex items-center gap-3 mb-6">
-                                    <div className={`flex items-center justify-center size-8 rounded-full ${step >= 1 ? 'bg-primary text-white' : 'bg-icon-bg-secondary dark:bg-border-card-dark'} font-bold text-sm`}>1</div>
-                                    <h2 className="text-xl font-bold">{pageContent.step1Title}</h2>
+                                    <div className={`flex items-center justify-center size-8 rounded-full ${step >= 1 ? 'bg-premium-forest text-premium-cream' : 'bg-premium-sand text-premium-ink/50'} font-premium-display font-semibold text-sm`}>1</div>
+                                    <h2 className="font-premium-display text-premium-forest text-xl">{pageContent.step1Title}</h2>
                                 </div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                                     <div className="w-full">
-                                        <label className="block text-sm font-medium text-text-main-light dark:text-text-muted mb-2">Número de Reserva</label>
+                                        <label className="block text-xs font-semibold uppercase tracking-[0.14em] text-premium-ink/60 mb-2">Número de Reserva</label>
                                         <div className="relative">
-                                            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-text-muted">
+                                            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-premium-ink/40">
                                                 <span className="material-symbols-outlined text-xl">confirmation_number</span>
                                             </span>
                                             <input
-                                                className="block w-full pl-10 pr-3 py-3 border border-border-card dark:border-border-card-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-2 focus:ring-primary focus:border-primary placeholder:text-text-muted transition-all"
+                                                className="block w-full pl-10 pr-3 py-3 rounded-premium hairline bg-white focus:outline-none focus:ring-2 focus:ring-premium-gold/40 focus:border-premium-gold placeholder:text-premium-ink/40 transition-all ease-premium"
                                                 placeholder="Ej: R189"
                                                 type="text"
                                                 value={noReserva}
@@ -348,16 +349,16 @@ export default function CheckIn() {
                                                 disabled={reservaValidada !== null}
                                             />
                                         </div>
-                                        <p className="mt-1 text-xs text-text-muted">Ingresa la letra R seguida de los números de tu reserva</p>
+                                        <p className="mt-1 text-xs text-premium-ink/50">Ingresa la letra R seguida de los números de tu reserva</p>
                                     </div>
                                     <div className="w-full">
-                                        <label className="block text-sm font-medium text-text-main-light dark:text-text-muted mb-2">Código Único</label>
+                                        <label className="block text-xs font-semibold uppercase tracking-[0.14em] text-premium-ink/60 mb-2">Código Único</label>
                                         <div className="relative">
-                                            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-text-muted">
+                                            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-premium-ink/40">
                                                 <span className="material-symbols-outlined text-xl">pin</span>
                                             </span>
                                             <input
-                                                className="block w-full pl-10 pr-3 py-3 border border-border-card dark:border-border-card-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-2 focus:ring-primary focus:border-primary placeholder:text-text-muted transition-all"
+                                                className="block w-full pl-10 pr-3 py-3 rounded-premium hairline bg-white focus:outline-none focus:ring-2 focus:ring-premium-gold/40 focus:border-premium-gold placeholder:text-premium-ink/40 transition-all ease-premium"
                                                 placeholder="Ej: 579"
                                                 type="text"
                                                 value={codigoUnico}
@@ -365,12 +366,12 @@ export default function CheckIn() {
                                                 disabled={reservaValidada !== null}
                                             />
                                         </div>
-                                        <p className="mt-1 text-xs text-text-muted">Código único de 3 dígitos de tu reserva</p>
+                                        <p className="mt-1 text-xs text-premium-ink/50">Código único de 3 dígitos de tu reserva</p>
                                     </div>
                                 </div>
                                 <div className="flex justify-end">
                                     <button
-                                        className="w-full md:w-auto px-6 py-3 bg-[#2d6a4f] hover:opacity-90 text-white font-bold rounded-lg shadow-lg transition-all flex items-center justify-center gap-2"
+                                        className="w-full md:w-auto px-6 py-3 bg-premium-forest hover:bg-premium-pine text-premium-cream font-semibold rounded-premium shadow-premium hover:shadow-gold-glow transition-all ease-premium flex items-center justify-center gap-2 disabled:opacity-60"
                                         type="button"
                                         onClick={validarReserva}
                                         disabled={validando || reservaValidada !== null}
@@ -381,15 +382,15 @@ export default function CheckIn() {
                                 </div>
 
                                 {/* Mensajes de estado */}
-                                <div className="mt-4 border-t border-border-card dark:border-border-card-dark pt-4">
+                                <div className="mt-4 border-t border-premium-ink/10 pt-4">
                                     {errorValidacion && (
-                                        <div className="flex items-center gap-2 text-red-600 dark:text-red-400">
+                                        <div className="flex items-center gap-2 text-[#B4533A]">
                                             <span className="material-symbols-outlined text-base">error</span>
                                             <span className="text-sm">{errorValidacion}</span>
                                         </div>
                                     )}
                                     {reservaValidada && (
-                                        <div className="flex items-center gap-2 text-success-text dark:text-green-400">
+                                        <div className="flex items-center gap-2 text-premium-pine">
                                             <span className="material-symbols-outlined text-base">check</span>
                                             <span className="text-sm">
                                                 ✓ Check Reserva Encontrada: <strong>{reservaValidada.checkIn}</strong> a <strong>{reservaValidada.checkOut}</strong>
@@ -401,15 +402,15 @@ export default function CheckIn() {
 
                             {/* Step 2: Main Guest Information */}
                             {step >= 2 && (
-                                <div className="bg-surface-card dark:bg-surface-card-dark rounded-xl p-6 shadow-sm border border-border-card dark:border-border-card-dark">
+                                <div className="card-premium p-6">
                                     <div className="flex items-center gap-3 mb-6">
-                                        <div className="flex items-center justify-center size-8 rounded-full bg-primary text-white font-bold text-sm">2</div>
-                                        <h2 className="text-xl font-bold">Huésped Principal</h2>
+                                        <div className="flex items-center justify-center size-8 rounded-full bg-premium-forest text-premium-cream font-premium-display font-semibold text-sm">2</div>
+                                        <h2 className="font-premium-display text-premium-forest text-xl">Huésped Principal</h2>
                                     </div>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         {/* Plataforma */}
                                         <div className="col-span-1 md:col-span-2">
-                                            <label className="block text-sm font-medium text-text-main-light dark:text-text-muted mb-3">Plataforma de Reserva</label>
+                                            <label className="block text-xs font-semibold uppercase tracking-[0.14em] text-premium-ink/60 mb-3">Plataforma de Reserva</label>
                                             <div className="grid grid-cols-3 gap-3">
                                                 {[
                                                     { id: 'Directa', icon: 'storefront', label: 'Directa' },
@@ -420,14 +421,14 @@ export default function CheckIn() {
                                                         key={p.id}
                                                         type="button"
                                                         onClick={() => setPlataforma(p.id)}
-                                                        className={`flex flex-col items-center gap-2 p-3 rounded-xl border-2 transition-all ${plataforma === p.id
-                                                            ? 'border-primary bg-primary/5 text-primary shadow-sm'
-                                                            : 'border-border-card dark:border-border-card-dark bg-background-light dark:bg-background-dark text-text-main-light dark:text-text-muted hover:border-primary/50'
+                                                        className={`flex flex-col items-center gap-2 p-3 rounded-premium border-2 transition-all ease-premium ${plataforma === p.id
+                                                            ? 'border-premium-gold bg-premium-gold/5 text-premium-forest shadow-premium-sm'
+                                                            : 'border-premium-ink/10 bg-white text-premium-ink/60 hover:border-premium-gold/50'
                                                             }`}
                                                     >
                                                         {p.id === 'Airbnb' ? (
                                                             /* Airbnb Logo SVG */
-                                                            <svg width="24" height="24" viewBox="0 0 32 32" fill="currentColor" className={plataforma === 'Airbnb' ? 'text-primary' : 'text-current'}>
+                                                            <svg width="24" height="24" viewBox="0 0 32 32" fill="currentColor" className={plataforma === 'Airbnb' ? 'text-premium-forest' : 'text-current'}>
                                                                 <path d="M16 1c2.008 0 3.463.963 4.751 3.269l.533 1.025c1.954 3.83 6.114 12.54 7.1 14.836l.145.353c.667 1.591.91 2.472.96 3.396l.01.415.001.228c0 4.062-2.877 6.478-6.357 6.478-2.224 0-4.556-1.258-6.709-3.386l-.257-.26-.172-.179h-.011l-.176.185c-2.044 2.1-4.393 3.405-6.701 3.619l-.265.022c-3.481 0-6.358-2.416-6.358-6.478 0-1.541.38-2.91.97-4.14l.115-.22c1.334-2.456 5.374-11.08 7.106-14.836l.533-1.025C12.537 1.963 13.992 1 16 1zm0 2c-1.232 0-2.203.693-3.366 2.757C10.975 8.923 6.64 18.068 5.64 19.957c-.43.837-.64 1.777-.64 2.768 0 2.924 1.944 4.478 4.358 4.478 1.488 0 3.197-.88 4.885-2.585l.757-.796.757.796c1.688 1.705 3.398 2.585 4.886 2.585 2.414 0 4.357-1.554 4.357-4.478 0-.814-.24-1.748-.684-2.86l-.105-.246c-.996-2.26-5.467-11.85-7.004-14.853C18.203 3.693 17.232 3 16 3zm0 11.5c1.933 0 3.5 1.567 3.5 3.5s-1.567 3.5-3.5 3.5-3.5-1.567-3.5-3.5 1.567-3.5 3.5-3.5zm0 2c-.828 0-1.5.672-1.5 1.5s.672 1.5 1.5 1.5 1.5-.672 1.5-1.5-.672-1.5-1.5-1.5z" />
                                                             </svg>
                                                         ) : (
@@ -441,9 +442,9 @@ export default function CheckIn() {
 
                                         {/* Nacionalidad */}
                                         <div>
-                                            <label className="block text-sm font-medium text-text-main-light dark:text-text-muted mb-2">Nacionalidad</label>
+                                            <label className="block text-xs font-semibold uppercase tracking-[0.14em] text-premium-ink/60 mb-2">Nacionalidad</label>
                                             <select
-                                                className="block w-full px-4 py-3 border border-border-card dark:border-border-card-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                                                className="block w-full px-4 py-3 rounded-premium hairline bg-white focus:outline-none focus:ring-2 focus:ring-premium-gold/40 focus:border-premium-gold placeholder:text-premium-ink/40 transition-all ease-premium"
                                                 value={nacionalidad}
                                                 onChange={(e) => setNacionalidad(e.target.value)}
                                             >
@@ -455,13 +456,13 @@ export default function CheckIn() {
 
                                         {/* Nombre Completo */}
                                         <div className="col-span-1 md:col-span-2">
-                                            <label className="block text-sm font-medium text-text-main-light dark:text-text-muted mb-2">Nombre Completo</label>
+                                            <label className="block text-xs font-semibold uppercase tracking-[0.14em] text-premium-ink/60 mb-2">Nombre Completo</label>
                                             <div className="relative">
-                                                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-text-muted">
+                                                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-premium-ink/40">
                                                     <span className="material-symbols-outlined text-xl">person</span>
                                                 </span>
                                                 <input
-                                                    className="block w-full pl-10 py-3 border border-border-card dark:border-border-card-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                                                    className="block w-full pl-10 py-3 rounded-premium hairline bg-white focus:outline-none focus:ring-2 focus:ring-premium-gold/40 focus:border-premium-gold placeholder:text-premium-ink/40 transition-all ease-premium"
                                                     placeholder="Ingresa tu nombre completo"
                                                     type="text"
                                                     value={nombrePrincipal}
@@ -472,9 +473,9 @@ export default function CheckIn() {
 
                                         {/* Tipo de Documento + Número */}
                                         <div>
-                                            <label className="block text-sm font-medium text-text-main-light dark:text-text-muted mb-2">Tipo de Documento</label>
+                                            <label className="block text-xs font-semibold uppercase tracking-[0.14em] text-premium-ink/60 mb-2">Tipo de Documento</label>
                                             <select
-                                                className="block w-full px-4 py-3 border border-border-card dark:border-border-card-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                                                className="block w-full px-4 py-3 rounded-premium hairline bg-white focus:outline-none focus:ring-2 focus:ring-premium-gold/40 focus:border-premium-gold placeholder:text-premium-ink/40 transition-all ease-premium"
                                                 value={tipoDocumento}
                                                 onChange={(e) => setTipoDocumento(e.target.value)}
                                             >
@@ -483,13 +484,13 @@ export default function CheckIn() {
                                             </select>
                                         </div>
                                         <div>
-                                            <label className="block text-sm font-medium text-text-main-light dark:text-text-muted mb-2">Número de Documento</label>
+                                            <label className="block text-xs font-semibold uppercase tracking-[0.14em] text-premium-ink/60 mb-2">Número de Documento</label>
                                             <div className="relative">
-                                                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-text-muted">
+                                                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-premium-ink/40">
                                                     <span className="material-symbols-outlined text-xl">badge</span>
                                                 </span>
                                                 <input
-                                                    className="block w-full pl-10 py-3 border border-border-card dark:border-border-card-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                                                    className="block w-full pl-10 py-3 rounded-premium hairline bg-white focus:outline-none focus:ring-2 focus:ring-premium-gold/40 focus:border-premium-gold placeholder:text-premium-ink/40 transition-all ease-premium"
                                                     placeholder="Número de identificación"
                                                     type="text"
                                                     value={documento}
@@ -500,9 +501,9 @@ export default function CheckIn() {
 
                                         {/* Edad */}
                                         <div>
-                                            <label className="block text-sm font-medium text-text-main-light dark:text-text-muted mb-2">Edad</label>
+                                            <label className="block text-xs font-semibold uppercase tracking-[0.14em] text-premium-ink/60 mb-2">Edad</label>
                                             <input
-                                                className="block w-full px-4 py-3 border border-border-card dark:border-border-card-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                                                className="block w-full px-4 py-3 rounded-premium hairline bg-white focus:outline-none focus:ring-2 focus:ring-premium-gold/40 focus:border-premium-gold placeholder:text-premium-ink/40 transition-all ease-premium"
                                                 placeholder="Años"
                                                 type="number"
                                                 value={edad}
@@ -512,13 +513,13 @@ export default function CheckIn() {
 
                                         {/* Teléfono */}
                                         <div>
-                                            <label className="block text-sm font-medium text-text-main-light dark:text-text-muted mb-2">Teléfono de Contacto</label>
+                                            <label className="block text-xs font-semibold uppercase tracking-[0.14em] text-premium-ink/60 mb-2">Teléfono de Contacto</label>
                                             <div className="relative">
-                                                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-text-muted">
+                                                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-premium-ink/40">
                                                     <span className="material-symbols-outlined text-xl">phone</span>
                                                 </span>
                                                 <input
-                                                    className="block w-full pl-10 py-3 border border-border-card dark:border-border-card-dark rounded-lg bg-background-light dark:bg-background-dark focus:ring-primary focus:border-primary"
+                                                    className="block w-full pl-10 py-3 rounded-premium hairline bg-white focus:outline-none focus:ring-2 focus:ring-premium-gold/40 focus:border-premium-gold placeholder:text-premium-ink/40 transition-all ease-premium"
                                                     placeholder="+57 300 000 0000"
                                                     type="tel"
                                                     value={telefono}
@@ -532,26 +533,26 @@ export default function CheckIn() {
 
                             {/* Step 3: Additional Guests */}
                             {step >= 2 && (
-                                <div className="bg-surface-card dark:bg-surface-card-dark rounded-xl p-6 shadow-sm border border-border-card dark:border-border-card-dark">
+                                <div className="card-premium p-6">
                                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                                         <div className="flex items-center gap-3">
-                                            <div className="flex items-center justify-center size-8 rounded-full bg-icon-bg-secondary dark:bg-border-card-dark font-bold text-sm">3</div>
+                                            <div className="flex items-center justify-center size-8 rounded-full bg-premium-forest text-premium-cream font-premium-display font-semibold text-sm">3</div>
                                             <div>
-                                                <h2 className="text-xl font-bold">Acompañantes</h2>
-                                                <p className="text-sm text-text-muted dark:text-text-muted">¿Cuántas personas viajan contigo?</p>
+                                                <h2 className="font-premium-display text-premium-forest text-xl">Acompañantes</h2>
+                                                <p className="text-sm text-premium-ink/60">¿Cuántas personas viajan contigo?</p>
                                             </div>
                                         </div>
-                                        <div className="flex items-center bg-background-light dark:bg-background-dark rounded-lg border border-border-card dark:border-border-card-dark p-1">
+                                        <div className="flex items-center bg-premium-mist rounded-premium hairline p-1">
                                             <button
-                                                className="size-10 flex items-center justify-center text-text-muted hover:text-primary hover:bg-surface-light dark:hover:bg-surface-dark rounded-md transition-colors"
+                                                className="size-10 flex items-center justify-center text-premium-ink/50 hover:text-premium-forest hover:bg-white rounded-lg transition-colors ease-premium"
                                                 type="button"
                                                 onClick={() => setNumAcompanantes(Math.max(0, numAcompanantes - 1))}
                                             >
                                                 <span className="material-symbols-outlined">remove</span>
                                             </button>
-                                            <div className="w-12 text-center font-bold text-lg">{numAcompanantes}</div>
+                                            <div className="w-12 text-center font-premium-display font-semibold text-lg text-premium-forest">{numAcompanantes}</div>
                                             <button
-                                                className="size-10 flex items-center justify-center text-text-muted hover:text-primary hover:bg-surface-light dark:hover:bg-surface-dark rounded-md transition-colors"
+                                                className="size-10 flex items-center justify-center text-premium-ink/50 hover:text-premium-forest hover:bg-white rounded-lg transition-colors ease-premium"
                                                 type="button"
                                                 onClick={() => setNumAcompanantes(numAcompanantes + 1)}
                                             >
@@ -561,15 +562,15 @@ export default function CheckIn() {
                                     </div>
                                     <div className="space-y-6">
                                         {acompanantes.map((acomp, index) => (
-                                            <div key={index} className="border border-border-card dark:border-border-card-dark rounded-xl p-5 bg-background-light dark:bg-background-dark relative group hover:border-primary/30 transition-colors">
-                                                <div className="absolute -top-3 left-4 bg-surface-card dark:bg-surface-card-dark px-2 text-xs font-semibold text-primary uppercase tracking-wider">
+                                            <div key={index} className="hairline rounded-premium p-5 bg-premium-mist relative group hover:border-premium-gold/40 transition-colors ease-premium">
+                                                <div className="absolute -top-3 left-4 bg-white rounded-full px-3 py-0.5 text-xs font-semibold text-premium-gold uppercase tracking-[0.14em]">
                                                     Huésped Adicional {index + 1}
                                                 </div>
                                                 <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
                                                     <div className="md:col-span-5">
-                                                        <label className="block text-xs font-semibold text-text-muted dark:text-text-muted mb-1">Nombre</label>
+                                                        <label className="block text-xs font-semibold uppercase tracking-[0.14em] text-premium-ink/60 mb-1">Nombre</label>
                                                         <input
-                                                            className="block w-full px-3 py-2 border border-border-card dark:border-border-card-dark rounded-md bg-surface-card dark:bg-surface-card-dark focus:ring-primary focus:border-primary text-sm"
+                                                            className="block w-full px-3 py-2 rounded-premium hairline bg-white focus:outline-none focus:ring-2 focus:ring-premium-gold/40 focus:border-premium-gold placeholder:text-premium-ink/40 transition-all ease-premium text-sm"
                                                             placeholder="Nombre completo"
                                                             type="text"
                                                             value={acomp.nombre}
@@ -577,9 +578,9 @@ export default function CheckIn() {
                                                         />
                                                     </div>
                                                     <div className="md:col-span-5">
-                                                        <label className="block text-xs font-semibold text-text-muted dark:text-text-muted mb-1">Nacionalidad</label>
+                                                        <label className="block text-xs font-semibold uppercase tracking-[0.14em] text-premium-ink/60 mb-1">Nacionalidad</label>
                                                         <select
-                                                            className="block w-full px-3 py-2 border border-border-card dark:border-border-card-dark rounded-md bg-surface-card dark:bg-surface-card-dark focus:ring-primary focus:border-primary text-sm"
+                                                            className="block w-full px-3 py-2 rounded-premium hairline bg-white focus:outline-none focus:ring-2 focus:ring-premium-gold/40 focus:border-premium-gold placeholder:text-premium-ink/40 transition-all ease-premium text-sm"
                                                             value={acomp.nacionalidad}
                                                             onChange={(e) => updateAcompanante(index, 'nacionalidad', e.target.value)}
                                                         >
@@ -589,9 +590,9 @@ export default function CheckIn() {
                                                         </select>
                                                     </div>
                                                     <div className="md:col-span-2">
-                                                        <label className="block text-xs font-semibold text-text-muted dark:text-text-muted mb-1">Edad</label>
+                                                        <label className="block text-xs font-semibold uppercase tracking-[0.14em] text-premium-ink/60 mb-1">Edad</label>
                                                         <input
-                                                            className="block w-full px-3 py-2 border border-border-card dark:border-border-card-dark rounded-md bg-surface-card dark:bg-surface-card-dark focus:ring-primary focus:border-primary text-sm"
+                                                            className="block w-full px-3 py-2 rounded-premium hairline bg-white focus:outline-none focus:ring-2 focus:ring-premium-gold/40 focus:border-premium-gold placeholder:text-premium-ink/40 transition-all ease-premium text-sm"
                                                             placeholder="0"
                                                             type="number"
                                                             value={acomp.edad}
@@ -610,18 +611,18 @@ export default function CheckIn() {
                                 <div className="flex flex-col md:flex-row items-center justify-between pt-4 gap-6">
                                     <label className="flex items-start gap-3 cursor-pointer group">
                                         <input
-                                            className="text-primary rounded border-gray-300 focus:ring-primary mt-1 size-5"
+                                            className="text-premium-forest rounded border-premium-ink/20 focus:ring-premium-gold/40 mt-1 size-5"
                                             type="checkbox"
                                             checked={aceptaTerminos}
                                             onChange={(e) => setAceptaTerminos(e.target.checked)}
                                         />
-                                        <span className="text-sm text-text-muted dark:text-text-muted group-hover:text-gray-900 dark:group-hover:text-gray-200 transition-colors">
-                                            Acepto los <a className="text-primary underline hover:text-success-text" href="#">términos y condiciones</a> y la política de tratamiento de datos personales.
+                                        <span className="text-sm text-premium-ink/60 group-hover:text-premium-ink transition-colors">
+                                            Acepto los <a className="text-premium-pine underline hover:text-premium-gold transition-colors" href="#">términos y condiciones</a> y la política de tratamiento de datos personales.
                                         </span>
                                     </label>
                                     <div className="flex gap-4 w-full md:w-auto">
                                         <button
-                                            className="flex-1 md:flex-none px-8 py-3 bg-primary hover:bg-btn-primary-hover text-white font-bold rounded-lg shadow-lg shadow-card transition-all transform active:scale-95 disabled:opacity-50"
+                                            className="flex-1 md:flex-none px-8 py-3 bg-premium-forest hover:bg-premium-pine text-premium-cream font-semibold rounded-premium shadow-premium hover:shadow-gold-glow transition-all ease-premium transform active:scale-95 disabled:opacity-50"
                                             type="button"
                                             onClick={enviarRegistro}
                                             disabled={enviando || !aceptaTerminos}
@@ -638,49 +639,50 @@ export default function CheckIn() {
                 {/* Right Sidebar - Style from Reservas */}
                 <div className="lg:w-[380px] shrink-0">
                     <div className="sticky top-24 flex flex-col gap-6">
-                        <div className="bg-surface-card dark:bg-surface-card-dark rounded-2xl p-6 shadow-xl shadow-gray-200/50 dark:shadow-black/20 border border-border-card dark:border-border-card-dark">
+                        <div className="card-premium p-6">
                             <div className="flex justify-between items-center mb-6">
-                                <h3 className="text-lg font-bold">Tu Reserva</h3>
-                                <span className="text-xs font-bold px-3 py-1 rounded-full bg-[#2d6a4f] text-white shadow-sm">
+                                <h3 className="font-premium-display text-premium-forest text-lg">Tu Reserva</h3>
+                                <span className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full ${reservaValidada ? 'bg-premium-pine/10 text-premium-pine' : 'bg-premium-gold/10 text-premium-gold'}`}>
+                                    <span className={`w-1.5 h-1.5 rounded-full ${reservaValidada ? 'bg-premium-pine' : 'bg-premium-gold'}`}></span>
                                     {reservaValidada ? 'Verificada' : 'Pendiente'}
                                 </span>
                             </div>
                             {reservaValidada ? (
                                 <>
                                     <div className="flex gap-4 mb-6">
-                                        <div className="flex-1 p-3 rounded-lg border border-border-card dark:border-border-card-dark bg-background-light dark:bg-background-dark">
-                                            <p className="text-xs text-text-muted uppercase font-bold mb-1">Llegada</p>
-                                            <p className="font-bold text-sm">{reservaValidada.checkIn}</p>
+                                        <div className="flex-1 p-3 rounded-premium hairline bg-premium-mist">
+                                            <p className="text-xs text-premium-ink/50 uppercase tracking-[0.14em] font-semibold mb-1">Llegada</p>
+                                            <p className="font-bold text-sm text-premium-forest">{reservaValidada.checkIn}</p>
                                         </div>
-                                        <div className="flex-1 p-3 rounded-lg border border-border-card dark:border-border-card-dark bg-background-light dark:bg-background-dark">
-                                            <p className="text-xs text-text-muted uppercase font-bold mb-1">Salida</p>
-                                            <p className="font-bold text-sm">{reservaValidada.checkOut}</p>
+                                        <div className="flex-1 p-3 rounded-premium hairline bg-premium-mist">
+                                            <p className="text-xs text-premium-ink/50 uppercase tracking-[0.14em] font-semibold mb-1">Salida</p>
+                                            <p className="font-bold text-sm text-premium-forest">{reservaValidada.checkOut}</p>
                                         </div>
                                     </div>
-                                    <div className="flex flex-col gap-3 text-sm text-text-muted dark:text-text-muted">
+                                    <div className="flex flex-col gap-3 text-sm text-premium-ink/60">
                                         <div className="flex items-center gap-2">
-                                            <span className="material-symbols-outlined text-icon-color">confirmation_number</span>
-                                            <span>Reserva: <strong className="text-primary">{noReserva}</strong></span>
+                                            <span className="material-symbols-outlined text-premium-gold">confirmation_number</span>
+                                            <span>Reserva: <strong className="text-premium-forest">{noReserva}</strong></span>
                                         </div>
                                         <div className="flex items-center gap-2">
-                                            <span className="material-symbols-outlined text-icon-color">groups</span>
-                                            <span>Huéspedes: <strong className="text-primary">{reservaValidada?.huespedes || 1}</strong></span>
+                                            <span className="material-symbols-outlined text-premium-gold">groups</span>
+                                            <span>Huéspedes: <strong className="text-premium-forest">{reservaValidada?.huespedes || 1}</strong></span>
                                         </div>
                                         <div className="flex items-center gap-2">
-                                            <span className="material-symbols-outlined text-icon-color">home</span>
+                                            <span className="material-symbols-outlined text-premium-gold">home</span>
                                             <span>Reserva de las Sierras</span>
                                         </div>
                                     </div>
                                 </>
                             ) : (
-                                <div className="text-center py-8 text-text-muted">
-                                    <span className="material-symbols-outlined text-4xl mb-2">search</span>
+                                <div className="text-center py-8 text-premium-ink/50">
+                                    <span className="material-symbols-outlined text-4xl mb-2 text-premium-sage">search</span>
                                     <p className="text-sm">Ingresa tu número de reserva para continuar</p>
                                 </div>
                             )}
-                            <div className="h-px bg-icon-bg-primary dark:bg-border-card-dark my-4"></div>
+                            <div className="h-px bg-premium-ink/10 my-4"></div>
                             <div
-                                className="p-4 rounded-lg border"
+                                className="p-4 rounded-premium border"
                                 style={{
                                     backgroundColor: siteColors.warningBg,
                                     borderColor: siteColors.warningBorder
