@@ -113,6 +113,53 @@ export default defineConfig(({ command }) => {
             next();
           }
         });
+
+        // iCal proxy endpoint (development only) - replaces dead api.allorigins.win
+        server.middlewares.use('/api/ical-proxy', async (req, res, next) => {
+          if (req.method === 'POST') {
+            let body = '';
+            req.on('data', chunk => { body += chunk.toString() });
+            req.on('end', async () => {
+              try {
+                const { url } = JSON.parse(body);
+                if (!url) {
+                  res.statusCode = 400;
+                  res.setHeader('Content-Type', 'application/json');
+                  res.end(JSON.stringify({ error: 'URL is required' }));
+                  return;
+                }
+                console.log('📅 Fetching iCal:', url.substring(0, 60) + '...');
+                const response = await fetch(url, {
+                  headers: {
+                    'User-Agent': 'ReservaDeLasSierras/1.0 iCal-Sync',
+                    'Accept': 'text/calendar, text/plain, */*',
+                  },
+                  redirect: 'follow',
+                });
+                if (!response.ok) {
+                  throw new Error(`HTTP ${response.status}`);
+                }
+                const icsData = await response.text();
+                res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+                res.end(icsData);
+                console.log('✅ iCal data fetched successfully');
+              } catch (error) {
+                console.error('❌ iCal proxy error:', error.message);
+                res.statusCode = 502;
+                res.setHeader('Content-Type', 'application/json');
+                res.end(JSON.stringify({ error: error.message }));
+              }
+            });
+          } else if (req.method === 'OPTIONS') {
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+            res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+            res.statusCode = 200;
+            res.end();
+          } else {
+            next();
+          }
+        });
       }
     });
   }

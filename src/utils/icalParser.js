@@ -3,19 +3,37 @@
 
 export async function fetchICalEvents(url) {
     try {
-        // Use a CORS proxy for fetching iCal data
-        const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`
-        const response = await fetch(proxyUrl)
+        // Primary: Use our own serverless proxy (avoids CORS + no third-party dependency)
+        const response = await fetch('/api/ical-proxy', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url })
+        })
 
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`)
+            throw new Error(`Proxy error! status: ${response.status}`)
         }
 
         const icsData = await response.text()
         return parseICS(icsData)
-    } catch (error) {
-        console.error('Error fetching iCal:', error)
-        return []
+    } catch (primaryError) {
+        console.warn('Primary iCal proxy failed, trying fallback:', primaryError.message)
+        
+        // Fallback: Use corsproxy.io as backup
+        try {
+            const fallbackUrl = `https://corsproxy.io/?${encodeURIComponent(url)}`
+            const response = await fetch(fallbackUrl)
+
+            if (!response.ok) {
+                throw new Error(`Fallback proxy error! status: ${response.status}`)
+            }
+
+            const icsData = await response.text()
+            return parseICS(icsData)
+        } catch (fallbackError) {
+            console.error('All iCal proxies failed:', fallbackError)
+            return []
+        }
     }
 }
 
