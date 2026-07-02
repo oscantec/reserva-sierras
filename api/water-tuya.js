@@ -1,4 +1,5 @@
 import { TuyaContext } from '@tuya/tuya-connector-nodejs'
+import { getServerConfig } from '../lib/server-config.js'
 
 /**
  * API endpoint para conectarse a sensores Tuya ultrasónicos
@@ -23,15 +24,20 @@ export default async function handler(req, res) {
     }
 
     try {
-        const { deviceIds } = req.query
+        const config = await getServerConfig()
 
-        const clientId = process.env.TUYA_CLIENT_ID
-        const clientSecret = process.env.TUYA_CLIENT_SECRET
+        // deviceIds puede venir del cliente o armarse desde la config guardada
+        const deviceIds = req.query.deviceIds
+            || [config.tuyaDeviceIdAbajo, config.tuyaDeviceIdArriba, config.tuyaDeviceIdCasa].filter(Boolean).join(',')
+
+        // Credenciales: primero variables de entorno (si existen), si no, la config de Supabase
+        const clientId = process.env.TUYA_CLIENT_ID || config.tuyaAccessId
+        const clientSecret = process.env.TUYA_CLIENT_SECRET || config.tuyaAccessSecret
 
         if (!clientId || !clientSecret) {
             return res.status(500).json({
                 success: false,
-                error: 'Credenciales de Tuya no configuradas en el servidor'
+                error: 'Credenciales de Tuya no configuradas'
             })
         }
 

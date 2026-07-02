@@ -1,4 +1,5 @@
 import { fetchSheetData } from '../lib/sheets-utils.js';
+import { getServerConfig, normalizePrivateKey } from '../lib/server-config.js';
 
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
@@ -6,17 +7,22 @@ export default async function handler(req, res) {
     }
 
     try {
-        const { sheetId, sheetName } = req.body;
+        const config = await getServerConfig();
+
+        // El sheetId puede venir del cliente o de la config guardada en Supabase
+        const sheetId = req.body?.sheetId || config.googleSheetsId;
+        const sheetName = req.body?.sheetName;
 
         if (!sheetId) {
             return res.status(400).json({ error: 'Missing sheetId' });
         }
 
-        const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
-        const privateKey = (process.env.GOOGLE_PRIVATE_KEY || '').replace(/\\n/g, '\n');
+        // Credenciales: primero variables de entorno (si existen), si no, la config de Supabase
+        const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || config.googleServiceAccountEmail;
+        const privateKey = normalizePrivateKey(process.env.GOOGLE_PRIVATE_KEY || config.googlePrivateKey);
 
         if (!email || !privateKey) {
-            return res.status(500).json({ error: 'Credenciales de Google no configuradas en el servidor' });
+            return res.status(500).json({ error: 'Credenciales de Google no configuradas' });
         }
 
         const data = await fetchSheetData(sheetId, sheetName, email, privateKey);
