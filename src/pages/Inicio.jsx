@@ -240,7 +240,7 @@ export default function Landing() {
                 {/* Content - Only Dynamic Rotating Text */}
                 <div className="relative z-20 text-center px-4 max-w-4xl mx-auto flex flex-col items-center justify-center h-full fade-in pointer-events-none">
                     {/* Eyebrow */}
-                    <p className="eyebrow text-premium-gold-light mb-4 animate-fade-up">ANAPOIMA · COLOMBIA</p>
+                    <p className="eyebrow !text-premium-cream/90 mb-4 animate-fade-up">ANAPOIMA · COLOMBIA</p>
 
                     {/* Animated Rotating Text */}
                     <h1
@@ -248,7 +248,7 @@ export default function Landing() {
                             }`}
                     >
                         {mainText}{' '}
-                        <span className="block sm:inline text-premium-gold-light">{lastWord}</span>
+                        <span className="block sm:inline text-premium-cream">{lastWord}</span>
                     </h1>
                 </div>
             </header>

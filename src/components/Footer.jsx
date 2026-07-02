@@ -72,16 +72,16 @@ export default function Footer() {
             {/* Content - Editorial Layout */}
             <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 text-center py-16 md:py-20">
                 <div className="flex flex-col items-center justify-center gap-3 text-white/90">
-                    <span className="material-symbols-outlined text-2xl text-premium-gold-light">{config.icon}</span>
+                    <span className="material-symbols-outlined text-2xl text-white">{config.icon}</span>
                     <span className="font-premium-display text-xl md:text-2xl font-semibold tracking-tight text-white">Reserva de las Sierras</span>
                 </div>
                 <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 mt-6 mb-8 text-sm font-premium-body font-medium">
-                    <Link to="/" className="text-white/80 hover:text-premium-gold-light transition-colors duration-300 ease-premium">Inicio</Link>
-                    <Link to="/galeria" className="text-white/80 hover:text-premium-gold-light transition-colors duration-300 ease-premium">Galería</Link>
-                    <Link to="/reservas" className="text-white/80 hover:text-premium-gold-light transition-colors duration-300 ease-premium">Reservas</Link>
-                    <Link to="/registro" className="text-white/80 hover:text-premium-gold-light transition-colors duration-300 ease-premium">Registro</Link>
+                    <Link to="/" className="text-white/80 hover:text-white transition-colors duration-300 ease-premium">Inicio</Link>
+                    <Link to="/galeria" className="text-white/80 hover:text-white transition-colors duration-300 ease-premium">Galería</Link>
+                    <Link to="/reservas" className="text-white/80 hover:text-white transition-colors duration-300 ease-premium">Reservas</Link>
+                    <Link to="/registro" className="text-white/80 hover:text-white transition-colors duration-300 ease-premium">Registro</Link>
                     {config.showAdmin !== false && (
-                        <Link to="/admin" className="text-white/80 hover:text-premium-gold-light transition-colors duration-300 ease-premium">Admin</Link>
+                        <Link to="/admin" className="text-white/80 hover:text-white transition-colors duration-300 ease-premium">Admin</Link>
                     )}
                 </div>
 
@@ -91,7 +91,7 @@ export default function Footer() {
                     {config.email && (
                         <>
                             <span className="hidden sm:inline">•</span>
-                            <a href={`mailto:${config.email}`} className="hover:text-premium-gold-light transition-colors duration-300 ease-premium">
+                            <a href={`mailto:${config.email}`} className="hover:text-white transition-colors duration-300 ease-premium">
                                 {config.email}
                             </a>
                         </>

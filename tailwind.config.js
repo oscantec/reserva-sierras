@@ -102,16 +102,16 @@ export default {
                 "water-badge-text": "var(--color-water-badge-text)",
 
                 // === PREMIUM DESIGN SYSTEM (lujo natural editorial) ===
-                // Solo 2 verdes en toda la paleta: forest (oscuro) y gold (acento vivo).
-                // pine/sage/gold-light quedan como alias de los mismos 2 tonos para no reescribir cada uso.
+                // Un solo verde de marca (#1b4332) en toda la paleta.
+                // forest/pine/sage/gold/gold-light apuntan todos al mismo tono.
                 premium: {
-                    forest: "#16302B",
-                    pine: "#16302B",
-                    sage: "#2a8a0e",
+                    forest: "#1b4332",
+                    pine: "#1b4332",
+                    sage: "#1b4332",
                     cream: "#FAF7F0",
                     sand: "#EFE9DC",
-                    gold: "#2a8a0e",
-                    "gold-light": "#2a8a0e",
+                    gold: "#1b4332",
+                    "gold-light": "#1b4332",
                     ink: "#1C1917",
                     mist: "#F4F6F3",
                 },
@@ -122,14 +122,14 @@ export default {
                 "body": ["var(--font-display)", "sans-serif"],
                 // Premium design system (no reemplazan a las anteriores,
                 // que están en uso vía Admin Panel)
-                "premium-display": ["Fraunces", "Georgia", "serif"],
-                "premium-body": ["Inter", "system-ui", "sans-serif"],
+                "premium-display": ["Montserrat", "system-ui", "sans-serif"],
+                "premium-body": ["Montserrat", "system-ui", "sans-serif"],
             },
             boxShadow: {
                 "premium-sm": "0 1px 2px rgba(22,48,43,0.06), 0 2px 8px rgba(22,48,43,0.04)",
                 "premium": "0 2px 8px rgba(22,48,43,0.06), 0 12px 32px rgba(22,48,43,0.10)",
                 "premium-lg": "0 4px 16px rgba(22,48,43,0.08), 0 24px 64px rgba(22,48,43,0.14)",
-                "gold-glow": "0 0 0 1px rgba(42,138,14,0.25), 0 8px 24px rgba(42,138,14,0.18)",
+                "gold-glow": "0 0 0 1px rgba(27,67,50,0.25), 0 8px 24px rgba(27,67,50,0.18)",
             },
             borderRadius: {
                 "premium": "1.25rem",
