@@ -1,16 +1,37 @@
 import { useState, useEffect } from 'react'
-import { processZoneDataFromPercent, calculateMaxConicVolume, calculateMaxCubicVolume, computeRealZoneVolume } from '../../utils/waterCalculations'
+import { processZoneDataFromPercent, computeZoneGrouped, geomMaxPerTank } from '../../utils/waterCalculations'
 import { getTuyaCredentials } from '../../utils/tuyaConfig'
 
-// Configuración por defecto de "Valores Reales" (medidas físicas exactas de los tanques).
-// Diámetros / largo / ancho en cm, altura máxima del líquido en m.
+// Configuración por defecto de "Valores Reales" (medidas físicas exactas).
+// Cada zona tiene uno o varios GRUPOS de tanques (distinta forma/altura).
+// Diámetros / largo / ancho / diámetro en cm, altura máxima del líquido en m.
+const REAL_CONFIG_VERSION = 2
 const DEFAULT_REAL_CONFIG = {
-    zonaBaja: { name: 'Tanque Abajo', shape: 'cone', diameterBottom: 115.5, diameterTop: 140.5, maxHeight: 1.55, count: 3 },
-    zonaAlta: { name: 'Tanque Arriba', shape: 'cone', diameterBottom: 115.5, diameterTop: 140.5, maxHeight: 1.45, count: 2 },
-    zonaCasa: { name: 'Tanque Casa', shape: 'rect', length: 280, width: 240, maxHeight: 1.35, count: 1 },
+    zonaBaja: {
+        name: 'Tanque Abajo',
+        groups: [
+            { shape: 'cone', diameterBottom: 115.5, diameterTop: 140.5, maxHeight: 1.55, count: 3 },
+            { shape: 'cylinder', diameter: 137.3, maxHeight: 1.35, count: 2 }, // tanques "botella" (~2 m³ c/u)
+        ],
+    },
+    zonaAlta: {
+        name: 'Tanque Arriba',
+        groups: [
+            { shape: 'cone', diameterBottom: 115.5, diameterTop: 140.5, maxHeight: 1.45, count: 2 },
+        ],
+    },
+    zonaCasa: {
+        name: 'Tanque Casa',
+        groups: [
+            { shape: 'rect', length: 280, width: 240, maxHeight: 1.35, count: 1 },
+        ],
+    },
 }
 
 const REAL_CONFIG_KEY = 'realTanksConfig'
+
+// Etiquetas de forma para la UI
+const SHAPE_LABELS = { cone: 'Cónico', rect: 'Rectangular', cylinder: 'Cilindro (botella)' }
 
 // Series de la gráfica histórica (colores distinguibles por zona)
 const CHART_SERIES = [
@@ -20,18 +41,20 @@ const CHART_SERIES = [
 ]
 const CHART_TOTAL_COLOR = '#16a34a' // verde
 
-// Carga la config de "Valores Reales" desde localStorage, combinada sobre los defaults.
+// Carga la config de "Valores Reales". Usa la guardada solo si es de la versión
+// actual (formato con grupos); de lo contrario aplica los valores por defecto.
 function loadRealConfig() {
     try {
         const saved = JSON.parse(localStorage.getItem(REAL_CONFIG_KEY) || '{}')
-        const merged = {}
-        for (const key of Object.keys(DEFAULT_REAL_CONFIG)) {
-            merged[key] = { ...DEFAULT_REAL_CONFIG[key], ...(saved[key] || {}) }
+        if (saved.__v === REAL_CONFIG_VERSION && saved.zones) {
+            const merged = {}
+            for (const key of Object.keys(DEFAULT_REAL_CONFIG)) {
+                merged[key] = saved.zones[key] || DEFAULT_REAL_CONFIG[key]
+            }
+            return merged
         }
-        return merged
-    } catch {
-        return DEFAULT_REAL_CONFIG
-    }
+    } catch { /* ignore */ }
+    return DEFAULT_REAL_CONFIG
 }
 
 /**
@@ -55,12 +78,62 @@ export default function AdminWaterStats() {
     const [hiddenSeries, setHiddenSeries] = useState({})
     const toggleSeries = (key) => setHiddenSeries(prev => ({ ...prev, [key]: !prev[key] }))
 
-    // Actualiza una medida de una zona (estado + caché local instantáneo).
-    // La persistencia definitiva es en Supabase con el botón "Guardar".
-    const updateRealConfig = (zoneKey, field, value) => {
+    // Guarda en localStorage con el envoltorio de versión ({__v, zones})
+    const persistRealLocal = (cfg) => {
+        try { localStorage.setItem(REAL_CONFIG_KEY, JSON.stringify({ __v: REAL_CONFIG_VERSION, zones: cfg })) } catch { /* ignore */ }
+    }
+
+    // Valores por defecto al elegir una forma de tanque
+    const shapeDefaults = (shape) => {
+        if (shape === 'cone') return { shape, diameterBottom: 115.5, diameterTop: 140.5 }
+        if (shape === 'cylinder') return { shape, diameter: 137.3 }
+        return { shape, length: 200, width: 200 } // rect
+    }
+
+    // Actualiza un campo de un grupo de tanques (estado + caché local instantáneo)
+    const updateGroup = (zoneKey, groupIdx, field, value) => {
         setRealConfig(prev => {
-            const next = { ...prev, [zoneKey]: { ...prev[zoneKey], [field]: value } }
-            try { localStorage.setItem(REAL_CONFIG_KEY, JSON.stringify(next)) } catch { /* ignore */ }
+            const zone = prev[zoneKey]
+            const groups = zone.groups.map((g, i) => i === groupIdx ? { ...g, [field]: value } : g)
+            const next = { ...prev, [zoneKey]: { ...zone, groups } }
+            persistRealLocal(next)
+            return next
+        })
+        setRealSaved(false)
+    }
+
+    // Cambia la forma de un grupo, aplicando medidas por defecto (conserva altura y cantidad)
+    const setGroupShape = (zoneKey, groupIdx, shape) => {
+        setRealConfig(prev => {
+            const zone = prev[zoneKey]
+            const groups = zone.groups.map((g, i) => i === groupIdx
+                ? { ...shapeDefaults(shape), maxHeight: g.maxHeight, count: g.count }
+                : g)
+            const next = { ...prev, [zoneKey]: { ...zone, groups } }
+            persistRealLocal(next)
+            return next
+        })
+        setRealSaved(false)
+    }
+
+    const addGroup = (zoneKey) => {
+        setRealConfig(prev => {
+            const zone = prev[zoneKey]
+            const groups = [...zone.groups, { ...shapeDefaults('cylinder'), maxHeight: 1.35, count: 1 }]
+            const next = { ...prev, [zoneKey]: { ...zone, groups } }
+            persistRealLocal(next)
+            return next
+        })
+        setRealSaved(false)
+    }
+
+    const removeGroup = (zoneKey, groupIdx) => {
+        setRealConfig(prev => {
+            const zone = prev[zoneKey]
+            if (zone.groups.length <= 1) return prev
+            const groups = zone.groups.filter((_, i) => i !== groupIdx)
+            const next = { ...prev, [zoneKey]: { ...zone, groups } }
+            persistRealLocal(next)
             return next
         })
         setRealSaved(false)
@@ -73,10 +146,10 @@ export default function AdminWaterStats() {
             const res = await fetch('/api/config', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ realTanksConfig: realConfig })
+                body: JSON.stringify({ realTanksConfig: { __v: REAL_CONFIG_VERSION, zones: realConfig } })
             })
             if (!res.ok) throw new Error('respuesta ' + res.status)
-            try { localStorage.setItem(REAL_CONFIG_KEY, JSON.stringify(realConfig)) } catch { /* ignore */ }
+            persistRealLocal(realConfig)
             setRealSaved(true)
             setTimeout(() => setRealSaved(false), 2500)
         } catch (e) {
@@ -137,14 +210,15 @@ export default function AdminWaterStats() {
             if (response.ok) {
                 const data = await response.json()
 
-                // "Valores Reales": cargar desde Supabase si existe (fuente de verdad entre dispositivos)
-                if (data.realTanksConfig) {
+                // "Valores Reales": cargar desde Supabase si existe y es de la versión actual
+                const rtc = data.realTanksConfig
+                if (rtc && rtc.__v === REAL_CONFIG_VERSION && rtc.zones) {
                     const merged = {}
                     for (const key of Object.keys(DEFAULT_REAL_CONFIG)) {
-                        merged[key] = { ...DEFAULT_REAL_CONFIG[key], ...(data.realTanksConfig[key] || {}) }
+                        merged[key] = rtc.zones[key] || DEFAULT_REAL_CONFIG[key]
                     }
                     setRealConfig(merged)
-                    try { localStorage.setItem(REAL_CONFIG_KEY, JSON.stringify(merged)) } catch { /* ignore */ }
+                    persistRealLocal(merged)
                     console.log('✅ Valores Reales cargados desde Supabase')
                 }
 
@@ -299,25 +373,21 @@ export default function AdminWaterStats() {
     }
 
     // Calcular total de agua disponible
-    const getTotalWater = () => {
-        // 1. Primero intentar con datos en tiempo real
-        if (currentData && currentData.zones && currentData.zones.length > 0) {
-            return currentData.zones.reduce((sum, zone) => sum + (parseFloat(zone.totalVolume) || 0), 0)
-        }
-
-        // 2. Fallback: usar datos históricos (igual que las tarjetas)
-        if (allMeasurements && allMeasurements.length > 0) {
-            const latestByZone = {}
-            allMeasurements.forEach(m => {
-                if (!latestByZone[m.zone] || new Date(m.timestamp) > new Date(latestByZone[m.zone].timestamp)) {
-                    latestByZone[m.zone] = m
-                }
-            })
-            return Object.values(latestByZone).reduce((sum, m) => sum + (parseFloat(m.volume_m3) || 0), 0)
-        }
-
-        return 0
+    // % del sensor por zona: primero datos en vivo, si no, el último histórico
+    const getZonePercent = (zoneKey) => {
+        const live = currentData?.zones?.find(z => z.zone === zoneKey)
+        if (live) return parseFloat(live.sensorPercent) || 0
+        let latest = null
+        allMeasurements.forEach(m => {
+            if (m.zone === zoneKey && (!latest || new Date(m.timestamp) > new Date(latest.timestamp))) latest = m
+        })
+        return latest ? (parseFloat(latest.percentage) || 0) : 0
     }
+
+    // Agua total = suma del volumen real (modelo por grupos) de todas las zonas
+    const getTotalWater = () => Object.keys(realConfig).reduce(
+        (sum, z) => sum + computeZoneGrouped(realConfig[z], getZonePercent(z)).volume, 0
+    )
 
     if (!config) {
         return (
@@ -338,47 +408,11 @@ export default function AdminWaterStats() {
     const step = Math.ceil(historicalData.length / maxPoints)
     const chartPoints = historicalData.filter((_, i) => i % step === 0 || i === historicalData.length - 1)
 
-    // Calculate max capacities for percentage calculation using imported shared functions
+    // Capacidad máxima por zona = geometría real de todos los grupos de tanques
     const maxCapacities = {
-        zonaBaja: config.tankConfigs.zonaBaja ?
-            (config.tankConfigs.zonaBaja.type === 'conic' ?
-                calculateMaxConicVolume(
-                    config.tankConfigs.zonaBaja.height,
-                    config.tankConfigs.zonaBaja.topRadius,
-                    config.tankConfigs.zonaBaja.bottomRadius
-                ) * config.tankConfigs.zonaBaja.tankCount
-                : calculateMaxCubicVolume(
-                    config.tankConfigs.zonaBaja.height,
-                    config.tankConfigs.zonaBaja.length,
-                    config.tankConfigs.zonaBaja.width
-                ) * config.tankConfigs.zonaBaja.tankCount
-            ) : 1,
-        zonaAlta: config.tankConfigs.zonaAlta ?
-            (config.tankConfigs.zonaAlta.type === 'conic' ?
-                calculateMaxConicVolume(
-                    config.tankConfigs.zonaAlta.height,
-                    config.tankConfigs.zonaAlta.topRadius,
-                    config.tankConfigs.zonaAlta.bottomRadius
-                ) * config.tankConfigs.zonaAlta.tankCount
-                : calculateMaxCubicVolume(
-                    config.tankConfigs.zonaAlta.height,
-                    config.tankConfigs.zonaAlta.length,
-                    config.tankConfigs.zonaAlta.width
-                ) * config.tankConfigs.zonaAlta.tankCount
-            ) : 1,
-        zonaCasa: config.tankConfigs.zonaCasa ?
-            (config.tankConfigs.zonaCasa.type === 'conic' ?
-                calculateMaxConicVolume(
-                    config.tankConfigs.zonaCasa.height,
-                    config.tankConfigs.zonaCasa.topRadius,
-                    config.tankConfigs.zonaCasa.bottomRadius
-                ) * config.tankConfigs.zonaCasa.tankCount
-                : calculateMaxCubicVolume(
-                    config.tankConfigs.zonaCasa.height,
-                    config.tankConfigs.zonaCasa.length,
-                    config.tankConfigs.zonaCasa.width
-                ) * config.tankConfigs.zonaCasa.tankCount
-            ) : 1
+        zonaBaja: computeZoneGrouped(realConfig.zonaBaja, 100).maxVolume || 1,
+        zonaAlta: computeZoneGrouped(realConfig.zonaAlta, 100).maxVolume || 1,
+        zonaCasa: computeZoneGrouped(realConfig.zonaCasa, 100).maxVolume || 1,
     }
 
     const totalMaxCapacity = maxCapacities.zonaBaja + maxCapacities.zonaAlta + maxCapacities.zonaCasa
@@ -437,13 +471,13 @@ export default function AdminWaterStats() {
                             <div>
                                 <p className="text-xs opacity-75">Capacidad Máx</p>
                                 <p className="text-lg font-bold">
-                                    {currentData.zones.reduce((sum, zone) => sum + parseFloat(zone.maxVolume), 0).toFixed(2)} m³
+                                    {totalMaxCapacity.toFixed(2)} m³
                                 </p>
                             </div>
                             <div>
                                 <p className="text-xs opacity-75">% Actual</p>
                                 <p className="text-lg font-bold">
-                                    {((totalWater / currentData.zones.reduce((sum, zone) => sum + parseFloat(zone.maxVolume), 0)) * 100).toFixed(1)}%
+                                    {(totalMaxCapacity > 0 ? (totalWater / totalMaxCapacity) * 100 : 0).toFixed(1)}%
                                 </p>
                             </div>
                         </div>
@@ -462,11 +496,13 @@ export default function AdminWaterStats() {
                     // Si hay datos en tiempo real, usarlos
                     if (currentData?.zones?.length > 0) {
                         return currentData.zones.map((zone, idx) => {
-                            const percent = parseFloat(zone.percentage) || 0
                             const tuyaPercent = parseFloat(zone.sensorPercent) || 0
-                            const volume = parseFloat(zone.totalVolume) || 0
-                            const maxVol = parseFloat(zone.maxVolume) || 0
-                            const levelCm = parseFloat(zone.level_cm) || 0
+                            // Volumen/capacidad/tanques desde el modelo por grupos (incluye todos los tipos de tanque)
+                            const g = computeZoneGrouped(realConfig[zone.zone], tuyaPercent)
+                            const percent = tuyaPercent            // "Nivel" = lectura del sensor
+                            const volume = g.volume
+                            const maxVol = g.maxVolume
+                            const tankCount = g.totalCount
 
                             return (
                                 <div key={idx} className="bg-surface-card border border-border-card rounded-xl p-3 md:p-4 shadow-sm">
@@ -502,7 +538,7 @@ export default function AdminWaterStats() {
                                         </div>
                                         <div>
                                             <span className="text-text-muted block">Tanques</span>
-                                            <span className="font-medium">{zone.tankCount}</span>
+                                            <span className="font-medium">{tankCount}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -629,7 +665,7 @@ export default function AdminWaterStats() {
 
                     const results = zoneKeys.map(k => {
                         const pct = getLivePercent(k)
-                        return { key: k, cfg: realConfig[k], pct, ...computeRealZoneVolume(realConfig[k], pct) }
+                        return { key: k, cfg: realConfig[k], pct, ...computeZoneGrouped(realConfig[k], pct) }
                     })
                     const totalMax = results.reduce((s, r) => s + r.maxVolume, 0)
                     const totalVol = results.reduce((s, r) => s + r.volume, 0)
@@ -663,8 +699,9 @@ export default function AdminWaterStats() {
 
                             {/* Cards por zona */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
-                                {results.map(({ key, cfg, pct, volume, maxVolume, waterHeight }) => {
+                                {results.map(({ key, cfg, pct, volume, maxVolume, waterHeight, refHeight, groups }) => {
                                     const percent = maxVolume > 0 ? (volume / maxVolume) * 100 : 0
+                                    const tanksSummary = groups.map(g => `${g.count} × ${SHAPE_LABELS[g.shape] || g.shape}`).join(' · ')
                                     return (
                                         <div key={key} className="bg-surface-card border border-border-card rounded-xl p-3 md:p-4 shadow-sm">
                                             <h3 className="text-sm md:text-base font-bold mb-2 md:mb-3">{cfg.name}</h3>
@@ -677,7 +714,7 @@ export default function AdminWaterStats() {
                                                     <div className="h-full bg-primary transition-all duration-500" style={{ width: `${Math.min(percent, 100)}%` }} />
                                                 </div>
                                                 <p className="text-[11px] text-text-muted mt-1">
-                                                    Profundidad: <span className="font-medium">{waterHeight.toFixed(2)} m</span> de {Number(cfg.maxHeight).toFixed(2)} m
+                                                    Profundidad: <span className="font-medium">{waterHeight.toFixed(2)} m</span> de {refHeight.toFixed(2)} m
                                                 </p>
                                             </div>
                                             <div className="grid grid-cols-2 gap-2 text-xs border-t border-border-card pt-2">
@@ -695,9 +732,19 @@ export default function AdminWaterStats() {
                                                 </div>
                                                 <div>
                                                     <span className="text-text-muted block">Tanques</span>
-                                                    <span className="font-medium">{cfg.count} × {cfg.shape === 'cone' ? 'cónico' : 'rectangular'}</span>
+                                                    <span className="font-medium">{tanksSummary}</span>
                                                 </div>
                                             </div>
+                                            {groups.length > 1 && (
+                                                <div className="mt-2 pt-2 border-t border-border-card space-y-1">
+                                                    {groups.map((g, gi) => (
+                                                        <div key={gi} className="flex items-center justify-between text-[11px] text-text-muted">
+                                                            <span>{g.count} × {SHAPE_LABELS[g.shape] || g.shape} <span className="opacity-60">(máx {g.maxHeight} m)</span></span>
+                                                            <span className="font-medium text-text-main">{g.groupVol.toFixed(2)} / {g.groupMax.toFixed(2)} m³</span>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
                                         </div>
                                     )
                                 })}
@@ -709,56 +756,70 @@ export default function AdminWaterStats() {
                                     <h3 className="text-sm md:text-base font-bold mb-3">Editar medidas y número de tanques</h3>
                                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                                         {zoneKeys.map(k => {
-                                            const cfg = realConfig[k]
+                                            const zone = realConfig[k]
                                             return (
                                                 <div key={k} className="border border-border-card rounded-lg p-3">
-                                                    <p className="font-bold text-sm mb-2">{cfg.name}</p>
-                                                    <div className="space-y-2 text-xs">
-                                                        {cfg.shape === 'cone' ? (
-                                                            <>
-                                                                <label className="block">
-                                                                    <span className="text-text-muted">Diámetro inferior (cm)</span>
-                                                                    <input type="number" step="0.1" value={cfg.diameterBottom}
-                                                                        onChange={e => updateRealConfig(k, 'diameterBottom', parseFloat(e.target.value) || 0)}
-                                                                        className="w-full mt-0.5 px-2 py-1 border border-border-card rounded" />
-                                                                </label>
-                                                                <label className="block">
-                                                                    <span className="text-text-muted">Diámetro superior (cm)</span>
-                                                                    <input type="number" step="0.1" value={cfg.diameterTop}
-                                                                        onChange={e => updateRealConfig(k, 'diameterTop', parseFloat(e.target.value) || 0)}
-                                                                        className="w-full mt-0.5 px-2 py-1 border border-border-card rounded" />
-                                                                </label>
-                                                            </>
-                                                        ) : (
-                                                            <>
-                                                                <label className="block">
-                                                                    <span className="text-text-muted">Largo (cm)</span>
-                                                                    <input type="number" step="0.1" value={cfg.length}
-                                                                        onChange={e => updateRealConfig(k, 'length', parseFloat(e.target.value) || 0)}
-                                                                        className="w-full mt-0.5 px-2 py-1 border border-border-card rounded" />
-                                                                </label>
-                                                                <label className="block">
-                                                                    <span className="text-text-muted">Ancho (cm)</span>
-                                                                    <input type="number" step="0.1" value={cfg.width}
-                                                                        onChange={e => updateRealConfig(k, 'width', parseFloat(e.target.value) || 0)}
-                                                                        className="w-full mt-0.5 px-2 py-1 border border-border-card rounded" />
-                                                                </label>
-                                                            </>
-                                                        )}
-                                                        <label className="block">
-                                                            <span className="text-text-muted">Altura máx. del líquido (m)</span>
-                                                            <input type="number" step="0.01" value={cfg.maxHeight}
-                                                                onChange={e => updateRealConfig(k, 'maxHeight', parseFloat(e.target.value) || 0)}
-                                                                className="w-full mt-0.5 px-2 py-1 border border-border-card rounded" />
-                                                        </label>
-                                                        <label className="block">
-                                                            <span className="text-text-muted">Número de tanques</span>
-                                                            <select value={cfg.count}
-                                                                onChange={e => updateRealConfig(k, 'count', parseInt(e.target.value) || 1)}
-                                                                className="w-full mt-0.5 px-2 py-1 border border-border-card rounded bg-white">
-                                                                {[1, 2, 3, 4, 5, 6, 7, 8].map(n => <option key={n} value={n}>{n}</option>)}
-                                                            </select>
-                                                        </label>
+                                                    <p className="font-bold text-sm mb-2">{zone.name}</p>
+                                                    <div className="space-y-3">
+                                                        {zone.groups.map((g, gi) => (
+                                                            <div key={gi} className="rounded-lg bg-surface-card-hover p-2.5 space-y-2 text-xs">
+                                                                <div className="flex items-center justify-between gap-2">
+                                                                    <select value={g.shape}
+                                                                        onChange={e => setGroupShape(k, gi, e.target.value)}
+                                                                        className="flex-1 px-2 py-1 border border-border-card rounded bg-white font-medium">
+                                                                        <option value="cone">Cónico</option>
+                                                                        <option value="cylinder">Cilindro (botella)</option>
+                                                                        <option value="rect">Rectangular</option>
+                                                                    </select>
+                                                                    {zone.groups.length > 1 && (
+                                                                        <button onClick={() => removeGroup(k, gi)} title="Quitar grupo" className="text-red-500 hover:text-red-600">
+                                                                            <span className="material-symbols-outlined text-base">delete</span>
+                                                                        </button>
+                                                                    )}
+                                                                </div>
+                                                                {g.shape === 'cone' && (<>
+                                                                    <label className="block"><span className="text-text-muted">Diámetro inferior (cm)</span>
+                                                                        <input type="number" step="0.1" value={g.diameterBottom}
+                                                                            onChange={e => updateGroup(k, gi, 'diameterBottom', parseFloat(e.target.value) || 0)}
+                                                                            className="w-full mt-0.5 px-2 py-1 border border-border-card rounded" /></label>
+                                                                    <label className="block"><span className="text-text-muted">Diámetro superior (cm)</span>
+                                                                        <input type="number" step="0.1" value={g.diameterTop}
+                                                                            onChange={e => updateGroup(k, gi, 'diameterTop', parseFloat(e.target.value) || 0)}
+                                                                            className="w-full mt-0.5 px-2 py-1 border border-border-card rounded" /></label>
+                                                                </>)}
+                                                                {g.shape === 'cylinder' && (
+                                                                    <label className="block"><span className="text-text-muted">Diámetro (cm)</span>
+                                                                        <input type="number" step="0.1" value={g.diameter}
+                                                                            onChange={e => updateGroup(k, gi, 'diameter', parseFloat(e.target.value) || 0)}
+                                                                            className="w-full mt-0.5 px-2 py-1 border border-border-card rounded" /></label>
+                                                                )}
+                                                                {g.shape === 'rect' && (<>
+                                                                    <label className="block"><span className="text-text-muted">Largo (cm)</span>
+                                                                        <input type="number" step="0.1" value={g.length}
+                                                                            onChange={e => updateGroup(k, gi, 'length', parseFloat(e.target.value) || 0)}
+                                                                            className="w-full mt-0.5 px-2 py-1 border border-border-card rounded" /></label>
+                                                                    <label className="block"><span className="text-text-muted">Ancho (cm)</span>
+                                                                        <input type="number" step="0.1" value={g.width}
+                                                                            onChange={e => updateGroup(k, gi, 'width', parseFloat(e.target.value) || 0)}
+                                                                            className="w-full mt-0.5 px-2 py-1 border border-border-card rounded" /></label>
+                                                                </>)}
+                                                                <label className="block"><span className="text-text-muted">Altura máx. del líquido (m)</span>
+                                                                    <input type="number" step="0.01" value={g.maxHeight}
+                                                                        onChange={e => updateGroup(k, gi, 'maxHeight', parseFloat(e.target.value) || 0)}
+                                                                        className="w-full mt-0.5 px-2 py-1 border border-border-card rounded" /></label>
+                                                                <label className="block"><span className="text-text-muted">Número de tanques</span>
+                                                                    <select value={g.count}
+                                                                        onChange={e => updateGroup(k, gi, 'count', parseInt(e.target.value) || 1)}
+                                                                        className="w-full mt-0.5 px-2 py-1 border border-border-card rounded bg-white">
+                                                                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => <option key={n} value={n}>{n}</option>)}
+                                                                    </select></label>
+                                                                <p className="text-[10px] text-text-muted">≈ {geomMaxPerTank(g).toFixed(2)} m³ por tanque</p>
+                                                            </div>
+                                                        ))}
+                                                        <button onClick={() => addGroup(k)}
+                                                            className="w-full flex items-center justify-center gap-1 py-1.5 border border-dashed border-border-card rounded text-xs text-primary hover:bg-surface-card-hover">
+                                                            <span className="material-symbols-outlined text-sm">add</span> Agregar grupo de tanques
+                                                        </button>
                                                     </div>
                                                 </div>
                                             )

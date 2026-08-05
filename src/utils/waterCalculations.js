@@ -273,3 +273,86 @@ export function computeRealZoneVolume(zoneCfg, levelPercent) {
         count
     }
 }
+
+/**
+ * Volumen máximo (m³) de UN tanque según su geometría, lleno hasta maxHeight.
+ * Medidas en cm (diámetros/largo/ancho/diámetro), altura en m.
+ *  - cone     -> tronco de cono
+ *  - rect     -> prisma rectangular (largo * ancho * alto)
+ *  - cylinder -> cilindro (tanque "botella"): π r² h
+ */
+export function geomMaxPerTank(group) {
+    const H = Number(group.maxHeight) || 0
+    if (group.shape === 'cone') {
+        const r = ((Number(group.diameterBottom) || 0) / 100) / 2
+        const R = ((Number(group.diameterTop) || 0) / 100) / 2
+        return (Math.PI * H / 3) * (R * R + R * r + r * r)
+    }
+    if (group.shape === 'cylinder') {
+        const r = ((Number(group.diameter) || 0) / 100) / 2
+        return Math.PI * r * r * H
+    }
+    // 'rect'
+    const L = (Number(group.length) || 0) / 100
+    const W = (Number(group.width) || 0) / 100
+    return L * W * H
+}
+
+/**
+ * Cálculo de una zona con VARIOS grupos de tanques de distinta forma/altura,
+ * con el modelo INTERCONECTADO (todos comparten la misma altura de agua).
+ *
+ * El sensor entrega su % calibrado a la altura de referencia de la zona
+ * (la altura del tanque más alto, p.ej. 1.55 m del cónico). De ahí se obtiene
+ * la altura real del agua h = %sensor * alturaRef, que es la MISMA en todos
+ * los tanques. Cada grupo se llena respecto a SU propia altura máxima:
+ *   - Cónicos (máx 1.55 m): a h=1.07 -> 69% de su volumen.
+ *   - Botella/cilindro (máx 1.35 m): a h=1.07 -> 79% (llegan a 100% en 1.35 m).
+ *
+ * Volumen por grupo = (h / alturaMáxGrupo, tope 100%) * volumenMáxGrupo (lineal).
+ *
+ * @param {object} zoneCfg - { name, groups: [ {shape, ...medidas, maxHeight, count} ] }
+ * @param {number} sensorPercent - % del sensor (0-100), relativo a la altura de referencia
+ */
+export function computeZoneGrouped(zoneCfg, sensorPercent) {
+    const groups = Array.isArray(zoneCfg?.groups) ? zoneCfg.groups : []
+    const pct = Math.max(0, Math.min(100, Number(sensorPercent) || 0)) / 100
+    const refHeight = groups.reduce((m, g) => Math.max(m, Number(g.maxHeight) || 0), 0)
+    const waterHeight = pct * refHeight   // altura real del agua (m), igual en todos
+
+    let maxVolume = 0
+    let volume = 0
+    let totalCount = 0
+
+    const groupResults = groups.map(g => {
+        const gH = Number(g.maxHeight) || 0
+        const count = Number(g.count) || 0
+        const maxPerTank = geomMaxPerTank(g)
+        const fill = gH > 0 ? Math.max(0, Math.min(1, waterHeight / gH)) : 0
+        const volPerTank = maxPerTank * fill
+        const gMax = maxPerTank * count
+        const gVol = volPerTank * count
+        maxVolume += gMax
+        volume += gVol
+        totalCount += count
+        return {
+            ...g,
+            maxPerTank: parseFloat(maxPerTank.toFixed(3)),
+            volPerTank: parseFloat(volPerTank.toFixed(3)),
+            groupMax: parseFloat(gMax.toFixed(3)),
+            groupVol: parseFloat(gVol.toFixed(3)),
+            fillPercent: parseFloat((fill * 100).toFixed(1)),
+        }
+    })
+
+    return {
+        maxVolume: parseFloat(maxVolume.toFixed(3)),
+        volume: parseFloat(volume.toFixed(3)),
+        percentage: maxVolume > 0 ? parseFloat(((volume / maxVolume) * 100).toFixed(1)) : 0,
+        waterHeight: parseFloat(waterHeight.toFixed(3)),
+        refHeight: parseFloat(refHeight.toFixed(3)),
+        sensorPercent: parseFloat((pct * 100).toFixed(1)),
+        totalCount,
+        groups: groupResults,
+    }
+}
