@@ -12,6 +12,14 @@ const DEFAULT_REAL_CONFIG = {
 
 const REAL_CONFIG_KEY = 'realTanksConfig'
 
+// Series de la gráfica histórica (colores distinguibles por zona)
+const CHART_SERIES = [
+    { key: 'zonaBaja', label: 'Abajo', color: '#2563eb' },   // azul
+    { key: 'zonaAlta', label: 'Arriba', color: '#f59e0b' },  // ámbar
+    { key: 'zonaCasa', label: 'Casa', color: '#8b5cf6' },    // violeta
+]
+const CHART_TOTAL_COLOR = '#16a34a' // verde
+
 // Carga la config de "Valores Reales" desde localStorage, combinada sobre los defaults.
 function loadRealConfig() {
     try {
@@ -42,6 +50,10 @@ export default function AdminWaterStats() {
     const [showRealEditor, setShowRealEditor] = useState(false)
     const [savingReal, setSavingReal] = useState(false)
     const [realSaved, setRealSaved] = useState(false)
+    // Gráfica histórica: interactividad
+    const [hoverIdx, setHoverIdx] = useState(null)
+    const [hiddenSeries, setHiddenSeries] = useState({})
+    const toggleSeries = (key) => setHiddenSeries(prev => ({ ...prev, [key]: !prev[key] }))
 
     // Actualiza una medida de una zona (estado + caché local instantáneo).
     // La persistencia definitiva es en Supabase con el botón "Guardar".
@@ -785,135 +797,159 @@ export default function AdminWaterStats() {
                         <h2 className="text-lg md:text-2xl font-bold">Histórico de Niveles (7 días)</h2>
                         <p className="text-xs text-text-muted">Mediciones cada hora (cron-job)</p>
                     </div>
-                    <div className="flex flex-wrap items-center gap-2 md:gap-4 text-xs">
-                        <span className="flex items-center gap-1">
-                            <span className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-black"></span> Abajo
-                        </span>
-                        <span className="flex items-center gap-1">
-                            <span className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-gray-600"></span> Arriba
-                        </span>
-                        <span className="flex items-center gap-1">
-                            <span className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-gray-400"></span> Casa
-                        </span>
-                        <span className="flex items-center gap-1 font-bold">
-                            <span className="w-3 h-3 md:w-4 md:h-4 rounded-full bg-[#22c55e]"></span> TOTAL
-                        </span>
+                    <div className="flex flex-wrap items-center gap-1.5 md:gap-2 text-xs">
+                        {[...CHART_SERIES, { key: 'total', label: 'TOTAL', color: CHART_TOTAL_COLOR }].map(s => {
+                            const hidden = hiddenSeries[s.key]
+                            return (
+                                <button
+                                    key={s.key}
+                                    onClick={() => toggleSeries(s.key)}
+                                    className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full border transition-all ${hidden ? 'opacity-40 border-border-card' : 'border-border-card bg-surface-card-hover'} ${s.key === 'total' ? 'font-bold' : ''}`}
+                                    title={hidden ? 'Mostrar' : 'Ocultar'}
+                                >
+                                    <span className="w-3 h-3 rounded-full" style={{ backgroundColor: s.color }}></span>
+                                    {s.label}
+                                </button>
+                            )
+                        })}
                     </div>
                 </div>
                 {chartPoints.length > 0 ? (
                     <div className="overflow-x-auto">
-                        <svg viewBox={`0 0 ${chartWidth} ${chartHeight + 130}`} className="w-full" style={{ minWidth: '750px' }}>
-                            {/* Grid lines - HORIZONTAL */}
-                            {[0, 20, 40, 60, 80, 100].map(i => {
-                                const y = 20 + (chartHeight - 20) - (i * (chartHeight - 20) / 100)
-                                return (
-                                    <g key={i}>
-                                        <line x1="60" y1={y} x2={chartWidth - 20} y2={y} stroke="#e5e7eb" strokeWidth="1" />
-                                        <text x="50" y={y + 4} textAnchor="end" fontSize="11" fill="#6b7280">
-                                            {i}%
-                                        </text>
-                                    </g>
-                                )
-                            })}
+                        {(() => {
+                            const plotTop = 20
+                            const plotBottom = chartHeight        // 300
+                            const plotH = plotBottom - plotTop
+                            const leftX = 60
+                            const rightX = chartWidth - 20
+                            const n = chartPoints.length
+                            const xAt = (i) => leftX + (i * (rightX - leftX) / (n - 1 || 1))
+                            const yAt = (pct) => plotBottom - (Math.max(0, Math.min(100, pct)) * plotH / 100)
+                            const totalCap = Object.values(maxCapacities).reduce((a, b) => a + b, 0)
 
-                            {/* Grid lines - VERTICAL (00:00 and 12:00) */}
-                            {chartPoints.map((point, i) => {
-                                const date = new Date(point.timestamp)
-                                if (date.getHours() % 12 !== 0) return null
-                                const x = 60 + (i * (chartWidth - 80) / (chartPoints.length - 1 || 1))
-                                return (
-                                    <line key={`v-${i}`} x1={x} y1="20" x2={x} y2={chartHeight} stroke="#e5e7eb" strokeWidth="1" strokeDasharray="4,4" />
-                                )
-                            })}
+                            const rows = chartPoints.map((point, i) => {
+                                const pct = (key, cap) => cap > 0 ? ((point[key] || 0) / cap) * 100 : 0
+                                const totalVol = (point.zonaBaja || 0) + (point.zonaAlta || 0) + (point.zonaCasa || 0)
+                                return {
+                                    i, x: xAt(i), timestamp: point.timestamp,
+                                    zonaBaja: pct('zonaBaja', maxCapacities.zonaBaja),
+                                    zonaAlta: pct('zonaAlta', maxCapacities.zonaAlta),
+                                    zonaCasa: pct('zonaCasa', maxCapacities.zonaCasa),
+                                    total: totalCap > 0 ? (totalVol / totalCap) * 100 : 0,
+                                }
+                            })
 
-                            {/* Lines for individual zones */}
-                            {[{ key: 'zonaBaja', dash: 'none', width: 2, color: '#000000' },
-                            { key: 'zonaAlta', dash: '8,4', width: 2, color: '#4b5563' },
-                            { key: 'zonaCasa', dash: '2,2', width: 2, color: '#9ca3af' }].map((zone, zoneIdx) => {
-                                const points = chartPoints.map((point, i) => {
-                                    const x = 60 + (i * (chartWidth - 80) / (chartPoints.length - 1 || 1))
-                                    const value = point[zone.key] || 0
-                                    const maxCap = maxCapacities[zone.key]
-                                    const percent = maxCap > 0 ? (value / maxCap) * 100 : 0
-                                    const y = 20 + (chartHeight - 20) - (percent * (chartHeight - 20) / 100)
-                                    return { x, y, percent }
-                                }).filter(p => !isNaN(p.y))
+                            const buildPath = (key) => rows.map((r, idx) => `${idx === 0 ? 'M' : 'L'} ${r.x.toFixed(1)} ${yAt(r[key]).toFixed(1)}`).join(' ')
+                            const totalArea = rows.length
+                                ? `${buildPath('total')} L ${rows[rows.length - 1].x.toFixed(1)} ${plotBottom} L ${rows[0].x.toFixed(1)} ${plotBottom} Z`
+                                : ''
+                            const stepW = (rightX - leftX) / (n - 1 || 1)
+                            const hover = hoverIdx != null ? rows[hoverIdx] : null
 
-                                if (points.length === 0) return null
-                                const pathData = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ')
+                            return (
+                                <svg
+                                    viewBox={`0 0 ${chartWidth} ${chartHeight + 130}`}
+                                    className="w-full select-none"
+                                    style={{ minWidth: '750px' }}
+                                    onMouseLeave={() => setHoverIdx(null)}
+                                >
+                                    <defs>
+                                        <linearGradient id="totalAreaGrad" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="0%" stopColor={CHART_TOTAL_COLOR} stopOpacity="0.22" />
+                                            <stop offset="100%" stopColor={CHART_TOTAL_COLOR} stopOpacity="0" />
+                                        </linearGradient>
+                                    </defs>
 
-                                return (
-                                    <g key={zone.key}>
-                                        <path d={pathData} fill="none" stroke={zone.color} strokeWidth={zone.width} strokeDasharray={zone.dash} />
-                                        {points.length < 100 && points.map((p, i) => (
-                                            <circle key={i} cx={p.x} cy={p.y} r="2" fill={zone.color} />
-                                        ))}
-                                    </g>
-                                )
-                            })}
+                                    {/* Grid horizontal + etiquetas Y */}
+                                    {[0, 20, 40, 60, 80, 100].map(i => {
+                                        const y = yAt(i)
+                                        return (
+                                            <g key={i}>
+                                                <line x1={leftX} y1={y} x2={rightX} y2={y} stroke="#eef2f7" strokeWidth="1" />
+                                                <text x={leftX - 10} y={y + 4} textAnchor="end" fontSize="11" fill="#9ca3af">{i}%</text>
+                                            </g>
+                                        )
+                                    })}
 
-                            {/* TOTAL line - thick green */}
-                            {(() => {
-                                const totalPoints = chartPoints.map((point, i) => {
-                                    const x = 60 + (i * (chartWidth - 80) / (chartPoints.length - 1 || 1))
-                                    const total = (point.zonaBaja || 0) + (point.zonaAlta || 0) + (point.zonaCasa || 0)
-                                    const totalCapacity = Object.values(maxCapacities).reduce((a, b) => a + b, 0)
-                                    const percent = totalCapacity > 0 ? (total / totalCapacity) * 100 : 0
+                                    {/* Grid vertical (00:00 / 12:00) */}
+                                    {rows.map((r) => {
+                                        const d = new Date(r.timestamp)
+                                        if (d.getHours() % 12 !== 0) return null
+                                        return <line key={`v-${r.i}`} x1={r.x} y1={plotTop} x2={r.x} y2={plotBottom} stroke="#f1f5f9" strokeWidth="1" />
+                                    })}
 
-                                    // Use same Y calculation as grid
-                                    const y = 20 + (chartHeight - 20) - (percent * (chartHeight - 20) / 100)
-                                    return { x, y, percent }
-                                }).filter(p => p.percent > 0)
+                                    {/* Área bajo el total */}
+                                    {!hiddenSeries.total && totalArea && <path d={totalArea} fill="url(#totalAreaGrad)" />}
 
-                                if (totalPoints.length === 0) return null
+                                    {/* Líneas por zona */}
+                                    {CHART_SERIES.map(s => hiddenSeries[s.key] ? null : (
+                                        <path key={s.key} d={buildPath(s.key)} fill="none" stroke={s.color} strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" opacity="0.95" />
+                                    ))}
 
-                                const pathData = totalPoints.map((p, i) =>
-                                    `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`
-                                ).join(' ')
+                                    {/* Línea total */}
+                                    {!hiddenSeries.total && <path d={buildPath('total')} fill="none" stroke={CHART_TOTAL_COLOR} strokeWidth="3" strokeLinejoin="round" strokeLinecap="round" />}
 
-                                return (
-                                    <g>
-                                        <path d={pathData} fill="none" stroke="#3db814" strokeWidth="4" />
-                                        {totalPoints.map((p, i) => (
-                                            <circle key={i} cx={p.x} cy={p.y} r="5" fill="#3db814" />
-                                        ))}
-                                    </g>
-                                )
-                            })()}
+                                    {/* Crosshair + puntos + tooltip (hover) */}
+                                    {hover && (
+                                        <g>
+                                            <line x1={hover.x} y1={plotTop} x2={hover.x} y2={plotBottom} stroke="#94a3b8" strokeWidth="1" strokeDasharray="4,3" />
+                                            {CHART_SERIES.map(s => hiddenSeries[s.key] ? null : (
+                                                <circle key={s.key} cx={hover.x} cy={yAt(hover[s.key])} r="4" fill="#fff" stroke={s.color} strokeWidth="2.5" />
+                                            ))}
+                                            {!hiddenSeries.total && <circle cx={hover.x} cy={yAt(hover.total)} r="5" fill="#fff" stroke={CHART_TOTAL_COLOR} strokeWidth="3" />}
+                                            {(() => {
+                                                const boxW = 172
+                                                const left = hover.x > (leftX + rightX) / 2
+                                                const bx = left ? hover.x - boxW - 12 : hover.x + 12
+                                                const d = new Date(hover.timestamp)
+                                                const dayName = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'][d.getDay()]
+                                                const dateLabel = `${dayName} ${d.getDate()}/${d.getMonth() + 1} ${String(d.getHours()).padStart(2, '0')}:00`
+                                                const items = [
+                                                    { label: 'Total', color: CHART_TOTAL_COLOR, val: hover.total, hidden: hiddenSeries.total },
+                                                    { label: 'Abajo', color: '#2563eb', val: hover.zonaBaja, hidden: hiddenSeries.zonaBaja },
+                                                    { label: 'Arriba', color: '#f59e0b', val: hover.zonaAlta, hidden: hiddenSeries.zonaAlta },
+                                                    { label: 'Casa', color: '#8b5cf6', val: hover.zonaCasa, hidden: hiddenSeries.zonaCasa },
+                                                ].filter(it => !it.hidden)
+                                                return (
+                                                    <g transform={`translate(${bx}, ${plotTop + 6})`}>
+                                                        <rect x="0" y="0" width={boxW} height={22 + items.length * 20 + 6} rx="10" fill="#ffffff" stroke="#e5e7eb" strokeWidth="1" />
+                                                        <text x="12" y="17" fontSize="11" fontWeight="bold" fill="#374151">{dateLabel}</text>
+                                                        {items.map((it, k) => (
+                                                            <g key={it.label} transform={`translate(12, ${34 + k * 20})`}>
+                                                                <rect x="0" y="-8" width="10" height="10" rx="2" fill={it.color} />
+                                                                <text x="16" y="1" fontSize="11" fill="#6b7280">{it.label}</text>
+                                                                <text x={boxW - 24} y="1" fontSize="11" fontWeight="bold" textAnchor="end" fill="#111827">{it.val.toFixed(1)}%</text>
+                                                            </g>
+                                                        ))}
+                                                    </g>
+                                                )
+                                            })()}
+                                        </g>
+                                    )}
 
-                            {/* X-axis labels - TOTALMENTE VERTICALES (90 grados) */}
-                            {chartPoints.map((point, i) => {
-                                const date = new Date(point.timestamp)
-                                // Mostrar etiquetas solo a las 00:00 y 12:00 (2 por día)
-                                if (date.getHours() % 12 !== 0) return null
+                                    {/* Zonas de detección de hover (invisibles) */}
+                                    {rows.map(r => (
+                                        <rect key={`hit-${r.i}`} x={r.x - stepW / 2} y={plotTop} width={stepW} height={plotH} fill="transparent" onMouseEnter={() => setHoverIdx(r.i)} />
+                                    ))}
 
-                                const x = 60 + (i * (chartWidth - 80) / (chartPoints.length - 1 || 1))
-                                const dayName = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'][date.getDay()]
-                                const label = `${dayName} ${date.getDate()}/${date.getMonth() + 1} ${String(date.getHours()).padStart(2, '0')}:00`
+                                    {/* Etiquetas eje X (00:00 / 12:00) */}
+                                    {rows.map((r) => {
+                                        const d = new Date(r.timestamp)
+                                        if (d.getHours() % 12 !== 0) return null
+                                        const dayName = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'][d.getDay()]
+                                        const label = `${dayName} ${d.getDate()}/${d.getMonth() + 1} ${String(d.getHours()).padStart(2, '0')}:00`
+                                        return (
+                                            <g key={`x-${r.i}`}>
+                                                <line x1={r.x} y1={plotBottom} x2={r.x} y2={plotBottom + 6} stroke="#cbd5e1" strokeWidth="1" />
+                                                <text x={r.x + 3} y={plotBottom + 12} textAnchor="start" fontSize="10" fill="#6b7280" transform={`rotate(90, ${r.x}, ${plotBottom + 12})`}>{label}</text>
+                                            </g>
+                                        )
+                                    })}
 
-                                return (
-                                    <g key={i}>
-                                        <text
-                                            x={x + 3}
-                                            y={chartHeight + 12}
-                                            textAnchor="start"
-                                            fontSize="10"
-                                            fill="#374151"
-                                            fontWeight="bold"
-                                            transform={`rotate(90, ${x}, ${chartHeight + 12})`}
-                                        >
-                                            {label}
-                                        </text>
-                                        <line x1={x} y1={chartHeight} x2={x} y2={chartHeight + 10} stroke="#374151" strokeWidth="2" />
-                                    </g>
-                                )
-                            })}
-
-                            {/* Axis labels */}
-                            <text x="10" y={chartHeight / 2} textAnchor="middle" fontSize="12" fill="#6b7280" fontWeight="bold" transform={`rotate(-90, 10, ${chartHeight / 2})`}>
-                                Porcentaje (%)
-                            </text>
-                        </svg>
+                                    <text x="14" y={plotTop + plotH / 2} textAnchor="middle" fontSize="12" fill="#9ca3af" fontWeight="bold" transform={`rotate(-90, 14, ${plotTop + plotH / 2})`}>Porcentaje (%)</text>
+                                </svg>
+                            )
+                        })()}
                     </div>
                 ) : (
                     <div className="text-center py-12 text-text-muted">
