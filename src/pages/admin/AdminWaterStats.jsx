@@ -40,14 +40,38 @@ export default function AdminWaterStats() {
     // "Valores Reales": config editable de medidas físicas y editor desplegable
     const [realConfig, setRealConfig] = useState(loadRealConfig)
     const [showRealEditor, setShowRealEditor] = useState(false)
+    const [savingReal, setSavingReal] = useState(false)
+    const [realSaved, setRealSaved] = useState(false)
 
-    // Actualiza una medida de una zona y persiste en localStorage
+    // Actualiza una medida de una zona (estado + caché local instantáneo).
+    // La persistencia definitiva es en Supabase con el botón "Guardar".
     const updateRealConfig = (zoneKey, field, value) => {
         setRealConfig(prev => {
             const next = { ...prev, [zoneKey]: { ...prev[zoneKey], [field]: value } }
             try { localStorage.setItem(REAL_CONFIG_KEY, JSON.stringify(next)) } catch { /* ignore */ }
             return next
         })
+        setRealSaved(false)
+    }
+
+    // Guarda la config de "Valores Reales" en Supabase (site_config, merge profundo)
+    const saveRealConfigToSupabase = async () => {
+        setSavingReal(true)
+        try {
+            const res = await fetch('/api/config', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ realTanksConfig: realConfig })
+            })
+            if (!res.ok) throw new Error('respuesta ' + res.status)
+            try { localStorage.setItem(REAL_CONFIG_KEY, JSON.stringify(realConfig)) } catch { /* ignore */ }
+            setRealSaved(true)
+            setTimeout(() => setRealSaved(false), 2500)
+        } catch (e) {
+            alert('No se pudo guardar en Supabase: ' + e.message)
+        } finally {
+            setSavingReal(false)
+        }
     }
 
     // Cargar configuración e histórico al inicio
@@ -100,6 +124,18 @@ export default function AdminWaterStats() {
             const response = await fetch('/api/config')
             if (response.ok) {
                 const data = await response.json()
+
+                // "Valores Reales": cargar desde Supabase si existe (fuente de verdad entre dispositivos)
+                if (data.realTanksConfig) {
+                    const merged = {}
+                    for (const key of Object.keys(DEFAULT_REAL_CONFIG)) {
+                        merged[key] = { ...DEFAULT_REAL_CONFIG[key], ...(data.realTanksConfig[key] || {}) }
+                    }
+                    setRealConfig(merged)
+                    try { localStorage.setItem(REAL_CONFIG_KEY, JSON.stringify(merged)) } catch { /* ignore */ }
+                    console.log('✅ Valores Reales cargados desde Supabase')
+                }
+
                 if (data.tankConfigs) {
                     console.log('✅ Config de tanques cargada desde Supabase')
                     setConfig({ tankConfigs: data.tankConfigs })
@@ -713,7 +749,25 @@ export default function AdminWaterStats() {
                                             )
                                         })}
                                     </div>
-                                    <p className="text-[11px] text-text-muted mt-3">Los cambios se guardan automáticamente en este navegador.</p>
+                                    <div className="flex items-center gap-3 mt-4">
+                                        <button
+                                            onClick={saveRealConfigToSupabase}
+                                            disabled={savingReal}
+                                            className="flex items-center gap-2 px-4 py-2 bg-primary hover:bg-btn-primary-hover text-white rounded-lg font-medium transition-colors disabled:opacity-50 text-sm"
+                                        >
+                                            <span className={`material-symbols-outlined text-base ${savingReal ? 'animate-spin' : ''}`}>
+                                                {savingReal ? 'progress_activity' : 'cloud_upload'}
+                                            </span>
+                                            {savingReal ? 'Guardando...' : 'Guardar en Supabase'}
+                                        </button>
+                                        {realSaved && (
+                                            <span className="flex items-center gap-1 text-primary text-sm font-medium">
+                                                <span className="material-symbols-outlined text-base">check_circle</span>
+                                                Guardado
+                                            </span>
+                                        )}
+                                    </div>
+                                    <p className="text-[11px] text-text-muted mt-2">Se guarda en Supabase y estará disponible en todos los dispositivos.</p>
                                 </div>
                             )}
                         </>
