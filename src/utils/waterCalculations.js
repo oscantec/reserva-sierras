@@ -218,3 +218,57 @@ export function processZoneDataFromPercent(tankConfig, percentageFromSensor, tan
         tankCount
     }
 }
+
+/**
+ * Cálculo geométrico PRECISO del volumen real de una zona ("Valores Reales").
+ *
+ * A diferencia de processZoneDataFromPercent (que estima el volumen de forma
+ * lineal: maxVolumen * %), aquí el porcentaje del sensor se interpreta como
+ * % de ALTURA del líquido y el volumen se calcula con la geometría real:
+ *  - Cónico  -> tronco de cono, el radio en la superficie del agua interpola
+ *               entre el radio inferior (fondo) y el superior (borde) según
+ *               la altura del líquido. El volumen NO es lineal con la altura.
+ *  - Rectangular -> largo * ancho * altura (sí es lineal).
+ *
+ * Unidades de entrada: diámetros / largo / ancho en cm, altura máxima en m.
+ * Devuelve volúmenes en m³.
+ *
+ * @param {object} zoneCfg - { shape:'cone'|'rect', diameterBottom, diameterTop,
+ *                             length, width, maxHeight (m), count }
+ * @param {number} levelPercent - % de nivel reportado por el sensor (0-100)
+ */
+export function computeRealZoneVolume(zoneCfg, levelPercent) {
+    const pct = Math.max(0, Math.min(100, Number(levelPercent) || 0)) / 100
+    const H = Number(zoneCfg.maxHeight) || 0   // altura máxima del líquido (m)
+    const count = Number(zoneCfg.count) || 1
+    const h = pct * H                          // altura actual del líquido (m)
+
+    let maxPerTank = 0
+    let volPerTank = 0
+
+    if (zoneCfg.shape === 'cone') {
+        const r = ((Number(zoneCfg.diameterBottom) || 0) / 100) / 2   // radio fondo (m)
+        const R = ((Number(zoneCfg.diameterTop) || 0) / 100) / 2      // radio borde superior (m)
+        maxPerTank = (Math.PI * H / 3) * (R * R + R * r + r * r)
+        const rH = H > 0 ? r + (R - r) * (h / H) : r                  // radio en la superficie del agua
+        volPerTank = (Math.PI * h / 3) * (rH * rH + rH * r + r * r)
+    } else { // 'rect'
+        const L = (Number(zoneCfg.length) || 0) / 100   // largo (m)
+        const W = (Number(zoneCfg.width) || 0) / 100    // ancho (m)
+        maxPerTank = L * W * H
+        volPerTank = L * W * h
+    }
+
+    const maxVolume = maxPerTank * count
+    const volume = volPerTank * count
+
+    return {
+        maxPerTank: parseFloat(maxPerTank.toFixed(3)),
+        volPerTank: parseFloat(volPerTank.toFixed(3)),
+        maxVolume: parseFloat(maxVolume.toFixed(3)),
+        volume: parseFloat(volume.toFixed(3)),
+        levelCm: parseFloat((h * 100).toFixed(1)),
+        percentage: parseFloat((pct * 100).toFixed(1)),
+        count
+    }
+}

@@ -1,6 +1,30 @@
 import { useState, useEffect } from 'react'
-import { processZoneDataFromPercent, calculateMaxConicVolume, calculateMaxCubicVolume } from '../../utils/waterCalculations'
+import { processZoneDataFromPercent, calculateMaxConicVolume, calculateMaxCubicVolume, computeRealZoneVolume } from '../../utils/waterCalculations'
 import { getTuyaCredentials } from '../../utils/tuyaConfig'
+
+// Configuración por defecto de "Valores Reales" (medidas físicas exactas de los tanques).
+// Diámetros / largo / ancho en cm, altura máxima del líquido en m.
+const DEFAULT_REAL_CONFIG = {
+    zonaBaja: { name: 'Tanque Abajo', shape: 'cone', diameterBottom: 115.5, diameterTop: 140.5, maxHeight: 1.55, count: 3 },
+    zonaAlta: { name: 'Tanque Arriba', shape: 'cone', diameterBottom: 115.5, diameterTop: 140.5, maxHeight: 1.45, count: 2 },
+    zonaCasa: { name: 'Tanque Casa', shape: 'rect', length: 280, width: 240, maxHeight: 1.35, count: 1 },
+}
+
+const REAL_CONFIG_KEY = 'realTanksConfig'
+
+// Carga la config de "Valores Reales" desde localStorage, combinada sobre los defaults.
+function loadRealConfig() {
+    try {
+        const saved = JSON.parse(localStorage.getItem(REAL_CONFIG_KEY) || '{}')
+        const merged = {}
+        for (const key of Object.keys(DEFAULT_REAL_CONFIG)) {
+            merged[key] = { ...DEFAULT_REAL_CONFIG[key], ...(saved[key] || {}) }
+        }
+        return merged
+    } catch {
+        return DEFAULT_REAL_CONFIG
+    }
+}
 
 /**
  * Dashboard de Estadísticas de Agua
@@ -13,6 +37,18 @@ export default function AdminWaterStats() {
     const [allMeasurements, setAllMeasurements] = useState([])
     const [refreshing, setRefreshing] = useState(false)
     const [showConfig, setShowConfig] = useState(false)
+    // "Valores Reales": config editable de medidas físicas y editor desplegable
+    const [realConfig, setRealConfig] = useState(loadRealConfig)
+    const [showRealEditor, setShowRealEditor] = useState(false)
+
+    // Actualiza una medida de una zona y persiste en localStorage
+    const updateRealConfig = (zoneKey, field, value) => {
+        setRealConfig(prev => {
+            const next = { ...prev, [zoneKey]: { ...prev[zoneKey], [field]: value } }
+            try { localStorage.setItem(REAL_CONFIG_KEY, JSON.stringify(next)) } catch { /* ignore */ }
+            return next
+        })
+    }
 
     // Cargar configuración e histórico al inicio
     useEffect(() => {
@@ -507,6 +543,181 @@ export default function AdminWaterStats() {
                             </div>
                         )
                     })
+                })()}
+            </div>
+
+            {/* ===== Valores Reales (cálculo geométrico preciso) ===== */}
+            <div className="mb-6 md:mb-8">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+                    <div>
+                        <h2 className="text-lg md:text-2xl font-bold">Valores Reales</h2>
+                        <p className="text-xs text-text-muted">Cálculo geométrico preciso según las medidas físicas de cada tanque</p>
+                    </div>
+                    <button
+                        onClick={() => setShowRealEditor(v => !v)}
+                        className="flex items-center gap-1 sm:gap-2 px-4 py-2 border border-border-card hover:bg-surface-card-hover text-sm rounded-lg font-medium transition-colors self-start"
+                    >
+                        <span className="material-symbols-outlined text-base">tune</span>
+                        {showRealEditor ? 'Cerrar edición' : 'Editar medidas'}
+                    </button>
+                </div>
+
+                {(() => {
+                    const zoneKeys = ['zonaBaja', 'zonaAlta', 'zonaCasa']
+
+                    // Último % por zona: primero datos en vivo de Tuya, si no, histórico
+                    const latestByZone = {}
+                    allMeasurements.forEach(m => {
+                        if (!latestByZone[m.zone] || new Date(m.timestamp) > new Date(latestByZone[m.zone].timestamp)) {
+                            latestByZone[m.zone] = m
+                        }
+                    })
+                    const getLivePercent = (zoneKey) => {
+                        const live = currentData?.zones?.find(z => z.zone === zoneKey)
+                        if (live) return parseFloat(live.sensorPercent) || 0
+                        const hist = latestByZone[zoneKey]
+                        return hist ? (parseFloat(hist.percentage) || 0) : 0
+                    }
+
+                    const results = zoneKeys.map(k => {
+                        const pct = getLivePercent(k)
+                        return { key: k, cfg: realConfig[k], pct, ...computeRealZoneVolume(realConfig[k], pct) }
+                    })
+                    const totalMax = results.reduce((s, r) => s + r.maxVolume, 0)
+                    const totalVol = results.reduce((s, r) => s + r.volume, 0)
+                    const totalPct = totalMax > 0 ? (totalVol / totalMax) * 100 : 0
+
+                    return (
+                        <>
+                            {/* Banner total real */}
+                            <div className="bg-gradient-to-br from-primary to-btn-primary-hover text-white rounded-xl p-4 md:p-6 mb-4 shadow-lg">
+                                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                                    <div className="flex items-center gap-3 md:gap-4">
+                                        <span className="material-symbols-outlined text-4xl md:text-5xl">calculate</span>
+                                        <div>
+                                            <h3 className="text-base md:text-lg opacity-90">Agua Real Disponible</h3>
+                                            <p className="text-3xl md:text-4xl font-bold mt-1">{totalVol.toFixed(2)} m³</p>
+                                            <p className="text-xs opacity-75 mt-1">Basado en las medidas físicas reales de los tanques</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex gap-6 sm:gap-8 text-left sm:text-right w-full sm:w-auto justify-start sm:justify-end">
+                                        <div>
+                                            <p className="text-xs opacity-75">Capacidad Máx</p>
+                                            <p className="text-lg font-bold">{totalMax.toFixed(2)} m³</p>
+                                        </div>
+                                        <div>
+                                            <p className="text-xs opacity-75">% Actual</p>
+                                            <p className="text-lg font-bold">{totalPct.toFixed(1)}%</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Cards por zona */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+                                {results.map(({ key, cfg, pct, volume, maxVolume }) => {
+                                    const percent = maxVolume > 0 ? (volume / maxVolume) * 100 : 0
+                                    return (
+                                        <div key={key} className="bg-surface-card border border-border-card rounded-xl p-3 md:p-4 shadow-sm">
+                                            <h3 className="text-sm md:text-base font-bold mb-2 md:mb-3">{cfg.name}</h3>
+                                            <div className="mb-2 md:mb-3">
+                                                <div className="flex items-center justify-between mb-1">
+                                                    <span className="text-xs text-text-muted">Llenado real</span>
+                                                    <span className="text-lg md:text-xl font-bold text-primary">{percent.toFixed(1)}%</span>
+                                                </div>
+                                                <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                                                    <div className="h-full bg-primary transition-all duration-500" style={{ width: `${Math.min(percent, 100)}%` }} />
+                                                </div>
+                                            </div>
+                                            <div className="grid grid-cols-2 gap-2 text-xs border-t border-border-card pt-2">
+                                                <div>
+                                                    <span className="text-text-muted block">Volumen real</span>
+                                                    <span className="font-bold">{volume.toFixed(2)} m³</span>
+                                                </div>
+                                                <div>
+                                                    <span className="text-text-muted block">Capacidad máx</span>
+                                                    <span className="font-medium">{maxVolume.toFixed(2)} m³</span>
+                                                </div>
+                                                <div>
+                                                    <span className="text-text-muted block">Sensor Tuya</span>
+                                                    <span className="font-medium text-primary">{pct.toFixed(1)}%</span>
+                                                </div>
+                                                <div>
+                                                    <span className="text-text-muted block">Tanques</span>
+                                                    <span className="font-medium">{cfg.count} × {cfg.shape === 'cone' ? 'cónico' : 'rectangular'}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )
+                                })}
+                            </div>
+
+                            {/* Editor de medidas */}
+                            {showRealEditor && (
+                                <div className="mt-4 bg-surface-card border border-border-card rounded-xl p-4 md:p-5 shadow-sm">
+                                    <h3 className="text-sm md:text-base font-bold mb-3">Editar medidas y número de tanques</h3>
+                                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                                        {zoneKeys.map(k => {
+                                            const cfg = realConfig[k]
+                                            return (
+                                                <div key={k} className="border border-border-card rounded-lg p-3">
+                                                    <p className="font-bold text-sm mb-2">{cfg.name}</p>
+                                                    <div className="space-y-2 text-xs">
+                                                        {cfg.shape === 'cone' ? (
+                                                            <>
+                                                                <label className="block">
+                                                                    <span className="text-text-muted">Diámetro inferior (cm)</span>
+                                                                    <input type="number" step="0.1" value={cfg.diameterBottom}
+                                                                        onChange={e => updateRealConfig(k, 'diameterBottom', parseFloat(e.target.value) || 0)}
+                                                                        className="w-full mt-0.5 px-2 py-1 border border-border-card rounded" />
+                                                                </label>
+                                                                <label className="block">
+                                                                    <span className="text-text-muted">Diámetro superior (cm)</span>
+                                                                    <input type="number" step="0.1" value={cfg.diameterTop}
+                                                                        onChange={e => updateRealConfig(k, 'diameterTop', parseFloat(e.target.value) || 0)}
+                                                                        className="w-full mt-0.5 px-2 py-1 border border-border-card rounded" />
+                                                                </label>
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                <label className="block">
+                                                                    <span className="text-text-muted">Largo (cm)</span>
+                                                                    <input type="number" step="0.1" value={cfg.length}
+                                                                        onChange={e => updateRealConfig(k, 'length', parseFloat(e.target.value) || 0)}
+                                                                        className="w-full mt-0.5 px-2 py-1 border border-border-card rounded" />
+                                                                </label>
+                                                                <label className="block">
+                                                                    <span className="text-text-muted">Ancho (cm)</span>
+                                                                    <input type="number" step="0.1" value={cfg.width}
+                                                                        onChange={e => updateRealConfig(k, 'width', parseFloat(e.target.value) || 0)}
+                                                                        className="w-full mt-0.5 px-2 py-1 border border-border-card rounded" />
+                                                                </label>
+                                                            </>
+                                                        )}
+                                                        <label className="block">
+                                                            <span className="text-text-muted">Altura máx. del líquido (m)</span>
+                                                            <input type="number" step="0.01" value={cfg.maxHeight}
+                                                                onChange={e => updateRealConfig(k, 'maxHeight', parseFloat(e.target.value) || 0)}
+                                                                className="w-full mt-0.5 px-2 py-1 border border-border-card rounded" />
+                                                        </label>
+                                                        <label className="block">
+                                                            <span className="text-text-muted">Número de tanques</span>
+                                                            <select value={cfg.count}
+                                                                onChange={e => updateRealConfig(k, 'count', parseInt(e.target.value) || 1)}
+                                                                className="w-full mt-0.5 px-2 py-1 border border-border-card rounded bg-white">
+                                                                {[1, 2, 3, 4, 5, 6, 7, 8].map(n => <option key={n} value={n}>{n}</option>)}
+                                                            </select>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
+                                    <p className="text-[11px] text-text-muted mt-3">Los cambios se guardan automáticamente en este navegador.</p>
+                                </div>
+                            )}
+                        </>
+                    )
                 })()}
             </div>
 
