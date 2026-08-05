@@ -651,7 +651,7 @@ export default function AdminWaterStats() {
 
                             {/* Cards por zona */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
-                                {results.map(({ key, cfg, pct, volume, maxVolume }) => {
+                                {results.map(({ key, cfg, pct, volume, maxVolume, waterHeight }) => {
                                     const percent = maxVolume > 0 ? (volume / maxVolume) * 100 : 0
                                     return (
                                         <div key={key} className="bg-surface-card border border-border-card rounded-xl p-3 md:p-4 shadow-sm">
@@ -664,6 +664,9 @@ export default function AdminWaterStats() {
                                                 <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
                                                     <div className="h-full bg-primary transition-all duration-500" style={{ width: `${Math.min(percent, 100)}%` }} />
                                                 </div>
+                                                <p className="text-[11px] text-text-muted mt-1">
+                                                    Profundidad: <span className="font-medium">{waterHeight.toFixed(2)} m</span> de {Number(cfg.maxHeight).toFixed(2)} m
+                                                </p>
                                             </div>
                                             <div className="grid grid-cols-2 gap-2 text-xs border-t border-border-card pt-2">
                                                 <div>
