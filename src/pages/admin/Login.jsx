@@ -37,7 +37,7 @@ export default function Login() {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 via-gray-100 to-gray-50 flex items-center justify-center p-4">
+        <div className="admin-login min-h-screen flex items-center justify-center p-4">
             {/* Background decoration */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 <div className="absolute -top-40 -right-40 w-80 h-80 bg-gray-200/50 rounded-full blur-3xl"></div>
@@ -46,7 +46,7 @@ export default function Login() {
 
             <div className="relative w-full max-w-md">
                 {/* Card */}
-                <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl shadow-green-900/10 p-8 border border-white/50">
+                <div className="admin-login__card bg-white rounded-3xl shadow-2xl shadow-green-900/10 p-8 border border-white/50">
                     {/* Logo & Header */}
                     <div className="text-center mb-8">
                         <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl shadow-lg shadow-card mb-4" style={{ background: 'linear-gradient(to bottom right, #2a8a0e, #1b4332)' }}>
@@ -58,7 +58,7 @@ export default function Login() {
 
                     {/* Error Message */}
                     {error && (
-                        <div className="mb-6 p-4 bg-gray-100 border border-gray-300 rounded-xl flex items-center gap-3">
+                        <div role="alert" className="mb-6 p-4 bg-gray-100 border border-gray-300 rounded-xl flex items-center gap-3">
                             <span className="material-symbols-outlined text-gray-700">error</span>
                             <p className="text-gray-800 text-sm font-medium">{error}</p>
                         </div>
@@ -68,7 +68,7 @@ export default function Login() {
                     <form onSubmit={handleSubmit} className="space-y-5">
                         {/* Email Field */}
                         <div>
-                            <label className="block text-sm font-semibold text-text-main-light mb-2">
+                            <label htmlFor="admin-email" className="block text-sm font-semibold text-text-main-light mb-2">
                                 Correo electrónico
                             </label>
                             <div className="relative">
@@ -77,6 +77,8 @@ export default function Login() {
                                 </span>
                                 <input
                                     type="email"
+                                    id="admin-email"
+                                    autoComplete="username"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     placeholder="admin@reservadelassierras.com"
@@ -88,7 +90,7 @@ export default function Login() {
 
                         {/* Password Field */}
                         <div>
-                            <label className="block text-sm font-semibold text-text-main-light mb-2">
+                            <label htmlFor="admin-password" className="block text-sm font-semibold text-text-main-light mb-2">
                                 Contraseña
                             </label>
                             <div className="relative">
@@ -97,6 +99,8 @@ export default function Login() {
                                 </span>
                                 <input
                                     type={showPassword ? 'text' : 'password'}
+                                    id="admin-password"
+                                    autoComplete="current-password"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     placeholder="••••••••"
@@ -106,6 +110,8 @@ export default function Login() {
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
+                                    aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                                    aria-pressed={showPassword}
                                     className="absolute right-4 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-muted transition-colors"
                                 >
                                     <span className="material-symbols-outlined text-xl">

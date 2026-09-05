@@ -50,12 +50,14 @@ export default function Footer() {
     const logoSizeVh = config.logoSize || 5
 
     return (
-        <footer className="relative mt-auto overflow-hidden border-t border-premium-gold/30">
+        <footer className="site-footer relative mt-auto overflow-hidden border-t border-premium-gold/30">
             {/* Background Image */}
             <div className="absolute inset-0">
                 <img
                     src={exteriorImg}
                     alt=""
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover"
                 />
             </div>

@@ -102,18 +102,17 @@ export default {
                 "water-badge-text": "var(--color-water-badge-text)",
 
                 // === PREMIUM DESIGN SYSTEM (lujo natural editorial) ===
-                // Un solo verde de marca (#1b4332) en toda la paleta.
-                // forest/pine/sage/gold/gold-light apuntan todos al mismo tono.
+                // Verde de marca con superficies neutras y tonos de apoyo.
                 premium: {
                     forest: "#1b4332",
-                    pine: "#1b4332",
-                    sage: "#1b4332",
-                    cream: "#FAF7F0",
-                    sand: "#EFE9DC",
+                    pine: "#28614c",
+                    sage: "#577767",
+                    cream: "#F7F9F8",
+                    sand: "#E7EDE9",
                     gold: "#1b4332",
-                    "gold-light": "#1b4332",
-                    ink: "#1C1917",
-                    mist: "#F4F6F3",
+                    "gold-light": "#BFE3CE",
+                    ink: "#182C25",
+                    mist: "#EEF4F0",
                 },
             },
             fontFamily: {
@@ -122,8 +121,8 @@ export default {
                 "body": ["var(--font-display)", "sans-serif"],
                 // Premium design system (no reemplazan a las anteriores,
                 // que están en uso vía Admin Panel)
-                "premium-display": ["Montserrat", "system-ui", "sans-serif"],
-                "premium-body": ["Montserrat", "system-ui", "sans-serif"],
+                "premium-display": ["var(--font-display)", "system-ui", "sans-serif"],
+                "premium-body": ["var(--font-display)", "system-ui", "sans-serif"],
             },
             boxShadow: {
                 "premium-sm": "0 1px 2px rgba(22,48,43,0.06), 0 2px 8px rgba(22,48,43,0.04)",

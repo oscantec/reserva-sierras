@@ -13,6 +13,7 @@ import previewRegistro from '../images/medium/imagesinicio/registro.webp'
 import previewGaleria from '../images/medium/imagesinicio/galeria.webp'
 import previewGuia from '../images/medium/imagesinicio/guia.webp'
 import placeholders from '../images/placeholders.json'
+import portada from '../images/Portada 1.webp'
 
 // Helper function to extract YouTube video ID from various URL formats
 function getYouTubeVideoId(url) {
@@ -41,8 +42,6 @@ const VideoBackground = memo(({ videoId, blurAmount }) => {
     const [isReady, setIsReady] = useState(false);
     const iframeRef = useRef(null);
 
-    if (!videoId) return null;
-
     // Detect if mobile for different quality settings
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
@@ -58,22 +57,27 @@ const VideoBackground = memo(({ videoId, blurAmount }) => {
         if (isReady && !isMobile && iframeRef.current) {
             // Try to upgrade quality via postMessage after load
             const iframe = iframeRef.current;
-            setTimeout(() => {
+            const timeout = setTimeout(() => {
                 try {
                     iframe.contentWindow?.postMessage('{"event":"command","func":"setPlaybackQuality","args":["hd1080"]}', '*');
                 } catch (e) {
                     // Silently fail if cross-origin issues
                 }
             }, 2000); // Wait 2 seconds for video to start playing
+            return () => clearTimeout(timeout);
         }
     }, [isReady, isMobile]);
 
+    if (!videoId) return null;
+
     return (
-        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden bg-black">
+        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
             {/* Single iframe that covers entire hero - stretches on wide screens */}
             <iframe
                 ref={iframeRef}
                 id="hero-video-player"
+                title="Video de Reserva de las Sierras"
+                tabIndex={-1}
                 src={embedUrl}
                 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200%] h-[200%] min-w-[100%] min-h-[100%]"
                 style={{
@@ -181,14 +185,18 @@ export default function Landing() {
     // Rotate phrases every 5 seconds
     useEffect(() => {
         if (heroConfig.phrases.length <= 1) return
+        let timeout
         const interval = setInterval(() => {
             setIsVisible(false)
-            setTimeout(() => {
+            timeout = setTimeout(() => {
                 setCurrentPhraseIndex(prev => (prev + 1) % heroConfig.phrases.length)
                 setIsVisible(true)
             }, 500)
         }, 5000)
-        return () => clearInterval(interval)
+        return () => {
+            clearInterval(interval)
+            clearTimeout(timeout)
+        }
     }, [heroConfig.phrases])
 
     const currentPhrase = heroConfig.phrases[currentPhraseIndex] || ''
@@ -197,18 +205,18 @@ export default function Landing() {
     const mainText = words.join(' ')
 
     return (
-        <div className="flex flex-col min-h-screen bg-premium-cream text-premium-ink font-premium-body">
+        <div className="home-page flex flex-col min-h-screen bg-premium-cream text-premium-ink font-premium-body">
             <Navbar />
 
             {/* Hero Section - Optimized Iframe for INSTANT Mobile Autoplay */}
-            <header className="relative w-full h-[500px] lg:h-[600px] flex items-center justify-center overflow-hidden">
+            <header className="home-hero relative w-full flex items-center overflow-hidden">
                 {/* Background Placeholder - Thumbnail loads instantly */}
                 <div
                     className="absolute inset-0 z-0 bg-cover bg-center animate-ken-burns"
                     style={{
                         backgroundImage: videoId
                             ? `url(https://img.youtube.com/vi/${videoId}/maxresdefault.jpg)`
-                            : "url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600')",
+                            : `url("${portada}")`,
                         filter: `blur(${heroConfig.blurAmount}px) brightness(0.7)`
                     }}
                 ></div>
@@ -232,30 +240,34 @@ export default function Landing() {
                 ></div>
 
                 {/* Legibility overlay: dark only near the top, fully clear by mid-hero so the video stays visible */}
-                <div className="absolute inset-0 bg-gradient-to-b from-premium-ink/55 via-premium-ink/10 to-transparent z-1 pointer-events-none"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/35 to-black/15 z-1 pointer-events-none"></div>
 
                 {/* Fusion fade: short band at the very bottom edge to blend into the next section */}
-                <div className="absolute inset-x-0 bottom-0 h-24 md:h-32 bg-gradient-to-b from-transparent to-premium-cream z-1 pointer-events-none"></div>
+                <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/30 to-transparent z-1 pointer-events-none"></div>
 
                 {/* Content - Only Dynamic Rotating Text */}
-                <div className="relative z-20 text-center px-4 max-w-4xl mx-auto flex flex-col items-center justify-center h-full fade-in pointer-events-none">
+                <div className="home-hero__content relative z-20 max-w-7xl mx-auto w-full fade-in">
                     {/* Eyebrow */}
-                    <p className="eyebrow !text-premium-cream/90 mb-4 animate-fade-up">ANAPOIMA · COLOMBIA</p>
+                    <p className="home-hero__eyebrow mb-6">ANAPOIMA · COLOMBIA</p>
 
                     {/* Animated Rotating Text */}
                     <h1
-                        className={`font-premium-display text-[clamp(2rem,6vw,4.5rem)] font-semibold text-white leading-[1.1] tracking-tight text-balance transition-all duration-500 ease-premium ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+                        className={`home-hero__title font-premium-display font-semibold text-white tracking-tight text-balance transition-all duration-500 ease-premium ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
                             }`}
                     >
                         {mainText}{' '}
                         <span className="block sm:inline text-premium-cream">{lastWord}</span>
                     </h1>
+                    <div className="home-hero__actions">
+                        <Link to="/reservas" className="hero-link hero-link--primary">Reservas <span className="material-symbols-outlined" aria-hidden="true">arrow_forward</span></Link>
+                        <Link to="/galeria" className="hero-link">Galería <span className="material-symbols-outlined" aria-hidden="true">north_east</span></Link>
+                    </div>
                 </div>
             </header>
 
             {/* Check-in / Check-out Info Bar */}
-            <div className="relative z-30 -mt-8 px-4 mb-8">
-                <div className="max-w-3xl mx-auto glass rounded-premium shadow-premium-lg p-4 md:p-5 flex flex-col sm:flex-row gap-4 sm:gap-8 items-center justify-center">
+            <div className="stay-info relative z-30 -mt-8 px-4 mb-8">
+                <div className="stay-info__inner max-w-3xl mx-auto glass rounded-premium shadow-premium-lg p-4 md:p-5 flex flex-row gap-4 sm:gap-8 items-center justify-center">
                     {/* Check-in */}
                     <div className="flex items-center gap-3">
                         <div
@@ -271,8 +283,7 @@ export default function Landing() {
                     </div>
 
                     {/* Divider */}
-                    <div className="hidden sm:block h-10 w-px bg-premium-gold/30"></div>
-                    <div className="sm:hidden w-20 h-px bg-premium-gold/30"></div>
+                    <div className="h-10 w-px bg-premium-gold/20"></div>
 
                     {/* Check-out */}
                     <div className="flex items-center gap-3">
@@ -291,7 +302,7 @@ export default function Landing() {
             </div>
 
             {/* Bienvenida + Amenidades */}
-            <section className="bg-premium-cream">
+            <section className="home-intro bg-premium-cream">
                 <div className="max-w-7xl mx-auto px-4 md:px-8 pt-4 md:pt-8 pb-12 md:pb-16 w-full">
                     <motion.div
                         initial={{ opacity: 0, y: 24 }}
@@ -409,7 +420,7 @@ export default function Landing() {
 
             {/* Explora el Sitio - Cards con preview */}
             {exploraSitio?.items?.length > 0 && (
-                <section className="bg-premium-cream">
+                <section className="home-explore bg-premium-cream">
                     <div className="max-w-7xl mx-auto px-4 md:px-8 py-12 md:py-16 w-full">
                         <motion.div
                             initial={{ opacity: 0, y: 24 }}
@@ -491,8 +502,8 @@ export default function Landing() {
                                             {/* Content */}
                                             <div className="p-3 md:p-4">
                                                 <h3 className="text-base md:text-lg font-premium-display font-semibold text-premium-forest mb-1">{item.title}</h3>
-                                                <p className="text-xs md:text-sm text-premium-ink/60 line-clamp-2 leading-relaxed">{item.description}</p>
-                                                <p className="mt-2 text-xs font-medium text-premium-gold flex items-center gap-1 transition-all duration-300 ease-premium md:opacity-0 md:-translate-x-1 md:group-hover:opacity-100 md:group-hover:translate-x-0">
+                                                <p className="text-sm text-premium-ink/70 leading-relaxed">{item.description}</p>
+                                                <p className="mt-4 text-sm font-semibold text-premium-gold flex items-center gap-2">
                                                     Ver más <span aria-hidden="true">→</span>
                                                 </p>
                                             </div>

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
 import nextLogo from '../../images/NextLogo.png'
+import NavigationDrawer from '../../components/NavigationDrawer'
 
 export default function AdminLayout() {
     const location = useLocation()
@@ -9,6 +10,8 @@ export default function AdminLayout() {
     const { logout } = useAuth()
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     const [adminLogoHeight, setAdminLogoHeight] = useState(24)
+
+    useEffect(() => { setMobileMenuOpen(false) }, [location.pathname])
 
     useEffect(() => {
         const loadConfig = async () => {
@@ -44,6 +47,7 @@ export default function AdminLayout() {
     }
 
     const isActive = (path) => {
+        if (path === '/') return location.pathname === '/'
         if (path === '/admin' && location.pathname === '/admin') return true
         if (path !== '/admin' && location.pathname.startsWith(path)) return true
         return false
@@ -74,10 +78,10 @@ export default function AdminLayout() {
     ]
 
     return (
-        <div className="flex h-screen overflow-hidden bg-background-light dark:bg-background-dark">
+        <div className="admin-shell flex h-screen overflow-hidden bg-background-light dark:bg-background-dark">
             {/* Desktop Sidebar */}
-            <aside className="w-64 flex-shrink-0 border-r border-border-card dark:border-border-card-dark bg-surface-card dark:bg-surface-card-dark hidden lg:flex flex-col justify-between">
-                <div className="flex flex-col h-full p-4">
+            <aside className="admin-sidebar w-64 flex-shrink-0 border-r border-border-card dark:border-border-card-dark bg-surface-card dark:bg-surface-card-dark hidden lg:flex flex-col justify-between">
+                <div className="flex flex-col min-h-0 h-full p-4 overflow-y-auto">
                     <div className="flex justify-center mb-8 px-2 mt-2">
                         <img
                             src={nextLogo}
@@ -87,7 +91,7 @@ export default function AdminLayout() {
                         />
                     </div>
 
-                    <nav className="flex flex-col gap-1 flex-1">
+                    <nav className="flex flex-col gap-1 flex-1" aria-label="Administración">
                         {navItems.map((item) => (
                             item.submenu ? (
                                 // Item with submenu
@@ -121,6 +125,7 @@ export default function AdminLayout() {
                                 <Link
                                     key={item.path}
                                     to={item.path}
+                                    aria-current={isActive(item.path) ? 'page' : undefined}
                                     className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${isActive(item.path)
                                         ? 'bg-icon-bg-primary text-icon-color'
                                         : 'text-text-main-light dark:text-text-main-dark hover:bg-background-light dark:hover:bg-background-dark/50'
@@ -174,17 +179,29 @@ export default function AdminLayout() {
             </aside>
 
             {/* Main content - with bottom padding for mobile nav */}
-            <main className="flex-1 flex flex-col min-w-0 h-full overflow-x-auto overflow-y-auto relative pb-16 lg:pb-0">
+            <main className="admin-workspace flex-1 flex flex-col min-w-0 h-full overflow-x-auto overflow-y-auto relative pb-16 lg:pb-0">
+                <header className="admin-topbar">
+                    <div className="flex items-center gap-3 min-w-0">
+                        <span className="material-symbols-outlined text-primary" aria-hidden="true">{navItems.find(item => isActive(item.path))?.icon || 'water_drop'}</span>
+                        <span className="font-semibold truncate">{navItems.find(item => isActive(item.path))?.label || 'Agua'}</span>
+                    </div>
+                    <Link to="/" className="flex items-center gap-2 text-sm text-text-muted">
+                        <span className="hidden sm:inline">Reserva de las Sierras</span>
+                        <span className="material-symbols-outlined" aria-hidden="true">home</span>
+                        <span className="sr-only">Inicio</span>
+                    </Link>
+                </header>
                 <Outlet />
             </main>
 
             {/* Mobile Bottom Navigation - Compact */}
-            <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-surface-card dark:bg-surface-card-dark border-t border-border-card dark:border-border-card-dark z-50 safe-area-inset-bottom">
-                <div className="flex justify-around items-center h-12">
-                    {mobileNavItems.map((item) => (
+            <nav aria-label="Accesos de administración" className="admin-mobile-nav lg:hidden fixed bottom-0 left-0 right-0 bg-surface-card dark:bg-surface-card-dark border-t border-border-card dark:border-border-card-dark z-50">
+                <div className="flex justify-around items-center h-16">
+                    {mobileNavItems.slice(0, 4).map((item) => (
                         <Link
                             key={item.path}
                             to={item.path}
+                            aria-current={isActive(item.path) ? 'page' : undefined}
                             className={`flex flex-col items-center justify-center flex-1 h-full py-0.5 transition-colors ${isActive(item.path)
                                 ? 'text-primary'
                                 : 'text-text-muted dark:text-text-muted'
@@ -193,11 +210,28 @@ export default function AdminLayout() {
                             <span className={`material-symbols-outlined text-lg ${isActive(item.path) ? 'filled-icon' : ''}`}>
                                 {item.icon}
                             </span>
-                            <span className="text-[8px] font-medium leading-tight">{item.label}</span>
+                            <span className="text-xs font-medium leading-tight">{item.label}</span>
                         </Link>
                     ))}
+                    <button type="button" onClick={() => setMobileMenuOpen(true)} aria-expanded={mobileMenuOpen} aria-haspopup="dialog" className="flex flex-col items-center justify-center flex-1 h-full gap-1 text-text-muted">
+                        <span className="material-symbols-outlined" aria-hidden="true">menu</span>
+                        <span className="text-xs font-medium">Menú</span>
+                    </button>
                 </div>
             </nav>
+            <NavigationDrawer open={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} title="Panel Admin">
+                <img src={nextLogo} alt="NextLogo" style={{ height: `${adminLogoHeight}px` }} className="w-auto object-contain mb-6" />
+                <nav className="drawer-links" aria-label="Menú de administración">
+                    {mobileNavItems.map(item => (
+                        <Link key={item.path} to={item.path} onClick={() => setMobileMenuOpen(false)} aria-current={isActive(item.path) ? 'page' : undefined}>
+                            <span className="material-symbols-outlined" aria-hidden="true">{item.icon}</span>{item.label}
+                        </Link>
+                    ))}
+                    <button type="button" onClick={handleLogout}>
+                        <span className="material-symbols-outlined" aria-hidden="true">logout</span>Cerrar Sesión
+                    </button>
+                </nav>
+            </NavigationDrawer>
         </div>
     )
 }

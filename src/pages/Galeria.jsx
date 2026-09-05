@@ -471,8 +471,17 @@ export default function Gallery() {
                             {filteredImages.map((image, index) => (
                                 <div
                                     key={`todas-${index}`}
+                                    role="button"
+                                    tabIndex={0}
+                                    aria-label={`Ampliar ${image.title}`}
+                                    onKeyDown={event => {
+                                        if (event.key === 'Enter' || event.key === ' ') {
+                                            event.preventDefault()
+                                            openLightbox(image, index)
+                                        }
+                                    }}
                                     onClick={() => openLightbox(image, index)}
-                                    className={`group img-zoom relative overflow-hidden rounded-premium cursor-pointer shadow-premium-sm hover:shadow-premium ${getBentoClass(index)} transition-all duration-500 ease-premium hover:z-10`}
+                                    className={`gallery-tile group img-zoom relative overflow-hidden rounded-premium cursor-pointer shadow-premium-sm hover:shadow-premium ${getBentoClass(index)} transition-all duration-500 ease-premium hover:z-10`}
                                 >
                                     <LazyImage
                                         placeholder={getPlaceholder(image.src)}
@@ -500,8 +509,17 @@ export default function Gallery() {
                             {filteredImages.map((image, index) => (
                                 <div
                                     key={`cat-${index}`}
+                                    role="button"
+                                    tabIndex={0}
+                                    aria-label={`Ampliar ${image.title}`}
+                                    onKeyDown={event => {
+                                        if (event.key === 'Enter' || event.key === ' ') {
+                                            event.preventDefault()
+                                            openLightbox(image, index)
+                                        }
+                                    }}
                                     onClick={() => openLightbox(image, index)}
-                                    className="group img-zoom relative overflow-hidden rounded-premium cursor-pointer aspect-square bg-white hairline shadow-premium-sm hover:shadow-premium hover:-translate-y-1 transition-all duration-300 ease-premium"
+                                    className="gallery-tile group img-zoom relative overflow-hidden rounded-premium cursor-pointer aspect-square bg-white hairline shadow-premium-sm hover:shadow-premium hover:-translate-y-1 transition-all duration-300 ease-premium"
                                 >
                                     <LazyImage
                                         placeholder={getPlaceholder(image.src)}
@@ -538,6 +556,7 @@ export default function Gallery() {
 
                     <button
                         onClick={closeLightbox}
+                        aria-label="Cerrar imagen"
                         className="absolute top-6 right-6 w-14 h-14 bg-white/10 hover:bg-premium-gold/30 backdrop-blur-sm border border-white/15 rounded-full flex items-center justify-center transition-all duration-300 ease-premium z-50 group hover:scale-110"
                     >
                         <span className="material-symbols-outlined text-white text-2xl group-hover:rotate-90 transition-transform duration-300">close</span>
@@ -552,6 +571,7 @@ export default function Gallery() {
                     {lightboxIndex > 0 && (
                         <button
                             onClick={(e) => { e.stopPropagation(); navigateLightbox(-1); }}
+                            aria-label="Imagen anterior"
                             className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 w-14 h-14 bg-white/10 hover:bg-premium-gold/30 backdrop-blur-sm border border-white/15 rounded-full flex items-center justify-center transition-all duration-300 ease-premium group hover:scale-110"
                         >
                             <span className="material-symbols-outlined text-white text-2xl">chevron_left</span>
@@ -560,6 +580,7 @@ export default function Gallery() {
                     {lightboxIndex < filteredImages.length - 1 && (
                         <button
                             onClick={(e) => { e.stopPropagation(); navigateLightbox(1); }}
+                            aria-label="Imagen siguiente"
                             className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 w-14 h-14 bg-white/10 hover:bg-premium-gold/30 backdrop-blur-sm border border-white/15 rounded-full flex items-center justify-center transition-all duration-300 ease-premium group hover:scale-110"
                         >
                             <span className="material-symbols-outlined text-white text-2xl">chevron_right</span>

@@ -467,13 +467,14 @@ export default function Booking() {
                         stepLabel={pageContent.stepLabel}
                     />
 
-                    <div className="bg-[#FFFEFB] rounded-premium p-6 shadow-premium-sm hairline">
+                    <div className="reservation-calendar bg-white rounded-premium p-4 sm:p-6 shadow-premium-sm hairline">
                         <div className="flex flex-col xl:flex-row gap-8 justify-center">
-                            <div className="flex-1 min-w-[300px]">
+                            <div className="flex-1 min-w-0">
                                 {/* Month Navigation with Refresh Button */}
                                 <div className="flex items-center justify-between mb-4">
                                     <button
                                         onClick={() => navigateMonth(-1)}
+                                        aria-label="Mes anterior"
                                         className="w-10 h-10 flex items-center justify-center bg-premium-forest text-premium-cream rounded-full hover:bg-premium-pine transition-colors duration-300 ease-premium"
                                     >
                                         <span className="material-symbols-outlined">chevron_left</span>
@@ -506,6 +507,7 @@ export default function Booking() {
                                     </div>
                                     <button
                                         onClick={() => navigateMonth(1)}
+                                        aria-label="Mes siguiente"
                                         className="w-10 h-10 flex items-center justify-center bg-premium-forest text-premium-cream rounded-full hover:bg-premium-pine transition-colors duration-300 ease-premium"
                                     >
                                         <span className="material-symbols-outlined">chevron_right</span>
@@ -668,6 +670,7 @@ export default function Booking() {
                                                 <button
                                                     key={index}
                                                     onClick={() => handleDateClick(date)}
+                                                    aria-label={date.toLocaleDateString('es-CO', { day: 'numeric', month: 'long', year: 'numeric' })}
                                                     disabled={past || resState === 'middle'}
                                                     className={`h-12 w-full flex items-start justify-end p-1.5 text-xs transition-all duration-300 ease-premium relative border border-premium-ink/10 bg-[#FFFEFB] ${cursorClass} ${textClass} ${shapeClass} ${borderClass} ${hoverClass}`}
                                                     style={{ backgroundImage: gradient }}

@@ -335,7 +335,7 @@ export default function CheckIn() {
                                 </div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                                     <div className="w-full">
-                                        <label className="block text-xs font-semibold uppercase tracking-[0.14em] text-premium-ink/60 mb-2">Número de Reserva</label>
+                                        <label htmlFor="reservation-number" className="block text-xs font-semibold uppercase tracking-[0.14em] text-premium-ink/60 mb-2">Número de Reserva</label>
                                         <div className="relative">
                                             <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-premium-ink/40">
                                                 <span className="material-symbols-outlined text-xl">confirmation_number</span>
@@ -343,6 +343,7 @@ export default function CheckIn() {
                                             <input
                                                 className="block w-full pl-10 pr-3 py-3 rounded-premium hairline bg-white focus:outline-none focus:ring-2 focus:ring-premium-gold/40 focus:border-premium-gold placeholder:text-premium-ink/40 transition-all ease-premium"
                                                 placeholder="Ej: R189"
+                                                id="reservation-number"
                                                 type="text"
                                                 value={noReserva}
                                                 onChange={(e) => setNoReserva(e.target.value.toUpperCase())}
@@ -352,7 +353,7 @@ export default function CheckIn() {
                                         <p className="mt-1 text-xs text-premium-ink/50">Ingresa la letra R seguida de los números de tu reserva</p>
                                     </div>
                                     <div className="w-full">
-                                        <label className="block text-xs font-semibold uppercase tracking-[0.14em] text-premium-ink/60 mb-2">Código Único</label>
+                                        <label htmlFor="reservation-code" className="block text-xs font-semibold uppercase tracking-[0.14em] text-premium-ink/60 mb-2">Código Único</label>
                                         <div className="relative">
                                             <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-premium-ink/40">
                                                 <span className="material-symbols-outlined text-xl">pin</span>
@@ -360,6 +361,8 @@ export default function CheckIn() {
                                             <input
                                                 className="block w-full pl-10 pr-3 py-3 rounded-premium hairline bg-white focus:outline-none focus:ring-2 focus:ring-premium-gold/40 focus:border-premium-gold placeholder:text-premium-ink/40 transition-all ease-premium"
                                                 placeholder="Ej: 579"
+                                                id="reservation-code"
+                                                inputMode="numeric"
                                                 type="text"
                                                 value={codigoUnico}
                                                 onChange={(e) => setCodigoUnico(e.target.value)}
