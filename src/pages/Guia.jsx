@@ -10,6 +10,7 @@ import AntesDePartirSection from '../components/AntesDePartirSection'
 import ZonasHumedasSection from '../components/ZonasHumedasSection'
 import PageHeader from '../components/PageHeader'
 import { DEFAULT_CONFIG } from '../utils/config'
+import guideHeroImage from '../images/Exterior 2.webp'
 
 export default function Guia() {
     const [pageContent, setPageContent] = useState({
@@ -52,24 +53,36 @@ export default function Guia() {
     }, [])
 
     return (
-        <div className="flex flex-col min-h-screen bg-premium-cream text-premium-ink font-premium-body">
+        <div className="guide-page flex flex-col min-h-screen bg-premium-cream text-premium-ink font-premium-body">
             <Navbar />
 
-            <PageHeader
-                eyebrow="Guía del huésped"
-                title={pageContent.pageTitle}
-                subtitle={pageContent.pageSubtitle}
-                progress={100}
-                className="max-w-7xl mx-auto px-4 md:px-8 pt-8"
-            />
+            <main className="guide-main">
+                <section className="guide-hero" aria-label="Guía del huésped">
+                    <div className="guide-hero__copy">
+                        <PageHeader
+                            eyebrow="Guía del huésped"
+                            title={pageContent.pageTitle}
+                            subtitle={pageContent.pageSubtitle}
+                            progress={100}
+                            className="guide-page-heading"
+                        />
+                    </div>
+                    <div className="guide-hero__visual">
+                        <img src={guideHeroImage} alt="Paisaje de las sierras desde la finca" />
+                        <span className="guide-hero__stamp" aria-hidden="true">Reserva de las Sierras</span>
+                    </div>
+                </section>
 
-            <ContactoInicialSection />
-            <LocationSection />
-            <PaymentSection />
-            <WaterConservationSection />
-            <RulesSection />
-            <ZonasHumedasSection />
-            <AntesDePartirSection />
+                <div className="guide-flow">
+                    <div className="guide-flow__section guide-flow__section--arrival"><ContactoInicialSection /></div>
+                    <div className="guide-flow__section guide-flow__section--location"><LocationSection /></div>
+                    <div className="guide-flow__section guide-flow__section--payment"><PaymentSection /></div>
+                    <div className="guide-flow__section guide-flow__section--water"><WaterConservationSection /></div>
+                    <div className="guide-flow__section guide-flow__section--rules"><RulesSection /></div>
+                    <div className="guide-flow__section guide-flow__section--wellness"><ZonasHumedasSection /></div>
+                    <div className="guide-flow__section guide-flow__section--checkout"><AntesDePartirSection /></div>
+                </div>
+            </main>
 
             <Footer />
         </div>
