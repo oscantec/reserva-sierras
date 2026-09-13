@@ -54,6 +54,7 @@ export default async function handler(req, res) {
 
     if (req.method === 'GET') {
         try {
+            res.setHeader('Cache-Control', 'no-store, max-age=0')
             // Get the first row from site_config table
             const { data, error } = await supabase
                 .from('site_config')
@@ -120,4 +121,3 @@ export default async function handler(req, res) {
 
     res.status(405).json({ error: 'Method not allowed' })
 }
-

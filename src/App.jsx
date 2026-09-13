@@ -151,7 +151,7 @@ function App() {
         const loadAndApplyConfig = async () => {
             try {
                 // PRIORIDAD 1: Siempre intentar cargar desde API (Supabase)
-                const response = await fetch('/api/config')
+                const response = await fetch('/api/config', { cache: 'no-store' })
                 if (response.ok) {
                     const apiConfig = await response.json()
                     if (Object.keys(apiConfig).length > 0) {
