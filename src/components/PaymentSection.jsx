@@ -3,6 +3,18 @@ import { fetchReservasData } from '../utils/googleSheets'
 import qrImage from '/src/images/QR RS.png'
 import { DEFAULT_CONFIG } from '../utils/config'
 
+const cleanPaymentConfig = (parsed) => {
+    if (!parsed || typeof parsed !== 'object') return parsed
+
+    const cleaned = { ...parsed }
+    if (typeof cleaned.paymentSubtitlePart2 === 'string') {
+        cleaned.paymentSubtitlePart2 = cleaned.paymentSubtitlePart2
+            .replace(/\s*FInal Fimal\s*$/i, '')
+            .trim()
+    }
+    return cleaned
+}
+
 export default function PaymentSection() {
     const [config, setConfig] = useState({
         paymentAdvancePercent: DEFAULT_CONFIG.paymentAdvancePercent,
@@ -39,8 +51,9 @@ export default function PaymentSection() {
                 if (response.ok) {
                     const parsed = await response.json()
                     if (Object.keys(parsed).length > 0) {
-                        setConfig(prev => ({ ...prev, ...parsed }))
-                        localStorage.setItem('casacampestre_config', JSON.stringify(parsed))
+                        const cleaned = cleanPaymentConfig(parsed)
+                        setConfig(prev => ({ ...prev, ...cleaned }))
+                        localStorage.setItem('casacampestre_config', JSON.stringify(cleaned))
                         return
                     }
                 }
@@ -50,7 +63,7 @@ export default function PaymentSection() {
             // 2. Fallback to localStorage
             const saved = localStorage.getItem('casacampestre_config')
             if (saved) {
-                const parsed = JSON.parse(saved)
+                const parsed = cleanPaymentConfig(JSON.parse(saved))
                 setConfig(prev => ({ ...prev, ...parsed }))
             }
         }
