@@ -513,7 +513,7 @@
   "paymentSectionSubtitle": "Si tu reserva fue realizada a través de Airbnb, no es necesario efectuar pagos adicionales, ya que todo el proceso se gestiona directamente por la plataforma. Para reservas directas o realizadas por Booking, se solicita un ABONO OBLIGATORIO del 25 % al momento de confirmar la reserva para asegurar la fecha, y el saldo restante se paga al llegar a la casa.",
   "paymentSubtitlePart1": "Si tu reserva fue realizada a través de Airbnb, no es necesario efectuar pagos adicionales, ya que todo el proceso se gestiona directamente por la plataforma. Para reservas directas o realizadas por Booking, se solicita un",
   "paymentSubtitleHighlight": "ABONO OBLIGATORIO DEL 25 %",
-  "paymentSubtitlePart2": "al momento de confirmar la reserva para asegurar la fecha, y el saldo restante se paga al llegar a la casa. FInal Fimal",
+  "paymentSubtitlePart2": "al momento de confirmar la reserva para asegurar la fecha, y el saldo restante se paga al llegar a la casa.",
   "siteFonts": {
     "fontTitle": "Outfit",
     "fontBody": "Inter",
