@@ -14,7 +14,7 @@ export default function Booking() {
     const [isLoading, setIsLoading] = useState(true)
     const [pricing, setPricing] = useState(DEFAULT_CONFIG.pricing)
     const [siteColors, setSiteColors] = useState({
-        discountText: DEFAULT_CONFIG.siteColors?.discountText || '#3db814'
+        discountText: DEFAULT_CONFIG.siteColors?.discountText || '#40916c'
     })
     const [pageContent, setPageContent] = useState({
         pageTitle: DEFAULT_CONFIG.reservasContent?.pageTitle || 'Reserva tu hospedaje',

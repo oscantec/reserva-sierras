@@ -7,8 +7,7 @@
    Editable desde Admin Panel -> Colores
    
    Paleta Unificada:
-   Principales: #3db814, #2a8a0e, #ffffff, #000000
-   Secundarios: #00a658, #009178, #007983, #006076, #2f4858, #00af52, #00a381, #0094a8
+   Verde profundo: #1b4332 · Verde principal: #2d6a4f · Verde claro: #40916c
    ============================================ */
 :root {
   /* === FONDOS DE PÁGINAS === */
@@ -21,21 +20,21 @@
 
   /* === BOTONES === */
   --color-btn-primary: #2d6a4f;
-  --color-btn-primary-hover: #3db814;
+  --color-btn-primary-hover: #40916c;
 
   /* === TEXTOS - COLORES COMPLETOS === */
-  --color-text-main: #081c15;
+  --color-text-main: #182c25;
   --color-text-title: #1b4332;
-  --color-text-muted: #081c15;
-  --color-text-subtitle: #081c15;
-  --color-text-subtitle-dark: #1b4332;
-  --color-text-link: #3db814;
-  --color-text-accent: #2a8a0e;
+  --color-text-muted: #577767;
+  --color-text-subtitle: #577767;
+  --color-text-subtitle-dark: #b7d8c2;
+  --color-text-link: #2d6a4f;
+  --color-text-accent: #40916c;
   --color-text-on-primary: #ffffff;
 
   /* === ICONOS - COLORES COMPLETOS === */
   --color-icon-color: #ffffff;
-  --color-icon-color-secondary: #3db814;
+  --color-icon-color-secondary: #40916c;
   --color-icon-color-dark: #ffffff;
   --color-icon-bg-primary: #2d6a4f;
   --color-icon-bg-secondary: #ffffff;
@@ -44,12 +43,12 @@
 
   /* === SUPERFICIES - CONTENEDORES === */
   --color-surface-card: #fafafa;
-  --color-surface-card-hover: #f7fdf8;
+  --color-surface-card-hover: #f0f6f2;
   --color-surface-light: #ffffff;
   /* surface-section ahora es transparente para heredar el fondo de página */
   --color-surface-section: #ffffff;
   --color-surface-nav: #ffffff;
-  --color-surface-footer: #2f4858;
+  --color-surface-footer: #1b4332;
   --color-surface-card-dark: #081c15;
   --color-surface-page: #ffffff;
   --color-surface-page-dark: #111b0e;
@@ -62,7 +61,7 @@
   --color-card-shadow: #1b4332;
 
   /* === BADGES === */
-  --color-badge-bg: #3db814;
+  --color-badge-bg: #2d6a4f;
   --color-badge-text: #ffffff;
 
   /* === PLATAFORMAS === */
@@ -72,8 +71,8 @@
   --color-platform-directa: #00A658;
 
   /* === NAVEGACIÓN EXTERNA === */
-  --color-nav-waze: #007983;
-  --color-nav-maps: #006076;
+  --color-nav-waze: #2d6a4f;
+  --color-nav-maps: #40916c;
 
   /* === ALERTAS - WARNING === */
   --color-warning-bg: #2d6a4f;
@@ -82,65 +81,65 @@
   --color-warning-border: #1b4332;
 
   /* === ALERTAS - INFO === */
-  --color-info-bg: #e0f7f4;
+  --color-info-bg: #e7f0ea;
   --color-info-text: #1b4332;
-  --color-info-icon: #1b4332;
-  --color-info-border: #081c15;
+  --color-info-icon: #2d6a4f;
+  --color-info-border: #bfd3c5;
 
   /* === ALERTAS - SUCCESS === */
   --color-success-bg: #40916c;
-  --color-success-text: #2a8a0e;
-  --color-success-icon: #081c15;
-  --color-success-border: #1b4332;
+  --color-success-text: #ffffff;
+  --color-success-icon: #1b4332;
+  --color-success-border: #2d6a4f;
 
   /* === ALERTAS - ERROR === */
-  --color-error-bg: #b7e4c7;
-  --color-error-text: #2d6a4f;
+  --color-error-bg: #f2e4df;
+  --color-error-text: #b4533a;
   --color-error-icon: #ef4444;
-  --color-error-border: #1b4332;
+  --color-error-border: #b4533a;
 
   /* === AGUA - FONDOS Y GRADIENTE === */
-  --color-water-bg-primary: #006076;
-  --color-water-bg-secondary: #007983;
-  --color-water-glow: #00a658;
+  --color-water-bg-primary: #1b4332;
+  --color-water-bg-secondary: #2d6a4f;
+  --color-water-glow: #74c69d;
 
   /* === AGUA - TEXTOS === */
   --color-water-text: #ffffff;
   --color-water-text-muted: #ffffff;
 
   /* === AGUA - TARJETAS DE CONSEJOS === */
-  --color-water-tip-card-bg: #007983;
-  --color-water-tip-card-border: #009178;
-  --color-water-tip-icon-bg: #009178;
-  --color-water-tip-icon-bg-dark: #006076;
-  --color-water-tip-icon: #ffffff;
+  --color-water-tip-card-bg: #214d3a;
+  --color-water-tip-card-border: #40916c;
+  --color-water-tip-icon-bg: #2d6a4f;
+  --color-water-tip-icon-bg-dark: #1b4332;
+  --color-water-tip-icon: #d8f3dc;
   --color-water-tip-title: #ffffff;
   --color-water-tip-text: #ffffff;
 
   /* === AGUA - TARJETA DE AVISO === */
-  --color-water-warning-bg: #00a381;
-  --color-water-warning-border: #009178;
-  --color-water-warning-icon-bg: #009178;
+  --color-water-warning-bg: #2d6a4f;
+  --color-water-warning-border: #74c69d;
+  --color-water-warning-icon-bg: #40916c;
   --color-water-warning-icon: #ffffff;
   --color-water-warning-title: #ffffff;
   --color-water-warning-text: #ffffff;
 
   /* === AGUA - TARJETA DE AGRADECIMIENTO === */
-  --color-water-thanks-bg: #00af52;
-  --color-water-thanks-border: #00a658;
-  --color-water-thanks-icon-bg: #3db814;
-  --color-water-thanks-icon-bg-dark: #2a8a0e;
+  --color-water-thanks-bg: #40916c;
+  --color-water-thanks-border: #74c69d;
+  --color-water-thanks-icon-bg: #2d6a4f;
+  --color-water-thanks-icon-bg-dark: #1b4332;
   --color-water-thanks-icon: #ffffff;
   --color-water-thanks-title: #ffffff;
   --color-water-thanks-text: #ffffff;
 
   /* === AGUA - BADGE DE URGENCIA === */
-  --color-water-badge-bg: #2f4858;
+  --color-water-badge-bg: #1b4332;
   --color-water-badge-text: #ffffff;
-  --color-water-badge-glow: #006076;
+  --color-water-badge-glow: #2d6a4f;
 
   /* === AGUA - EFECTOS VISUALES === */
-  --color-water-bubbles: #ffffff;
+  --color-water-bubbles: #b7e4c7;
   --color-water-bubbles-inner: #ffffff;
   --color-water-wave-back: #ffffff;
   --color-water-wave-mid: #ffffff;
@@ -176,12 +175,12 @@ select {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #009178;
+  background: #2d6a4f;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #007983;
+  background: #40916c;
 }
 
 html {
@@ -430,6 +429,16 @@ button:disabled { cursor: not-allowed; }
 .admin-login { background: radial-gradient(ellipse at top left, #d8e9dd, transparent 60%), #f2f6f3; }
 .admin-login__card { border-top: 4px solid #1b4332; }
 .admin-login input { font-size: 1rem; }
+
+/* Keep legacy controls on the same green scale as the tokenized UI. */
+.admin-login input:focus { --tw-ring-color: #2d6a4f; }
+.site-nav__inner,
+.site-nav__links a[aria-current],
+.site-nav__admin,
+.ui-icon-button,
+.drawer-links [aria-current] {
+  border-color: rgba(45, 106, 79, .18);
+}
 
 @media (min-width: 1024px) {
   .home-intro > div > div:first-child { max-width: 850px; margin-bottom: 2.5rem; }

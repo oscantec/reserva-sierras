@@ -99,7 +99,7 @@ export default function Landing() {
     const [isVisible, setIsVisible] = useState(true)
     const [heroConfig, setHeroConfig] = useState({
         videoUrl: INITIAL_STATE.heroVideoUrl,
-        filterColor: INITIAL_STATE.heroFilterColor || '#22c55e',
+        filterColor: INITIAL_STATE.heroFilterColor || '#2d6a4f',
         filterOpacity: INITIAL_STATE.heroFilterOpacity ?? 4,
         blurAmount: INITIAL_STATE.heroBlurAmount ?? 2,
         phrases: INITIAL_STATE.heroRotatingPhrases || []
@@ -134,7 +134,7 @@ export default function Landing() {
     })
     const [sparklesConfig, setSparklesConfig] = useState(INITIAL_STATE.inicioContent?.sparklesConfig || {
         enabled: true,
-        particleColor: '#3db814',
+        particleColor: '#40916c',
         particleDensity: { amenidades: 80, destacados: 80, explora: 100 },
         particleSize: { min: 0.4, max: 1.2 },
         speed: 0.8,
@@ -342,7 +342,7 @@ export default function Landing() {
                                             maxSize={sparklesConfig?.particleSize?.max || 1.2}
                                             particleDensity={sparklesConfig?.particleDensity?.amenidades || 80}
                                             className="w-full h-full"
-                                            particleColor={sparklesConfig?.particleColor || '#3db814'}
+                                            particleColor={sparklesConfig?.particleColor || '#40916c'}
                                             speed={sparklesConfig?.speed || 0.8}
                                         />
                                     </div>
@@ -396,7 +396,7 @@ export default function Landing() {
                                                 maxSize={sparklesConfig?.particleSize?.max || 1.2}
                                                 particleDensity={sparklesConfig?.particleDensity?.destacados || 80}
                                                 className="w-full h-full"
-                                                particleColor={sparklesConfig?.particleColor || '#3db814'}
+                                                particleColor={sparklesConfig?.particleColor || '#40916c'}
                                                 speed={sparklesConfig?.speed || 0.8}
                                             />
                                         </div>
@@ -482,7 +482,7 @@ export default function Landing() {
                                                             maxSize={sparklesConfig?.particleSize?.max || 1.5}
                                                             particleDensity={sparklesConfig?.particleDensity?.explora || 100}
                                                             className="w-full h-full"
-                                                            particleColor={sparklesConfig?.particleColor || '#3db814'}
+                                                    particleColor={sparklesConfig?.particleColor || '#40916c'}
                                                             speed={sparklesConfig?.speed || 1.0}
                                                         />
                                                     </div>

@@ -1,19 +1,17 @@
 import { useState, useEffect } from 'react'
 
-// Paleta de 12 colores permitidos
+// Paleta compartida de verdes para ajustes visuales
 const ALLOWED_COLORS = [
-    { hex: '#3db814', name: 'Verde Principal' },
-    { hex: '#2a8a0e', name: 'Verde Oscuro' },
+    { hex: '#1b4332', name: 'Verde Profundo' },
+    { hex: '#2d6a4f', name: 'Verde Principal' },
+    { hex: '#40916c', name: 'Verde Claro' },
+    { hex: '#74c69d', name: 'Verde Hoja' },
+    { hex: '#95d5b2', name: 'Verde Suave' },
+    { hex: '#b7e4c7', name: 'Verde Celadón' },
+    { hex: '#d8f3dc', name: 'Menta Claro' },
     { hex: '#ffffff', name: 'Blanco' },
     { hex: '#000000', name: 'Negro' },
-    { hex: '#00a658', name: 'Verde Menta' },
-    { hex: '#009178', name: 'Verde Azulado' },
-    { hex: '#007983', name: 'Teal' },
-    { hex: '#006076', name: 'Teal Oscuro' },
-    { hex: '#2f4858', name: 'Azul Grisáceo' },
-    { hex: '#00af52', name: 'Verde Lima' },
-    { hex: '#00a381', name: 'Verde Mar' },
-    { hex: '#0094a8', name: 'Turquesa' }
+    { hex: '#182c25', name: 'Tinta Verde' }
 ]
 
 const PaletteColorPicker = ({ value, onChange }) => {
@@ -47,7 +45,7 @@ export default function Conexiones() {
     const DEFAULT_CONFIG = {
         // Hero Video Settings
         heroVideoUrl: 'https://www.youtube.com/watch?v=yzjFNEuWwFI',
-        heroFilterColor: '#3db814',
+        heroFilterColor: '#2d6a4f',
         heroFilterOpacity: 30,
         heroRotatingPhrases: [
             'Somos Reserva de las Sierras',
@@ -316,7 +314,7 @@ export default function Conexiones() {
                                     max="50"
                                     value={config.heroBlurAmount || 15}
                                     onChange={(e) => handleChange('heroBlurAmount', parseInt(e.target.value))}
-                                    className="w-full h-3 rounded-lg appearance-none cursor-pointer bg-gray-200 dark:bg-gray-700 accent-[#2a8a0e]"
+                                    className="w-full h-3 rounded-lg appearance-none cursor-pointer bg-gray-200 dark:bg-gray-700 accent-[#2d6a4f]"
                                 />
                                 <div className="flex justify-between text-xs text-text-muted mt-1">
                                     <span>0px (Nítido)</span>

@@ -132,14 +132,14 @@ const getDefaultContent = () => ({
         copyright: '© 2024 Reserva de las Sierras. Todos los derechos reservados.',
         poweredBy: 'Ingenierocante',
         showAdmin: true,
-        overlayColor: '#2f4858',
+        overlayColor: '#1b4332',
         overlayOpacity: 70,
         logoHeight: 32,
         adminLogoHeight: 24
     },
     sparklesConfig: {
         enabled: true,
-        particleColor: '#3db814',
+        particleColor: '#40916c',
         particleDensity: {
             amenidades: 80,
             destacados: 80,
@@ -352,8 +352,7 @@ const GALLERY_IMAGES = [
 ]
 
 // Sistema de Colores Estandarizado - Paleta Unificada
-// Colores Principales: #3db814, #2a8a0e, #ffffff, #000000
-// Colores Secundarios: #00a658, #009178, #007983, #006076, #2f4858, #00af52, #00a381, #0094a8
+// Paleta compartida: verde profundo, verde principal y verde claro.
 const DEFAULT_COLORS = {
     // === FONDOS DE PÁGINAS ===
     pageBgInicio: '#ffffff',
@@ -364,27 +363,27 @@ const DEFAULT_COLORS = {
     pageBgAdmin: '#ffffff',
 
     // === BOTONES ===
-    btnPrimary: '#3db814',
-    btnPrimaryHover: '#2a8a0e',
+    btnPrimary: '#2d6a4f',
+    btnPrimaryHover: '#40916c',
 
     // === TEXTOS - COLORES COMPLETOS ===
-    textMain: '#2f4858',          // Texto principal/cuerpo
-    textTitle: '#2f4858',         // Títulos y encabezados
-    textMuted: '#007983',         // Texto secundario/descripciones
-    textSubtitle: '#009178',      // Subtítulos debajo de títulos
-    textSubtitleDark: '#00a658',  // Subtítulos modo oscuro
-    textLink: '#3db814',          // Enlaces y texto clickeable
-    textAccent: '#3db814',        // Texto destacado/resaltado
+    textMain: '#182c25',          // Texto principal/cuerpo
+    textTitle: '#1b4332',         // Títulos y encabezados
+    textMuted: '#577767',         // Texto secundario/descripciones
+    textSubtitle: '#577767',      // Subtítulos debajo de títulos
+    textSubtitleDark: '#b7d8c2',  // Subtítulos modo oscuro
+    textLink: '#2d6a4f',          // Enlaces y texto clickeable
+    textAccent: '#40916c',        // Texto destacado/resaltado
     textOnPrimary: '#ffffff',     // Texto sobre botones primarios
 
     // === ICONOS - COLORES COMPLETOS ===
-    iconColor: '#3db814',             // Color del símbolo del icono
-    iconColorSecondary: '#009178',    // Color secundario del símbolo
+    iconColor: '#2d6a4f',             // Color del símbolo del icono
+    iconColorSecondary: '#40916c',    // Color secundario del símbolo
     iconColorDark: '#ffffff',         // Color del símbolo en modo oscuro
     iconBgPrimary: '#ffffff',         // Fondo de iconos principales
     iconBgSecondary: '#ffffff',       // Fondo de iconos secundarios
-    iconBgDark: '#006076',            // Fondo de iconos modo oscuro
-    iconBorder: '#3db814',            // Borde de iconos
+    iconBgDark: '#214d3a',            // Fondo de iconos modo oscuro
+    iconBorder: '#2d6a4f',            // Borde de iconos
 
     // === SUPERFICIES - CONTENEDORES ===
     surfaceCard: '#ffffff',           // Cards principales
@@ -392,18 +391,18 @@ const DEFAULT_COLORS = {
     surfaceLight: '#ffffff',          // Secciones claras
     surfaceSection: '#f8faf8',        // Fondo de secciones alternas
     surfaceNav: '#ffffff',            // Navbar
-    surfaceFooter: '#2f4858',         // Footer
-    surfaceCardDark: '#2f4858',       // Cards modo oscuro
+    surfaceFooter: '#1b4332',         // Footer
+    surfaceCardDark: '#214d3a',       // Cards modo oscuro
 
     // === BORDES ===
-    borderCard: '#009178',
-    borderCardDark: '#006076',
+    borderCard: '#bfd3c5',
+    borderCardDark: '#3a624c',
 
     // === SOMBRAS ===
-    cardShadow: '#22c55e',            // Verde para sombras de botones y cards
+    cardShadow: '#1b4332',            // Verde para sombras de botones y cards
 
     // === BADGES ===
-    badgeBg: '#3db814',
+    badgeBg: '#2d6a4f',
     badgeText: '#ffffff',
 
     // === PLATAFORMAS ===
@@ -413,8 +412,8 @@ const DEFAULT_COLORS = {
     platformDirecta: '#00a658',
 
     // === NAVEGACIÓN EXTERNA ===
-    navWaze: '#007983',
-    navMaps: '#006076',
+    navWaze: '#2d6a4f',
+    navMaps: '#40916c',
 
     // === ALERTAS - WARNING ===
     warningBg: '#2d6a4f',
@@ -423,22 +422,22 @@ const DEFAULT_COLORS = {
     warningBorder: '#1b4332',
 
     // === ALERTAS - INFO ===
-    infoBg: '#0094a8',
+    infoBg: '#e7f0ea',
     infoText: '#ffffff',
     infoIcon: '#ffffff',
-    infoBorder: '#007983',
+    infoBorder: '#bfd3c5',
 
     // === ALERTAS - SUCCESS ===
-    successBg: '#3db814',
+    successBg: '#40916c',
     successText: '#ffffff',
     successIcon: '#ffffff',
-    successBorder: '#2a8a0e',
+    successBorder: '#2d6a4f',
 
     // === ALERTAS - ERROR ===
-    errorBg: '#2f4858',
+    errorBg: '#f2e4df',
     errorText: '#ffffff',
     errorIcon: '#ffffff',
-    errorBorder: '#006076'
+    errorBorder: '#b4533a'
 }
 
 // ============================================
@@ -446,18 +445,16 @@ const DEFAULT_COLORS = {
 // Solo estos colores pueden ser seleccionados en el panel de colores
 // ============================================
 const ALLOWED_COLORS = [
-    { hex: '#3db814', name: 'Verde Principal' },
+    { hex: '#1b4332', name: 'Verde Profundo' },
+    { hex: '#2d6a4f', name: 'Verde Principal' },
+    { hex: '#40916c', name: 'Verde Claro' },
+    { hex: '#74c69d', name: 'Verde Hoja' },
+    { hex: '#95d5b2', name: 'Verde Suave' },
+    { hex: '#b7e4c7', name: 'Verde Celadón' },
+    { hex: '#d8f3dc', name: 'Menta Claro' },
     { hex: '#ffffff', name: 'Blanco' },
     { hex: '#000000', name: 'Negro' },
-    { hex: '#d8f3dc', name: 'Frosted Mint' },
-    { hex: '#b7e4c7', name: 'Celadon Claro' },
-    { hex: '#95d5b2', name: 'Celadon' },
-    { hex: '#74c69d', name: 'Mint Leaf Claro' },
-    { hex: '#52b788', name: 'Mint Leaf' },
-    { hex: '#40916c', name: 'Sea Green' },
-    { hex: '#2d6a4f', name: 'Hunter Green' },
-    { hex: '#1b4332', name: 'Pine Teal' },
-    { hex: '#081c15', name: 'Carbon Black' }
+    { hex: '#182c25', name: 'Tinta Verde' }
 ]
 
 // Componente de selector de colores con paleta + picker libre + input hexadecimal
@@ -1037,7 +1034,7 @@ export default function AdminContenido() {
     // Hero config (uses existing config pattern)
     const heroConfig = {
         videoUrl: config.heroVideoUrl || 'https://www.youtube.com/watch?v=yzjFNEuWwFI',
-        filterColor: config.heroFilterColor || '#3db814',
+        filterColor: config.heroFilterColor || '#2d6a4f',
         filterOpacity: config.heroFilterOpacity ?? 30,
         blurAmount: config.heroBlurAmount ?? 15,
         phrases: config.heroRotatingPhrases || ['Somos Reserva de las Sierras', 'Somos Tranquilidad', 'Somos Aire Puro', 'Somos Espacio Verde']
@@ -1435,7 +1432,7 @@ export default function AdminContenido() {
                             Color de Partículas
                         </label>
                         <PaletteColorPicker
-                            value={content.sparklesConfig?.particleColor || '#3db814'}
+                            value={content.sparklesConfig?.particleColor || '#40916c'}
                             onChange={value => setContent(prev => ({
                                 ...prev,
                                 sparklesConfig: {
@@ -1795,11 +1792,11 @@ export default function AdminContenido() {
                                 <div className="flex items-center gap-2">
                                     <input
                                         type="color"
-                                        value={content.waterConservation.rainColor || '#3db814'}
+                                        value={content.waterConservation.rainColor || '#74c69d'}
                                         onChange={e => updateContent('waterConservation.rainColor', e.target.value)}
                                         className="w-10 h-10 border border-border-card rounded cursor-pointer"
                                     />
-                                    <span className="text-xs text-text-muted font-mono">{content.waterConservation.rainColor || '#3db814'}</span>
+                                    <span className="text-xs text-text-muted font-mono">{content.waterConservation.rainColor || '#74c69d'}</span>
                                 </div>
                             </div>
                             <div>
@@ -2490,7 +2487,7 @@ export default function AdminContenido() {
                 {/* Info Banner */}
                 <div className="bg-gray-50 border border-gray-200 rounded-xl p-5">
                     <div className="flex items-start gap-4">
-                        <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(to bottom right, #2a8a0e, #1b4332)' }}>
+                        <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(to bottom right, #40916c, #1b4332)' }}>
                             <span className="material-symbols-outlined text-white text-2xl">text_format</span>
                         </div>
                         <div className="flex-1">
@@ -2888,7 +2885,7 @@ export default function AdminContenido() {
                     <div>
                         <label className="block text-sm font-medium text-text-main-light mb-1">Color del Filtro</label>
                         <PaletteColorPicker
-                            value={content.footer?.overlayColor || '#2f4858'}
+                            value={content.footer?.overlayColor || '#1b4332'}
                             onChange={(color) => updateContent('footer.overlayColor', color)}
                         />
                         <p className="text-xs text-text-muted mt-1">Color que se superpone sobre la imagen de fondo</p>
@@ -2953,7 +2950,7 @@ export default function AdminContenido() {
                     <div
                         className="absolute inset-0"
                         style={{
-                            backgroundColor: content.footer?.overlayColor || '#2f4858',
+                            backgroundColor: content.footer?.overlayColor || '#1b4332',
                             opacity: (content.footer?.overlayOpacity ?? 70) / 100
                         }}
                     ></div>

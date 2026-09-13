@@ -49,7 +49,7 @@ export default function Login() {
                 <div className="admin-login__card bg-white rounded-3xl shadow-2xl shadow-green-900/10 p-8 border border-white/50">
                     {/* Logo & Header */}
                     <div className="text-center mb-8">
-                        <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl shadow-lg shadow-card mb-4" style={{ background: 'linear-gradient(to bottom right, #2a8a0e, #1b4332)' }}>
+                        <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl shadow-lg shadow-card mb-4" style={{ background: 'linear-gradient(to bottom right, #40916c, #1b4332)' }}>
                             <span className="material-symbols-outlined text-white text-3xl">cabin</span>
                         </div>
                         <h1 className="text-2xl font-bold text-gray-900">Panel de Administración</h1>
@@ -83,7 +83,7 @@ export default function Login() {
                                     onChange={(e) => setEmail(e.target.value)}
                                     placeholder="admin@reservadelassierras.com"
                                     required
-                                    className="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2a8a0e] focus:border-transparent transition-all"
+                                    className="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2d6a4f] focus:border-transparent transition-all"
                                 />
                             </div>
                         </div>
@@ -105,7 +105,7 @@ export default function Login() {
                                     onChange={(e) => setPassword(e.target.value)}
                                     placeholder="••••••••"
                                     required
-                                    className="w-full pl-12 pr-12 py-3.5 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2a8a0e] focus:border-transparent transition-all"
+                                    className="w-full pl-12 pr-12 py-3.5 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2d6a4f] focus:border-transparent transition-all"
                                 />
                                 <button
                                     type="button"
@@ -126,7 +126,7 @@ export default function Login() {
                             type="submit"
                             disabled={loading}
                             className="w-full py-4 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                            style={{ background: 'linear-gradient(to right, #2a8a0e, #1b4332)' }}
+                            style={{ background: 'linear-gradient(to right, #2d6a4f, #1b4332)' }}
                         >
                             {loading ? (
                                 <>

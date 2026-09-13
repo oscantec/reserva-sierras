@@ -7,9 +7,9 @@ export default function Calendario() {
     const [currentDate, setCurrentDate] = useState(new Date())
     const [config, setConfig] = useState(null)
     const [siteColors, setSiteColors] = useState({
-        todayBorder: '#3db814',
-        todayText: '#2a8a0e',
-        todayPulse: '#00a658',
+        todayBorder: '#2d6a4f',
+        todayText: '#1b4332',
+        todayPulse: '#40916c',
         platformAirbnb: '#2f4858',
         platformBooking: '#006076',
         platformGoogle: '#0094a8'

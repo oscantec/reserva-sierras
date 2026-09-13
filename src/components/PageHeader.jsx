@@ -72,7 +72,7 @@ const PageHeader = ({
 
             <div role={currentStep && totalSteps ? 'progressbar' : undefined} aria-label={currentStep && totalSteps ? 'Progreso' : undefined} aria-valuenow={currentStep && totalSteps ? displayProgress : undefined} aria-valuemin={currentStep && totalSteps ? 0 : undefined} aria-valuemax={currentStep && totalSteps ? 100 : undefined} className={`page-heading__line h-1.5 w-full rounded-full mt-2 relative overflow-hidden ${premium ? "bg-premium-sand" : "bg-gray-100 dark:bg-border-card-dark"}`}>
                 <div
-                    className={`absolute top-0 left-0 h-full rounded-full transition-all duration-500 ${premium ? "bg-premium-gold ease-premium" : "bg-[#3db814] ease-in-out shadow-[0_0_8px_rgba(61,184,20,0.3)]"}`}
+                    className={`absolute top-0 left-0 h-full rounded-full transition-all duration-500 ${premium ? "bg-premium-gold ease-premium" : "bg-primary ease-in-out shadow-[0_0_8px_rgba(45,106,79,0.3)]"}`}
                     style={{ width: `${displayProgress}%` }}
                 ></div>
             </div>

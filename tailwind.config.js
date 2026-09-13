@@ -102,15 +102,15 @@ export default {
                 "water-badge-text": "var(--color-water-badge-text)",
 
                 // === PREMIUM DESIGN SYSTEM (lujo natural editorial) ===
-                // Verde de marca con superficies neutras y tonos de apoyo.
+                // Paleta única de verdes compartida por todas las páginas.
                 premium: {
                     forest: "#1b4332",
-                    pine: "#28614c",
+                    pine: "#2d6a4f",
                     sage: "#577767",
                     cream: "#F7F9F8",
                     sand: "#E7EDE9",
-                    gold: "#1b4332",
-                    "gold-light": "#BFE3CE",
+                    gold: "#40916c",
+                    "gold-light": "#d8f3dc",
                     ink: "#182C25",
                     mist: "#EEF4F0",
                 },

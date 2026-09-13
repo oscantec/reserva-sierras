@@ -15,7 +15,7 @@ export default function WaterConservationSection() {
         urgencyBadgeText: 'IMPORTANTE',
         // Rain effect settings
         showRain: true,
-        rainColor: '#3db814',
+        rainColor: '#74c69d',
         rainCount: 100,
         rainOpacity: 50,
         rainSpeed: 2
@@ -55,7 +55,7 @@ export default function WaterConservationSection() {
 
     // Rain configuration
     const showRain = content.showRain !== false
-    const rainColor = content.rainColor || '#3db814'
+    const rainColor = content.rainColor || '#74c69d'
     const rainCount = content.rainCount || 100
     const rainOpacity = (content.rainOpacity || 50) / 100
     const rainSpeed = content.rainSpeed || 2

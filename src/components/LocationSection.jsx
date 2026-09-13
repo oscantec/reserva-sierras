@@ -124,7 +124,7 @@ export default function LocationSection() {
                                 }}
                             >
                                 <svg width="28" height="36" viewBox="0 0 24 30" style={{ filter: 'drop-shadow(0 2px 3px rgba(0,0,0,0.4))' }}>
-                                    <path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 18 12 18s12-9 12-18c0-6.6-5.4-12-12-12z" fill="var(--color-btn-primary, #3db814)" />
+                                    <path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 18 12 18s12-9 12-18c0-6.6-5.4-12-12-12z" fill="var(--color-btn-primary, #2d6a4f)" />
                                 </svg>
                             </div>
                         </div>

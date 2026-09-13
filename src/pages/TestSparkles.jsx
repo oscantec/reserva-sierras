@@ -13,7 +13,7 @@ export default function TestSparkles() {
                         maxSize={1.5}
                         particleDensity={120}
                         className="w-full h-full"
-                        particleColor="#3db814"
+                        particleColor="#40916c"
                         speed={1.0}
                     />
                 </div>

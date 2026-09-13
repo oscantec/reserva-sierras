@@ -1,20 +1,18 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../../utils/supabaseClient'
 
-// Paleta de 12 colores permitidos
+// Paleta compartida de verdes para temporadas y tarifas
 const ALLOWED_COLORS = [
-    { hex: '#3db814', name: 'Verde Principal' },
-    { hex: '#2a8a0e', name: 'Verde Oscuro' },
+    { hex: '#1b4332', name: 'Verde Profundo' },
+    { hex: '#2d6a4f', name: 'Verde Principal' },
+    { hex: '#40916c', name: 'Verde Claro' },
+    { hex: '#74c69d', name: 'Verde Hoja' },
+    { hex: '#95d5b2', name: 'Verde Suave' },
+    { hex: '#b7e4c7', name: 'Verde Celadón' },
+    { hex: '#d8f3dc', name: 'Menta Claro' },
     { hex: '#ffffff', name: 'Blanco' },
     { hex: '#000000', name: 'Negro' },
-    { hex: '#00a658', name: 'Verde Menta' },
-    { hex: '#009178', name: 'Verde Azulado' },
-    { hex: '#007983', name: 'Teal' },
-    { hex: '#006076', name: 'Teal Oscuro' },
-    { hex: '#2f4858', name: 'Azul Grisáceo' },
-    { hex: '#00af52', name: 'Verde Lima' },
-    { hex: '#00a381', name: 'Verde Mar' },
-    { hex: '#0094a8', name: 'Turquesa' }
+    { hex: '#182c25', name: 'Tinta Verde' }
 ]
 
 const PaletteColorPicker = ({ value, onChange }) => {
@@ -50,8 +48,8 @@ export default function Tarifas() {
             ivaPercent: 19
         },
         seasons: [
-            { id: 1, name: 'Temporada Alta', multiplier: 1.3, startMonth: 12, startDay: 15, endMonth: 1, endDay: 15, color: '#2f4858' },
-            { id: 2, name: 'Semana Santa', multiplier: 1.4, startMonth: 3, startDay: 24, endMonth: 3, endDay: 31, color: '#007983' },
+            { id: 1, name: 'Temporada Alta', multiplier: 1.3, startMonth: 12, startDay: 15, endMonth: 1, endDay: 15, color: '#1b4332' },
+            { id: 2, name: 'Semana Santa', multiplier: 1.4, startMonth: 3, startDay: 24, endMonth: 3, endDay: 31, color: '#40916c' },
         ],
         specialDates: [
             { id: 1, startDate: '2026-01-01', endDate: '2026-01-01', multiplier: 1.4, label: 'Año Nuevo' },
@@ -180,7 +178,7 @@ export default function Tarifas() {
             startDay: 1,
             endMonth: 1,
             endDay: 31,
-            color: '#3db814'
+            color: '#2d6a4f'
         }
         setPricing(prev => ({
             ...prev,
