@@ -1211,6 +1211,13 @@ button:disabled { cursor: not-allowed; }
 .admin-shell .admin-workspace,
 .admin-shell .bg-background-light,
 .admin-shell .dark\:bg-background-dark { background: transparent !important; }
+.admin-shell .bg-gray-50,
+.admin-shell .bg-gray-100,
+.admin-shell .bg-gray-200,
+.admin-shell .dark\:bg-gray-800,
+.admin-shell .dark\:bg-gray-900 {
+  background: rgba(255,255,255,.075) !important;
+}
 .admin-shell .bg-white,
 .admin-shell .bg-surface-card,
 .admin-shell .dark\:bg-surface-card-dark {
