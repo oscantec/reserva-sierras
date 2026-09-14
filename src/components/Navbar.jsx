@@ -26,14 +26,14 @@ export default function Navbar() {
                     </a>
                     <div className="site-nav__links">
                         {navLinks.map(link => link.path === '/' ? (
-                            <a key={link.path} href={link.path} aria-current={pathname === link.path ? 'page' : undefined}>{link.label}</a>
+                            <a key={link.path} href={link.path} style={{ color: '#f4a261' }} aria-current={pathname === link.path ? 'page' : undefined}>{link.label}</a>
                         ) : (
-                            <Link key={link.path} to={link.path} aria-current={pathname === link.path ? 'page' : undefined}>{link.label}</Link>
+                            <Link key={link.path} to={link.path} style={{ color: '#f4a261' }} aria-current={pathname === link.path ? 'page' : undefined}>{link.label}</Link>
                         ))}
                     </div>
                     <div className="site-nav__actions flex items-center gap-2">
                         <button type="button" onClick={() => setIsMenuOpen(true)} className="ui-icon-button site-nav__toggle" aria-label="Abrir menú" aria-expanded={isMenuOpen} aria-haspopup="dialog">
-                            <span className="navbar-hamburger-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+                            <span className="navbar-hamburger-bars" aria-hidden="true"><i style={{ backgroundColor: '#f4a261' }}></i><i style={{ backgroundColor: '#f4a261' }}></i><i style={{ backgroundColor: '#f4a261' }}></i></span>
                         </button>
                         <Link to="/admin" className="site-nav__admin" aria-label="Panel Admin">
                             <span className="material-symbols-outlined" aria-hidden="true">key</span>
