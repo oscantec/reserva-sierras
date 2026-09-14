@@ -25,7 +25,10 @@ function weatherDashboardBuildPlugin() {
   return {
     name: 'weather-dashboard-build',
     apply: 'build',
-    transformIndexHtml(html) {
+    transformIndexHtml(html, context) {
+      if (context.path === '/index.html') {
+        return fs.readFileSync(path.join(__dirname, 'weather-dashboard.html'), 'utf8')
+      }
       return html
     },
     generateBundle() {
