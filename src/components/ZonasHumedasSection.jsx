@@ -141,7 +141,7 @@ export default function ZonasHumedasSection() {
                     className="mt-6 rounded-premium p-4 flex items-start gap-3 hairline bg-premium-sand"
                 >
                     <span className="material-symbols-outlined text-premium-gold mt-0.5">info</span>
-                    <p className="text-sm text-premium-ink/70">
+                    <p className="text-sm" style={{ color: '#f3fbf5' }}>
                         {content.bottomMessage.split('uso exclusivo').map((part, i) =>
                             i === 0 ? part : <><strong key={i}>uso exclusivo</strong>{part}</>
                         )}
