@@ -1101,6 +1101,24 @@ button:disabled { cursor: not-allowed; }
 .guide-page .guide-flow__section--arrival .card-premium .material-symbols-outlined {
   color: #b7e4c7 !important;
 }
+
+/* Final override: Contacto Inicial must match the dark Inicio reference. */
+.guide-page .guide-flow__section--arrival .card-premium {
+  background: rgba(255,255,255,.10) !important;
+  border-color: rgba(255,255,255,.20) !important;
+  color: #f3fbf5 !important;
+}
+.guide-page .guide-flow__section--arrival .card-premium * {
+  color: #f3fbf5 !important;
+}
+.guide-page .guide-flow__section--arrival .card-premium .material-symbols-outlined {
+  color: #b7e4c7 !important;
+}
+.guide-page .guide-flow__section--arrival .card-premium .space-y-3 > div,
+.guide-page .guide-flow__section--arrival .card-premium .space-y-4 > div {
+  background: rgba(255,255,255,.095) !important;
+  border-color: rgba(255,255,255,.14) !important;
+}
 .guide-page .guide-flow__section--arrival .card-premium .space-y-3 > div,
 .guide-page .guide-flow__section--arrival .card-premium .space-y-4 > div {
   background: rgba(255,255,255,.095) !important;
@@ -1218,4 +1236,21 @@ button:disabled { cursor: not-allowed; }
     max-width: 12ch;
     font-size: clamp(2.35rem, 12vw, 3.5rem) !important;
   }
+}
+
+/* Final Contacto Inicial contrast after restoring the previous Guide skin. */
+.guide-page .guide-flow__section--arrival .card-premium,
+.guide-page .guide-flow__section--arrival .card-premium * {
+  color: #f3fbf5 !important;
+}
+.guide-page .guide-flow__section--arrival .card-premium {
+  background: rgba(255,255,255,.10) !important;
+  border-color: rgba(255,255,255,.20) !important;
+}
+.guide-page .guide-flow__section--arrival .card-premium .material-symbols-outlined {
+  color: #b7e4c7 !important;
+}
+.guide-page .guide-flow__section--arrival .card-premium .space-y-3 > div,
+.guide-page .guide-flow__section--arrival .card-premium .space-y-4 > div {
+  background: rgba(255,255,255,.095) !important;
 }
