@@ -150,7 +150,7 @@ export default function LocationSection() {
                     <div className="lg:w-[380px] shrink-0">
                         <div className="sticky top-24 card-premium p-3 md:p-5">
                             <div className="flex justify-between items-center mb-4">
-                                <h3 className="font-premium-display text-premium-forest text-lg">Instrucciones</h3>
+                                <h3 className="font-premium-display !text-white text-lg">Instrucciones</h3>
                             </div>
 
                             {/* Transport Mode Selector */}
@@ -182,8 +182,8 @@ export default function LocationSection() {
                                     <div key={i} className="flex gap-4">
                                         <div className="w-8 h-8 bg-premium-forest text-premium-cream rounded-full flex items-center justify-center text-sm font-premium-display font-semibold shrink-0">{i + 1}</div>
                                         <div>
-                                            <p className="font-semibold text-base text-premium-forest">{step.title}</p>
-                                            <p className="text-sm text-premium-ink/60">{step.desc}</p>
+                                            <p className="font-semibold text-base !text-white">{step.title}</p>
+                                            <p className="text-sm !text-white/80">{step.desc}</p>
                                         </div>
                                     </div>
                                 ))}
