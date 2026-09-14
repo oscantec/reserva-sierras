@@ -89,7 +89,7 @@ export default function WaterConservationSection() {
     return (
         <section className="px-4 py-8 md:py-12 bg-premium-mist overflow-hidden relative">
             {/* Rain Animation with Splash Effect */}
-            {showRain && (
+            {false && showRain && (
                 <div className="absolute inset-0 overflow-hidden pointer-events-none z-30">
                     {rainDrops.map(drop => (
                         <div key={drop.id}>
