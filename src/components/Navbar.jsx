@@ -33,14 +33,14 @@ export default function Navbar() {
                             <Link key={link.path} to={link.path} aria-current={pathname === link.path ? 'page' : undefined}>{link.label}</Link>
                         ))}
                     </div>
-                    <div className="flex items-center gap-2">
-                        <Link to="/admin" className="site-nav__admin" aria-label="Panel Admin">
-                            <span className="material-symbols-outlined" aria-hidden="true">admin_panel_settings</span>
-                            <span>Panel Admin</span>
-                        </Link>
+                    <div className="site-nav__actions flex items-center gap-2">
                         <button type="button" onClick={() => setIsMenuOpen(true)} className="ui-icon-button site-nav__toggle" aria-label="Abrir menú" aria-expanded={isMenuOpen} aria-haspopup="dialog">
                             <span className="material-symbols-outlined" aria-hidden="true">menu</span>
                         </button>
+                        <Link to="/admin" className="site-nav__admin" aria-label="Panel Admin">
+                            <span className="material-symbols-outlined" aria-hidden="true">key</span>
+                            <span>Panel Admin</span>
+                        </Link>
                     </div>
                 </div>
             </nav>

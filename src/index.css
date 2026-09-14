@@ -164,19 +164,25 @@
 }
 
 .reservas-page .site-nav {
-  padding: .85rem 1.25rem;
+  position: fixed;
+  top: 15px;
+  right: 37px;
+  left: max(1rem, 8vw);
+  z-index: 50;
+  padding: 0;
   background: transparent;
 }
 
 .reservas-page .site-nav__inner {
-  min-height: 64px;
-  padding: .35rem .6rem;
-  border-radius: 1.25rem;
-  border-color: var(--reservas-line);
-  background: rgba(255, 255, 255, .12);
-  box-shadow: 0 14px 34px rgba(0, 0, 0, .18), inset 1px 1px 0 rgba(255, 255, 255, .12);
-  backdrop-filter: blur(20px) saturate(120%);
-  -webkit-backdrop-filter: blur(20px) saturate(120%);
+  max-width: none;
+  min-height: 70px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
   color: var(--reservas-ink);
 }
 
@@ -187,8 +193,8 @@
 }
 
 .reservas-page .site-brand img {
-  width: 170px;
-  height: 52px;
+  width: clamp(145px, 16vw, 220px);
+  height: clamp(50px, 5vw, 66px);
   filter: brightness(0) invert(1);
 }
 
@@ -202,9 +208,26 @@
 
 .reservas-page .site-nav__admin,
 .reservas-page .ui-icon-button {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 13px;
   border-color: rgba(255, 255, 255, .2);
   background: rgba(255, 255, 255, .1);
   color: #fff;
+}
+
+.reservas-page .site-nav__actions {
+  gap: 1rem;
+}
+
+.reservas-page .site-nav__admin .material-symbols-outlined,
+.reservas-page .site-nav__toggle .material-symbols-outlined {
+  font-size: 20px;
+}
+
+.reservas-page .site-nav__admin > span:last-child {
+  display: none;
 }
 
 .reservas-page .reservas-main {
@@ -366,9 +389,31 @@
 }
 
 @media (max-width: 767px) {
-  .reservas-page .site-nav { padding: .55rem .65rem; }
-  .reservas-page .site-nav__inner { min-height: 58px; border-radius: 1rem; }
-  .reservas-page .site-brand img { width: 108px; height: 38px; }
+  .reservas-page .site-nav {
+    top: 4px;
+    right: 8px;
+    left: 4px;
+  }
+  .reservas-page .site-nav__inner {
+    min-height: 52px;
+    gap: .35rem;
+  }
+  .reservas-page .site-brand img {
+    width: clamp(92px, 27vw, 112px);
+    height: 42px;
+  }
+  .reservas-page .site-nav__actions {
+    margin-left: auto;
+    gap: .4rem;
+  }
+  .reservas-page .site-nav__toggle {
+    display: inline-flex;
+  }
+  .reservas-page .site-nav__admin,
+  .reservas-page .site-nav__toggle {
+    width: 40px;
+    height: 40px;
+  }
   .reservas-page .reservas-main { padding-top: 1.25rem; padding-bottom: 2.5rem; gap: 1.25rem; }
   .reservas-page .reservation-calendar,
   .reservas-page .card-premium { border-radius: 1.25rem; }
