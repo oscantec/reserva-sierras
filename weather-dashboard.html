@@ -893,7 +893,7 @@
             if (lowerVisual) lowerVisual.style.setProperty('--home-lower-image', `url("${posterUrl}")`);
           }
           if (videoId && !heroFrame.src.includes(`/embed/${videoId}`)) {
-            heroFrame.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=1&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&iv_load_policy=3&vq=default&origin=${encodeURIComponent(window.location.origin)}`;
+            heroFrame.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&disablekb=1&fs=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&vq=default&origin=${encodeURIComponent(window.location.origin)}`;
           }
         }
         if (heroTitle && phrases.length) {
