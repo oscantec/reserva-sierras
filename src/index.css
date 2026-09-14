@@ -1124,6 +1124,53 @@ button:disabled { cursor: not-allowed; }
   background: rgba(255,255,255,.095) !important;
 }
 
+/* Guía usa exactamente el Footer compacto de las demás páginas. */
+.guide-page .site-footer {
+  position: relative;
+  width: 100%;
+  min-height: 0;
+  margin-top: 0;
+  border-radius: 0;
+  border: 0;
+  padding: 1.875rem clamp(1rem, 8vw, 8rem) 1.25rem;
+  text-align: center;
+}
+.guide-page .site-footer .site-footer__content {
+  max-width: none;
+  padding: 0;
+}
+.guide-page .site-footer .home-footer-name {
+  margin-top: 0;
+  font-size: clamp(1.4rem, 2vw, 2rem);
+  line-height: 1.15;
+}
+.guide-page .site-footer .home-footer-nav {
+  gap: .875rem;
+  margin-top: .875rem;
+  margin-bottom: 1rem;
+}
+.guide-page .site-footer .home-footer-nav a {
+  min-height: 32px;
+  font-size: clamp(.8125rem, 1.3vw, 1.0625rem);
+}
+.guide-page .site-footer .home-footer-meta {
+  gap: .5rem;
+  margin-top: 1.25rem;
+  font-size: clamp(.75rem, 1.1vw, 1rem);
+  line-height: 1.4;
+}
+.guide-page .site-footer .home-powered {
+  gap: .5625rem;
+  margin-top: 1rem;
+  font-size: clamp(.6875rem, 1vw, .875rem);
+  letter-spacing: .075em;
+}
+.guide-page .site-footer .home-powered img {
+  width: clamp(7rem, 12vw, 9.375rem);
+  height: auto !important;
+  max-height: 2.8125rem;
+}
+
 /* Ubicación: misma jerarquía glass oscura de Inicio. */
 .guide-page .guide-flow__section--location {
   background: transparent !important;
