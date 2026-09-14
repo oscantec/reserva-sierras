@@ -557,26 +557,38 @@
       .home-photo, .home-photo:first-child { min-height: calc(210 * var(--u)); grid-row: auto; }
       .home-grid { grid-template-columns: 1fr; }
       .home-footer { flex-direction: column; align-items: flex-start; }
-      .home-hero, .home-hero-content { min-height: calc(530 * var(--u)); }
-      .home-hero-content { padding: calc(28 * var(--u)); }
-      .home-hero-title { font-size: calc(59 * var(--u)); }
-      .home-schedule { grid-template-columns: 1fr; margin-top: calc(-28 * var(--u)); padding: calc(12 * var(--u)) calc(18 * var(--u)); }
-      .home-schedule-item + .home-schedule-item { border-top: 1px solid rgba(255,255,255,.2); border-left: 0; }
+      .home-hero, .home-hero-content { min-height: clamp(270px, 78vw, 340px); }
+      .home-hero-content { padding: calc(24 * var(--u)); }
+      .home-hero-title { max-width: 100%; font-size: clamp(38px, 11vw, 48px); }
+      .home-hero-kicker { margin-bottom: calc(8 * var(--u)); font-size: calc(10 * var(--u)); }
+      .home-hero-actions { gap: calc(7 * var(--u)); margin-top: calc(15 * var(--u)); }
+      .home-cta { padding: calc(9 * var(--u)) calc(12 * var(--u)); font-size: calc(12 * var(--u)); }
+      .home-schedule { grid-template-columns: 1fr 1fr; margin-top: calc(-22 * var(--u)); padding: calc(8 * var(--u)) calc(10 * var(--u)); }
+      .home-schedule-item { min-height: calc(48 * var(--u)); gap: calc(8 * var(--u)); }
+      .home-schedule-item .icon { width: calc(18 * var(--u)); height: calc(18 * var(--u)); }
+      .home-schedule-label { font-size: calc(8 * var(--u)); }
+      .home-schedule-value { font-size: calc(18 * var(--u)); }
+      .home-schedule-item + .home-schedule-item { border-top: 0; border-left: 1px solid rgba(255,255,255,.2); }
       .home-info-grid, .home-stat-grid, .home-explore-grid { grid-template-columns: 1fr; }
+      .home-info-card { min-height: auto; padding: calc(18 * var(--u)); }
+      .home-stat-card { min-height: auto; padding: calc(18 * var(--u)); }
+      .home-explore-card img { height: calc(120 * var(--u)); }
+      .home-explore-copy { min-height: auto; padding: calc(16 * var(--u)); }
       .home-highlight { padding: calc(30 * var(--u)) calc(18 * var(--u)); }
-      .home-section { margin-top: calc(63 * var(--u)); }
+      .home-section { margin-top: calc(46 * var(--u)); }
       .home-video-section { margin-top: 0; padding: 0; }
       .home-video-frame { aspect-ratio: 16 / 10; border-radius: 0; }
       .home-site-footer { padding: calc(35 * var(--u)) calc(18 * var(--u)) calc(27 * var(--u)); }
-      .site-header { position: fixed; left: calc(12 * var(--u)); right: calc(12 * var(--u)); top: calc(12 * var(--u)); height: calc(62 * var(--u)); padding: calc(6 * var(--u)) calc(8 * var(--u)); }
+      .site-header { position: fixed; z-index: 30; left: calc(10 * var(--u)); right: calc(10 * var(--u)); top: calc(10 * var(--u)); display: flex; height: calc(54 * var(--u)); min-width: 0; gap: calc(5 * var(--u)); padding: calc(4 * var(--u)) calc(5 * var(--u)); }
       .home-video-fallback { right: calc(16 * var(--u)); bottom: calc(16 * var(--u)); }
-      .site-brand { flex: 0 0 auto; }
-      .site-brand img { width: calc(145 * var(--u)); height: calc(50 * var(--u)); }
+      .site-brand { min-width: 0; flex: 0 0 auto; }
+      .site-brand img { width: clamp(92px, 27vw, 112px); height: calc(42 * var(--u)); }
       .site-brand span { display: none; }
-      .site-nav { flex: 1; justify-content: flex-end; gap: 0; }
-      .site-nav a { padding: calc(9 * var(--u)) calc(7 * var(--u)); font-size: calc(11 * var(--u)); }
+      .site-nav { min-width: 0; flex: 1 1 auto; justify-content: flex-end; gap: calc(1 * var(--u)); overflow: visible; }
+      .site-nav a { flex: 0 1 auto; padding: calc(7 * var(--u)) calc(5 * var(--u)); font-size: clamp(9px, 2.7vw, 11px); white-space: nowrap; }
       .site-nav a:nth-child(n + 4) { display: none; }
-      .site-admin { width: calc(36 * var(--u)); height: calc(36 * var(--u)); }
+      .site-admin { width: calc(30 * var(--u)); height: calc(30 * var(--u)); }
+      .site-admin .icon { width: calc(14 * var(--u)); height: calc(14 * var(--u)); }
       .bar-chart { height: calc(175 * var(--u)); gap: calc(7 * var(--u)); }
     }
 
