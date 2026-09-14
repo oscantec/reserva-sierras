@@ -1207,6 +1207,18 @@ button:disabled { cursor: not-allowed; }
 .guide-page .guide-flow__section--wellness .card-premium [class*="text-premium-forest"] {
   color: #f3fbf5 !important;
 }
+.guide-page .guide-flow__section--wellness .wellness-notice {
+  background: rgba(255,255,255,.095) !important;
+  border-color: rgba(255,255,255,.18) !important;
+  color: #f3fbf5 !important;
+}
+.guide-page .guide-flow__section--wellness .wellness-notice p,
+.guide-page .guide-flow__section--wellness .wellness-notice strong {
+  color: #f3fbf5 !important;
+}
+.guide-page .guide-flow__section--wellness .wellness-notice .material-symbols-outlined {
+  color: #b7e4c7 !important;
+}
 .guide-page .guide-flow__section--arrival h2,
 .guide-page .guide-flow__section--arrival h3 {
   color: #fff !important;
