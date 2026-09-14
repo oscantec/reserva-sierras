@@ -826,10 +826,6 @@ button:disabled { cursor: not-allowed; }
 .guide-top-page .guide-page-heading p { color: rgba(243,251,245,.75) !important; }
 .guide-top-page .guide-hero__visual { min-height: 520px; overflow: hidden; }
 .guide-top-page .guide-hero__visual img { width: 100%; height: 100%; object-fit: cover; }
-.guide-top-page .guide-flow,
-.guide-top-page .guide-flow * {
-  all: revert !important;
-}
 @media (max-width: 767px) {
   .guide-top-page .site-brand img { width: clamp(92px, 27vw, 112px); height: 42px; }
   .guide-top-page .guide-hero { grid-template-columns: 1fr; min-height: 0; }
@@ -840,11 +836,5 @@ button:disabled { cursor: not-allowed; }
 /* Guía en estado neutro: sin estilos visuales propios. */
 #unstyled-guide,
 #unstyled-guide * {
-  all: revert !important;
-}
-
-/* Everything below Guía's first section remains intentionally unstyled. */
-.guide-top-page .guide-flow,
-.guide-top-page .guide-flow * {
   all: revert !important;
 }
