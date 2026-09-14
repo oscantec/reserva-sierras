@@ -108,11 +108,11 @@ export default function ZonasHumedasSection() {
                                         <span className={`material-symbols-outlined text-3xl ${zona.iconColor}`}>{zona.icon}</span>
                                     </div>
                                     <div>
-                                        <h3 className="font-premium-display text-premium-forest text-lg">{zona.title}</h3>
-                                        <p className="text-sm text-premium-ink/60">{zona.subtitle}</p>
+                                        <h3 className="font-premium-display text-lg" style={{ color: '#f3fbf5' }}>{zona.title}</h3>
+                                        <p className="text-sm" style={{ color: 'rgba(243,251,245,.82)' }}>{zona.subtitle}</p>
                                     </div>
                                 </div>
-                                <span className={`text-xs font-semibold px-3 py-1 rounded-full ${zona.badgeColor}`}>
+                                <span className={`text-xs font-semibold px-3 py-1 rounded-full ${zona.badgeColor}`} style={{ color: '#b7e4c7' }}>
                                     {zona.badge}
                                 </span>
                             </div>
