@@ -53,7 +53,7 @@ export default function Guia() {
     }, [])
 
     return (
-        <div id="unstyled-guide">
+        <div className="home-page flex flex-col min-h-screen bg-premium-cream text-premium-ink font-premium-body">
             <Navbar />
 
             <main className="guide-main">
