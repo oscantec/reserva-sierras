@@ -1194,6 +1194,41 @@ button:disabled { cursor: not-allowed; }
 .admin-login__card input::placeholder { color: rgba(243,251,245,.55) !important; }
 .admin-login__card input + * { color: #b7e4c7 !important; }
 
+/* Panel de administración: misma identidad visual de Inicio. */
+.admin-shell {
+  background: linear-gradient(135deg, #061820 0%, #0b2a2d 55%, #173d35 100%) !important;
+  color: #f3fbf5 !important;
+}
+.admin-shell .admin-sidebar,
+.admin-shell .admin-topbar,
+.admin-shell .admin-mobile-nav {
+  background: rgba(255,255,255,.095) !important;
+  border-color: rgba(255,255,255,.18) !important;
+  color: #f3fbf5 !important;
+  backdrop-filter: blur(18px) saturate(118%);
+  -webkit-backdrop-filter: blur(18px) saturate(118%);
+}
+.admin-shell .admin-workspace,
+.admin-shell .bg-background-light,
+.admin-shell .dark\:bg-background-dark { background: transparent !important; }
+.admin-shell .bg-white,
+.admin-shell .bg-surface-card,
+.admin-shell .dark\:bg-surface-card-dark {
+  background: rgba(255,255,255,.095) !important;
+  border-color: rgba(255,255,255,.18) !important;
+}
+.admin-shell h1, .admin-shell h2, .admin-shell h3,
+.admin-shell p, .admin-shell label, .admin-shell th,
+.admin-shell td, .admin-shell span, .admin-shell a,
+.admin-shell button { color: #f3fbf5; }
+.admin-shell input, .admin-shell select, .admin-shell textarea {
+  background: rgba(255,255,255,.10) !important;
+  color: #f3fbf5 !important;
+  border-color: rgba(255,255,255,.22) !important;
+}
+.admin-shell input::placeholder, .admin-shell textarea::placeholder { color: rgba(243,251,245,.55) !important; }
+.admin-shell .text-primary, .admin-shell .text-icon-color { color: #b7e4c7 !important; }
+
 /* Mobile Navbar: hamburger aligned with the NextCan orange accent. */
 @media (max-width: 767px) {
   .site-nav__toggle .material-symbols-outlined {
