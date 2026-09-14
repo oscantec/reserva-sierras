@@ -297,6 +297,17 @@
   border-color: rgba(183, 228, 199, .58);
 }
 
+/* Reserved dates use green ink so their numbers remain readable on the sand cells. */
+.reservas-page .reservation-calendar button.reservas-calendar-day--reserved,
+.reservas-page .reservation-calendar button.reservas-calendar-day--reserved > span {
+  color: #2d6a4f !important;
+}
+
+.reservas-page .reservation-calendar .reservas-legend-reserved {
+  color: #66c28d !important;
+  font-weight: 600;
+}
+
 .reservas-page .reservation-calendar .border-t,
 .reservas-page .reservation-calendar [class*="border-premium-ink"] {
   border-color: rgba(255, 255, 255, .16) !important;
