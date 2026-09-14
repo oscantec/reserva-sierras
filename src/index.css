@@ -1167,6 +1167,21 @@ button:disabled { cursor: not-allowed; }
   color: #1d6b50 !important;
   background: #f3fbf5 !important;
 }
+.guide-page .guide-flow__section--location .sticky.card-premium,
+.guide-page .guide-flow__section--location .sticky.card-premium h3,
+.guide-page .guide-flow__section--location .sticky.card-premium p,
+.guide-page .guide-flow__section--location .sticky.card-premium .text-premium-ink\/60 {
+  color: #f3fbf5 !important;
+}
+.guide-page .guide-flow__section--location .sticky.card-premium > .flex button:not(.bg-premium-forest) {
+  color: #183b32 !important;
+}
+.guide-page .guide-flow__section--location .sticky.card-premium > .flex button.bg-premium-forest {
+  color: #f3fbf5 !important;
+}
+.guide-page .guide-flow__section--location .sticky.card-premium .h-px {
+  background: rgba(255,255,255,.22) !important;
+}
 .guide-page .guide-flow__section--arrival h2,
 .guide-page .guide-flow__section--arrival h3 {
   color: #fff !important;
