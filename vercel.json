@@ -12,7 +12,7 @@
         },
         {
             "source": "/",
-            "destination": "/weather-dashboard.html"
+            "destination": "/app.html"
         },
         {
             "source": "/(.*)",
