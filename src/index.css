@@ -1211,6 +1211,14 @@ button:disabled { cursor: not-allowed; }
 .admin-shell .admin-workspace,
 .admin-shell .bg-background-light,
 .admin-shell .dark\:bg-background-dark { background: transparent !important; }
+.admin-shell .admin-dashboard,
+.admin-shell .bg-surface-page {
+  background: transparent !important;
+}
+.admin-shell .admin-dashboard > header {
+  background: rgba(255,255,255,.095) !important;
+  border-color: rgba(255,255,255,.18) !important;
+}
 .admin-shell .bg-gray-50,
 .admin-shell .bg-gray-100,
 .admin-shell .bg-gray-200,

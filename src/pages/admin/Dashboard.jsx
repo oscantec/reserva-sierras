@@ -243,7 +243,7 @@ export default function Dashboard() {
     }
 
     return (
-        <div className="flex-1 flex flex-col overflow-y-auto bg-surface-page min-w-0 w-full max-w-full">
+        <div className="admin-dashboard flex-1 flex flex-col overflow-y-auto min-w-0 w-full max-w-full">
             {/* Header - Same style as Reservas */}
             <header className="bg-white border-b border-border-card px-3 md:px-6 py-3 md:py-4">
                 <div className="flex flex-col gap-3">
