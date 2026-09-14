@@ -1040,6 +1040,39 @@ button:disabled { cursor: not-allowed; }
   border-radius: 0;
 }
 
+/* New Inicio visual, limited to Contacto Inicial only. */
+.guide-page .guide-flow__section--arrival {
+  background: #061820 !important;
+  border-top-color: rgba(255,255,255,.14) !important;
+}
+.guide-page .guide-flow__section--arrival > section {
+  max-width: 1216px;
+  margin: 0 auto;
+  padding: 4rem max(1.5rem, 8vw) !important;
+}
+.guide-page .guide-flow__section--arrival h2,
+.guide-page .guide-flow__section--arrival h3,
+.guide-page .guide-flow__section--arrival p,
+.guide-page .guide-flow__section--arrival span { color: #f3fbf5 !important; }
+.guide-page .guide-flow__section--arrival .eyebrow { color: #b7e4c7 !important; }
+.guide-page .guide-flow__section--arrival .card-premium {
+  border: 1px solid rgba(255,255,255,.18) !important;
+  border-radius: 1.5rem !important;
+  background: rgba(255,255,255,.095) !important;
+  box-shadow: 0 16px 34px rgba(0,0,0,.14), inset 1px 1px 0 rgba(255,255,255,.08) !important;
+  backdrop-filter: blur(16px) saturate(118%);
+  -webkit-backdrop-filter: blur(16px) saturate(118%);
+}
+.guide-page .guide-flow__section--arrival [class*="bg-premium-mist"],
+.guide-page .guide-flow__section--arrival [class*="bg-premium-sand"] {
+  background: rgba(255,255,255,.09) !important;
+  border-color: rgba(255,255,255,.14) !important;
+}
+.guide-page .guide-flow__section--arrival .material-symbols-outlined { color: #b7e4c7 !important; }
+@media (max-width: 767px) {
+  .guide-page .guide-flow__section--arrival > section { padding: 3rem 1rem !important; }
+}
+
 /* Guía uses the same navigation/footer proportions without inheriting Reservas' dark cards. */
 .guide-shell-page .site-nav {
   position: sticky;
