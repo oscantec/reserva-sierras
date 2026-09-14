@@ -785,3 +785,367 @@ button:disabled { cursor: not-allowed; }
 #unstyled-guide * {
   all: revert !important;
 }
+/* Guía: lenguaje editorial inspirado en Aris Photograph, aislado de las demás páginas. */
+.guide-page {
+  --guide-cream: #f3f1e9;
+  --guide-paper: #fbfaf5;
+  --guide-ink: #17201b;
+  --guide-forest: #17382c;
+  --guide-line: rgba(23, 56, 44, .18);
+  background: var(--guide-cream) !important;
+  color: var(--guide-ink);
+}
+
+.guide-page > .guide-main {
+  padding: 0 0 0;
+}
+
+.guide-hero {
+  width: min(1216px, calc(100% - 3rem));
+  min-height: 480px;
+  margin: 1.5rem auto 0;
+  display: grid;
+  grid-template-columns: minmax(0, .88fr) minmax(0, 1.12fr);
+  overflow: hidden;
+  background: var(--guide-forest);
+  border-radius: 1.5rem;
+  box-shadow: 0 24px 70px -40px rgba(23, 56, 44, .55);
+}
+
+.guide-hero__copy {
+  display: flex;
+  align-items: flex-end;
+  min-width: 0;
+  padding: clamp(2rem, 5vw, 5rem);
+}
+
+.guide-page-heading {
+  max-width: none !important;
+  padding: 0 !important;
+}
+
+.guide-page-heading .eyebrow {
+  color: #c6d5c8;
+  font-size: .7rem;
+  letter-spacing: .24em;
+}
+
+.guide-page-heading h1 {
+  max-width: 9ch;
+  color: #f6f4ec !important;
+  font-size: clamp(3.25rem, 6vw, 6.35rem) !important;
+  font-weight: 500;
+  line-height: .98;
+  letter-spacing: -.075em;
+}
+
+.guide-page-heading p {
+  max-width: 28rem;
+  color: #d5ddd4 !important;
+  font-size: 1rem;
+}
+
+.guide-page-heading__line,
+.guide-page-heading .page-heading__line {
+  margin-top: 2.25rem;
+  background: rgba(246, 244, 236, .22) !important;
+}
+
+.guide-page-heading .page-heading__line > div {
+  background: #c8a96b !important;
+}
+
+.guide-hero__visual {
+  position: relative;
+  min-height: 480px;
+  overflow: hidden;
+  background: #10271e;
+}
+
+.guide-hero__visual::after {
+  position: absolute;
+  inset: 0;
+  content: '';
+  background: linear-gradient(90deg, rgba(23, 56, 44, .38), transparent 42%), linear-gradient(0deg, rgba(13, 26, 20, .36), transparent 48%);
+  pointer-events: none;
+}
+
+.guide-hero__visual img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  filter: saturate(.8) contrast(1.04);
+  transform: scale(1.02);
+}
+
+.guide-hero__stamp {
+  position: absolute;
+  z-index: 1;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  color: #f6f4ec;
+  font-size: .68rem;
+  font-weight: 600;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+.guide-flow {
+  counter-reset: guide-section;
+  margin-top: 1.5rem;
+}
+
+.guide-flow__section {
+  position: relative;
+  counter-increment: guide-section;
+  border-top: 1px solid var(--guide-line);
+}
+
+.guide-flow__section::before {
+  position: absolute;
+  z-index: 2;
+  top: 2.45rem;
+  left: max(1.5rem, calc((100vw - 1216px) / 2));
+  color: rgba(23, 56, 44, .55);
+  content: counter(guide-section, decimal-leading-zero);
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .2em;
+}
+
+.guide-flow__section > section {
+  padding: clamp(4rem, 7vw, 7rem) max(1.5rem, calc((100vw - 1216px) / 2)) !important;
+  background: transparent !important;
+}
+
+.guide-flow__section > section > .max-w-7xl {
+  max-width: 1216px;
+}
+
+.guide-flow__section h2 {
+  color: var(--guide-forest) !important;
+  font-size: clamp(2.25rem, 4vw, 4.15rem) !important;
+  font-weight: 500 !important;
+  line-height: .98 !important;
+  letter-spacing: -.07em !important;
+}
+
+.guide-flow__section .eyebrow {
+  color: #587261;
+  font-size: .68rem;
+  letter-spacing: .22em;
+}
+
+.guide-flow__section .card-premium {
+  border-color: var(--guide-line);
+  border-radius: 1rem;
+  background: var(--guide-paper);
+  box-shadow: 0 16px 45px -32px rgba(23, 56, 44, .38);
+}
+
+.guide-flow__section .card-premium:hover {
+  transform: translateY(-2px);
+  border-color: rgba(23, 56, 44, .32);
+}
+
+/* Guía keeps its light editorial cards readable while sharing Reservas' shell. */
+.guide-page .guide-flow__section:not(.guide-flow__section--water):not(.guide-flow__section--rules):not(.guide-flow__section--checkout) .card-premium {
+  color: var(--guide-ink);
+}
+
+.guide-page .guide-flow__section:not(.guide-flow__section--water):not(.guide-flow__section--rules):not(.guide-flow__section--checkout) .card-premium [class*="text-premium-ink"],
+.guide-page .guide-flow__section:not(.guide-flow__section--water):not(.guide-flow__section--rules):not(.guide-flow__section--checkout) .card-premium [class*="text-premium-forest"] {
+  color: var(--guide-ink) !important;
+}
+
+.guide-flow__section--location,
+.guide-flow__section--wellness {
+  background: #e9eee8;
+}
+
+.guide-flow__section--water,
+.guide-flow__section--rules,
+.guide-flow__section--checkout {
+  background: var(--guide-forest);
+}
+
+.guide-flow__section--water::before,
+.guide-flow__section--rules::before,
+.guide-flow__section--checkout::before {
+  color: rgba(246, 244, 236, .58);
+}
+
+.guide-flow__section--water h2,
+.guide-flow__section--rules h2,
+.guide-flow__section--checkout h2,
+.guide-flow__section--water h3,
+.guide-flow__section--rules h3,
+.guide-flow__section--checkout h3 {
+  color: #f6f4ec !important;
+}
+
+.guide-flow__section--water :is(p, .text-premium-ink\/60, .text-premium-ink\/70),
+.guide-flow__section--rules :is(p, .text-premium-ink\/60, .text-premium-ink\/70),
+.guide-flow__section--checkout :is(p, .text-premium-ink\/60, .text-premium-ink\/70) {
+  color: rgba(246, 244, 236, .72) !important;
+}
+
+.guide-flow__section--water .eyebrow,
+.guide-flow__section--rules .eyebrow,
+.guide-flow__section--checkout .eyebrow {
+  color: #c8d6c9;
+}
+
+.guide-flow__section--water .card-premium,
+.guide-flow__section--rules .card-premium,
+.guide-flow__section--checkout .card-premium {
+  border-color: rgba(246, 244, 236, .16);
+  background: rgba(246, 244, 236, .08);
+  box-shadow: none;
+}
+
+.guide-flow__section--water .card-premium :is(h3, p),
+.guide-flow__section--rules .card-premium :is(h3, p),
+.guide-flow__section--checkout .card-premium :is(h3, p) {
+  color: #f6f4ec !important;
+}
+
+.guide-flow__section--water .bg-white,
+.guide-flow__section--rules .bg-white,
+.guide-flow__section--checkout .bg-white {
+  background: rgba(246, 244, 236, .12) !important;
+}
+
+.guide-flow__section--water > section {
+  color: #f6f4ec;
+}
+
+.guide-flow__section--water > section > div {
+  max-width: 1216px;
+}
+
+.guide-flow__section--water [class*="bg-white"] {
+  border-color: rgba(246, 244, 236, .2);
+}
+
+.guide-flow__section--checkout .card-premium {
+  min-height: 100%;
+}
+
+.guide-page .site-footer {
+  margin-top: 0;
+  border-radius: 0;
+}
+
+/* Guía uses the same navigation/footer proportions without inheriting Reservas' dark cards. */
+.guide-shell-page .site-nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: linear-gradient(180deg, rgba(4, 18, 26, .78), rgba(4, 18, 26, .28));
+}
+
+.guide-shell-page .site-brand img {
+  width: clamp(145px, 16vw, 220px);
+  height: clamp(50px, 5vw, 66px);
+  filter: brightness(0) invert(1);
+}
+
+.guide-shell-page .site-footer {
+  padding: 1.875rem clamp(1rem, 8vw, 8rem) 1.25rem;
+  background: linear-gradient(180deg, rgba(4, 18, 26, .38), rgba(4, 18, 26, .8));
+  text-align: center;
+}
+
+/* The guide content follows Inicio's weather glass visual language. */
+.guide-shell-page {
+  background: linear-gradient(180deg, #061820 0%, #0a2429 55%, #071a22 100%) !important;
+  color: #f3fbf5;
+}
+
+.guide-shell-page .guide-flow__section,
+.guide-shell-page .guide-flow__section--location,
+.guide-shell-page .guide-flow__section--wellness {
+  background: transparent !important;
+  border-color: rgba(255, 255, 255, .16);
+}
+
+.guide-shell-page .guide-flow__section::before,
+.guide-shell-page .guide-flow__section .eyebrow {
+  color: #b7e4c7 !important;
+}
+
+.guide-shell-page .guide-flow__section h2,
+.guide-shell-page .guide-flow__section h3,
+.guide-shell-page .guide-flow__section p,
+.guide-shell-page .guide-flow__section [class*="text-premium-ink"] {
+  color: #f3fbf5 !important;
+}
+
+.guide-shell-page .guide-flow__section .card-premium {
+  border-color: rgba(255, 255, 255, .18);
+  background: rgba(255, 255, 255, .095);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, .14), inset 1px 1px 0 rgba(255, 255, 255, .08);
+  backdrop-filter: blur(18px) saturate(118%);
+  -webkit-backdrop-filter: blur(18px) saturate(118%);
+}
+
+@media (max-width: 767px) {
+  .guide-shell-page .site-brand img {
+    width: clamp(92px, 27vw, 112px);
+    height: 42px;
+  }
+  .guide-shell-page .site-footer {
+    padding: 1.375rem 1rem 1rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .guide-hero {
+    width: calc(100% - 1.5rem);
+    min-height: auto;
+    margin-top: .75rem;
+    grid-template-columns: 1fr;
+    border-radius: 1rem;
+  }
+
+  .guide-hero__copy {
+    min-height: 345px;
+    padding: 2rem 1.5rem 2.5rem;
+  }
+
+  .guide-page-heading h1 {
+    max-width: 8ch;
+    font-size: clamp(3rem, 15vw, 4.5rem) !important;
+  }
+
+  .guide-hero__visual {
+    min-height: 250px;
+  }
+
+  .guide-hero__stamp {
+    right: 1rem;
+    bottom: 1rem;
+  }
+
+  .guide-flow {
+    margin-top: .75rem;
+  }
+
+  .guide-flow__section::before {
+    top: 1.5rem;
+    left: 1rem;
+  }
+
+  .guide-flow__section > section {
+    padding: 4rem 1rem 3.5rem !important;
+  }
+
+  .guide-flow__section h2 {
+    max-width: 12ch;
+    font-size: clamp(2.35rem, 12vw, 3.5rem) !important;
+  }
+}
