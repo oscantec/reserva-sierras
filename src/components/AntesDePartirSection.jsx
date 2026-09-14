@@ -62,8 +62,8 @@ export default function AntesDePartirSection() {
                     </div>
                 </div>
 
-                {/* Grid - Compact 2-column mobile layout */}
-                <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 md:gap-4">
+                {/* Grid responsive: una columna en móvil, dos en tablet y tres en escritorio */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
                     {content.items.map((item, index) => (
                         <div
                             key={index}
@@ -81,4 +81,3 @@ export default function AntesDePartirSection() {
         </section>
     )
 }
-
