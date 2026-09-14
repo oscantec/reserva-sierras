@@ -1123,6 +1123,42 @@ button:disabled { cursor: not-allowed; }
 .guide-page .guide-flow__section--arrival .card-premium .space-y-4 > div {
   background: rgba(255,255,255,.095) !important;
 }
+
+/* Ubicación: misma jerarquía glass oscura de Inicio. */
+.guide-page .guide-flow__section--location {
+  background: transparent !important;
+  color: #f3fbf5 !important;
+}
+.guide-page .guide-flow__section--location h2,
+.guide-page .guide-flow__section--location h3,
+.guide-page .guide-flow__section--location p,
+.guide-page .guide-flow__section--location a,
+.guide-page .guide-flow__section--location button {
+  color: #f3fbf5 !important;
+}
+.guide-page .guide-flow__section--location .card-premium {
+  background: rgba(255,255,255,.095) !important;
+  border-color: rgba(255,255,255,.18) !important;
+  box-shadow: 0 16px 34px rgba(0,0,0,.14), inset 1px 1px 0 rgba(255,255,255,.08) !important;
+  backdrop-filter: blur(18px) saturate(118%);
+  -webkit-backdrop-filter: blur(18px) saturate(118%);
+}
+.guide-page .guide-flow__section--location .card-premium .bg-white {
+  background: rgba(255,255,255,.12) !important;
+}
+.guide-page .guide-flow__section--location .card-premium .text-premium-pine,
+.guide-page .guide-flow__section--location .card-premium .text-premium-gold,
+.guide-page .guide-flow__section--location .card-premium .material-symbols-outlined {
+  color: #b7e4c7 !important;
+}
+.guide-page .guide-flow__section--location .card-premium [class*="text-premium-ink"],
+.guide-page .guide-flow__section--location .card-premium [class*="text-premium-forest"] {
+  color: #f3fbf5 !important;
+}
+.guide-page .guide-flow__section--location .card-premium button.bg-premium-mist,
+.guide-page .guide-flow__section--location .card-premium button:not(.bg-premium-forest) {
+  background: rgba(255,255,255,.12) !important;
+}
 .guide-page .guide-flow__section--arrival h2,
 .guide-page .guide-flow__section--arrival h3 {
   color: #fff !important;
