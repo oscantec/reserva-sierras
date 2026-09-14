@@ -672,7 +672,7 @@ export default function Booking() {
                                                     onClick={() => handleDateClick(date)}
                                                     aria-label={date.toLocaleDateString('es-CO', { day: 'numeric', month: 'long', year: 'numeric' })}
                                                     disabled={past || resState === 'middle'}
-                                                    className={`h-12 w-full flex items-start justify-end p-1.5 text-xs transition-all duration-300 ease-premium relative border border-premium-ink/10 bg-[#FFFEFB] ${cursorClass} ${textClass} ${shapeClass} ${borderClass} ${hoverClass} ${resState !== 'none' ? 'reservas-calendar-day--reserved' : ''}`}
+                                                    className={`h-12 w-full flex items-start justify-end p-1.5 text-xs transition-all duration-300 ease-premium relative border border-premium-ink/10 bg-[#FFFEFB] ${cursorClass} ${textClass} ${shapeClass} ${borderClass} ${hoverClass} ${resState === 'start' || resState === 'middle' ? 'reservas-calendar-day--reserved-dark' : ''} ${resState === 'end' ? 'reservas-calendar-day--reserved-light' : ''}`}
                                                     style={{ backgroundImage: gradient }}
                                                     title={holiday ? holiday.name : ''}
                                                 >
@@ -716,7 +716,7 @@ export default function Booking() {
                             </div>
                             <div className="flex items-center gap-2">
                                 <div className="size-3 rounded-full bg-premium-sand"></div>
-                                <span className="reservas-legend-reserved">Reservado</span>
+                                <span>Reservado</span>
                             </div>
                         </div>
                     </div>
