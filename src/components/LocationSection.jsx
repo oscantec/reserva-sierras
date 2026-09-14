@@ -131,12 +131,6 @@ export default function LocationSection() {
 
                         {/* Visual References Card - Image fills full width, no border */}
                         <div className="card-premium overflow-hidden">
-                            <div className="p-3 md:p-5 pb-0">
-                                <h3 className="font-premium-display text-premium-forest text-base md:text-lg mb-3 md:mb-4 flex items-center gap-2">
-                                    <span className="material-symbols-outlined text-premium-gold">location_on</span>
-                                    Puntos de Referencia
-                                </h3>
-                            </div>
                             <div className="relative">
                                 <ProgressiveImage
                                     src={accesoImage}

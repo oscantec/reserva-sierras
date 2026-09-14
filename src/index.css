@@ -1159,6 +1159,10 @@ button:disabled { cursor: not-allowed; }
 .guide-page .guide-flow__section--location .card-premium button:not(.bg-premium-forest) {
   background: rgba(255,255,255,.12) !important;
 }
+.guide-page .guide-flow__section--location > div > div:first-child a {
+  color: #1d6b50 !important;
+  background: #f3fbf5 !important;
+}
 .guide-page .guide-flow__section--arrival h2,
 .guide-page .guide-flow__section--arrival h3 {
   color: #fff !important;
