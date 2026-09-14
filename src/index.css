@@ -866,20 +866,6 @@ button:disabled { cursor: not-allowed; }
   -webkit-backdrop-filter: blur(16px) saturate(118%);
 }
 .guide-top-page .guide-flow__section .material-symbols-outlined { color: #b7e4c7; }
-.guide-top-page .guide-flow__section .rounded-premium,
-.guide-top-page .guide-flow__section .rounded-lg,
-.guide-top-page .guide-flow__section .rounded-xl {
-  border-color: rgba(255,255,255,.16);
-}
-.guide-top-page .guide-flow__section button {
-  color: #f3fbf5;
-}
-.guide-top-page .guide-flow__section button[aria-pressed="true"],
-.guide-top-page .guide-flow__section button.bg-premium-forest {
-  background: #174b3b !important;
-  color: #fff !important;
-}
-.guide-top-page .guide-flow__section img { border-radius: 1.25rem; }
 @media (max-width: 767px) {
   .guide-top-page .site-brand img { width: clamp(92px, 27vw, 112px); height: 42px; }
   .guide-top-page .guide-hero { grid-template-columns: 1fr; min-height: 0; }
