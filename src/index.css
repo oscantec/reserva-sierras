@@ -945,6 +945,16 @@ button:disabled { cursor: not-allowed; }
   border-color: rgba(23, 56, 44, .32);
 }
 
+/* Guía keeps its light editorial cards readable while sharing Reservas' shell. */
+.guide-page .guide-flow__section:not(.guide-flow__section--water):not(.guide-flow__section--rules):not(.guide-flow__section--checkout) .card-premium {
+  color: var(--guide-ink);
+}
+
+.guide-page .guide-flow__section:not(.guide-flow__section--water):not(.guide-flow__section--rules):not(.guide-flow__section--checkout) .card-premium [class*="text-premium-ink"],
+.guide-page .guide-flow__section:not(.guide-flow__section--water):not(.guide-flow__section--rules):not(.guide-flow__section--checkout) .card-premium [class*="text-premium-forest"] {
+  color: var(--guide-ink) !important;
+}
+
 .guide-flow__section--location,
 .guide-flow__section--wellness {
   background: #e9eee8;
