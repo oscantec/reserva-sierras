@@ -151,56 +151,6 @@
   --font-display: "Inter", sans-serif;
 }
 
-/* Final Guide skin: same visual system as Inicio's weather section. */
-.guide-shell-page {
-  min-height: 100vh;
-  background: #061820 !important;
-  color: #f3fbf5 !important;
-}
-.guide-shell-page .guide-main { background: transparent !important; }
-.guide-shell-page .guide-hero,
-.guide-shell-page .guide-flow { margin-top: 0 !important; }
-.guide-shell-page .guide-hero {
-  width: 100%;
-  max-width: none;
-  border-radius: 0;
-  background: linear-gradient(135deg, #0b2b31, #071a22) !important;
-  box-shadow: none;
-}
-.guide-shell-page .guide-hero__copy { padding: clamp(2rem, 6vw, 5rem) max(1.5rem, 8vw); }
-.guide-shell-page .guide-hero__visual { min-height: 420px; }
-.guide-shell-page .guide-flow__section,
-.guide-shell-page .guide-flow__section--location,
-.guide-shell-page .guide-flow__section--wellness,
-.guide-shell-page .guide-flow__section--water,
-.guide-shell-page .guide-flow__section--rules,
-.guide-shell-page .guide-flow__section--checkout {
-  background: #061820 !important;
-  border-color: rgba(255,255,255,.14) !important;
-}
-.guide-shell-page .guide-flow__section > section {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: clamp(3.5rem, 6vw, 5rem) max(1.5rem, 8vw) !important;
-}
-.guide-shell-page .guide-flow__section h2,
-.guide-shell-page .guide-flow__section h3,
-.guide-shell-page .guide-flow__section p,
-.guide-shell-page .guide-flow__section span,
-.guide-shell-page .guide-flow__section [class*="text-premium-ink"] {
-  color: #f3fbf5 !important;
-}
-.guide-shell-page .guide-flow__section .eyebrow,
-.guide-shell-page .guide-flow__section::before { color: #b7e4c7 !important; }
-.guide-shell-page .guide-flow__section .card-premium {
-  border: 1px solid rgba(255,255,255,.18) !important;
-  border-radius: 1.5rem !important;
-  background: rgba(255,255,255,.095) !important;
-  box-shadow: 0 16px 34px rgba(0,0,0,.14), inset 1px 1px 0 rgba(255,255,255,.08) !important;
-  backdrop-filter: blur(18px) saturate(118%);
-  -webkit-backdrop-filter: blur(18px) saturate(118%);
-}
-.guide-shell-page .guide-flow__section .card-premium .material-symbols-outlined { color: #b7e4c7 !important; }
 
 /* Reservas: same dark-green glass language as the public weather homepage. */
 .reservas-page {
