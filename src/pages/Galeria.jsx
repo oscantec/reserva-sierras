@@ -504,8 +504,8 @@ export default function Gallery() {
                             ))}
                         </div>
                     ) : (
-                        /* Uniform grid for specific categories with labels */
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        /* Mosaico responsive for specific categories with varied tile sizes */
+                        <div className="grid grid-cols-2 md:grid-cols-4 auto-rows-[120px] md:auto-rows-[150px] gap-3 md:gap-4">
                             {filteredImages.map((image, index) => (
                                 <div
                                     key={`cat-${index}`}
@@ -519,7 +519,7 @@ export default function Gallery() {
                                         }
                                     }}
                                     onClick={() => openLightbox(image, index)}
-                                    className="gallery-tile group img-zoom relative overflow-hidden rounded-premium cursor-pointer aspect-square bg-white hairline shadow-premium-sm hover:shadow-premium hover:-translate-y-1 transition-all duration-300 ease-premium"
+                                    className={`gallery-tile group img-zoom relative overflow-hidden rounded-premium cursor-pointer bg-white hairline shadow-premium-sm hover:shadow-premium transition-all duration-300 ease-premium hover:z-10 ${getBentoClass(index)}`}
                                 >
                                     <LazyImage
                                         placeholder={getPlaceholder(image.src)}
