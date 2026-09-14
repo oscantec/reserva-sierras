@@ -25,6 +25,12 @@ function weatherDashboardBuildPlugin() {
   return {
     name: 'weather-dashboard-build',
     apply: 'build',
+    transformIndexHtml(html, context) {
+      if (context.path === '/index.html') {
+        return fs.readFileSync(path.join(__dirname, 'weather-dashboard.html'), 'utf8')
+      }
+      return html
+    },
     generateBundle() {
       this.emitFile({
         type: 'asset',
@@ -46,6 +52,14 @@ function weatherDashboardBuildPlugin() {
 export default defineConfig(({ command }) => {
   const config = {
     plugins: [react(), weatherDashboardBuildPlugin()],
+    build: {
+      rollupOptions: {
+        input: {
+          index: path.resolve(__dirname, 'index.html'),
+          app: path.resolve(__dirname, 'app.html'),
+        },
+      },
+    },
     server: {
       port: 3000,
       open: true
