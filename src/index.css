@@ -1171,6 +1171,29 @@ button:disabled { cursor: not-allowed; }
   max-height: 2.8125rem;
 }
 
+/* Admin login: Inicio's dark glass visual language. */
+.admin-login {
+  background: linear-gradient(135deg, #061820 0%, #0b2a2d 55%, #173d35 100%) !important;
+}
+.admin-login__card {
+  background: rgba(255,255,255,.10) !important;
+  border-color: rgba(255,255,255,.20) !important;
+  box-shadow: 0 24px 60px rgba(0,0,0,.28), inset 1px 1px 0 rgba(255,255,255,.08) !important;
+  backdrop-filter: blur(18px) saturate(118%);
+  -webkit-backdrop-filter: blur(18px) saturate(118%);
+}
+.admin-login__card h1,
+.admin-login__card label,
+.admin-login__card p,
+.admin-login__card a { color: #f3fbf5 !important; }
+.admin-login__card input {
+  color: #f3fbf5 !important;
+  background: rgba(255,255,255,.10) !important;
+  border-color: rgba(255,255,255,.22) !important;
+}
+.admin-login__card input::placeholder { color: rgba(243,251,245,.55) !important; }
+.admin-login__card input + * { color: #b7e4c7 !important; }
+
 /* Mobile Navbar: hamburger aligned with the NextCan orange accent. */
 @media (max-width: 767px) {
   .site-nav__toggle .material-symbols-outlined {
