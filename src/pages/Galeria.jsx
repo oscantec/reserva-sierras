@@ -467,7 +467,7 @@ export default function Gallery() {
                 <div className={`transition-all duration-500 ${isAnimating ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
                     {activeCategory === 'todas' ? (
                         /* Bento grid for "Todas" */
-                        <div className="grid grid-cols-2 md:grid-cols-4 auto-rows-[120px] md:auto-rows-[150px] gap-3 md:gap-4">
+                        <div className="gallery-mosaic grid grid-cols-2 md:grid-cols-4 auto-rows-[120px] md:auto-rows-[150px] gap-3 md:gap-4">
                             {filteredImages.map((image, index) => (
                                 <div
                                     key={`todas-${index}`}
@@ -505,7 +505,7 @@ export default function Gallery() {
                         </div>
                     ) : (
                         /* Mosaico responsive for specific categories with varied tile sizes */
-                        <div className="grid grid-cols-2 md:grid-cols-4 auto-rows-[120px] md:auto-rows-[150px] gap-3 md:gap-4">
+                        <div className="gallery-mosaic grid grid-cols-2 md:grid-cols-4 auto-rows-[120px] md:auto-rows-[150px] gap-3 md:gap-4">
                             {filteredImages.map((image, index) => (
                                 <div
                                     key={`cat-${index}`}

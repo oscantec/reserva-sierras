@@ -1266,6 +1266,16 @@ button:disabled { cursor: not-allowed; }
 .guide-page .guide-flow__section--wellness .wellness-notice .material-symbols-outlined {
   color: #b7e4c7 !important;
 }
+
+/* Galería: patrón de mosaico visible también en la vista por categoría. */
+.gallery-mosaic > :nth-child(4n + 1) { grid-column: span 2; grid-row: span 2; }
+.gallery-mosaic > :nth-child(4n + 2),
+.gallery-mosaic > :nth-child(4n + 3) { grid-column: span 1; grid-row: span 1; }
+.gallery-mosaic > :nth-child(4n + 4) { grid-column: span 2; grid-row: span 1; }
+@media (max-width: 767px) {
+  .gallery-mosaic > :nth-child(4n + 1) { grid-column: span 2; grid-row: span 2; }
+  .gallery-mosaic > :nth-child(4n + 4) { grid-column: span 2; grid-row: span 1; }
+}
 .guide-page .guide-flow__section--arrival h2,
 .guide-page .guide-flow__section--arrival h3 {
   color: #fff !important;
