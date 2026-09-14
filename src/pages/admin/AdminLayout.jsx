@@ -78,7 +78,7 @@ export default function AdminLayout() {
     ]
 
     return (
-        <div className="admin-shell flex h-screen overflow-hidden bg-background-light dark:bg-background-dark">
+        <div className="admin-shell flex h-screen overflow-hidden bg-background-light dark:bg-background-dark" style={{ background: 'linear-gradient(135deg, #061820 0%, #0b2a2d 55%, #173d35 100%)' }}>
             {/* Desktop Sidebar */}
             <aside className="admin-sidebar w-64 flex-shrink-0 border-r border-border-card dark:border-border-card-dark bg-surface-card dark:bg-surface-card-dark hidden lg:flex flex-col justify-between">
                 <div className="flex flex-col min-h-0 h-full p-4 overflow-y-auto">
