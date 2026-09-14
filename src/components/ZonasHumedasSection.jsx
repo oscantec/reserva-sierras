@@ -123,12 +123,13 @@ export default function ZonasHumedasSection() {
                                 {zona.rules.map((rule, index) => (
                                     <div
                                         key={index}
-                                        className="flex items-start gap-3 p-3 rounded-premium bg-premium-mist hairline"
+                                        className="flex items-start gap-3 p-3 rounded-premium hairline"
+                                        style={{ background: 'rgba(255,255,255,.095)', borderColor: 'rgba(255,255,255,.18)' }}
                                     >
-                                        <div className={`w-8 h-8 ${zona.iconBg === 'bg-premium-mist' ? 'bg-white text-premium-pine' : 'bg-white text-premium-gold'} rounded-lg flex items-center justify-center flex-shrink-0`}>
+                                        <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(255,255,255,.16)', color: '#b7e4c7' }}>
                                             <span className="material-symbols-outlined text-lg">{rule.icon}</span>
                                         </div>
-                                        <p className="text-sm text-premium-ink/70 leading-relaxed pt-1">{rule.text}</p>
+                                        <p className="text-sm leading-relaxed pt-1" style={{ color: '#f3fbf5' }}>{rule.text}</p>
                                     </div>
                                 ))}
                             </div>
