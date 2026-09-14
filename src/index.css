@@ -1073,6 +1073,32 @@ button:disabled { cursor: not-allowed; }
   .guide-page .guide-flow__section--arrival > section { padding: 3rem 1rem !important; }
 }
 
+/* Contacto Inicial: match Inicio's dark glass cards and hierarchy. */
+.guide-page .guide-flow__section--arrival {
+  background: #061820 !important;
+}
+.guide-page .guide-flow__section--arrival .card-premium {
+  background: rgba(255,255,255,.10) !important;
+  border-color: rgba(255,255,255,.20) !important;
+}
+.guide-page .guide-flow__section--arrival .card-premium > p,
+.guide-page .guide-flow__section--arrival .card-premium p {
+  color: rgba(243,251,245,.78) !important;
+}
+.guide-page .guide-flow__section--arrival .card-premium .space-y-3 > div,
+.guide-page .guide-flow__section--arrival .card-premium .space-y-4 > div {
+  background: rgba(255,255,255,.095) !important;
+  border-color: rgba(255,255,255,.12) !important;
+}
+.guide-page .guide-flow__section--arrival .card-premium .space-y-3 > div p,
+.guide-page .guide-flow__section--arrival .card-premium .space-y-4 > div p {
+  color: #f3fbf5 !important;
+}
+.guide-page .guide-flow__section--arrival h2,
+.guide-page .guide-flow__section--arrival h3 {
+  color: #fff !important;
+}
+
 /* Guía uses the same navigation/footer proportions without inheriting Reservas' dark cards. */
 .guide-shell-page .site-nav {
   position: sticky;
