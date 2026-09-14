@@ -1087,6 +1087,31 @@ button:disabled { cursor: not-allowed; }
   -webkit-backdrop-filter: blur(18px) saturate(118%);
 }
 
+.guide-shell-page .guide-flow__section > section {
+  padding-top: clamp(3.5rem, 6vw, 5rem) !important;
+  padding-bottom: clamp(3.5rem, 6vw, 5rem) !important;
+}
+
+.guide-shell-page .guide-flow__section h2 {
+  max-width: none;
+  font-size: clamp(2rem, 4vw, 3.25rem) !important;
+  line-height: 1.08 !important;
+  letter-spacing: -.055em !important;
+}
+
+.guide-shell-page .guide-flow__section .card-premium {
+  border-radius: 1.5rem;
+  padding: 1.5rem;
+}
+
+.guide-shell-page .guide-flow__section .card-premium .material-symbols-outlined {
+  color: #b7e4c7;
+}
+
+.guide-shell-page .guide-flow__section .card-premium > :is(div:first-child, div:first-child > div) {
+  border-color: rgba(183, 228, 199, .28);
+}
+
 @media (max-width: 767px) {
   .guide-shell-page .site-brand img {
     width: clamp(92px, 27vw, 112px);
