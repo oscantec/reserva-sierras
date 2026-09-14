@@ -379,7 +379,7 @@ export default function Gallery() {
     }
 
     return (
-        <div className="flex flex-col min-h-screen bg-premium-cream text-premium-ink font-premium-body">
+        <div className="reservas-page flex flex-col min-h-screen bg-premium-cream text-premium-ink font-premium-body">
             <Navbar />
 
             {/* Header Section - Premium variant */}
