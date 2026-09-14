@@ -1182,6 +1182,15 @@ button:disabled { cursor: not-allowed; }
 .guide-page .guide-flow__section--location .sticky.card-premium .h-px {
   background: rgba(255,255,255,.22) !important;
 }
+.guide-page .guide-flow__section--location .sticky.card-premium * {
+  color: #f3fbf5 !important;
+}
+.guide-page .guide-flow__section--location .sticky.card-premium > div > button:not(.bg-premium-forest) {
+  color: #183b32 !important;
+}
+.guide-page .guide-flow__section--location .sticky.card-premium > div > button.bg-premium-forest {
+  color: #f3fbf5 !important;
+}
 .guide-page .guide-flow__section--arrival h2,
 .guide-page .guide-flow__section--arrival h3 {
   color: #fff !important;
