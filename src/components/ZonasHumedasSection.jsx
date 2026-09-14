@@ -139,9 +139,10 @@ export default function ZonasHumedasSection() {
 
                 {/* Bottom Info - Custom color via CSS variable */}
                 <div
-                    className="mt-6 rounded-premium p-4 flex items-start gap-3 hairline bg-premium-sand"
+                    className="mt-6 rounded-premium p-4 flex items-start gap-3 hairline"
+                    style={{ background: 'rgba(255,255,255,.095)', borderColor: 'rgba(255,255,255,.18)' }}
                 >
-                    <span className="material-symbols-outlined text-premium-gold mt-0.5">info</span>
+                    <span className="material-symbols-outlined mt-0.5" style={{ color: '#b7e4c7' }}>info</span>
                     <p className="text-sm" style={{ color: '#f3fbf5' }}>
                         {content.bottomMessage.split('uso exclusivo').map((part, i) =>
                             i === 0 ? part : <><strong key={i}>uso exclusivo</strong>{part}</>
