@@ -1274,6 +1274,12 @@ button:disabled { cursor: not-allowed; }
     color: #f4a261 !important;
   }
 }
+@media (max-width: 1024px) {
+  .site-nav__links { display: none !important; }
+  .site-nav__toggle { display: inline-flex !important; }
+  .site-nav__inner { padding-left: 1rem; padding-right: 1rem; }
+  .site-brand img { width: clamp(110px, 24vw, 150px); height: auto; }
+}
 
 /* Ubicación: misma jerarquía glass oscura de Inicio. */
 .guide-page .guide-flow__section--location {
