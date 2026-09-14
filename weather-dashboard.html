@@ -186,6 +186,8 @@
     .site-nav { display: flex; align-items: center; gap: calc(5 * var(--u)); }
     .site-nav a { padding: clamp(8px, calc(10 * var(--u)), 11px) clamp(9px, calc(11 * var(--u)), 13px); border-radius: clamp(10px, calc(12 * var(--u)), 14px); color: rgba(255,255,255,.76); font-size: clamp(12px, calc(12 * var(--u)), 14px); font-weight: 500; transition: color .2s ease, background .2s ease; }
     .site-nav a:hover, .site-nav a[aria-current="page"] { background: rgba(255,255,255,.17); color: #fff; }
+    .site-menu-toggle { display: none; place-items: center; width: calc(40 * var(--u)); height: calc(40 * var(--u)); flex: 0 0 auto; border: 1px solid rgba(255,255,255,.2); border-radius: calc(12 * var(--u)); background: rgba(255,255,255,.1); color: #fff; }
+    .site-menu-toggle .icon { width: calc(18 * var(--u)); height: calc(18 * var(--u)); }
     .site-admin { display: grid; width: calc(40 * var(--u)); height: calc(40 * var(--u)); flex: 0 0 auto; place-items: center; border: 1px solid rgba(255,255,255,.19); border-radius: calc(13 * var(--u)); background: rgba(255,255,255,.09); color: rgba(255,255,255,.88); }
     .site-admin .icon { width: calc(18 * var(--u)); height: calc(18 * var(--u)); }
 
@@ -587,9 +589,11 @@
       .site-brand { min-width: 0; flex: 0 0 auto; align-self: flex-start; }
       .site-brand img { width: clamp(92px, 27vw, 112px); height: calc(42 * var(--u)); }
       .site-brand span { display: none; }
-      .site-nav { min-width: 0; flex: 1 1 auto; justify-content: flex-end; gap: calc(1 * var(--u)); overflow: visible; }
-      .site-nav a { flex: 0 1 auto; padding: calc(7 * var(--u)) calc(5 * var(--u)); font-size: clamp(9px, 2.7vw, 11px); white-space: nowrap; }
-      .site-nav a:nth-child(n + 4) { display: none; }
+      .site-menu-toggle { display: grid; width: calc(32 * var(--u)); height: calc(32 * var(--u)); margin-left: auto; }
+      .site-menu-toggle .icon { width: calc(16 * var(--u)); height: calc(16 * var(--u)); }
+      .site-nav { position: absolute; top: calc(50 * var(--u)); right: 0; left: auto; display: none; min-width: calc(190 * var(--u)); flex-direction: column; align-items: stretch; gap: calc(3 * var(--u)); padding: calc(8 * var(--u)); border: 1px solid rgba(255,255,255,.2); border-radius: calc(16 * var(--u)); background: rgba(8,27,35,.9); box-shadow: 0 calc(12 * var(--u)) calc(28 * var(--u)) rgba(0,0,0,.24); backdrop-filter: blur(calc(18 * var(--u))); -webkit-backdrop-filter: blur(calc(18 * var(--u))); }
+      .site-header.is-menu-open .site-nav { display: flex; }
+      .site-nav a { display: block; padding: calc(10 * var(--u)) calc(12 * var(--u)); border-radius: calc(10 * var(--u)); font-size: calc(13 * var(--u)); white-space: nowrap; }
       .site-admin { width: calc(30 * var(--u)); height: calc(30 * var(--u)); }
       .site-admin .icon { width: calc(14 * var(--u)); height: calc(14 * var(--u)); }
       .bar-chart { height: calc(175 * var(--u)); gap: calc(7 * var(--u)); }
@@ -623,7 +627,8 @@
 
       <header class="header site-header">
         <a class="site-brand" href="#site-information" aria-label="Reserva de las Sierras, Inicio"><img src="/src/images/Logo.webp" alt="Reserva de las Sierras" /><span>Reserva de las Sierras</span></a>
-        <nav class="site-nav" aria-label="Navegación principal"><a href="#site-information" aria-current="page">Inicio</a><a href="/reservas">Reservas</a><a href="/registro">Registro</a><a href="/galeria">Galería</a><a href="/guia">Guía</a></nav>
+        <button class="site-menu-toggle" type="button" aria-controls="site-main-nav" aria-expanded="false" aria-label="Abrir menú"><svg class="icon"><use href="#i-menu"/></svg></button>
+        <nav class="site-nav" id="site-main-nav" aria-label="Navegación principal"><a href="#site-information" aria-current="page">Inicio</a><a href="/reservas">Reservas</a><a href="/registro">Registro</a><a href="/galeria">Galería</a><a href="/guia">Guía</a></nav>
         <a class="site-admin" href="/admin" aria-label="Panel Admin"><svg class="icon"><use href="#i-key"/></svg></a>
       </header>
 
@@ -796,6 +801,8 @@
   <svg aria-hidden="true" width="0" height="0" style="position:absolute">
     <defs>
       <symbol id="i-back" viewBox="0 0 24 24"><path d="m14.5 5-7 7 7 7M8 12h11"/></symbol>
+      <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+      <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
       <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></symbol>
       <symbol id="i-tv" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="13" rx="2"/><path d="m8 21 4-3 4 3M8 2l4 3 4-3"/></symbol>
       <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01" stroke-width="2.4"/></symbol>
@@ -879,6 +886,28 @@
           window.setTimeout(requestHeroVideoPlay, 1200);
         });
         window.setTimeout(requestHeroVideoPlay, 1800);
+      };
+      const bindMobileMenu = () => {
+        const header = document.querySelector('.site-header');
+        const toggle = document.querySelector('.site-menu-toggle');
+        const nav = document.getElementById('site-main-nav');
+        if (!header || !toggle || !nav) return;
+        const closeMenu = () => {
+          header.classList.remove('is-menu-open');
+          toggle.setAttribute('aria-expanded', 'false');
+          toggle.setAttribute('aria-label', 'Abrir menú');
+          toggle.querySelector('use')?.setAttribute('href', '#i-menu');
+        };
+        toggle.addEventListener('click', () => {
+          const isOpen = header.classList.toggle('is-menu-open');
+          toggle.setAttribute('aria-expanded', String(isOpen));
+          toggle.setAttribute('aria-label', isOpen ? 'Cerrar menú' : 'Abrir menú');
+          toggle.querySelector('use')?.setAttribute('href', isOpen ? '#i-close' : '#i-menu');
+        });
+        nav.addEventListener('click', closeMenu);
+        window.addEventListener('resize', () => {
+          if (window.innerWidth > 860) closeMenu();
+        });
       };
       let phraseTimer;
       let phraseSwapTimer;
@@ -1021,6 +1050,7 @@
 
       applyHomeConfig({ heroRotatingPhrases: ['Somos Reserva de las Sierras', 'Somos Tranquilidad', 'Somos Aire Puro', 'Somos Espacio Verde'] });
       bindHeroVideo();
+      bindMobileMenu();
       loadWeather();
       loadHomeConfig();
       window.setInterval(loadWeather, 600000);
