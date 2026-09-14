@@ -1163,6 +1163,10 @@ button:disabled { cursor: not-allowed; }
   color: #1d6b50 !important;
   background: #f3fbf5 !important;
 }
+.guide-page .guide-flow__section--location a.flex.items-center {
+  color: #1d6b50 !important;
+  background: #f3fbf5 !important;
+}
 .guide-page .guide-flow__section--arrival h2,
 .guide-page .guide-flow__section--arrival h3 {
   color: #fff !important;
