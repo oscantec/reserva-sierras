@@ -506,10 +506,15 @@
     @media (max-width: 860px) {
       :root { --u: min(calc(100vw / 430), 1.22px); }
       html, body { overflow: auto; }
-      .stage { position: relative; height: auto; min-height: calc(980 * var(--u)); overflow: hidden; padding-bottom: calc(90 * var(--u)); background-position: 54% center; }
+      .stage { position: relative; height: auto; min-height: calc(980 * var(--u)); overflow: hidden; padding-bottom: calc(120 * var(--u)); background-position: 54% center; }
       .stage::before { background: linear-gradient(180deg, rgba(4,16,24,.58), rgba(4,16,24,.42) 45%, rgba(4,16,24,.7)); }
+      .chrome { display: flex; flex-direction: column; }
       .sidebar { position: fixed; z-index: 10; left: calc(12 * var(--u)); right: calc(12 * var(--u)); top: auto; bottom: calc(10 * var(--u)); width: auto; height: calc(64 * var(--u)); flex-direction: row; justify-content: space-around; padding: 0 calc(13 * var(--u)); border-radius: calc(22 * var(--u)); transform: none; animation: riseIn .72s var(--e-out) .1s both; }
       .sidebar::after { display: none; }
+      .header { order: 1; }
+      .hero { order: 2; }
+      .rail { order: 3; }
+      .forecast { order: 4; }
       .back-button { margin: 0; }
       .logo { width: calc(36 * var(--u)); height: calc(36 * var(--u)); }
       .nav { flex: 1; flex-direction: row; justify-content: space-around; gap: 0; margin: 0 calc(12 * var(--u)); }
@@ -522,19 +527,20 @@
       .tools .tool:nth-child(-n+3) { display: none; }
       .tool, .avatar { width: calc(44 * var(--u)); height: calc(44 * var(--u)); }
       .hero { position: relative; left: auto; top: auto; width: auto; margin: calc(60 * var(--u)) calc(24 * var(--u)) 0; }
-      h1 { margin-top: calc(18 * var(--u)); font-size: calc(59 * var(--u)); line-height: calc(70 * var(--u)); }
-      .ln { height: calc(70 * var(--u)); }
-      .blurb { width: min(calc(380 * var(--u)), 100%); margin-top: calc(18 * var(--u)); font-size: calc(15 * var(--u)); line-height: calc(23 * var(--u)); }
-      .rail { position: relative; top: auto; right: auto; bottom: auto; width: auto; margin: calc(52 * var(--u)) calc(24 * var(--u)) 0; gap: calc(13 * var(--u)); }
+      h1 { max-width: 100%; margin-top: calc(18 * var(--u)); font-size: clamp(44px, 12.5vw, 56px); line-height: 1.02; }
+      .ln { height: auto; overflow: visible; }
+      .blurb { width: min(calc(380 * var(--u)), 100%); margin-top: calc(18 * var(--u)); font-size: clamp(15px, 4.1vw, 17px); line-height: 1.5; }
+      .rail { position: relative; top: auto; right: auto; bottom: auto; width: auto; margin: calc(38 * var(--u)) calc(24 * var(--u)) 0; gap: calc(13 * var(--u)); }
       .card { animation-name: riseIn; }
       .card.big { min-height: calc(225 * var(--u)); padding: calc(22 * var(--u)); }
       .card.row { min-height: calc(102 * var(--u)); }
-      .forecast { position: relative; left: auto; right: auto; bottom: auto; margin: calc(43 * var(--u)) calc(24 * var(--u)) 0; padding-bottom: calc(50 * var(--u)); }
+      .forecast { position: relative; left: auto; right: auto; bottom: auto; margin: calc(34 * var(--u)) calc(24 * var(--u)) 0; padding-bottom: calc(24 * var(--u)); }
+      .forecast-heading { margin-bottom: calc(14 * var(--u)); font-size: clamp(13px, 3.5vw, 15px); }
       .temps { gap: calc(13 * var(--u)); overflow: hidden; }
       .temp-item { flex: 0 0 auto; font-size: calc(29 * var(--u)); gap: calc(7 * var(--u)); }
       .temp-item .icon { width: calc(25 * var(--u)); height: calc(25 * var(--u)); }
       .wave { height: calc(150 * var(--u)); margin-top: calc(25 * var(--u)); }
-      .days { margin-top: calc(-8 * var(--u)); font-size: calc(13.5 * var(--u)); }
+      .days { margin-top: calc(-8 * var(--u)); font-size: clamp(14px, 3.8vw, 16px); }
       .home-below { min-height: auto; padding: calc(60 * var(--u)) calc(18 * var(--u)) 0; }
       .home-inner { width: 100%; max-width: none; }
       .home-lower-visual { width: 100vw; margin-left: calc(50% - 50vw); padding: calc(1 * var(--u)) calc(18 * var(--u)) 0; }
