@@ -226,7 +226,7 @@ export default function PaymentSection() {
 
                 {/* Payment Method Selector - Grid Layout */}
                 <div className="max-w-2xl mx-auto">
-                    <p className="text-xs font-semibold text-premium-ink/50 uppercase tracking-[0.18em] mb-3 text-center">Método de Pago</p>
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] mb-3 text-center" style={{ color: '#b7e4c7' }}>Método de Pago</p>
                     <div className="grid grid-cols-3 gap-3">
                         {paymentMethods.map((method) => (
                             <button
@@ -238,8 +238,8 @@ export default function PaymentSection() {
                                     <span className="material-symbols-outlined text-2xl">{method.icon}</span>
                                 </div>
                                 <div>
-                                    <p className="font-semibold text-sm text-premium-forest">{method.label}</p>
-                                    <p className="text-xs text-premium-ink/50 hidden sm:block">{method.desc}</p>
+                                    <p className="font-semibold text-sm" style={{ color: '#f3fbf5' }}>{method.label}</p>
+                                    <p className="text-xs hidden sm:block" style={{ color: 'rgba(243,251,245,.78)' }}>{method.desc}</p>
                                 </div>
                             </button>
                         ))}
