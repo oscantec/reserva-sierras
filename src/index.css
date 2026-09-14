@@ -1261,6 +1261,7 @@ button:disabled { cursor: not-allowed; }
 .home-page .site-nav__links a,
 .home-page .site-nav__toggle .material-symbols-outlined {
   color: #f4a261 !important;
+  -webkit-text-fill-color: #f4a261 !important;
 }
 .navbar-hamburger-bars { display: inline-flex; flex-direction: column; gap: 4px; width: 28px; }
 .navbar-hamburger-bars i { display: block; width: 28px; height: 3px; border-radius: 3px; background: #f4a261 !important; }
