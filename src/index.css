@@ -780,59 +780,6 @@ button:disabled { cursor: not-allowed; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
 }
 
-/* Guía: only the top shell and first section borrow Inicio's visual language. */
-.guide-top-page {
-  min-height: 100vh;
-  background: #061820;
-  color: #f3fbf5;
-}
-.guide-top-page .site-nav {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  background: linear-gradient(180deg, rgba(4,18,26,.82), rgba(4,18,26,.34));
-  backdrop-filter: blur(14px) saturate(120%);
-  -webkit-backdrop-filter: blur(14px) saturate(120%);
-}
-.guide-top-page .site-brand img {
-  width: clamp(145px, 16vw, 220px);
-  height: clamp(50px, 5vw, 66px);
-  filter: brightness(0) invert(1);
-}
-.guide-top-page .guide-hero {
-  width: 100%;
-  max-width: none;
-  min-height: 520px;
-  margin: 0;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  overflow: hidden;
-  border-radius: 0;
-  background: linear-gradient(135deg, #0b2b31, #071a22);
-}
-.guide-top-page .guide-hero__copy {
-  display: flex;
-  align-items: center;
-  padding: clamp(2rem, 6vw, 5rem) max(1.5rem, 8vw);
-}
-.guide-top-page .guide-page-heading { padding: 0; }
-.guide-top-page .guide-page-heading .eyebrow { color: #b7e4c7; }
-.guide-top-page .guide-page-heading h1 {
-  color: #fff !important;
-  font-size: clamp(3rem, 6vw, 5.7rem) !important;
-  line-height: 1.06;
-  letter-spacing: -.055em;
-}
-.guide-top-page .guide-page-heading p { color: rgba(243,251,245,.75) !important; }
-.guide-top-page .guide-hero__visual { min-height: 520px; overflow: hidden; }
-.guide-top-page .guide-hero__visual img { width: 100%; height: 100%; object-fit: cover; }
-@media (max-width: 767px) {
-  .guide-top-page .site-brand img { width: clamp(92px, 27vw, 112px); height: 42px; }
-  .guide-top-page .guide-hero { grid-template-columns: 1fr; min-height: 0; }
-  .guide-top-page .guide-hero__copy { min-height: 360px; padding: 2rem 1.5rem 2.5rem; }
-  .guide-top-page .guide-hero__visual { min-height: 260px; }
-}
-
 /* Guía en estado neutro: sin estilos visuales propios. */
 #unstyled-guide,
 #unstyled-guide * {
