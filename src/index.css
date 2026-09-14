@@ -1191,6 +1191,22 @@ button:disabled { cursor: not-allowed; }
 .guide-page .guide-flow__section--location .sticky.card-premium > div > button.bg-premium-forest {
   color: #f3fbf5 !important;
 }
+.guide-page .guide-flow__section--wellness .card-premium {
+  background: rgba(255,255,255,.095) !important;
+  border-color: rgba(255,255,255,.18) !important;
+  box-shadow: 0 16px 34px rgba(0,0,0,.14), inset 1px 1px 0 rgba(255,255,255,.08) !important;
+}
+.guide-page .guide-flow__section--wellness .card-premium .bg-premium-mist,
+.guide-page .guide-flow__section--wellness .card-premium .bg-premium-sand {
+  background: rgba(255,255,255,.095) !important;
+}
+.guide-page .guide-flow__section--wellness .card-premium .bg-white {
+  background: rgba(255,255,255,.16) !important;
+}
+.guide-page .guide-flow__section--wellness .card-premium [class*="text-premium-ink"],
+.guide-page .guide-flow__section--wellness .card-premium [class*="text-premium-forest"] {
+  color: #f3fbf5 !important;
+}
 .guide-page .guide-flow__section--arrival h2,
 .guide-page .guide-flow__section--arrival h3 {
   color: #fff !important;
