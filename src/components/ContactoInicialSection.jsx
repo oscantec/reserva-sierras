@@ -90,19 +90,19 @@ export default function ContactoInicialSection() {
                 <div className="flex flex-col lg:flex-row gap-3 md:gap-4">
                     {/* Left - Info Card */}
                     <div className="flex-1 card-premium p-4 md:p-6">
-                        <p className="text-sm md:text-base text-premium-ink/70 mb-4 md:mb-6">
+                        <p className="text-sm md:text-base !text-white/80 mb-4 md:mb-6">
                             {config.welcomeText}
                         </p>
 
                         <div className="space-y-3 md:space-y-4">
                             {config.items.map((item, i) => (
                                 <div key={i} className="flex items-start gap-3 p-3 bg-premium-mist rounded-premium hairline hover:shadow-premium-sm transition-all duration-200 ease-premium">
-                                    <div className={`p-2 rounded-lg ${i % 2 === 0 ? 'bg-premium-mist text-premium-pine' : 'bg-premium-sand text-premium-gold'}`}>
+                                    <div className={`p-2 rounded-lg ${i % 2 === 0 ? 'bg-premium-mist !text-premium-pine' : 'bg-premium-sand !text-premium-gold'}`}>
                                         <span className="material-symbols-outlined">{item.icon}</span>
                                     </div>
                                     <div>
-                                        <p className="font-semibold text-base text-premium-forest">{item.title}</p>
-                                        <p className="text-sm text-premium-ink/60">{item.description}</p>
+                                        <p className="font-semibold text-base !text-white">{item.title}</p>
+                                        <p className="text-sm !text-white/75">{item.description}</p>
                                     </div>
                                 </div>
                             ))}
@@ -113,10 +113,10 @@ export default function ContactoInicialSection() {
                     <div className="lg:w-[380px] shrink-0">
                         <div className="card-premium p-4 md:p-6">
                             <div className="flex justify-between items-center mb-4 md:mb-6">
-                                <h3 className="font-premium-display text-premium-forest text-lg">Contacta a {config.hostName}</h3>
+                                <h3 className="font-premium-display !text-white text-lg">Contacta a {config.hostName}</h3>
                             </div>
 
-                            <p className="text-sm text-premium-ink/60 mb-6">
+                            <p className="text-sm !text-white/75 mb-6">
                                 Escríbenos por WhatsApp para coordinar todos los detalles de tu estadía.
                             </p>
 
@@ -132,7 +132,7 @@ export default function ContactoInicialSection() {
                                 {config.whatsappButtonText}
                             </a>
 
-                            <div className="flex items-center justify-center gap-2 mt-4 text-xs text-premium-ink/50">
+                            <div className="flex items-center justify-center gap-2 mt-4 text-xs !text-white/65">
                                 <span className="material-symbols-outlined text-sm text-premium-gold">verified</span>
                                 Anfitrión verificado · Respuesta rápida
                             </div>
