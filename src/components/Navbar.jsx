@@ -1,6 +1,7 @@
 import { Link, useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import logoFavicon from '../images/Logo ReservaSierras (Favicon).png'
+import logoBrand from '../images/Logo.webp'
 import NavigationDrawer from './NavigationDrawer'
 
 const navLinks = [
@@ -13,6 +14,7 @@ const navLinks = [
 
 export default function Navbar() {
     const { pathname } = useLocation()
+    const brandImage = pathname === '/reservas' ? logoBrand : logoFavicon
     const [isMenuOpen, setIsMenuOpen] = useState(false)
     useEffect(() => { setIsMenuOpen(false) }, [pathname])
 
@@ -21,7 +23,7 @@ export default function Navbar() {
             <nav className={`site-nav ${pathname === '/' ? 'site-nav--home' : ''}`} aria-label="Navegación principal">
                 <div className="site-nav__inner">
                     <a href="/" className="site-brand" onClick={() => setIsMenuOpen(false)}>
-                        <img src={logoFavicon} alt="" width="42" height="42" />
+                        <img src={brandImage} alt="" width={pathname === '/reservas' ? '170' : '42'} height={pathname === '/reservas' ? '52' : '42'} />
                         <span>Reserva de las Sierras</span>
                     </a>
                     <div className="site-nav__links">
