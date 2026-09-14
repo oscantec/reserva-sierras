@@ -143,10 +143,10 @@ export default function AdminLayout() {
 
                         {/* Links to public pages */}
                         <p className="px-3 text-xs font-bold text-text-muted uppercase tracking-wider mb-2">Páginas</p>
-                        <Link to="/" className="flex items-center gap-3 px-3 py-2 rounded-lg text-text-main-light dark:text-text-main-dark hover:bg-background-light dark:hover:bg-background-dark/50 transition-all">
+                        <a href="/" className="flex items-center gap-3 px-3 py-2 rounded-lg text-text-main-light dark:text-text-main-dark hover:bg-background-light dark:hover:bg-background-dark/50 transition-all">
                             <span className="material-symbols-outlined text-text-secondary-light dark:text-text-secondary-dark text-xl">home</span>
                             <span className="text-sm font-medium">Inicio</span>
-                        </Link>
+                        </a>
                         <Link to="/galeria" className="flex items-center gap-3 px-3 py-2 rounded-lg text-text-main-light dark:text-text-main-dark hover:bg-background-light dark:hover:bg-background-dark/50 transition-all">
                             <span className="material-symbols-outlined text-text-secondary-light dark:text-text-secondary-dark text-xl">photo_library</span>
                             <span className="text-sm font-medium">Galería</span>
@@ -185,11 +185,11 @@ export default function AdminLayout() {
                         <span className="material-symbols-outlined text-primary" aria-hidden="true">{navItems.find(item => isActive(item.path))?.icon || 'water_drop'}</span>
                         <span className="font-semibold truncate">{navItems.find(item => isActive(item.path))?.label || 'Agua'}</span>
                     </div>
-                    <Link to="/" className="flex items-center gap-2 text-sm text-text-muted">
+                    <a href="/" className="flex items-center gap-2 text-sm text-text-muted">
                         <span className="hidden sm:inline">Reserva de las Sierras</span>
                         <span className="material-symbols-outlined" aria-hidden="true">home</span>
                         <span className="sr-only">Inicio</span>
-                    </Link>
+                    </a>
                 </header>
                 <Outlet />
             </main>

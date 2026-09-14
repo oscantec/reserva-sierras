@@ -78,7 +78,7 @@ export default function Footer() {
                     <span className="font-premium-display text-xl md:text-2xl font-semibold tracking-tight text-white">Reserva de las Sierras</span>
                 </div>
                 <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 mt-6 mb-8 text-sm font-premium-body font-medium">
-                    <Link to="/" className="text-white/80 hover:text-white transition-colors duration-300 ease-premium">Inicio</Link>
+                    <a href="/" className="text-white/80 hover:text-white transition-colors duration-300 ease-premium">Inicio</a>
                     <Link to="/galeria" className="text-white/80 hover:text-white transition-colors duration-300 ease-premium">Galería</Link>
                     <Link to="/reservas" className="text-white/80 hover:text-white transition-colors duration-300 ease-premium">Reservas</Link>
                     <Link to="/registro" className="text-white/80 hover:text-white transition-colors duration-300 ease-premium">Registro</Link>

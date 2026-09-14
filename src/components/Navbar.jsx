@@ -20,15 +20,15 @@ export default function Navbar() {
         <>
             <nav className={`site-nav ${pathname === '/' ? 'site-nav--home' : ''}`} aria-label="Navegación principal">
                 <div className="site-nav__inner">
-                    <Link to="/" className="site-brand" onClick={() => setIsMenuOpen(false)}>
+                    <a href="/" className="site-brand" onClick={() => setIsMenuOpen(false)}>
                         <img src={logoFavicon} alt="" width="42" height="42" />
                         <span>Reserva de las Sierras</span>
-                    </Link>
+                    </a>
                     <div className="site-nav__links">
-                        {navLinks.map(link => (
-                            <Link key={link.path} to={link.path} aria-current={pathname === link.path ? 'page' : undefined}>
-                                {link.label}
-                            </Link>
+                        {navLinks.map(link => link.path === '/' ? (
+                            <a key={link.path} href={link.path} aria-current={pathname === link.path ? 'page' : undefined}>{link.label}</a>
+                        ) : (
+                            <Link key={link.path} to={link.path} aria-current={pathname === link.path ? 'page' : undefined}>{link.label}</Link>
                         ))}
                     </div>
                     <div className="flex items-center gap-2">
@@ -44,13 +44,14 @@ export default function Navbar() {
             </nav>
             <NavigationDrawer open={isMenuOpen} onClose={() => setIsMenuOpen(false)}>
                 <nav className="drawer-links" aria-label="Navegación móvil">
-                    {navLinks.map(link => (
-                        <Link key={link.path} to={link.path} onClick={() => setIsMenuOpen(false)} aria-current={pathname === link.path ? 'page' : undefined}>
-                            <span className="material-symbols-outlined" aria-hidden="true">{link.icon}</span>
-                            {link.label}
-                            <span className="material-symbols-outlined ml-auto" aria-hidden="true">arrow_forward</span>
-                        </Link>
-                    ))}
+                    {navLinks.map(link => {
+                        const linkContent = <><span className="material-symbols-outlined" aria-hidden="true">{link.icon}</span>{link.label}<span className="material-symbols-outlined ml-auto" aria-hidden="true">arrow_forward</span></>
+                        return link.path === '/' ? (
+                            <a key={link.path} href={link.path} onClick={() => setIsMenuOpen(false)} aria-current={pathname === link.path ? 'page' : undefined}>{linkContent}</a>
+                        ) : (
+                            <Link key={link.path} to={link.path} onClick={() => setIsMenuOpen(false)} aria-current={pathname === link.path ? 'page' : undefined}>{linkContent}</Link>
+                        )
+                    })}
                     <Link to="/admin" onClick={() => setIsMenuOpen(false)} className="mt-4">
                         <span className="material-symbols-outlined" aria-hidden="true">admin_panel_settings</span>
                         Panel Admin

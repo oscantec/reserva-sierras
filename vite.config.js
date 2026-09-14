@@ -6,10 +6,46 @@ import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const CONFIG_FILE = path.join(__dirname, 'saved-config.json')
+const WEATHER_DASHBOARD_ASSETS = [
+  'src/images/Exterior1.webp',
+  'src/images/Logo.webp',
+  'src/images/NextLogo.png',
+  'src/images/Portada 3.webp',
+  'src/images/Casa 3.webp',
+  'src/images/Piscina 1.webp',
+  'src/images/Jac 1.webp',
+  'src/images/Sendero 1.webp',
+  'src/images/imagesinicio/reservas.png',
+  'src/images/imagesinicio/registro.png',
+  'src/images/imagesinicio/galeria.png',
+  'src/images/imagesinicio/guia.png',
+]
+
+function weatherDashboardBuildPlugin() {
+  return {
+    name: 'weather-dashboard-build',
+    apply: 'build',
+    generateBundle() {
+      this.emitFile({
+        type: 'asset',
+        fileName: 'weather-dashboard.html',
+        source: fs.readFileSync(path.join(__dirname, 'weather-dashboard.html'), 'utf8'),
+      })
+
+      WEATHER_DASHBOARD_ASSETS.forEach((assetPath) => {
+        this.emitFile({
+          type: 'asset',
+          fileName: assetPath,
+          source: fs.readFileSync(path.join(__dirname, assetPath), null),
+        })
+      })
+    },
+  }
+}
 
 export default defineConfig(({ command }) => {
   const config = {
-    plugins: [react()],
+    plugins: [react(), weatherDashboardBuildPlugin()],
     server: {
       port: 3000,
       open: true
