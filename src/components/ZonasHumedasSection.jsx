@@ -119,7 +119,7 @@ export default function ZonasHumedasSection() {
 
                             {/* Rules List */}
                             <div className="space-y-3">
-                                <p className="text-xs font-semibold text-premium-ink/50 uppercase tracking-[0.18em] mb-3">Normas de uso</p>
+                                <p className="text-xs font-semibold uppercase tracking-[0.18em] mb-3" style={{ color: '#b7e4c7' }}>Normas de uso</p>
                                 {zona.rules.map((rule, index) => (
                                     <div
                                         key={index}
