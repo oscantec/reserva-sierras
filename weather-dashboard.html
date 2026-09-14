@@ -465,6 +465,9 @@
     .home-video-section > * { position: relative; z-index: 1; }
     .home-video-frame { position: relative; width: 100%; aspect-ratio: 16 / 7; overflow: hidden; border: 0; border-radius: 0; background: #02090d; box-shadow: none; }
     .home-video-frame iframe { display: block; width: 100%; height: 100%; border: 0; pointer-events: none; }
+    .home-video-open { display: inline-flex; align-items: center; gap: calc(8 * var(--u)); margin: calc(12 * var(--u)) auto calc(16 * var(--u)); padding: calc(10 * var(--u)) calc(14 * var(--u)); border: 1px solid rgba(183,228,199,.38); border-radius: 99px; background: rgba(183,228,199,.12); color: #dff8e6; font-size: clamp(12px, calc(12 * var(--u)), 14px); font-weight: 600; transition: background .2s ease, transform .2s ease; }
+    .home-video-open:hover { background: rgba(183,228,199,.24); transform: translateY(-1px); }
+    .home-video-open .icon { width: calc(16 * var(--u)); height: calc(16 * var(--u)); }
     .home-site-footer { position: relative; width: 100vw; overflow: hidden; margin: 0 0 0 calc(50% - 50vw); padding: calc(48 * var(--u)) max(calc(126 * var(--u)), 8vw) calc(33 * var(--u)); border: 0; border-radius: 0; background: linear-gradient(180deg, rgba(4,18,26,.38), rgba(4,18,26,.8)), url('/src/images/Exterior1.webp') center 55% / cover; text-align: center; }
     .home-site-footer::before { position: absolute; inset: 0; content: ""; background: rgba(5,21,27,.22); pointer-events: none; }
     .home-site-footer > * { position: relative; z-index: 1; }
@@ -726,6 +729,7 @@
         <div class="home-video-frame">
           <iframe title="Video de Reserva de las Sierras" src="https://www.youtube.com/embed/yzjFNEuWwFI?autoplay=1&mute=1&loop=1&playlist=yzjFNEuWwFI&controls=0&disablekb=1&fs=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&vq=default" loading="eager" allow="autoplay; encrypted-media; accelerometer; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </div>
+        <a class="home-video-open" id="home-video-open" href="https://www.youtube.com/watch?v=yzjFNEuWwFI" target="_blank" rel="noopener noreferrer" aria-label="Abrir el video y ver su información en una nueva pestaña"><svg class="icon"><use href="#i-play"/></svg> Ver video e información</a>
       </section>
 
       <footer class="home-site-footer">
@@ -882,6 +886,7 @@
         if (!config || typeof config !== 'object') return;
         const heroTitle = document.getElementById('home-title');
         const heroFrame = document.querySelector('.home-video-frame iframe');
+        const heroVideoLink = document.getElementById('home-video-open');
         const heroPoster = document.querySelector('.home-hero-poster');
         const lowerVisual = document.querySelector('.home-lower-visual');
         const phrases = Array.isArray(config.heroRotatingPhrases) ? config.heroRotatingPhrases.filter(Boolean) : [];
@@ -891,6 +896,7 @@
             const posterUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
             if (heroPoster) heroPoster.src = posterUrl;
             if (lowerVisual) lowerVisual.style.setProperty('--home-lower-image', `url("${posterUrl}")`);
+            if (heroVideoLink) heroVideoLink.href = `https://www.youtube.com/watch?v=${videoId}`;
           }
           if (videoId && !heroFrame.src.includes(`/embed/${videoId}`)) {
             heroFrame.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&disablekb=1&fs=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&vq=default&origin=${encodeURIComponent(window.location.origin)}`;
