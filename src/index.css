@@ -1054,6 +1054,39 @@ button:disabled { cursor: not-allowed; }
   text-align: center;
 }
 
+/* The guide content follows Inicio's weather glass visual language. */
+.guide-shell-page {
+  background: linear-gradient(180deg, #061820 0%, #0a2429 55%, #071a22 100%) !important;
+  color: #f3fbf5;
+}
+
+.guide-shell-page .guide-flow__section,
+.guide-shell-page .guide-flow__section--location,
+.guide-shell-page .guide-flow__section--wellness {
+  background: transparent !important;
+  border-color: rgba(255, 255, 255, .16);
+}
+
+.guide-shell-page .guide-flow__section::before,
+.guide-shell-page .guide-flow__section .eyebrow {
+  color: #b7e4c7 !important;
+}
+
+.guide-shell-page .guide-flow__section h2,
+.guide-shell-page .guide-flow__section h3,
+.guide-shell-page .guide-flow__section p,
+.guide-shell-page .guide-flow__section [class*="text-premium-ink"] {
+  color: #f3fbf5 !important;
+}
+
+.guide-shell-page .guide-flow__section .card-premium {
+  border-color: rgba(255, 255, 255, .18);
+  background: rgba(255, 255, 255, .095);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, .14), inset 1px 1px 0 rgba(255, 255, 255, .08);
+  backdrop-filter: blur(18px) saturate(118%);
+  -webkit-backdrop-filter: blur(18px) saturate(118%);
+}
+
 @media (max-width: 767px) {
   .guide-shell-page .site-brand img {
     width: clamp(92px, 27vw, 112px);
