@@ -454,9 +454,9 @@ export default function Booking() {
     }
 
     return (
-        <div className="flex flex-col min-h-screen bg-premium-cream text-premium-ink font-premium-body">
+        <div className="reservas-page flex flex-col min-h-screen bg-premium-cream text-premium-ink font-premium-body">
             <Navbar />
-            <main className="max-w-7xl mx-auto px-4 md:px-8 py-8 flex flex-col lg:flex-row gap-8 w-full">
+            <main className="reservas-main max-w-7xl mx-auto px-4 md:px-8 py-8 flex flex-col lg:flex-row gap-8 w-full">
                 <div className="flex-1 flex flex-col gap-8">
                     <PageHeader
                         eyebrow="Reserva tu estadía"

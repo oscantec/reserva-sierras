@@ -151,6 +151,155 @@
   --font-display: "Inter", sans-serif;
 }
 
+/* Reservas: same dark-green glass language as the public weather homepage. */
+.reservas-page {
+  --reservas-ink: #f3fbf5;
+  --reservas-muted: rgba(243, 251, 245, .72);
+  --reservas-line: rgba(255, 255, 255, .18);
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse at 70% 0%, rgba(183, 228, 199, .14), transparent 42%),
+    linear-gradient(180deg, #061820 0%, #0a2429 54%, #071a22 100%) !important;
+  color: var(--reservas-ink);
+}
+
+.reservas-page .site-nav {
+  padding: .85rem 1.25rem;
+  background: transparent;
+}
+
+.reservas-page .site-nav__inner {
+  border-color: var(--reservas-line);
+  background: rgba(255, 255, 255, .12);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, .18), inset 1px 1px 0 rgba(255, 255, 255, .12);
+  backdrop-filter: blur(20px) saturate(120%);
+  -webkit-backdrop-filter: blur(20px) saturate(120%);
+  color: var(--reservas-ink);
+}
+
+.reservas-page .site-brand,
+.reservas-page .site-nav__links a,
+.reservas-page .site-nav__admin {
+  color: var(--reservas-ink);
+}
+
+.reservas-page .site-nav__links a:hover,
+.reservas-page .site-nav__links a[aria-current] {
+  background: rgba(255, 255, 255, .16);
+  color: #fff;
+}
+
+.reservas-page .site-nav__admin,
+.reservas-page .ui-icon-button {
+  border-color: rgba(255, 255, 255, .2);
+  background: rgba(255, 255, 255, .1);
+  color: #fff;
+}
+
+.reservas-page .reservas-main {
+  max-width: 1280px;
+  padding-top: 2.25rem;
+  padding-bottom: 4rem;
+}
+
+.reservas-page .page-heading h1,
+.reservas-page .page-heading .text-premium-forest {
+  color: #fff !important;
+}
+
+.reservas-page .page-heading p,
+.reservas-page .page-heading [class*="text-premium-ink"] {
+  color: var(--reservas-muted) !important;
+}
+
+.reservas-page .page-heading__line {
+  background: rgba(255, 255, 255, .16);
+}
+
+.reservas-page .page-heading__line > div {
+  background: #b7e4c7;
+  box-shadow: 0 0 14px rgba(183, 228, 199, .28);
+}
+
+.reservas-page .page-heading__step {
+  border: 1px solid rgba(183, 228, 199, .26);
+  background: rgba(183, 228, 199, .13);
+}
+
+.reservas-page .reservation-calendar,
+.reservas-page .card-premium {
+  border: 1px solid var(--reservas-line);
+  background: rgba(255, 255, 255, .095);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, .14), inset 1px 1px 0 rgba(255, 255, 255, .08);
+  backdrop-filter: blur(18px) saturate(118%);
+  -webkit-backdrop-filter: blur(18px) saturate(118%);
+  color: var(--reservas-ink);
+}
+
+.reservas-page .reservation-calendar [class*="text-premium-forest"],
+.reservas-page .card-premium [class*="text-premium-forest"] {
+  color: #f3fbf5 !important;
+}
+
+.reservas-page .reservation-calendar [class*="text-premium-ink"],
+.reservas-page .card-premium [class*="text-premium-ink"] {
+  color: var(--reservas-muted) !important;
+}
+
+.reservas-page .reservation-calendar [class*="text-premium-pine"],
+.reservas-page .card-premium [class*="text-premium-pine"] {
+  color: #b7e4c7 !important;
+}
+
+.reservas-page .reservation-calendar [class*="bg-premium-mist"],
+.reservas-page .card-premium [class*="bg-premium-mist"] {
+  border-color: rgba(255, 255, 255, .14);
+  background: rgba(255, 255, 255, .08);
+}
+
+.reservas-page .reservation-calendar button {
+  border-color: rgba(255, 255, 255, .12);
+  background-color: rgba(255, 255, 255, .1) !important;
+}
+
+.reservas-page .reservation-calendar button:hover:not(:disabled) {
+  border-color: rgba(183, 228, 199, .58);
+}
+
+.reservas-page .reservation-calendar .border-t,
+.reservas-page .reservation-calendar [class*="border-premium-ink"] {
+  border-color: rgba(255, 255, 255, .16) !important;
+}
+
+.reservas-page .site-footer {
+  margin-top: 0;
+  border-radius: 0;
+  border-top-color: rgba(255, 255, 255, .16);
+}
+
+.reservas-page .navigation-drawer {
+  border-left: 1px solid rgba(255, 255, 255, .16);
+  background: #0a2429;
+  color: #f3fbf5;
+}
+
+.reservas-page .navigation-drawer .drawer-links :is(a, button):hover {
+  background: rgba(255, 255, 255, .1);
+}
+
+.reservas-page .navigation-drawer .drawer-links [aria-current] {
+  background: rgba(183, 228, 199, .18);
+  color: #fff;
+}
+
+@media (max-width: 767px) {
+  .reservas-page .site-nav { padding: .55rem .65rem; }
+  .reservas-page .site-nav__inner { min-height: 58px; border-radius: 1rem; }
+  .reservas-page .reservas-main { padding-top: 1.25rem; padding-bottom: 2.5rem; gap: 1.25rem; }
+  .reservas-page .reservation-calendar,
+  .reservas-page .card-premium { border-radius: 1.25rem; }
+}
+
 /* Aplicar tipografía global a TODO el documento */
 html,
 body {
