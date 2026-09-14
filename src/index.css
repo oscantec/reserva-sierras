@@ -283,9 +283,71 @@
 }
 
 .reservas-page .site-footer {
+  position: relative;
+  width: 100%;
+  min-height: 0;
   margin-top: 0;
   border-radius: 0;
-  border-top-color: rgba(255, 255, 255, .16);
+  border: 0;
+  padding: 1.875rem clamp(1rem, 8vw, 8rem) 1.25rem;
+  background: linear-gradient(180deg, rgba(4, 18, 26, .38), rgba(4, 18, 26, .8));
+  text-align: center;
+}
+
+.reservas-page .site-footer > .absolute {
+  z-index: 0;
+}
+
+.reservas-page .site-footer > .absolute + .absolute {
+  z-index: 0;
+}
+
+.reservas-page .site-footer .site-footer__content {
+  z-index: 1;
+  max-width: none;
+  padding: 0;
+}
+
+.reservas-page .site-footer .home-footer-name {
+  margin-top: 0;
+  color: #fff;
+  font-size: clamp(1.4rem, 2vw, 2rem);
+  line-height: 1.15;
+}
+
+.reservas-page .site-footer .home-footer-nav {
+  gap: .875rem;
+  margin-top: .875rem;
+  margin-bottom: 1rem;
+}
+
+.reservas-page .site-footer .home-footer-nav a {
+  min-height: 32px;
+  color: rgba(255, 255, 255, .82);
+  font-size: clamp(.8125rem, 1.3vw, 1.0625rem);
+}
+
+.reservas-page .site-footer .home-footer-meta {
+  gap: .5rem;
+  margin-top: 1.25rem;
+  color: rgba(255, 255, 255, .7);
+  font-size: clamp(.75rem, 1.1vw, 1rem);
+  line-height: 1.4;
+}
+
+.reservas-page .site-footer .home-powered {
+  gap: .5625rem;
+  margin-top: 1rem;
+  color: rgba(255, 255, 255, .58);
+  font-size: clamp(.6875rem, 1vw, .875rem);
+  letter-spacing: .075em;
+}
+
+.reservas-page .site-footer .home-powered img {
+  width: clamp(7rem, 12vw, 9.375rem);
+  height: auto !important;
+  max-height: 2.8125rem;
+  object-fit: contain;
 }
 
 .reservas-page .navigation-drawer {
@@ -310,6 +372,17 @@
   .reservas-page .reservas-main { padding-top: 1.25rem; padding-bottom: 2.5rem; gap: 1.25rem; }
   .reservas-page .reservation-calendar,
   .reservas-page .card-premium { border-radius: 1.25rem; }
+  .reservas-page .site-footer {
+    padding: 1.375rem 1rem 1rem;
+  }
+  .reservas-page .site-footer .home-footer-nav {
+    gap: .5rem .875rem;
+    margin-top: .75rem;
+    margin-bottom: .75rem;
+  }
+  .reservas-page .site-footer .home-footer-meta {
+    margin-top: .9rem;
+  }
 }
 
 /* Aplicar tipografía global a TODO el documento */
