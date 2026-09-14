@@ -1034,6 +1034,36 @@ button:disabled { cursor: not-allowed; }
   border-radius: 0;
 }
 
+/* Guía uses the same navigation/footer proportions without inheriting Reservas' dark cards. */
+.guide-shell-page .site-nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: linear-gradient(180deg, rgba(4, 18, 26, .78), rgba(4, 18, 26, .28));
+}
+
+.guide-shell-page .site-brand img {
+  width: clamp(145px, 16vw, 220px);
+  height: clamp(50px, 5vw, 66px);
+  filter: brightness(0) invert(1);
+}
+
+.guide-shell-page .site-footer {
+  padding: 1.875rem clamp(1rem, 8vw, 8rem) 1.25rem;
+  background: linear-gradient(180deg, rgba(4, 18, 26, .38), rgba(4, 18, 26, .8));
+  text-align: center;
+}
+
+@media (max-width: 767px) {
+  .guide-shell-page .site-brand img {
+    width: clamp(92px, 27vw, 112px);
+    height: 42px;
+  }
+  .guide-shell-page .site-footer {
+    padding: 1.375rem 1rem 1rem;
+  }
+}
+
 @media (max-width: 767px) {
   .guide-hero {
     width: calc(100% - 1.5rem);
