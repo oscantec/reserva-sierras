@@ -1249,6 +1249,16 @@ button:disabled { cursor: not-allowed; }
 .admin-shell input::placeholder, .admin-shell textarea::placeholder { color: rgba(243,251,245,.55) !important; }
 .admin-shell .text-primary, .admin-shell .text-icon-color { color: #b7e4c7 !important; }
 
+/* Navbar público: etiquetas e icono hamburguesa en naranja NextCan. */
+.site-nav__links a,
+.site-nav__toggle .material-symbols-outlined {
+  color: #f4a261 !important;
+}
+.site-nav__links a:hover,
+.site-nav__links a[aria-current="page"] {
+  color: #f4a261 !important;
+}
+
 /* Mobile Navbar: hamburger aligned with the NextCan orange accent. */
 @media (max-width: 767px) {
   .site-nav__toggle .material-symbols-outlined {
