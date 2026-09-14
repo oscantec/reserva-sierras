@@ -1170,7 +1170,7 @@ button:disabled { cursor: not-allowed; }
   height: auto !important;
   max-height: 2.8125rem;
 }
-@media (max-width: 767px) {
+@media (max-width: 1024px) {
   .guide-page .guide-flow__section--checkout .checkout-grid {
     grid-template-columns: minmax(0, 1fr) !important;
   }
