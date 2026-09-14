@@ -1171,6 +1171,15 @@ button:disabled { cursor: not-allowed; }
   max-height: 2.8125rem;
 }
 
+/* Mobile Navbar: hamburger aligned with the NextCan orange accent. */
+@media (max-width: 767px) {
+  .site-nav__toggle .material-symbols-outlined {
+    font-size: 30px !important;
+    line-height: 1;
+    color: #f4a261 !important;
+  }
+}
+
 /* Ubicación: misma jerarquía glass oscura de Inicio. */
 .guide-page .guide-flow__section--location {
   background: transparent !important;
