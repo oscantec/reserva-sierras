@@ -33,7 +33,7 @@ export default function Navbar() {
                     </div>
                     <div className="site-nav__actions flex items-center gap-2">
                         <button type="button" onClick={() => setIsMenuOpen(true)} className="ui-icon-button site-nav__toggle" aria-label="Abrir menú" aria-expanded={isMenuOpen} aria-haspopup="dialog">
-                            <span className="material-symbols-outlined" aria-hidden="true" style={{ fontSize: '30px', color: '#f4a261' }}>menu</span>
+                            <span className="navbar-hamburger-bars" aria-hidden="true"><i></i><i></i><i></i></span>
                         </button>
                         <Link to="/admin" className="site-nav__admin" aria-label="Panel Admin">
                             <span className="material-symbols-outlined" aria-hidden="true">key</span>
