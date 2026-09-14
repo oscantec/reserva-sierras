@@ -1170,6 +1170,11 @@ button:disabled { cursor: not-allowed; }
   height: auto !important;
   max-height: 2.8125rem;
 }
+@media (max-width: 767px) {
+  .guide-page .guide-flow__section--checkout .checkout-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
 
 /* Admin login: Inicio's dark glass visual language. */
 .admin-login {

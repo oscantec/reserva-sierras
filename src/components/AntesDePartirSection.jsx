@@ -63,7 +63,7 @@ export default function AntesDePartirSection() {
                 </div>
 
                 {/* Grid responsive: una columna en móvil, dos en tablet y tres en escritorio */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+                <div className="checkout-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
                     {content.items.map((item, index) => (
                         <div
                             key={index}
