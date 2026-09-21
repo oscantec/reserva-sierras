@@ -1331,6 +1331,16 @@ button:disabled { cursor: not-allowed; }
   color: rgba(243, 251, 245, .7) !important;
   font-size: .68rem;
 }
+.admin-upcoming-detail__date-value,
+.admin-upcoming-detail__time-value {
+  display: block;
+}
+.admin-upcoming-detail__time-value {
+  margin-top: .15rem;
+  color: #b7e4c7 !important;
+  font-size: .7rem;
+  font-weight: 600;
+}
 .admin-upcoming-detail__table {
   min-width: 1120px;
   border-collapse: collapse;

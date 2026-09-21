@@ -111,6 +111,12 @@ export default function Dashboard() {
         if (!d) return dateStr?.slice(0, 15) || '-'
         return d.toLocaleDateString('es-CO', { day: 'numeric', month: 'short' })
     }
+    const formatTime = (timeStr) => {
+        if (!timeStr) return '-'
+        const value = timeStr.toString().trim()
+        const match = value.match(/^(\d{1,2}:\d{2})(?::\d{2})?$/)
+        return match ? match[1] : value
+    }
 
     const loadData = async () => {
         setLoading(true)
@@ -136,6 +142,8 @@ export default function Dashboard() {
                     const parts = fechaReservaStr?.toString().split('→') || []
                     const fechaInicioStr = getCol(row, 'Fecha Inicio') || (parts[0]?.trim() || '')
                     const fechaSalidaStr = getCol(row, 'Fecha Salida') || (parts[1]?.trim() || '')
+                    const horaInicioStr = getCol(row, 'Hora Inicio', 'Hora Entrada', 'Hora Llegada', 'Hora Check-in')
+                    const horaSalidaStr = getCol(row, 'Hora Salida', 'Hora Check-out', 'Hora Checkout')
                     const id = getCol(row, 'No Reserva', 'ID') || 'N/A'
 
                     return {
@@ -152,8 +160,10 @@ export default function Dashboard() {
                         huespedes: parseInt(getCol(row, 'Huespedes')) || 0,
                         fechaInicio: fechaInicioStr,
                         fechaInicioDate: parseSpanishDate(fechaInicioStr),
+                        horaInicio: horaInicioStr,
                         fechaSalida: fechaSalidaStr,
                         fechaSalidaDate: parseSpanishDate(fechaSalidaStr),
+                        horaSalida: horaSalidaStr,
                         tiempo: getCol(row, 'Tiempo').toString().trim().toLowerCase(),
                         isRegistered: registeredIds.has(id.toString().trim())
                     }
@@ -399,9 +409,9 @@ export default function Dashboard() {
                                     <th scope="col" className="text-left">Nombre</th>
                                     <th scope="col" className="text-left">Teléfono</th>
                                     <th scope="col" className="text-left">Entrada</th>
+                                    <th scope="col" className="text-center">Noches</th>
                                     <th scope="col" className="text-left">Salida</th>
                                     <th scope="col" className="text-center">Huéspedes</th>
-                                    <th scope="col" className="text-center">Noches</th>
                                     <th scope="col" className="text-left">Plataforma</th>
                                     <th scope="col" className="text-left">Registro</th>
                                     <th scope="col" className="text-right">Valor</th>
@@ -416,12 +426,18 @@ export default function Dashboard() {
                                             <span className="font-semibold text-gray-900">{r.cliente}</span>
                                         </td>
                                         <td className="py-3 px-4 text-text-muted whitespace-nowrap">{r.telefono}</td>
-                                        <td className="py-3 px-4 text-text-main-light whitespace-nowrap">{formatShortDate(r.fechaInicio)}</td>
-                                        <td className="py-3 px-4 text-text-main-light whitespace-nowrap">{formatShortDate(r.fechaSalida)}</td>
-                                        <td className="py-3 px-4 text-center font-medium text-text-main-light whitespace-nowrap">{r.huespedes || '-'}</td>
+                                        <td className="py-3 px-4 text-text-main-light whitespace-nowrap">
+                                            <span className="admin-upcoming-detail__date-value">{formatShortDate(r.fechaInicio)}</span>
+                                            <span className="admin-upcoming-detail__time-value">{formatTime(r.horaInicio)}</span>
+                                        </td>
                                         <td className="py-3 px-4 text-center whitespace-nowrap">
                                             <span className="px-2 py-1 bg-primary text-white rounded-full text-xs font-bold">{r.noches}</span>
                                         </td>
+                                        <td className="py-3 px-4 text-text-main-light whitespace-nowrap">
+                                            <span className="admin-upcoming-detail__date-value">{formatShortDate(r.fechaSalida)}</span>
+                                            <span className="admin-upcoming-detail__time-value">{formatTime(r.horaSalida)}</span>
+                                        </td>
+                                        <td className="py-3 px-4 text-center font-medium text-text-main-light whitespace-nowrap">{r.huespedes || '-'}</td>
                                         <td className="py-3 px-4 whitespace-nowrap">
                                             <span className="px-2 py-1 rounded text-xs font-medium bg-primary text-white">
                                                 {r.fuente}
