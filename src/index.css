@@ -1249,6 +1249,146 @@ button:disabled { cursor: not-allowed; }
 .admin-shell input::placeholder, .admin-shell textarea::placeholder { color: rgba(243,251,245,.55) !important; }
 .admin-shell .text-primary, .admin-shell .text-icon-color { color: #b7e4c7 !important; }
 
+/* Dashboard: las tablas necesitan una jerarquía propia para conservar contraste
+   sobre el fondo de vidrio del panel y desplazarse sin ensanchar toda la vista. */
+.admin-upcoming-summary {
+  color: #f3fbf5;
+}
+.admin-upcoming-summary td {
+  color: #18352b !important;
+}
+.admin-upcoming-summary > div:first-child > span {
+  color: rgba(243, 251, 245, .76) !important;
+}
+.admin-upcoming-summary__table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid rgba(24, 53, 43, .14);
+  border-radius: .75rem;
+}
+.admin-upcoming-summary__table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: .75rem;
+}
+.admin-upcoming-summary__table th {
+  padding: .65rem .55rem;
+  background: #18352b;
+  color: #f3fbf5 !important;
+  font-size: .63rem;
+  font-weight: 700;
+  letter-spacing: .045em;
+  line-height: 1.15;
+  text-align: left;
+  text-transform: uppercase;
+}
+.admin-upcoming-summary__table th:nth-child(1) { width: 27%; }
+.admin-upcoming-summary__table th:nth-child(2) { width: 27%; }
+.admin-upcoming-summary__table th:nth-child(3) { width: 15%; }
+.admin-upcoming-summary__table th:nth-child(4) { width: 12%; }
+.admin-upcoming-summary__table th:nth-child(5) { width: 19%; }
+.admin-upcoming-summary__table td {
+  padding: .7rem .55rem;
+  background: rgba(255, 255, 255, .92);
+  border-top: 1px solid rgba(24, 53, 43, .1);
+  font-weight: 500;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+  vertical-align: middle;
+}
+.admin-upcoming-summary__table tbody tr:nth-child(even) td {
+  background: rgba(237, 246, 240, .94);
+}
+.admin-upcoming-summary__table td:first-child {
+  font-weight: 700;
+}
+.admin-upcoming-summary__empty {
+  padding: 1.25rem !important;
+  text-align: center;
+}
+
+.admin-upcoming-detail {
+  color: #f3fbf5;
+}
+.admin-upcoming-detail h3,
+.admin-upcoming-detail td,
+.admin-upcoming-detail th {
+  color: #f3fbf5 !important;
+}
+.admin-upcoming-detail__table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-color: rgba(183, 228, 199, .7) rgba(255, 255, 255, .1);
+}
+.admin-upcoming-detail__scroll-hint {
+  display: none;
+  color: rgba(243, 251, 245, .7) !important;
+  font-size: .68rem;
+}
+.admin-upcoming-detail__table {
+  min-width: 1120px;
+  border-collapse: collapse;
+}
+.admin-upcoming-detail__table th {
+  padding: .85rem 1rem;
+  background: rgba(6, 24, 32, .92) !important;
+  color: #f3fbf5 !important;
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .045em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.admin-upcoming-detail__table td {
+  padding: .8rem 1rem;
+  background: rgba(255, 255, 255, .075);
+  border-top: 1px solid rgba(255, 255, 255, .18);
+  color: #f3fbf5 !important;
+  white-space: nowrap;
+}
+.admin-upcoming-detail__table tbody tr:hover td {
+  background: rgba(255, 255, 255, .14);
+}
+.admin-upcoming-detail__table th:first-child,
+.admin-upcoming-detail__table td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: #18352b !important;
+}
+.admin-upcoming-detail__table th:first-child {
+  z-index: 2;
+}
+
+@media (max-width: 767px) {
+  .admin-upcoming-detail__scroll-hint {
+    display: block;
+  }
+  .admin-upcoming-summary__table th,
+  .admin-upcoming-summary__table td {
+    padding-left: .4rem;
+    padding-right: .4rem;
+  }
+  .admin-upcoming-summary__table th {
+    font-size: .56rem;
+  }
+  .admin-upcoming-summary__table td {
+    font-size: .68rem;
+  }
+  .admin-upcoming-detail__table {
+    min-width: 1040px;
+  }
+  .admin-upcoming-detail__table th,
+  .admin-upcoming-detail__table td {
+    padding-left: .75rem;
+    padding-right: .75rem;
+  }
+}
+
 /* Navbar público: etiquetas e icono hamburguesa en naranja NextCan. */
 .site-nav__links a,
 .site-nav__toggle .material-symbols-outlined {

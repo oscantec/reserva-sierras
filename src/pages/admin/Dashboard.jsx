@@ -196,16 +196,6 @@ export default function Dashboard() {
     }
     const occupancyRate = calculateOccupancyRate()
 
-    // Calculate days until reservation
-    const getDaysUntil = (fechaInicioDate) => {
-        if (!fechaInicioDate) return null
-        const today = new Date()
-        today.setHours(0, 0, 0, 0)
-        const diffTime = fechaInicioDate - today
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-        return diffDays
-    }
-
     const bySource = filteredData.reduce((a, r) => { if (validStatus(r.estado) && r.fuente) a[r.fuente] = (a[r.fuente] || 0) + r.total; return a }, {})
     const byStatus = filteredData.reduce((a, r) => { if (r.estado) a[r.estado] = (a[r.estado] || 0) + 1; return a }, {})
     const byMonthRaw = filteredData.reduce((a, r) => {
@@ -338,40 +328,38 @@ export default function Dashboard() {
                         </div>
                     </div>
 
-                    {/* Próximas Reservas - 1 col */}
-                    <div className="bg-white rounded-lg md:rounded-xl p-3 md:p-6 shadow-sm border border-border-card">
+                    {/* Resumen de próximas reservas - 1 col */}
+                    <div className="admin-upcoming-summary bg-white rounded-lg md:rounded-xl p-3 md:p-6 shadow-sm border border-border-card">
                         <div className="flex items-center justify-between mb-3 md:mb-4">
-                            <h3 className="text-sm md:text-base font-bold text-gray-900">Próximas</h3>
+                            <h3 className="text-sm md:text-base font-bold">Próximas</h3>
                             <span className="text-[10px] md:text-xs text-text-muted">{upcomingReservations.length} reservas</span>
                         </div>
-                        <div className="space-y-2 md:space-y-3">
-                            {upcomingReservations.slice(0, 4).map((r, i) => {
-                                const daysUntil = getDaysUntil(r.fechaInicioDate)
-                                return (
-                                    <div key={i} className="flex items-center gap-2 md:gap-3 p-2 md:p-3 bg-surface-light rounded-lg">
-                                        <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-success-bg flex items-center justify-center">
-                                            <span className="material-symbols-outlined text-icon-color text-base md:text-lg">person</span>
-                                        </div>
-                                        <div className="flex-1 min-w-0">
-                                            <p className="text-xs md:text-sm font-semibold text-gray-900 truncate">{r.cliente}</p>
-                                            <p className="text-[10px] md:text-xs text-text-muted">{r.noches}N</p>
-                                        </div>
-                                        <div className="text-right">
-                                            <span className={`px-1.5 md:px-2 py-0.5 md:py-1 rounded text-[10px] md:text-xs font-bold ${daysUntil !== null && daysUntil <= 0
-                                                ? 'bg-primary text-white'
-                                                : 'bg-gray-800 text-white'
-                                                }`}>
-                                                {daysUntil !== null && daysUntil <= 0
-                                                    ? 'Hoy'
-                                                    : daysUntil === 1
-                                                        ? 'Mañana'
-                                                        : `${daysUntil}d`}
-                                            </span>
-                                        </div>
-                                    </div>
-                                )
-                            })}
-                            {upcomingReservations.length === 0 && <p className="text-xs text-text-muted text-center py-4">No hay próximas reservas</p>}
+                        <div className="admin-upcoming-summary__table-wrap">
+                            <table className="admin-upcoming-summary__table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">Teléfono</th>
+                                        <th scope="col">Huéspedes</th>
+                                        <th scope="col">Noches</th>
+                                        <th scope="col">Fecha</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {upcomingReservations.map((r, i) => (
+                                        <tr key={i}>
+                                            <td title={r.cliente}>{r.cliente}</td>
+                                            <td title={r.telefono}>{r.telefono}</td>
+                                            <td className="text-center">{r.huespedes || '-'}</td>
+                                            <td className="text-center">{r.noches}</td>
+                                            <td>{formatShortDate(r.fechaInicio)}</td>
+                                        </tr>
+                                    ))}
+                                    {upcomingReservations.length === 0 && (
+                                        <tr><td colSpan="5" className="admin-upcoming-summary__empty">No hay próximas reservas</td></tr>
+                                    )}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -398,26 +386,27 @@ export default function Dashboard() {
 
 
                 {/* Detailed Próximas Reservas Table */}
-                <div className="bg-white rounded-xl shadow-sm border border-border-card overflow-hidden mt-6 min-w-0 w-full max-w-full">
-                    <div className="flex items-center justify-between p-5 border-b border-border-card">
-                        <h3 className="text-base font-bold text-gray-900">Próximas Reservas - Detalle Completo</h3>
+                <div className="admin-upcoming-detail bg-white rounded-xl shadow-sm border border-border-card overflow-hidden mt-6 min-w-0 w-full max-w-full">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 p-4 md:p-5 border-b border-border-card">
+                        <h3 className="text-base font-bold">Próximas Reservas - Detalle Completo</h3>
                         <span className="text-xs text-text-muted">{upcomingReservations.length} reservas próximas</span>
+                        <p className="admin-upcoming-detail__scroll-hint">Desliza horizontalmente para ver todas las columnas</p>
                     </div>
-                    <div className="overflow-x-auto">
-                        <table className="w-full text-sm">
+                    <div className="admin-upcoming-detail__table-wrap">
+                        <table className="admin-upcoming-detail__table w-full text-sm">
                             <thead className="bg-surface-light">
                                 <tr>
-                                    <th className="text-left py-3 px-4 font-semibold text-text-muted uppercase text-xs whitespace-nowrap">Nombre</th>
-                                    <th className="text-left py-3 px-4 font-semibold text-text-muted uppercase text-xs whitespace-nowrap">Teléfono</th>
-                                    <th className="text-left py-3 px-4 font-semibold text-text-muted uppercase text-xs whitespace-nowrap">Entrada</th>
-                                    <th className="text-left py-3 px-4 font-semibold text-text-muted uppercase text-xs whitespace-nowrap">Salida</th>
-                                    <th className="text-center py-3 px-4 font-semibold text-text-muted uppercase text-xs whitespace-nowrap">Huéspedes</th>
-                                    <th className="text-center py-3 px-4 font-semibold text-text-muted uppercase text-xs whitespace-nowrap">Noches</th>
-                                    <th className="text-left py-3 px-4 font-semibold text-text-muted uppercase text-xs whitespace-nowrap">Plataforma</th>
-                                    <th className="text-left py-3 px-4 font-semibold text-text-muted uppercase text-xs whitespace-nowrap">Registro</th>
-                                    <th className="text-right py-3 px-4 font-semibold text-text-muted uppercase text-xs whitespace-nowrap">Valor</th>
-                                    <th className="text-right py-3 px-4 font-semibold text-text-muted uppercase text-xs whitespace-nowrap">Abono</th>
-                                    <th className="text-right py-3 px-4 font-semibold text-text-muted uppercase text-xs whitespace-nowrap">Saldo</th>
+                                    <th scope="col" className="text-left">Nombre</th>
+                                    <th scope="col" className="text-left">Teléfono</th>
+                                    <th scope="col" className="text-left">Entrada</th>
+                                    <th scope="col" className="text-left">Salida</th>
+                                    <th scope="col" className="text-center">Huéspedes</th>
+                                    <th scope="col" className="text-center">Noches</th>
+                                    <th scope="col" className="text-left">Plataforma</th>
+                                    <th scope="col" className="text-left">Registro</th>
+                                    <th scope="col" className="text-right">Valor</th>
+                                    <th scope="col" className="text-right">Abono</th>
+                                    <th scope="col" className="text-right">Saldo</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-50">
@@ -447,7 +436,7 @@ export default function Dashboard() {
                                     </tr>
                                 ))}
                                 {upcomingReservations.length === 0 && (
-                                    <tr><td colSpan="10" className="py-8 text-center text-text-muted">No hay reservas próximas</td></tr>
+                                    <tr><td colSpan="11" className="py-8 text-center text-text-muted">No hay reservas próximas</td></tr>
                                 )}
                             </tbody>
                         </table>

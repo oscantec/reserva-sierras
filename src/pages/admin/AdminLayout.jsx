@@ -179,7 +179,7 @@ export default function AdminLayout() {
             </aside>
 
             {/* Main content - with bottom padding for mobile nav */}
-            <main className="admin-workspace flex-1 flex flex-col min-w-0 h-full overflow-x-auto overflow-y-auto relative pb-16 lg:pb-0">
+            <main className="admin-workspace flex-1 flex flex-col min-w-0 h-full overflow-x-hidden overflow-y-auto relative pb-16 lg:pb-0">
                 <header className="admin-topbar">
                     <div className="flex items-center gap-3 min-w-0">
                         <span className="material-symbols-outlined text-primary" aria-hidden="true">{navItems.find(item => isActive(item.path))?.icon || 'water_drop'}</span>
