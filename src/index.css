@@ -1255,7 +1255,7 @@ button:disabled { cursor: not-allowed; }
   color: #f3fbf5;
 }
 .admin-upcoming-summary td {
-  color: #18352b !important;
+  color: #f3fbf5 !important;
 }
 .admin-upcoming-summary > div:first-child > span {
   color: rgba(243, 251, 245, .76) !important;
@@ -1274,7 +1274,7 @@ button:disabled { cursor: not-allowed; }
 }
 .admin-upcoming-summary__table th {
   padding: .65rem .55rem;
-  background: #18352b;
+  background: rgba(6, 24, 32, .82);
   color: #f3fbf5 !important;
   font-size: .63rem;
   font-weight: 700;
@@ -1290,15 +1290,18 @@ button:disabled { cursor: not-allowed; }
 .admin-upcoming-summary__table th:nth-child(5) { width: 19%; }
 .admin-upcoming-summary__table td {
   padding: .7rem .55rem;
-  background: rgba(255, 255, 255, .92);
-  border-top: 1px solid rgba(24, 53, 43, .1);
+  background: rgba(255, 255, 255, .075);
+  border-top: 1px solid rgba(255, 255, 255, .16);
   font-weight: 500;
   line-height: 1.25;
   overflow-wrap: anywhere;
   vertical-align: middle;
 }
 .admin-upcoming-summary__table tbody tr:nth-child(even) td {
-  background: rgba(237, 246, 240, .94);
+  background: rgba(255, 255, 255, .1);
+}
+.admin-upcoming-summary__table tbody tr:hover td {
+  background: rgba(45, 106, 79, .24) !important;
 }
 .admin-upcoming-summary__table td:first-child {
   font-weight: 700;
@@ -1351,14 +1354,22 @@ button:disabled { cursor: not-allowed; }
   white-space: nowrap;
 }
 .admin-upcoming-detail__table tbody tr:hover td {
-  background: rgba(255, 255, 255, .14);
+  background: rgba(45, 106, 79, .24) !important;
 }
 .admin-upcoming-detail__table th:first-child,
 .admin-upcoming-detail__table td:first-child {
   position: sticky;
   left: 0;
   z-index: 1;
-  background: #18352b !important;
+}
+.admin-upcoming-detail__table thead th:first-child {
+  background: rgba(6, 24, 32, .92) !important;
+}
+.admin-upcoming-detail__table tbody td:first-child {
+  background: rgba(255, 255, 255, .075) !important;
+}
+.admin-upcoming-detail__table tbody tr:hover td:first-child {
+  background: rgba(45, 106, 79, .24) !important;
 }
 .admin-upcoming-detail__table th:first-child {
   z-index: 2;

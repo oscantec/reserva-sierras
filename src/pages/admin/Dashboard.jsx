@@ -411,7 +411,7 @@ export default function Dashboard() {
                             </thead>
                             <tbody className="divide-y divide-gray-50">
                                 {upcomingReservations.map((r, i) => (
-                                    <tr key={i} className="hover:bg-surface-light transition-colors">
+                                    <tr key={i}>
                                         <td className="py-3 px-4 whitespace-nowrap">
                                             <span className="font-semibold text-gray-900">{r.cliente}</span>
                                         </td>
